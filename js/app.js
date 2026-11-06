@@ -917,6 +917,9 @@ class GiriOrbitPlatform {
               <button id="btn-landing-open-drive" class="btn-giri-action-pill" title="Open Google Drive Cloud Workspace" style="background:#2563eb; color:#fff; border:1px solid #1d4ed8; font-size:11.5px; padding:5px 11px; border-radius:6px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:opacity 0.15s;">
                 <span>☁️</span> Google Drive
               </button>
+              <button id="btn-landing-download-windows" class="btn-giri-action-pill" title="Download Dedicated Windows Desktop App (x64, x86, ARM64)" style="background:linear-gradient(135deg, #10b981, #0284c7); color:#fff; border:1px solid #0284c7; font-size:11.5px; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 2px 8px rgba(2,132,199,0.25);">
+                <span>💻</span> Desktop App .exe
+              </button>
             </div>
           </div>
         </div>
@@ -1396,6 +1399,61 @@ class GiriOrbitPlatform {
       const nextTheme = isLight ? 'dark' : 'light';
       applyTheme(nextTheme);
       this.showToast(nextTheme === 'light' ? '☀️ Switched to Light Mode' : '🌙 Switched to Dark Mode', 'blue');
+    });
+
+    // Downloads Corner Modal & Architecture Detection
+    const dlModal = document.getElementById('downloads-corner-modal');
+    const openDlCorner = () => {
+      if (!dlModal) return;
+      dlModal.style.display = 'flex';
+      const ua = navigator.userAgent || '';
+      const platform = navigator.platform || '';
+      let detectedArch = 'x64';
+      let archText = 'Windows 64-Bit (x64 Intel / AMD) • Detected & Recommended';
+
+      if (/arm64|aarch64/i.test(ua) || (navigator.userAgentData && navigator.userAgentData.architecture === 'arm')) {
+        detectedArch = 'arm64';
+        archText = 'Windows ARM64 (Qualcomm Snapdragon / Surface) • Detected';
+      } else if (/WOW64|Win64|x86_64|x64|amd64/i.test(ua) || /Win64/i.test(platform)) {
+        detectedArch = 'x64';
+        archText = 'Windows 64-Bit (x64 Intel / AMD) • Detected & Recommended';
+      } else if (/x86|i686|i386/i.test(ua) || /Win32/i.test(platform)) {
+        detectedArch = 'x86';
+        archText = 'Windows 32-Bit (x86 / x84) • Detected';
+      }
+
+      const textEl = document.getElementById('downloads-detected-arch-text');
+      if (textEl) textEl.textContent = archText;
+
+      document.querySelectorAll('.dl-arch-card').forEach(card => {
+        card.style.borderColor = '#27272a';
+        card.style.boxShadow = 'none';
+      });
+      const targetCard = document.getElementById(`card-dl-${detectedArch}`);
+      if (targetCard) {
+        targetCard.style.borderColor = '#38bdf8';
+        targetCard.style.boxShadow = '0 0 24px rgba(56, 189, 248, 0.28)';
+      }
+    };
+
+    const closeDlCorner = () => {
+      if (dlModal) dlModal.style.display = 'none';
+    };
+
+    document.getElementById('btn-open-downloads-corner')?.addEventListener('click', openDlCorner);
+    document.getElementById('btn-close-downloads-corner')?.addEventListener('click', closeDlCorner);
+    dlModal?.addEventListener('click', (e) => {
+      if (e.target === dlModal) closeDlCorner();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dlModal && dlModal.style.display === 'flex') {
+        closeDlCorner();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (e.target && (e.target.id === 'btn-landing-download-windows' || e.target.closest('#btn-landing-download-windows'))) {
+        openDlCorner();
+      }
     });
 
     // Mobile Virtual Keyboard Viewport Adjustment for Floating Toolbars
