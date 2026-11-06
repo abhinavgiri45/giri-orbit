@@ -1,6 +1,7 @@
 import { FluentFontPicker } from '../components/fontPicker.js';
 import { AXIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { localSync } from '../components/localFileDirectSync.js';
+import { libreOfficeSuite } from '../components/libreofficeSuite.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI AXIS: ADVANCED SPREADSHEET STUDIO (axis.js)
@@ -872,6 +873,14 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
 
   container.innerHTML = `
     <div class="axis-app-shell" id="axis-app-shell">
+      <!-- LibreOffice Calc Classic Desktop Chrome -->
+      <div class="lo-classic-chrome">
+        ${libreOfficeSuite.renderWindowHeader('axis', 'Untitled 1 - LibreOffice Calc')}
+        ${libreOfficeSuite.renderMenubar('axis')}
+        ${libreOfficeSuite.renderToolbars('axis')}
+        ${libreOfficeSuite.renderFormulaBar()}
+      </div>
+
       <!-- Enterprise Multi-Tab Office Ribbon (Professional Dark Theme) -->
       <nav class="fluent-ribbon-bar" aria-label="Spreadsheet Fluent Office Ribbon">
         <!-- Ribbon Tabs Strip -->
@@ -1934,6 +1943,9 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
           </div>
       </div>
 
+      <!-- LibreOffice Calc Bottom Status Bar -->
+      ${libreOfficeSuite.renderStatusBar('axis', { sheet: 1, totalSheets: 1 })}
+
       <!-- Mobile Floating Quick-Action Bar for Axis -->
       <div class="axis-mobile-toolbar" id="axis-mobile-toolbar" style="display:none;">
         <button class="mobile-tool-btn" id="btn-mobile-axis-undo" title="Undo">↶</button>
@@ -2498,6 +2510,56 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     saveCurrentSheet();
   }
 
+  // LibreOffice Calc Desktop Suite Event Binding
+  libreOfficeSuite.bindEvents(container, 'axis', {
+    onNew: () => mountAxisEditor(container, [], onGridUpdate),
+    onOpen: () => container.querySelector('#btn-axis-import-custom-template')?.click() || container.querySelector('#btn-axis-open-file')?.click(),
+    onSave: () => saveAllSheets(),
+    onSaveDevice: () => container.querySelector('#btn-axis-save-device')?.click(),
+    onExportPdf: () => container.querySelector('#btn-axis-export-pdf')?.click() || window.print(),
+    onAutoSum: () => container.querySelector('#btn-axis-autosum')?.click() || container.querySelector('#btn-mobile-axis-sum')?.click(),
+    onFunctionWizard: () => container.querySelector('#axis-fx-label')?.click(),
+    onCommitFormula: (val) => {
+      if (formulaInput && activeCell) {
+        formulaInput.value = val;
+        setCellDirectText(activeCell, val);
+        evaluateCell(activeCell);
+        autoSave();
+      }
+    },
+    onCancelFormula: () => {
+      if (formulaInput && activeCell) {
+        const raw = rawFormulas.get(activeCell.dataset.cellId) || getCellDirectText(activeCell);
+        formulaInput.value = raw;
+        const loInput = container.querySelector('#lo-calc-formula-input');
+        if (loInput) loInput.value = raw;
+      }
+    },
+    onFormulaInput: (val) => {
+      if (formulaInput) formulaInput.value = val;
+    },
+    onJumpCell: (coord) => {
+      const targetCell = gridTable.querySelector(`td[data-cell-id="${coord}"]`);
+      if (targetCell) selectCell(targetCell);
+    },
+    onSelectSheet: (sheetName) => {
+      const tab = container.querySelector(`.axis-sheet-tab-item[data-sheet="${sheetName}"]`);
+      if (tab) tab.click();
+    },
+    onAddSheet: () => container.querySelector('#btn-axis-add-sheet')?.click(),
+    onZoom: (val) => {
+      const scale = parseInt(val, 10) / 100;
+      if (gridViewport) {
+        gridViewport.style.transform = `scale(${scale})`;
+        gridViewport.style.transformOrigin = 'top left';
+      }
+    },
+    onUiToggle: (mode) => {
+      container.classList.remove('orbit-ui-standard', 'orbit-ui-notebookbar');
+      container.classList.add(`orbit-ui-${mode}`);
+    }
+  });
+
   function renderSheetTabs() {
     if (!sheetTabsContainer) return;
     sheetTabsContainer.innerHTML = '';
@@ -2933,6 +2995,12 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
 
     const raw = rawFormulas.get(cellId) || getCellDirectText(activeCell);
     if (formulaInput) formulaInput.value = raw;
+    const loFormulaInput = container.querySelector('#lo-calc-formula-input');
+    const loNameBox = container.querySelector('#lo-calc-name-box');
+    if (loFormulaInput) loFormulaInput.value = raw;
+    if (loNameBox) loNameBox.value = cellId;
+    const loStatCell = container.querySelector('#lo-stat-selected-cell');
+    if (loStatCell) loStatCell.textContent = `Selected: ${cellId}`;
     updateLiveStatusBar();
 
     // Ensure cell is focused so typing immediately works
@@ -3656,6 +3724,13 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     if (statusAvg) statusAvg.textContent = `AVERAGE: ${numCount > 0 ? (sum / numCount).toFixed(2) : 0}`;
     if (statusMin) statusMin.textContent = `MIN: ${numCount > 0 ? (Number.isInteger(min) ? min.toLocaleString() : min.toFixed(2)) : 0}`;
     if (statusMax) statusMax.textContent = `MAX: ${numCount > 0 ? (Number.isInteger(max) ? max.toLocaleString() : max.toFixed(2)) : 0}`;
+
+    const loStatSum = container.querySelector('#lo-stat-calc-sum');
+    if (loStatSum) {
+      const avgStr = numCount > 0 ? (sum / numCount).toFixed(2) : '0';
+      const sumStr = numCount > 0 ? (Number.isInteger(sum) ? sum.toLocaleString() : sum.toFixed(2)) : '0';
+      loStatSum.textContent = `Average: ${avgStr} | Sum: ${sumStr} | Count: ${count}`;
+    }
   }
 
   // =========================================================================

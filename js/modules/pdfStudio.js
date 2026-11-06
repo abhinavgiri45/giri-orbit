@@ -1,6 +1,7 @@
 import { AEGIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { FluentFontPicker } from '../components/fontPicker.js';
 import { localSync } from '../components/localFileDirectSync.js';
+import { libreOfficeSuite } from '../components/libreofficeSuite.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI AEGIS: ENTERPRISE PDF STUDIO & FORM SUITE (pdfStudio.js)
@@ -892,6 +893,13 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
 
   container.innerHTML = `
     <div class="pdf-studio-shell" id="pdf-studio-shell">
+      <!-- LibreOffice Draw Classic Desktop Chrome -->
+      <div class="lo-classic-chrome">
+        ${libreOfficeSuite.renderWindowHeader('pdf', 'Drawing 1 - LibreOffice Draw')}
+        ${libreOfficeSuite.renderMenubar('pdf')}
+        ${libreOfficeSuite.renderToolbars('pdf')}
+      </div>
+
       <!-- Enterprise Multi-Group Office Ribbon -->
       <nav class="fluent-ribbon-bar" aria-label="PDF Studio Fluent Office Ribbon">
         <!-- Ribbon Tabs Strip -->
@@ -1975,6 +1983,9 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
         <button class="mobile-tool-btn" id="btn-mobile-pdf-rotate" title="Rotate 90°">↻</button>
         <button class="mobile-tool-btn" id="btn-mobile-pdf-save" title="Download PDF" style="color:#ef4444;">💾</button>
       </div>
+
+      <!-- LibreOffice Draw Bottom Status Bar -->
+      ${libreOfficeSuite.renderStatusBar('pdf', { currentPage: 1, totalPages: pages.length })}
     </div>
   `;
 
@@ -1983,6 +1994,31 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
 }
 
 function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText, isWatermarkActive, currentZoom, onPdfUpdate) {
+  // LibreOffice Draw Desktop Suite Event Binding
+  libreOfficeSuite.bindEvents(container, 'pdf', {
+    onNew: () => mountPdfEditor(container, 'blank', onPdfUpdate),
+    onOpen: () => container.querySelector('#pdf-file-open-input')?.click(),
+    onSave: () => {
+      if (pages[activePageIndex] && contentWrapper) {
+        pages[activePageIndex].htmlContent = contentWrapper.innerHTML;
+        localStorage.setItem('giri_orbit_pdf_pages', JSON.stringify(pages));
+      }
+      if (window.orbitPlatform) window.orbitPlatform.triggerToast('Saved drawing to local storage');
+    },
+    onSaveDevice: () => container.querySelector('#file-menu-save-device')?.click() || container.querySelector('#btn-pdf-save-device')?.click(),
+    onExportPdf: () => container.querySelector('#btn-pdf-export-pdf')?.click() || window.print(),
+    onZoom: (val) => {
+      const scale = parseInt(val, 10) / 100;
+      if (sheetEl) {
+        sheetEl.style.transform = `scale(${scale})`;
+        sheetEl.style.transformOrigin = 'top center';
+      }
+    },
+    onUiToggle: (mode) => {
+      container.classList.remove('orbit-ui-standard', 'orbit-ui-notebookbar');
+      container.classList.add(`orbit-ui-${mode}`);
+    }
+  });
   const thumbsList = container.querySelector('#pdf-thumbs-list');
   const pageCountHeading = container.querySelector('#pdf-page-count-heading');
   const contentWrapper = container.querySelector('#pdf-page-content-wrapper');

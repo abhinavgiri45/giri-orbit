@@ -10,6 +10,7 @@ import {
 } from '../data/templates.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { thesaurusManager } from '../components/thesaurusManager.js';
+import { libreOfficeSuite } from '../components/libreofficeSuite.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI KINETIC: ENTERPRISE PRESENTATION SUITE (kinetic.js)
@@ -2384,6 +2385,13 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 
   container.innerHTML = `
     <div class="kinetic-app-shell" id="kinetic-app-shell">
+      <!-- LibreOffice Impress Classic Desktop Chrome -->
+      <div class="lo-classic-chrome">
+        ${libreOfficeSuite.renderWindowHeader('kinetic', 'Presentation 1 - LibreOffice Impress')}
+        ${libreOfficeSuite.renderMenubar('kinetic')}
+        ${libreOfficeSuite.renderToolbars('kinetic')}
+      </div>
+
       <!-- Enterprise Multi-Tab Office Ribbon -->
       <nav class="fluent-ribbon-bar" aria-label="Presentation Fluent Office Ribbon">
         <!-- Ribbon Tabs Strip -->
@@ -3412,7 +3420,12 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             </div>
           </div>
         </aside>
+        <!-- LibreOffice Impress Right Sidebar Deck -->
+        ${libreOfficeSuite.renderSidebarDeck('kinetic')}
       </div>
+
+      <!-- LibreOffice Impress Bottom Status Bar -->
+      ${libreOfficeSuite.renderStatusBar('kinetic', { totalSlides: slidesData.length })}
 
       <!-- Presenter Station HUD & Fullscreen Overlay -->
       <div class="presenter-fullscreen-overlay" id="presenter-overlay">
@@ -3611,6 +3624,31 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 }
 
 function initKineticWorkspace(container, slidesData, currentSlideIndex, currentTheme, currentTransition, aspectRatio, onDeckUpdate) {
+  // LibreOffice Impress Desktop Suite Event Binding
+  libreOfficeSuite.bindEvents(container, 'kinetic', {
+    onNew: () => mountKineticEditor(container, 'blank', onDeckUpdate),
+    onOpen: () => container.querySelector('#btn-kinetic-open-deck')?.click(),
+    onSave: () => saveDeck(),
+    onSaveDevice: () => container.querySelector('#file-menu-save-device')?.click() || container.querySelector('#btn-kinetic-save-device')?.click(),
+    onExportPdf: () => container.querySelector('#btn-kinetic-export-pdf')?.click() || window.print(),
+    onAddSlide: () => container.querySelector('#btn-quick-new-slide')?.click() || container.querySelector('#btn-insert-new-slide')?.click(),
+    onSelectSlide: (idx) => {
+      const thumbs = container.querySelectorAll('.slide-thumb-card');
+      if (thumbs[idx]) thumbs[idx].click();
+    },
+    onSlideShow: () => {
+      container.querySelector('#btn-quick-present')?.click() || container.querySelector('#btn-present-start')?.click();
+    },
+    onZoom: (val) => {
+      const scale = parseInt(val, 10) / 100;
+      const sf = container.querySelector('#kinetic-active-slide');
+      if (sf) { sf.style.transform = `scale(${scale})`; sf.style.transformOrigin = 'center center'; }
+    },
+    onUiToggle: (mode) => {
+      container.classList.remove('orbit-ui-standard', 'orbit-ui-notebookbar');
+      container.classList.add(`orbit-ui-${mode}`);
+    }
+  });
   const navSidebar = container.querySelector('#kinetic-slide-nav');
   const slideFrame = container.querySelector('#kinetic-active-slide');
   const tagEl = container.querySelector('#slide-tag');
@@ -4005,6 +4043,8 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
     descEl.textContent = slide.desc || 'Slide subtitle and overview text...';
     if (notesInput) notesInput.value = slide.notes || '';
     if (slideNumIndicator) slideNumIndicator.textContent = `${index + 1}`;
+    const loSlideStat = container.querySelector('#lo-stat-slide-count');
+    if (loSlideStat) loSlideStat.textContent = `Slide ${index + 1} of ${slidesData.length}`;
 
     // Layout & Diagram rendering
     applyLayout(slide.layout || 'title');
