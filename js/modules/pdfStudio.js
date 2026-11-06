@@ -2242,6 +2242,9 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
       e.preventDefault();
       performPdfDirectSave(false);
+      if (window.orbitDriveSync && window.orbitDriveSync.currentActiveFileId) {
+        window.orbitDriveSync.saveCurrentActiveFileToRealGoogleDrive('pdf');
+      }
       return;
     }
     if (e.key === 'Escape') {

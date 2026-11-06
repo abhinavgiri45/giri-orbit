@@ -7826,6 +7826,9 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
       e.preventDefault();
       saveDeck();
       performKineticDirectSave(false);
+      if (window.orbitDriveSync && window.orbitDriveSync.currentActiveFileId) {
+        window.orbitDriveSync.saveCurrentActiveFileToRealGoogleDrive('kinetic');
+      }
       return;
     }
     const isEditing = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable;

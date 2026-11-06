@@ -1484,3 +1484,106 @@
   text-align: center;
 }
 
+/* ============================================================================
+   GOOGLE DRIVE PERFECT WORKSPACE ENHANCEMENTS
+   ============================================================================ */
+
+.drive-storage-meter-box {
+  margin-top: 12px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.drive-storage-meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  margin-bottom: 6px;
+  color: #94a3b8;
+}
+
+.drive-storage-meter-header strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.drive-storage-meter-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.drive-storage-meter-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  transition: width 0.4s ease;
+}
+
+.drive-storage-meter-fill.warning {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.drive-sort-select {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.drive-sort-select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+}
+
+.drive-drag-drop-zone {
+  border: 2px dashed rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.05);
+  border-radius: 10px;
+  padding: 22px;
+  text-align: center;
+  color: #38bdf8;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: none;
+  margin-bottom: 12px;
+}
+
+.drive-drag-drop-zone.active {
+  display: block;
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+}
+
+.btn-drive-copy-link {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-drive-copy-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+

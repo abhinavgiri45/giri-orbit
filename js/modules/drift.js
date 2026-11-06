@@ -3473,6 +3473,9 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
             e.preventDefault();
             saveDocument();
             performDirectSave(false);
+            if (window.orbitDriveSync && window.orbitDriveSync.currentActiveFileId) {
+              window.orbitDriveSync.saveCurrentActiveFileToRealGoogleDrive('drift');
+            }
           } else if (key === 'p') {
             e.preventDefault();
             if (window.giriPrintManager) {

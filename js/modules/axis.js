@@ -2135,6 +2135,14 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') fileMenuDropdown?.classList.remove('open');
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      saveCurrentSheet();
+      if (window.orbitPlatform) window.orbitPlatform.triggerToast('Workbook saved');
+      if (window.orbitDriveSync && window.orbitDriveSync.currentActiveFileId) {
+        window.orbitDriveSync.saveCurrentActiveFileToRealGoogleDrive('axis');
+      }
+    }
   });
 
   fileMenuDropdown?.querySelectorAll('.file-menu-item').forEach(item => {

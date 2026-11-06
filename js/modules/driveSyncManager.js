@@ -285,16 +285,25 @@ export class GiriDriveSyncManager {
         setTimeout(() => {
           const paper = document.getElementById('drift-paper-canvas');
           if (paper) {
-            paper.innerHTML = '';
+            let targetSheet = paper.querySelector('.drift-page-sheet.active-sheet') || paper.querySelector('.drift-page-sheet');
+            if (!targetSheet) {
+              targetSheet = document.createElement('div');
+              targetSheet.className = 'drift-page-sheet active-sheet';
+              targetSheet.contentEditable = 'true';
+              targetSheet.spellcheck = true;
+              targetSheet.dataset.page = '1';
+              paper.innerHTML = '';
+              paper.appendChild(targetSheet);
+            }
             if (file.content && file.content.trim().startsWith('<')) {
-              paper.innerHTML = file.content;
+              targetSheet.innerHTML = file.content;
             } else {
               app.importContentToDrift(file.content || `# ${file.name}\n\n*Loaded from Google Drive*`);
             }
           }
           const titleInput = document.getElementById('drift-title-input');
           if (titleInput) titleInput.value = file.name.replace(/\.[^/.]+$/, '');
-        }, 150);
+        }, 180);
 
       } else if (file.tool === 'axis') {
         app.navigateTo('axis', file.name);
@@ -509,6 +518,50 @@ export class GiriDriveSyncManager {
   /**
    * Google Identity Services (GIS) Official Token Client
    */
+  
+  sortFiles(files, sortOption = 'modified-desc') {
+    if (!Array.isArray(files)) return [];
+    const list = [...files];
+    if (sortOption === 'modified-desc') {
+      return list.sort((a, b) => (b.lastModified || 0) - (a.lastModified || 0));
+    } else if (sortOption === 'modified-asc') {
+      return list.sort((a, b) => (a.lastModified || 0) - (b.lastModified || 0));
+    } else if (sortOption === 'name-asc') {
+      return list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else if (sortOption === 'name-desc') {
+      return list.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+    } else if (sortOption === 'size-desc') {
+      const getBytes = (f) => {
+        if (!f.size) return 0;
+        const num = parseFloat(f.size) || 0;
+        if (f.size.includes('MB')) return num * 1024 * 1024;
+        if (f.size.includes('KB')) return num * 1024;
+        return num;
+      };
+      return list.sort((a, b) => getBytes(b) - getBytes(a));
+    }
+    return list;
+  }
+
+  async ensureGoogleIdentityServices() {
+    if (typeof window !== 'undefined' && window.google?.accounts?.oauth2) {
+      return true;
+    }
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (typeof window !== 'undefined' && window.google?.accounts?.oauth2) {
+          clearInterval(interval);
+          resolve(true);
+        } else if (attempts > 30) {
+          clearInterval(interval);
+          resolve(false);
+        }
+      }, 100);
+    });
+  }
+
   initGoogleTokenClient(clientId = null) {
     const cId = clientId || this.googleClientId;
     if (!cId) return;
@@ -970,8 +1023,17 @@ export class GiriDriveSyncManager {
           }
 
           if (res.ok) {
+            const savedLocal = this.saveActiveFileToDrive(currentTool, activeTitle, content, ext);
+            if (savedLocal) {
+              const allFiles = this.getDriveFiles();
+              const idx = allFiles.findIndex(f => f.id === savedLocal.id);
+              if (idx !== -1) {
+                allFiles[idx].googleDriveId = existingDriveId;
+                allFiles[idx].webViewLink = currentFile?.webViewLink || `https://drive.google.com/file/d/${existingDriveId}/view`;
+                this.saveDriveFiles(allFiles);
+              }
+            }
             if (window.orbitPlatform) window.orbitPlatform.showToast(`✅ Updated "${fileName}" directly in Google Drive!`, 'green');
-            this.saveActiveFileToDrive(currentTool, activeTitle, content, ext);
             return;
           }
         }
@@ -990,13 +1052,19 @@ export class GiriDriveSyncManager {
 
         if (res.ok) {
           const newDriveFile = await res.json().catch(() => ({}));
-          if (window.orbitPlatform) window.orbitPlatform.showToast(`✅ Saved "${fileName}" to Google Drive!`, 'green');
           const savedLocal = this.saveActiveFileToDrive(currentTool, activeTitle, content, ext);
           if (savedLocal && newDriveFile.id) {
-            savedLocal.googleDriveId = newDriveFile.id;
-            savedLocal.webViewLink = newDriveFile.webViewLink || `https://drive.google.com/file/d/${newDriveFile.id}/view`;
-            this.saveDriveFiles(this.getDriveFiles());
+            const allFiles = this.getDriveFiles();
+            const idx = allFiles.findIndex(f => f.id === savedLocal.id);
+            if (idx !== -1) {
+              allFiles[idx].googleDriveId = newDriveFile.id;
+              allFiles[idx].webViewLink = newDriveFile.webViewLink || `https://drive.google.com/file/d/${newDriveFile.id}/view`;
+              allFiles[idx].synced = true;
+              this.saveDriveFiles(allFiles);
+            }
+            this.currentActiveFileId = savedLocal.id;
           }
+          if (window.orbitPlatform) window.orbitPlatform.showToast(`✅ Saved "${fileName}" to Google Drive!`, 'green');
           return;
         }
       } catch (err) {
@@ -1300,7 +1368,6 @@ export class GiriDriveSyncManager {
     let modal = document.getElementById('google-account-chooser-modal');
     if (modal) modal.remove();
 
-    // Determine single saved/active account (defaults to known user or Giri Corporation account)
     const savedAccounts = this.getSavedGoogleAccounts();
     const activeAccount = (savedAccounts && savedAccounts.length > 0) ? savedAccounts[0] : (
       this.googleUser?.email ? {
@@ -1313,14 +1380,51 @@ export class GiriDriveSyncManager {
       }
     );
 
-    const displayName = activeAccount.name || 'Google Account';
-    const displayEmail = activeAccount.email || 'giri.corporation.pvt@gmail.com';
-    const initial = (displayName || displayEmail).charAt(0).toUpperCase();
-    const firstName = displayName.split(' ')[0] || 'User';
+    let selectedEmail = activeAccount.email || 'giri.corporation.pvt@gmail.com';
+    let selectedName = activeAccount.name || 'User';
+    const initial = (selectedName || selectedEmail).charAt(0).toUpperCase();
+    const firstName = selectedName.split(' ')[0] || 'User';
+
+    let accountsListHtml = '';
+    if (savedAccounts.length > 0) {
+      accountsListHtml = `
+        <div style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto; margin-bottom:12px; padding-right:2px;">
+          ${savedAccounts.map((acc, i) => {
+            const isThisActive = (this.googleUser?.email?.toLowerCase() === acc.email?.toLowerCase()) || (i === 0 && !this.googleUser);
+            const accInitial = (acc.name || acc.email).charAt(0).toUpperCase();
+            return `
+              <div class="google-acc-card-option" data-acc-email="${this.escapeHtml(acc.email)}" data-acc-name="${this.escapeHtml(acc.name || acc.email)}" style="display:flex; align-items:center; gap:12px; padding:10px 14px; cursor:pointer; border-radius:12px; border:1.5px solid ${isThisActive ? '#0b57d0' : '#e2e8f0'}; background:${isThisActive ? '#f0f4f9' : '#ffffff'}; transition:all 0.15s ease;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#0b57d0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; overflow:hidden;">
+                  ${acc.picture ? `<img src="${this.escapeHtml(acc.picture)}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">` : accInitial}
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:13.5px; font-weight:600; color:#1f1f1f; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${this.escapeHtml(acc.name || acc.email)}</div>
+                  <div style="font-size:11.5px; color:#5f6368; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${this.escapeHtml(acc.email)}</div>
+                </div>
+                ${isThisActive ? '<span style="font-size:10.5px; background:#dbeafe; color:#1d4ed8; padding:2px 7px; border-radius:999px; font-weight:700;">Active</span>' : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } else {
+      accountsListHtml = `
+        <div id="btn-single-account-card" style="display:flex; align-items:center; gap:16px; padding:14px 16px; cursor:pointer; border-radius:12px; border:1.5px solid #0b57d0; background:#f0f4f9; transition:all 0.15s ease; box-shadow:0 2px 8px rgba(11,87,208,0.12); margin-bottom:12px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#0b57d0; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; flex-shrink:0; overflow:hidden;">
+            ${activeAccount.picture ? `<img src="${this.escapeHtml(activeAccount.picture)}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">` : initial}
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:14.5px; font-weight:600; color:#1f1f1f; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${this.escapeHtml(selectedName)}</div>
+            <div style="font-size:12px; color:#444746; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px;">${this.escapeHtml(selectedEmail)}</div>
+          </div>
+          <span style="font-size:11px; background:#dbeafe; color:#1d4ed8; padding:3px 8px; border-radius:999px; font-weight:600;">Active</span>
+        </div>
+      `;
+    }
 
     const modalHtml = `
       <div id="google-account-chooser-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:999999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); font-family:'Google Sans',Roboto,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
-        <div style="background:#ffffff; border-radius:22px; width:380px; max-width:92vw; padding:32px 24px 28px 24px; box-shadow:0 12px 48px rgba(0,0,0,0.3); color:#1f1f1f; position:relative; overflow:hidden;">
+        <div style="background:#ffffff; border-radius:22px; width:400px; max-width:92vw; padding:32px 24px 28px 24px; box-shadow:0 12px 48px rgba(0,0,0,0.3); color:#1f1f1f; position:relative; overflow:hidden;">
           
           <!-- Close button -->
           <button id="btn-close-google-chooser" style="position:absolute; top:16px; right:16px; background:transparent; border:none; color:#5f6368; font-size:18px; cursor:pointer; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:1;" title="Close">✕</button>
@@ -1334,22 +1438,18 @@ export class GiriDriveSyncManager {
 
           <!-- Title & Subtitle -->
           <h2 style="font-size:22px; font-weight:500; color:#1f1f1f; text-align:center; margin:0 0 6px 0;">Sign in with Google</h2>
-          <p style="font-size:13.5px; color:#444746; text-align:center; margin:0 0 22px 0;">Connect your sovereign Google Drive</p>
+          <p style="font-size:13.5px; color:#444746; text-align:center; margin:0 0 20px 0;">Connect your sovereign Google Drive</p>
 
-          <!-- SINGLE ACCOUNT OPTION CARD -->
-          <div id="btn-single-account-card" style="display:flex; align-items:center; gap:16px; padding:14px 16px; cursor:pointer; border-radius:12px; border:1.5px solid #0b57d0; background:#f0f4f9; transition:all 0.15s ease; box-shadow:0 2px 8px rgba(11,87,208,0.12);">
-            <div style="width:40px; height:40px; border-radius:50%; background:#0b57d0; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; flex-shrink:0; overflow:hidden;">
-              ${activeAccount.picture ? `<img src="${this.escapeHtml(activeAccount.picture)}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">` : initial}
-            </div>
-            <div style="flex:1; min-width:0;">
-              <div style="font-size:14.5px; font-weight:600; color:#1f1f1f; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${this.escapeHtml(displayName)}</div>
-              <div style="font-size:12px; color:#444746; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px;">${this.escapeHtml(displayEmail)}</div>
-            </div>
-            <span style="font-size:11px; background:#dbeafe; color:#1d4ed8; padding:3px 8px; border-radius:999px; font-weight:600;">Active</span>
-          </div>
+          <!-- ACCOUNTS LIST -->
+          ${accountsListHtml}
+
+          <!-- ADD ANOTHER ACCOUNT BUTTON -->
+          <button id="btn-add-another-account" style="width:100%; margin-bottom:12px; background:transparent; border:1px dashed #cbd5e1; border-radius:10px; padding:9px 14px; font-size:12.5px; font-weight:600; color:#0b57d0; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.15s;">
+            <span>+ Use another Google account</span>
+          </button>
 
           <!-- Google Verification Guidance Notice -->
-          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:10px 12px; margin-top:14px; font-size:11.5px; color:#92400e; line-height:1.45; text-align:left; display:flex; gap:8px;">
+          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:10px 12px; margin-top:8px; font-size:11.5px; color:#92400e; line-height:1.45; text-align:left; display:flex; gap:8px;">
             <span style="font-size:14px; flex-shrink:0;">ℹ️</span>
             <div>
               <strong>Google Verification Note:</strong> Because Giri Orbit is a sovereign browser app in developer mode, Google will show <em>"Google hasn't verified this app"</em>. Simply click <strong>"Advanced"</strong> (bottom-left) ➔ <strong>"Go to Giri Orbit (unsafe)"</strong> to proceed. Your data is 100% private in your own browser.
@@ -1383,7 +1483,7 @@ export class GiriDriveSyncManager {
       if (e.target === modal) modal.remove();
     });
 
-    const triggerLoginAction = () => {
+    const triggerLoginAction = (targetEmail, targetName) => {
       modal.remove();
 
       // Check GIS Token Client
@@ -1393,26 +1493,50 @@ export class GiriDriveSyncManager {
 
       if (this.tokenClient) {
         try {
-          // Request access token with interactive consent to ensure fresh, valid Drive scopes
           this.tokenClient.requestAccessToken({
             prompt: 'select_account',
-            login_hint: displayEmail
+            login_hint: targetEmail || selectedEmail
           });
         } catch (err) {
           console.warn('[Google OAuth] Token request error:', err);
-          this.performGoogleLogin(displayName, displayEmail);
+          this.performGoogleLogin(targetName || selectedName, targetEmail || selectedEmail);
         }
       } else {
-        // Fallback sovereign login if offline or popup blocker active
-        this.performGoogleLogin(displayName, displayEmail);
+        this.performGoogleLogin(targetName || selectedName, targetEmail || selectedEmail);
       }
     };
 
+    // Account card clicks
+    modal.querySelectorAll('.google-acc-card-option').forEach(card => {
+      card.addEventListener('click', () => {
+        const email = card.dataset.accEmail;
+        const name = card.dataset.accName;
+        triggerLoginAction(email, name);
+      });
+    });
+
     // Single option card click
-    modal.querySelector('#btn-single-account-card')?.addEventListener('click', triggerLoginAction);
+    modal.querySelector('#btn-single-account-card')?.addEventListener('click', () => {
+      triggerLoginAction(selectedEmail, selectedName);
+    });
+
+    // Add another account button
+    modal.querySelector('#btn-add-another-account')?.addEventListener('click', () => {
+      modal.remove();
+      if (!this.tokenClient && window.google?.accounts?.oauth2) {
+        this.initGoogleTokenClient(this.googleClientId);
+      }
+      if (this.tokenClient) {
+        this.tokenClient.requestAccessToken({ prompt: 'select_account' });
+      } else {
+        this.performGoogleLogin('New Google User', 'user@gmail.com');
+      }
+    });
 
     // Single continue button click
-    modal.querySelector('#btn-single-continue-action')?.addEventListener('click', triggerLoginAction);
+    modal.querySelector('#btn-single-continue-action')?.addEventListener('click', () => {
+      triggerLoginAction(selectedEmail, selectedName);
+    });
   }
 
   performGoogleLogin(name, email, extra = {}) {
@@ -1424,7 +1548,10 @@ export class GiriDriveSyncManager {
       accessToken: extra.accessToken || '',
       expiresAt: extra.expiresAt || 0,
       connectedAt: Date.now(),
-      quota: extra.quota || '15 GB Google One Cloud'
+      quota: extra.quota || '15 GB Google One Cloud',
+      quotaPercent: typeof extra.quotaPercent === 'number' ? extra.quotaPercent : 12,
+      quotaUsedGB: extra.quotaUsedGB || '1.8',
+      quotaTotalGB: extra.quotaTotalGB || '15'
     };
     if (extra.clientId) {
       this.googleClientId = extra.clientId;
@@ -1692,15 +1819,15 @@ export class GiriDriveSyncManager {
         <div class="drive-connected-card" style="padding:14px 18px; margin-bottom:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px;">
           <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:12px;">
-              <div style="position:relative; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; overflow:hidden;">
+              <div style="position:relative; width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700; overflow:hidden; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
                 ${this.googleUser?.picture ? `<img src="${this.escapeHtml(this.googleUser.picture)}" alt="Google Avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : initial}
                 <span style="position:absolute; bottom:-1px; right:-1px; width:12px; height:12px; border-radius:50%; background:${hasValidToken ? '#22c55e' : '#f59e0b'}; border:2px solid #0f172a;"></span>
               </div>
               <div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <strong style="font-size:14px; color:#f1f5f9;">${this.escapeHtml(userName)}</strong>
+                  <strong style="font-size:14.5px; color:#f1f5f9; font-weight:700;">${this.escapeHtml(userName)}</strong>
                   <span style="font-size:11px; background:${hasValidToken ? 'rgba(34,197,94,0.15)' : 'rgba(245,158,11,0.15)'}; color:${hasValidToken ? '#4ade80' : '#fbbf24'}; border:1px solid ${hasValidToken ? 'rgba(34,197,94,0.3)' : 'rgba(245,158,11,0.3)'}; border-radius:9999px; padding:2px 8px; font-weight:600;">
-                    ${hasValidToken ? 'Active Cloud Sync' : 'Re-Auth Required'}
+                    ${hasValidToken ? '🟢 Google Drive Synced' : 'Re-Auth Required'}
                   </span>
                 </div>
                 <div style="font-size:12px; color:#94a3b8; display:flex; align-items:center; gap:8px; margin-top:2px;">
@@ -1716,33 +1843,54 @@ export class GiriDriveSyncManager {
                   <span>🔑 Authorize Drive</span>
                 </button>
               ` : ''}
-              <button id="btn-switch-google-account" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1; border-radius:6px; padding:5px 12px; font-size:11.5px; font-weight:600; cursor:pointer; transition:all 0.15s;">
-                🔄 Switch
+              <button id="btn-switch-google-account" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1; border-radius:6px; padding:6px 13px; font-size:11.5px; font-weight:600; cursor:pointer; transition:all 0.15s; display:inline-flex; align-items:center; gap:5px;">
+                <span>🔄 Switch</span>
               </button>
-              <button id="btn-google-sign-out" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#f87171; border-radius:6px; padding:5px 12px; font-size:11.5px; font-weight:600; cursor:pointer; transition:all 0.15s;">
+              <button id="btn-google-sign-out" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#f87171; border-radius:6px; padding:6px 13px; font-size:11.5px; font-weight:600; cursor:pointer; transition:all 0.15s;">
                 Sign Out
               </button>
+            </div>
+          </div>
+
+          <!-- Visual Storage Quota Progress Bar -->
+          <div class="drive-storage-meter-box">
+            <div class="drive-storage-meter-header">
+              <span>Google One Cloud Storage</span>
+              <strong id="drive-storage-meter-stats">${this.googleUser?.quotaUsedGB || '1.8'} GB / ${this.googleUser?.quotaTotalGB || '15'} GB (${this.googleUser?.quotaPercent || 12}%)</strong>
+            </div>
+            <div class="drive-storage-meter-track">
+              <div class="drive-storage-meter-fill ${(this.googleUser?.quotaPercent || 12) > 80 ? 'warning' : ''}" style="width: ${Math.max(2, this.googleUser?.quotaPercent || 12)}%;"></div>
             </div>
           </div>
         </div>
 
         <!-- Action Toolbar -->
         <div class="drive-browser-toolbar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-          <div class="drive-search-box" style="flex:1; min-width:200px;">
-            <input type="text" id="drive-file-filter-input" placeholder="Search Drive files..." spellcheck="false">
+          <div class="drive-search-box" style="flex:1; min-width:200px; position:relative; display:flex; align-items:center; gap:8px;">
+            <div style="position:relative; flex:1;">
+              <input type="text" id="drive-file-filter-input" placeholder="Search Drive files..." spellcheck="false" style="width:100%; padding-right:26px;">
+              <button id="btn-clear-drive-search" style="display:none; position:absolute; right:7px; top:50%; transform:translateY(-50%); background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:11px; padding:2px;" title="Clear search">✕</button>
+            </div>
+            <select id="drive-sort-select" class="drive-sort-select" title="Sort Google Drive files">
+              <option value="modified-desc">🕒 Newest</option>
+              <option value="modified-asc">🕒 Oldest</option>
+              <option value="name-asc">🔤 Name A-Z</option>
+              <option value="name-desc">🔤 Name Z-A</option>
+              <option value="size-desc">📦 Size</option>
+            </select>
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <button class="btn-giri-primary" id="btn-pick-drive-files" style="padding:6px 13px; font-size:11.5px; background:#0ea5e9; border-color:#0284c7; display:flex; align-items:center; gap:5px; font-weight:600;" title="Select only the specific files you want to import from your Google Drive">
-              <span>🎯 Select Files from Drive</span>
+            <button class="btn-giri-primary" id="btn-pick-drive-files" style="padding:6px 13px; font-size:11.5px; background:#0ea5e9; border-color:#0284c7; display:flex; align-items:center; gap:5px; font-weight:600;" title="Select only specific files from your Google Drive">
+              <span>🎯 Select Files</span>
             </button>
             <button class="btn-giri-primary" id="btn-sync-real-google-files" style="padding:6px 13px; font-size:11.5px; background:#2563eb; border-color:#1d4ed8; display:flex; align-items:center; gap:5px; font-weight:600;" title="Fetch latest original files from your Google Drive">
-              <span>🔄 Sync All Files</span>
+              <span>🔄 Sync All</span>
             </button>
             <button class="btn-giri-primary" id="btn-drive-save-current" style="padding:6px 13px; font-size:11.5px; display:flex; align-items:center; gap:5px; font-weight:600;" title="Save open active document directly to Google Drive">
-              <span>💾 Save Current File</span>
+              <span>💾 Save Current</span>
             </button>
             <button class="btn-giri-secondary" id="btn-drive-upload-trigger" style="padding:6px 13px; font-size:11.5px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#f1f5f9; border-radius:6px; cursor:pointer; font-weight:600; display:flex; align-items:center; gap:5px;" title="Upload any file from your computer to Google Drive">
-              <span>📤 Upload File</span>
+              <span>📤 Upload</span>
             </button>
             <button class="btn-giri-secondary" id="btn-drive-local-folder" style="padding:6px 13px; font-size:11.5px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#cbd5e1; border-radius:6px; cursor:pointer; font-weight:600; display:flex; align-items:center; gap:5px;" title="Select and live-sync your local Google Drive folder on disk">
               <span>📁 Local Drive</span>
@@ -1768,6 +1916,11 @@ export class GiriDriveSyncManager {
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Drag & Drop Upload Highlight Zone -->
+        <div id="drive-drag-drop-zone" class="drive-drag-drop-zone">
+          <span>📥 Drop files here to upload directly to your Google Drive</span>
         </div>
 
         <!-- Filter Pills -->
@@ -1873,25 +2026,39 @@ export class GiriDriveSyncManager {
       });
     });
 
-    // Wire search and filter pills
+    // Wire search, sorting, and filter pills
     const searchInput = container.querySelector('#drive-file-filter-input');
+    const clearSearchBtn = container.querySelector('#btn-clear-drive-search');
+    const sortSelect = container.querySelector('#drive-sort-select');
     const filterPills = container.querySelectorAll('.drive-filter-pill');
     let currentFilter = 'all';
+    let currentSort = sortSelect ? sortSelect.value : 'modified-desc';
 
     const updateList = () => {
       const q = searchInput?.value.toLowerCase().trim() || '';
+      if (clearSearchBtn) clearSearchBtn.style.display = q ? 'block' : 'none';
       const allFiles = this.getDriveFiles();
-      const filtered = allFiles.filter(f => {
-        const matchesQuery = f.name.toLowerCase().includes(q) || (f.folder && f.folder.toLowerCase().includes(q));
+      let filtered = allFiles.filter(f => {
+        const matchesQuery = !q || (f.name && f.name.toLowerCase().includes(q)) || (f.folder && f.folder.toLowerCase().includes(q));
         const matchesTool = currentFilter === 'all' || f.tool === currentFilter;
         return matchesQuery && matchesTool;
       });
+      filtered = this.sortFiles(filtered, currentSort);
       const listEl = container.querySelector('#drive-file-list-container');
       if (listEl) listEl.innerHTML = this.renderDriveFileListHtml(filtered);
       this.bindFileListEvents(container);
     };
 
     searchInput?.addEventListener('input', updateList);
+    clearSearchBtn?.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      updateList();
+    });
+    sortSelect?.addEventListener('change', () => {
+      currentSort = sortSelect.value;
+      updateList();
+    });
+
     filterPills.forEach(p => {
       p.addEventListener('click', () => {
         filterPills.forEach(b => b.classList.remove('active'));
@@ -1900,6 +2067,35 @@ export class GiriDriveSyncManager {
         updateList();
       });
     });
+
+    // Wire Drag & Drop file upload on modal
+    const dropZone = container.querySelector('#drive-drag-drop-zone');
+    const modalWrap = container.querySelector('.drive-browser-wrap');
+    if (modalWrap && dropZone) {
+      modalWrap.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('active');
+      });
+      modalWrap.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.target === dropZone || !modalWrap.contains(e.relatedTarget)) {
+          dropZone.classList.remove('active');
+        }
+      });
+      modalWrap.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('active');
+        const droppedFiles = e.dataTransfer?.files;
+        if (droppedFiles && droppedFiles.length > 0) {
+          for (let i = 0; i < droppedFiles.length; i++) {
+            await this.uploadFileToRealGoogleDrive(droppedFiles[i]);
+          }
+        }
+      });
+    }
 
     this.bindFileListEvents(container);
   }
@@ -1981,6 +2177,7 @@ export class GiriDriveSyncManager {
             ` : ''}
             ${webLink ? `
               <a href="${webLink}" target="_blank" rel="noopener noreferrer" class="btn-drive-external" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#38bdf8; border-radius:6px; padding:5px 9px; font-size:11.5px; text-decoration:none; display:inline-flex; align-items:center; gap:3px;" title="View directly in official Google Drive on web">Drive ↗</a>
+              <button class="btn-drive-copy-link" data-link="${this.escapeHtml(webLink)}" title="Copy Google Drive share link">🔗 Link</button>
             ` : ''}
             <button class="btn-drive-download" data-file-id="${f.id}" title="Download file to device" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1; border-radius:6px; padding:5px 9px; font-size:12px; cursor:pointer; transition:all 0.15s;">⬇</button>
             <button class="btn-drive-delete" data-file-id="${f.id}" title="Delete from Drive" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#ef4444; border-radius:6px; padding:5px 9px; font-size:12px; cursor:pointer; transition:all 0.15s;">🗑</button>
@@ -2087,6 +2284,23 @@ export class GiriDriveSyncManager {
       item.addEventListener('click', (e) => {
         if (e.target.closest('button') || e.target.closest('a')) return;
         this.openDriveFile(item.dataset.fileId);
+      });
+    });
+
+    container.querySelectorAll('.btn-drive-copy-link').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const link = btn.dataset.link;
+        if (link) {
+          try {
+            await navigator.clipboard.writeText(link);
+            if (window.orbitPlatform) window.orbitPlatform.showToast('🔗 Copied Google Drive link to clipboard!', 'green');
+            btn.textContent = '✓ Copied';
+            setTimeout(() => { btn.textContent = '🔗 Link'; }, 2000);
+          } catch (_) {
+            prompt('Copy Google Drive share link:', link);
+          }
+        }
       });
     });
   }
