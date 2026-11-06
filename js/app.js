@@ -1411,7 +1411,10 @@ class GiriOrbitPlatform {
       let detectedArch = 'x64';
       let archText = 'Windows 64-Bit (x64 Intel / AMD) • Detected & Recommended';
 
-      if (/arm64|aarch64/i.test(ua) || (navigator.userAgentData && navigator.userAgentData.architecture === 'arm')) {
+      if (/Android/i.test(ua)) {
+        detectedArch = 'android';
+        archText = 'Android Phone / Tablet Detected • Recommended';
+      } else if (/arm64|aarch64/i.test(ua) || (navigator.userAgentData && navigator.userAgentData.architecture === 'arm')) {
         detectedArch = 'arm64';
         archText = 'Windows ARM64 (Qualcomm Snapdragon / Surface) • Detected';
       } else if (/WOW64|Win64|x86_64|x64|amd64/i.test(ua) || /Win64/i.test(platform)) {
@@ -1431,8 +1434,9 @@ class GiriOrbitPlatform {
       });
       const targetCard = document.getElementById(`card-dl-${detectedArch}`);
       if (targetCard) {
-        targetCard.style.borderColor = '#38bdf8';
-        targetCard.style.boxShadow = '0 0 24px rgba(56, 189, 248, 0.28)';
+        const isAndroid = detectedArch === 'android';
+        targetCard.style.borderColor = isAndroid ? '#10b981' : '#38bdf8';
+        targetCard.style.boxShadow = isAndroid ? '0 0 24px rgba(16, 185, 129, 0.35)' : '0 0 24px rgba(56, 189, 248, 0.28)';
       }
     };
 
@@ -4702,6 +4706,21 @@ ${(s.features || []).map(f => `- **${f.num}** ${f.title}: ${f.desc}`).join('\n')
   }
 
   downloadBlob(content, type, filename) {
+    if (window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') {
+      try {
+        const reader = new FileReader();
+        const blob = new Blob([content], { type: `${type};charset=utf-8` });
+        reader.onloadend = () => {
+          const base64Data = reader.result;
+          window.AndroidBridge.saveFile(filename, base64Data, type);
+        };
+        reader.readAsDataURL(blob);
+        return;
+      } catch (err) {
+        console.warn('AndroidBridge saveFile failed:', err);
+      }
+    }
+
     const blob = new Blob([content], { type: `${type};charset=utf-8` });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -4712,6 +4731,18 @@ ${(s.features || []).map(f => `- **${f.num}** ${f.title}: ${f.desc}`).join('\n')
   }
 
   showToast(message, tone = 'blue') {
+    if (window.AndroidBridge && typeof window.AndroidBridge.showToast === 'function') {
+      try {
+        const cleanMsg = String(message).replace(/<[^>]+>/g, '').trim();
+        window.AndroidBridge.showToast(cleanMsg);
+        if (typeof window.AndroidBridge.vibrate === 'function') {
+          window.AndroidBridge.vibrate(25);
+        }
+      } catch (e) {
+        console.warn('AndroidBridge toast error:', e);
+      }
+    }
+
     if (!this.toastContainer) return;
     const toast = document.createElement('div');
     toast.className = 'orbit-toast';

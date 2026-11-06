@@ -192,7 +192,7 @@
           <span id="txt-global-drive-sync">Drive</span>
           <span class="drive-dot-live disconnected"></span>
         </button>
-        <button class="tier1-download-pill" id="btn-open-downloads-corner" title="Download Dedicated Windows Desktop App (x64, x86, ARM64)" style="background:linear-gradient(135deg, rgba(34,197,94,0.18), rgba(16,185,129,0.22)); border:1px solid rgba(34,197,94,0.4); color:#4ade80; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+        <button class="tier1-download-pill" id="btn-open-downloads-corner" title="Download Dedicated Native Apps for Windows &amp; Android" style="background:linear-gradient(135deg, rgba(34,197,94,0.18), rgba(16,185,129,0.22)); border:1px solid rgba(34,197,94,0.4); color:#4ade80; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
           <span style="font-size:13px;">📥</span>
           <span>Download App</span>
         </button>
@@ -477,52 +477,53 @@
     <button id="btn-girionix-dock-close" class="dock-pill-close-btn" title="Close Copilot">✕</button>
   </div>
 
-  <!-- DEDICATED WINDOWS DESKTOP APP DOWNLOADS CORNER MODAL -->
+  <!-- DEDICATED NATIVE APPS DOWNLOADS CORNER MODAL (WINDOWS & ANDROID) -->
   <div class="office-modal-backdrop" id="downloads-corner-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); z-index:999999; align-items:center; justify-content:center;">
-    <div class="office-dialog-card" role="dialog" aria-modal="true" style="width:740px; max-width:94vw; background:#18181b; border:1px solid #3f3f46; border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,0.8); overflow:hidden; display:flex; flex-direction:column; color:#f8fafc; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <div class="office-dialog-card" role="dialog" aria-modal="true" style="width:980px; max-width:96vw; max-height:92vh; background:#18181b; border:1px solid #3f3f46; border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,0.8); overflow-y:auto; display:flex; flex-direction:column; color:#f8fafc; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
       
       <!-- Modal Header -->
-      <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 22px; background:#111216; border-bottom:1px solid #27272a;">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 22px; background:#111216; border-bottom:1px solid #27272a; position:sticky; top:0; z-index:10;">
         <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:36px; height:36px; border-radius:8px; background:linear-gradient(135deg, #10b981, #0284c7); display:flex; align-items:center; justify-content:center; font-size:18px;">
-            💻
+          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #10b981, #0284c7); display:flex; align-items:center; justify-content:center; font-size:20px;">
+            💻📱
           </div>
           <div>
             <h2 style="font-size:16px; font-weight:800; margin:0; color:#ffffff; display:flex; align-items:center; gap:8px;">
-              <span>Giri Orbit for Windows</span>
-              <span style="font-size:10px; font-weight:700; background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.3); padding:2px 8px; border-radius:12px;">v11.8 Official</span>
+              <span>Giri Orbit for Windows &amp; Android</span>
+              <span style="font-size:10px; font-weight:700; background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.3); padding:2px 8px; border-radius:12px;">v11.8 Official • Multi-Platform</span>
             </h2>
-            <p style="font-size:11.5px; color:#94a3b8; margin:2px 0 0 0;">Dedicated Desktop Applications with Step-by-Step Installation &amp; Uninstallation Wizard</p>
+            <p style="font-size:11.5px; color:#94a3b8; margin:2px 0 0 0;">Dedicated Desktop Applications for Windows (x64, x86, ARM64) &amp; Mobile App for Android (.apk)</p>
           </div>
         </div>
         <button id="btn-close-downloads-corner" style="background:transparent; border:none; color:#94a3b8; font-size:18px; cursor:pointer; padding:4px 8px; border-radius:4px;" title="Close (Esc)">✕</button>
       </div>
 
-      <!-- Auto-detected Architecture Banner -->
-      <div style="background:rgba(56,189,248,0.08); border-bottom:1px solid rgba(56,189,248,0.2); padding:8px 22px; display:flex; align-items:center; justify-content:space-between; font-size:11.5px;">
+      <!-- Auto-detected Platform & Architecture Banner -->
+      <div style="background:rgba(56,189,248,0.08); border-bottom:1px solid rgba(56,189,248,0.2); padding:8px 22px; display:flex; align-items:center; justify-content:space-between; font-size:11.5px; flex-wrap:wrap; gap:8px;">
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="color:#38bdf8;">⚡</span>
-          <span style="color:#cbd5e1;">Your System:</span>
-          <strong id="downloads-detected-arch-text" style="color:#38bdf8;">Detecting Windows Architecture...</strong>
+          <span style="color:#cbd5e1;">Your Device:</span>
+          <strong id="downloads-detected-arch-text" style="color:#38bdf8;">Detecting System Architecture...</strong>
         </div>
-        <span style="color:#94a3b8; font-size:11px;">Zero Dependencies • 100% Offline Capable</span>
+        <span style="color:#94a3b8; font-size:11px;">Zero Dependencies • 100% Offline Sovereign Capable</span>
       </div>
 
       <!-- Architecture Download Cards Grid -->
-      <div style="padding:22px; display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; background:#141417;">
+      <div style="padding:22px; display:grid; grid-template-columns:repeat(auto-fit, minmax(215px, 1fr)); gap:14px; background:#141417;">
         
         <!-- 1. X64 (64-Bit Intel / AMD) -->
         <div class="dl-arch-card" id="card-dl-x64" style="background:#1e1e24; border:1.5px solid #27272a; border-radius:10px; padding:16px 14px; display:flex; flex-direction:column; justify-content:space-between; transition:all 0.2s;">
           <div>
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
               <span style="font-size:11px; font-weight:800; color:#38bdf8; background:rgba(56,189,248,0.12); padding:2px 8px; border-radius:4px;">x64 (64-BIT)</span>
-              <span style="font-size:10px; color:#22c55e; font-weight:700;">RECOMMENDED</span>
+              <span style="font-size:10px; color:#22c55e; font-weight:700;">WINDOWS</span>
             </div>
             <h3 style="font-size:14px; font-weight:700; margin:0 0 4px 0; color:#ffffff;">Windows 64-Bit</h3>
             <p style="font-size:11px; color:#94a3b8; margin:0 0 12px 0; line-height:1.4;">For Intel Core, Xeon, AMD Ryzen &amp; modern 64-bit Windows 11/10 PCs.</p>
             <div style="font-size:10.5px; color:#64748b; margin-bottom:14px;">
               <div>• File: <code>GiriOrbit-Setup-x64.exe</code></div>
               <div>• Size: 85.5 KB (Setup) / 85 MB (Installed)</div>
+              <div>• Includes Setup &amp; Uninstall Wizard</div>
             </div>
           </div>
           <a href="downloads/GiriOrbit-Setup-x64.exe" download="GiriOrbit-Setup-x64.exe" class="btn-dl-arch" style="background:#2563eb; color:#ffffff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:12px; font-weight:700; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 10px rgba(37,99,235,0.3);">
@@ -535,12 +536,14 @@
           <div>
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
               <span style="font-size:11px; font-weight:800; color:#eab308; background:rgba(234,179,8,0.12); padding:2px 8px; border-radius:4px;">x86 (32-BIT / X84)</span>
+              <span style="font-size:10px; color:#eab308; font-weight:700;">WINDOWS</span>
             </div>
             <h3 style="font-size:14px; font-weight:700; margin:0 0 4px 0; color:#ffffff;">Windows 32-Bit</h3>
             <p style="font-size:11px; color:#94a3b8; margin:0 0 12px 0; line-height:1.4;">For 32-bit processors, legacy hardware, and budget educational PCs.</p>
             <div style="font-size:10.5px; color:#64748b; margin-bottom:14px;">
               <div>• File: <code>GiriOrbit-Setup-x86.exe</code></div>
               <div>• Size: 86.0 KB (Setup) / 85 MB (Installed)</div>
+              <div>• Includes Setup &amp; Uninstall Wizard</div>
             </div>
           </div>
           <a href="downloads/GiriOrbit-Setup-x86.exe" download="GiriOrbit-Setup-x86.exe" class="btn-dl-arch" style="background:#3b82f6; color:#ffffff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:12px; font-weight:700; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
@@ -553,12 +556,14 @@
           <div>
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
               <span style="font-size:11px; font-weight:800; color:#ec4899; background:rgba(236,72,153,0.12); padding:2px 8px; border-radius:4px;">ARM64 / SNAPDRAGON</span>
+              <span style="font-size:10px; color:#ec4899; font-weight:700;">WINDOWS</span>
             </div>
             <h3 style="font-size:14px; font-weight:700; margin:0 0 4px 0; color:#ffffff;">Windows ARM</h3>
             <p style="font-size:11px; color:#94a3b8; margin:0 0 12px 0; line-height:1.4;">For Qualcomm Snapdragon X Elite, Microsoft Surface Pro ARM, and ARM64 Copilot+ PCs.</p>
             <div style="font-size:10.5px; color:#64748b; margin-bottom:14px;">
               <div>• File: <code>GiriOrbit-Setup-arm64.exe</code></div>
               <div>• Size: 86.0 KB (Setup) / 85 MB (Installed)</div>
+              <div>• Includes Setup &amp; Uninstall Wizard</div>
             </div>
           </div>
           <a href="downloads/GiriOrbit-Setup-arm64.exe" download="GiriOrbit-Setup-arm64.exe" class="btn-dl-arch" style="background:#8b5cf6; color:#ffffff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:12px; font-weight:700; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
@@ -566,14 +571,34 @@
           </a>
         </div>
 
+        <!-- 4. ANDROID MOBILE & TABLET (APK) -->
+        <div class="dl-arch-card" id="card-dl-android" style="background:#1e1e24; border:1.5px solid #27272a; border-radius:10px; padding:16px 14px; display:flex; flex-direction:column; justify-content:space-between; transition:all 0.2s;">
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <span style="font-size:11px; font-weight:800; color:#10b981; background:rgba(16,185,129,0.12); padding:2px 8px; border-radius:4px;">ANDROID (APK)</span>
+              <span style="font-size:10px; color:#10b981; font-weight:700;">MOBILE / TABLET</span>
+            </div>
+            <h3 style="font-size:14px; font-weight:700; margin:0 0 4px 0; color:#ffffff;">Android App</h3>
+            <p style="font-size:11px; color:#94a3b8; margin:0 0 12px 0; line-height:1.4;">Dedicated app for Android phones, tablets &amp; foldables (Samsung, Pixel, Xiaomi, OnePlus, etc.).</p>
+            <div style="font-size:10.5px; color:#64748b; margin-bottom:14px;">
+              <div>• File: <code>GiriOrbit.apk</code></div>
+              <div>• Architecture: ARM64, ARMv7, x86_64</div>
+              <div>• Requires: Android 7.0+ (API 24 to 35)</div>
+            </div>
+          </div>
+          <a href="downloads/GiriOrbit.apk" download="GiriOrbit.apk" class="btn-dl-arch" style="background:#10b981; color:#ffffff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:12px; font-weight:700; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 10px rgba(16,185,129,0.3);">
+            <span>⬇ Download Android .apk</span>
+          </a>
+        </div>
+
       </div>
 
-      <!-- Features & Wizard Highlights -->
-      <div style="padding:14px 22px; background:#111216; border-top:1px solid #27272a; font-size:11.5px; color:#94a3b8; display:flex; align-items:center; justify-content:space-between;">
-        <div style="display:flex; gap:16px;">
-          <span>✓ Full Step-by-Step Setup Wizard</span>
-          <span>✓ Clean Windows Uninstallation Wizard</span>
-          <span>✓ Desktop &amp; Start Menu Shortcuts</span>
+      <!-- Features & Platform Highlights -->
+      <div style="padding:14px 22px; background:#111216; border-top:1px solid #27272a; font-size:11.5px; color:#94a3b8; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <span>✓ Windows Step-by-Step Setup &amp; Uninstall Wizard</span>
+          <span>✓ Native Android APK with Offline LibreOffice Suite</span>
+          <span>✓ Zero Cloud Lock-In &amp; 100% Cryptographic Sovereignty</span>
         </div>
         <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" style="color:#38bdf8; text-decoration:none; font-weight:600;">View Repository Source &rarr;</a>
       </div>
