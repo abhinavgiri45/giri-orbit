@@ -38,7 +38,7 @@ The official production environment is actively deployed on Cloudflare Pages:
 > 2. **No Commercial or Non-Commercial Exploitation**: External individuals, organizations, or third parties are strictly prohibited from using, hosting, redistributing, or incorporating any component of this platform into other products or services.
 > 3. **Private Sovereign Technology**: Access to this repository is provided solely for internal inspection and authorized development by GIRI Corporation. No license or permission, express or implied, is granted under any patent, copyright, trademark, or trade secret rights of GIRI Corporation.
 >
-> *For licensing inquiries or authorized institutional partnerships, contact GIRI Corporation at `abhinavgiri370@gmail.com`.*
+> *For licensing inquiries or authorized institutional partnerships, contact me at `abhinavgiri370@gmail.com`.*
 
 ---
 
