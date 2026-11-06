@@ -2,7 +2,7 @@ import { FluentFontPicker } from '../components/fontPicker.js';
 import { symbolsManager } from '../components/symbolsManager.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { thesaurusManager } from '../components/thesaurusManager.js';
-import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { orbitDesktopSuite } from '../components/orbitDesktopSuite.js';
 import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
@@ -1202,12 +1202,12 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
 
     rootEl.innerHTML = `
       <div class="drift-app-shell" id="drift-app-shell">
-        <!-- LibreOffice Writer Classic Desktop Chrome -->
+        <!-- Giri Drift Classic Desktop Chrome -->
         <div class="lo-classic-chrome">
-          ${libreOfficeSuite.renderWindowHeader('drift', currentDocTitle)}
-          ${libreOfficeSuite.renderMenubar('drift')}
-          ${libreOfficeSuite.renderToolbars('drift')}
-          ${libreOfficeSuite.renderRuler()}
+          ${orbitDesktopSuite.renderWindowHeader('drift', currentDocTitle)}
+          ${orbitDesktopSuite.renderMenubar('drift')}
+          ${orbitDesktopSuite.renderToolbars('drift')}
+          ${orbitDesktopSuite.renderRuler()}
         </div>
 
         <!-- Modern Fluent Office Ribbon -->
@@ -2409,8 +2409,8 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
             </div>
           </div>
 
-          <!-- LibreOffice Writer Sidebar Deck -->
-          ${libreOfficeSuite.renderSidebarDeck('drift')}
+          <!-- Giri Drift Sidebar Deck -->
+          ${orbitDesktopSuite.renderSidebarDeck('drift')}
 
           <!-- Right Slide-Over Comments Panel -->
           <aside class="drift-comments-sidebar" id="drift-comments-sidebar">
@@ -2451,8 +2451,8 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
           </div>
         </div>
 
-        <!-- LibreOffice Writer Bottom Status Bar -->
-        ${libreOfficeSuite.renderStatusBar('drift', { currentPage: 1, totalPages: 1, words: 0, chars: 0 })}
+        <!-- Giri Drift Bottom Status Bar -->
+        ${orbitDesktopSuite.renderStatusBar('drift', { currentPage: 1, totalPages: 1, words: 0, chars: 0 })}
       </div>
 
       <!-- DIALOG MODALS FOR DRIFT -->
@@ -3353,9 +3353,9 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
       const commentsBadge = container.querySelector('#comments-badge');
       const emojiPickerDropdown = container.querySelector('#drift-emoji-picker-dropdown');
 
-      // Bind LibreOffice Writer Desktop Events & Shortcuts
-      libreOfficeSuite.bindEvents(container, 'drift', {
-        onNew: () => mountEditor(rootEl, '<p><br></p>', 'Document 1 - LibreOffice Writer', onUpdate),
+      // Bind Giri Drift Desktop Events & Shortcuts
+      orbitDesktopSuite.bindEvents(container, 'drift', {
+        onNew: () => mountEditor(rootEl, '<p><br></p>', 'Document 1 - Giri Drift Writer', onUpdate),
         onOpen: () => container.querySelector('#file-menu-open-device')?.click() || container.querySelector('#drift-editor-import-tpl-input')?.click(),
         onSave: () => saveDocument(),
         onSaveDevice: () => container.querySelector('#file-menu-save-device')?.click() || container.querySelector('#btn-drift-save-device')?.click(),
@@ -4910,7 +4910,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
         if (sbWordText) sbWordText.textContent = `${words.toLocaleString()} words`;
         if (sbCharText) sbCharText.textContent = `${chars.toLocaleString()} chars • ~${readMin}m read • ~${speakMin}m speak`;
 
-        // Update LibreOffice Writer Status Bar
+        // Update Giri Drift Status Bar
         const loPageStat = container.querySelector('#lo-stat-page-count');
         const loWordStat = container.querySelector('#lo-stat-word-count');
         if (loPageStat) loPageStat.textContent = `Page 1 of ${totalPages}`;

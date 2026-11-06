@@ -1,11 +1,11 @@
 /* ==========================================================================
-   LIBREOFFICE DESKTOP UI DESIGN SYSTEM (css/libreoffice.css)
-   Pixel-Accurate LibreOffice Colibre / Breeze Desktop Architecture
+   GIRI ORBIT DESKTOP UI DESIGN SYSTEM (css/orbitDesktop.css)
+   Pixel-Accurate Sovereign / Breeze Desktop Architecture
    Supported Tools:
-     - LibreOffice Writer  (Giri Drift)
-     - LibreOffice Calc    (Giri Axis)
-     - LibreOffice Impress (Giri Kinetic)
-     - LibreOffice Draw    (Giri Aegis PDF Studio)
+     - Giri Drift Writer
+     - Giri Axis Spreadsheet
+     - Giri Kinetic Presentation
+     - Giri Aegis PDF Studio
    ========================================================================== */
 
 /* --- Root & Theme Variables --- */
@@ -148,7 +148,7 @@ body.light-theme {
   color: var(--lo-text);
 }
 
-/* --- Classic LibreOffice Menu Bar --- */
+/* --- Classic orbitDesktop Menu Bar --- */
 .lo-menubar {
   display: flex;
   align-items: center;
@@ -258,7 +258,7 @@ body.light-theme {
   pointer-events: none;
 }
 
-/* --- LibreOffice Dual Toolbars: Standard & Formatting --- */
+/* --- orbitDesktop Dual Toolbars: Standard & Formatting --- */
 .lo-toolbars-wrap {
   display: flex;
   flex-direction: column;
@@ -356,7 +356,7 @@ body.light-theme {
   border-color: var(--lo-accent);
 }
 
-/* --- LibreOffice Calc Formula Bar --- */
+/* --- orbitDesktop Calc Formula Bar --- */
 .lo-formula-bar {
   display: flex;
   align-items: center;
@@ -424,7 +424,7 @@ body.light-theme {
   border-color: var(--lo-accent);
 }
 
-/* --- LibreOffice Writer Horizontal Measurement Ruler --- */
+/* --- orbitDesktop Writer Horizontal Measurement Ruler --- */
 .lo-ruler-wrap {
   width: 100%;
   background: var(--lo-ruler-bg);
@@ -461,7 +461,7 @@ body.light-theme {
   box-sizing: border-box;
 }
 
-/* --- LibreOffice Impress Slides Sorter Pane --- */
+/* --- orbitDesktop Impress Slides Sorter Pane --- */
 .lo-slides-pane {
   width: 190px;
   background: var(--lo-bg-main);
@@ -529,7 +529,7 @@ body.light-theme {
   padding: 0 2px;
 }
 
-/* --- LibreOffice Right Sidebar Deck --- */
+/* --- orbitDesktop Right Sidebar Deck --- */
 .lo-sidebar-deck {
   width: 280px;
   background: var(--lo-bg-main);
@@ -599,7 +599,7 @@ body.light-theme {
   padding-bottom: 4px;
 }
 
-/* --- LibreOffice Bottom Status Bar --- */
+/* --- orbitDesktop Bottom Status Bar --- */
 .lo-statusbar {
   display: flex;
   align-items: center;
@@ -658,7 +658,7 @@ body.light-theme {
   cursor: pointer;
 }
 
-/* --- LibreOffice Dialogs Architecture --- */
+/* --- orbitDesktop Dialogs Architecture --- */
 .lo-dialog-backdrop {
   position: fixed;
   inset: 0;
@@ -759,7 +759,7 @@ body.light-theme {
   background: #1557b0;
 }
 
-/* --- LibreOffice Calc Sheet Tabs at Bottom --- */
+/* --- orbitDesktop Calc Sheet Tabs at Bottom --- */
 .lo-sheet-tabs-bar {
   display: flex;
   align-items: center;
@@ -890,7 +890,7 @@ body.light-theme {
   font-size: 12px;
 }
 
-/* --- UI Layout Modes: Standard LibreOffice Toolbar vs Tabbed Notebookbar --- */
+/* --- UI Layout Modes: Standard orbitDesktop Toolbar vs Tabbed Notebookbar --- */
 .lo-classic-chrome {
   display: flex;
   flex-direction: column;

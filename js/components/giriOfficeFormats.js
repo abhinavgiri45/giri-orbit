@@ -4,10 +4,10 @@
  * By GIRI Corporation (A Subsidiary of Giri Group)
  * 
  * Provides two-way, 100% interoperable serialization and deserialization for:
- * - .gdrift  -> Native Giri Drift / Microsoft Word / LibreOffice Writer / WPS Writer
- * - .gaxis   -> Native Giri Axis / Microsoft Excel / LibreOffice Calc / WPS Spreadsheets
- * - .gkinetic-> Native Giri Kinetic / Microsoft PowerPoint / LibreOffice Impress / WPS Presentation
- * - .gaegis  -> Native Giri Aegis / Adobe PDF / LibreOffice Draw / Edge & Chrome PDF
+ * - .gdrift  -> Native Giri Drift / Microsoft Word / OpenDocument Writer / WPS Writer
+ * - .gaxis   -> Native Giri Axis / Microsoft Excel / OpenDocument Calc / WPS Spreadsheets
+ * - .gkinetic-> Native Giri Kinetic / Microsoft PowerPoint / OpenDocument Impress / WPS Presentation
+ * - .gaegis  -> Native Giri Aegis / Adobe PDF / Vector Draw Studio / Edge & Chrome PDF
  * - .giri    -> Native Sovereign Giri Orbit Universal Suite Container
  * ============================================================================
  */
@@ -54,7 +54,7 @@ export class GiriOfficeFormats {
 
   // ==========================================================================
   // 1. GIRI DRIFT (.gdrift) — Universal Wordprocessing Document
-  // Compatible with: MS Word, LibreOffice Writer, OpenOffice, WPS Writer, Google Docs
+  // Compatible with: MS Word, OpenDocument Writer, OpenOffice, WPS Writer, Google Docs
   // ==========================================================================
 
   static formatGDrift({ title = 'Untitled Document', content = '', author = 'Giri Orbit User', date = null, rawState = null }) {
@@ -281,7 +281,7 @@ ${utf8ToBase64(manifestJson)}
       }
     }
 
-    // 3. Document was edited or saved by MS Word, LibreOffice Writer, or is standard HTML
+    // 3. Document was edited or saved by MS Word, OpenDocument Writer, or is standard HTML
     let cleanedHtml = trimmed;
     const bodyMatch = cleanedHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
     if (bodyMatch && bodyMatch[1]) {
@@ -302,7 +302,7 @@ ${utf8ToBase64(manifestJson)}
 
   // ==========================================================================
   // 2. GIRI AXIS (.gaxis) — Universal Spreadsheet Workbook
-  // Compatible with: MS Excel, LibreOffice Calc, OpenOffice, WPS Spreadsheets, Google Sheets
+  // Compatible with: MS Excel, OpenDocument Calc, OpenOffice, WPS Spreadsheets, Google Sheets
   // ==========================================================================
 
   static formatGAxis({ sheetsData = {}, activeSheet = 'Sheet1', title = 'Giri Axis Workbook', author = 'Giri Orbit User', date = null }) {
@@ -510,7 +510,7 @@ ${rowsXml}  </Table>
       }
     }
 
-    // 3. XML SpreadsheetML (e.g. edited in Excel or LibreOffice Calc)
+    // 3. XML SpreadsheetML (e.g. edited in Excel or OpenDocument Calc)
     if (trimmed.includes('<Workbook') || trimmed.includes('<Worksheet')) {
       try {
         const extractedSheets = {};
@@ -583,7 +583,7 @@ ${rowsXml}  </Table>
 
   // ==========================================================================
   // 3. GIRI KINETIC (.gkinetic) — Universal Slide Presentation
-  // Compatible with: MS PowerPoint, LibreOffice Impress, OpenOffice, WPS Presentation
+  // Compatible with: MS PowerPoint, OpenDocument Impress, OpenOffice, WPS Presentation
   // ==========================================================================
 
   static formatGKinetic({ slidesData = [], title = 'Kinetic Presentation Deck', author = 'Giri Orbit User', date = null }) {
@@ -853,7 +853,7 @@ ${slidesHtml}
 
   // ==========================================================================
   // 4. GIRI AEGIS (.gaegis) — Universal PDF / Draw Studio Container
-  // Compatible with: Adobe Acrobat, LibreOffice Draw, Chrome / Edge PDF
+  // Compatible with: Adobe Acrobat, Vector Draw Studio, Chrome / Edge PDF
   // ==========================================================================
 
   static formatGAegis({ pages = [], title = 'Aegis Document', author = 'Giri Orbit User', date = null }) {

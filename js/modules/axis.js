@@ -1,7 +1,7 @@
 import { FluentFontPicker } from '../components/fontPicker.js';
 import { AXIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { localSync } from '../components/localFileDirectSync.js';
-import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { orbitDesktopSuite } from '../components/orbitDesktopSuite.js';
 import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
@@ -874,12 +874,12 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
 
   container.innerHTML = `
     <div class="axis-app-shell" id="axis-app-shell">
-      <!-- LibreOffice Calc Classic Desktop Chrome -->
+      <!-- Giri Axis Classic Desktop Chrome -->
       <div class="lo-classic-chrome">
-        ${libreOfficeSuite.renderWindowHeader('axis', 'Untitled 1 - LibreOffice Calc')}
-        ${libreOfficeSuite.renderMenubar('axis')}
-        ${libreOfficeSuite.renderToolbars('axis')}
-        ${libreOfficeSuite.renderFormulaBar()}
+        ${orbitDesktopSuite.renderWindowHeader('axis', 'Untitled 1 - Giri Axis Spreadsheet')}
+        ${orbitDesktopSuite.renderMenubar('axis')}
+        ${orbitDesktopSuite.renderToolbars('axis')}
+        ${orbitDesktopSuite.renderFormulaBar()}
       </div>
 
       <!-- Enterprise Multi-Tab Office Ribbon (Professional Dark Theme) -->
@@ -1944,8 +1944,8 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
           </div>
       </div>
 
-      <!-- LibreOffice Calc Bottom Status Bar -->
-      ${libreOfficeSuite.renderStatusBar('axis', { sheet: 1, totalSheets: 1 })}
+      <!-- Giri Axis Bottom Status Bar -->
+      ${orbitDesktopSuite.renderStatusBar('axis', { sheet: 1, totalSheets: 1 })}
 
       <!-- Mobile Floating Quick-Action Bar for Axis -->
       <div class="axis-mobile-toolbar" id="axis-mobile-toolbar" style="display:none;">
@@ -2511,8 +2511,8 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     saveCurrentSheet();
   }
 
-  // LibreOffice Calc Desktop Suite Event Binding
-  libreOfficeSuite.bindEvents(container, 'axis', {
+  // Giri Axis Desktop Suite Event Binding
+  orbitDesktopSuite.bindEvents(container, 'axis', {
     onNew: () => mountAxisEditor(container, [], onGridUpdate),
     onOpen: () => container.querySelector('#btn-axis-import-custom-template')?.click() || container.querySelector('#btn-axis-open-file')?.click(),
     onSave: () => saveAllSheets(),

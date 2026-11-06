@@ -1,23 +1,23 @@
 /**
  * ============================================================================
- * GIRI ORBIT — LIBREOFFICE CORE DESKTOP ENGINE (js/components/libreofficeSuite.js)
+ * GIRI ORBIT — SOVEREIGN CORE DESKTOP ENGINE (js/components/orbitDesktopSuite.js)
  * By GIRI Corporation (A Subsidiary of Giri Group)
- * Pixel-Accurate Desktop Parity with LibreOffice 7.x / 24.x Architecture:
- * - LibreOffice Writer  (Giri Drift)
- * - LibreOffice Calc    (Giri Axis)
- * - LibreOffice Impress (Giri Kinetic)
- * - LibreOffice Draw    (Giri Aegis PDF Studio)
+ * Pixel-Accurate Desktop Sovereign Architecture:
+ * - Giri Drift Writer
+ * - Giri Axis Spreadsheet
+ * - Giri Kinetic Presentation
+ * - Giri Aegis PDF Studio
  * ============================================================================
  */
 
-export class LibreOfficeSuite {
+export class OrbitDesktopSuite {
   constructor() {
     this.uiMode = localStorage.getItem('giri_orbit_ui_mode') || 'standard'; // 'standard' or 'notebookbar'
     this.activeMenu = null;
     this.initGlobalEvents();
   }
 
-  // --- SVG Icons Library (Colibre / Breeze Authentic Style) ---
+  // --- SVG Icons Library (Sovereign / Breeze Authentic Style) ---
   static get ICONS() {
     return {
       newDoc: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>`,
@@ -104,13 +104,13 @@ export class LibreOfficeSuite {
     this.activeMenu = null;
   }
 
-  // --- Render LibreOffice Application Window Header ---
+  // --- Render Application Window Header ---
   renderWindowHeader(tool, docTitle = 'Untitled 1') {
     const titles = {
-      drift: { name: 'LibreOffice Writer', badge: 'W', class: 'writer' },
-      axis: { name: 'LibreOffice Calc', badge: 'C', class: 'calc' },
-      kinetic: { name: 'LibreOffice Impress', badge: 'I', class: 'impress' },
-      pdf: { name: 'LibreOffice Draw', badge: 'D', class: 'draw' }
+      drift: { name: 'Giri Drift Writer', badge: 'W', class: 'writer' },
+      axis: { name: 'Giri Axis Spreadsheet', badge: 'C', class: 'calc' },
+      kinetic: { name: 'Giri Kinetic Presentation', badge: 'I', class: 'impress' },
+      pdf: { name: 'Giri Aegis PDF Studio', badge: 'D', class: 'draw' }
     };
     const t = titles[tool] || titles.drift;
 
@@ -140,7 +140,7 @@ export class LibreOfficeSuite {
     `;
   }
 
-  // --- Render LibreOffice Classic Menubar ---
+  // --- Render Classic Menubar ---
   renderMenubar(tool) {
     const menus = this.getMenusForTool(tool);
 
@@ -167,15 +167,15 @@ export class LibreOfficeSuite {
     `).join('');
 
     return `
-      <nav class="lo-menubar" aria-label="LibreOffice Desktop Menus">
+      <nav class="lo-menubar" aria-label="Orbit Desktop Menus">
         ${menuHtml}
       </nav>
     `;
   }
 
-  // --- Render LibreOffice Dual Toolbars ---
+  // --- Render Dual Toolbars ---
   renderToolbars(tool) {
-    const I = LibreOfficeSuite.ICONS;
+    const I = OrbitDesktopSuite.ICONS;
 
     let standardToolbar = `
       <div class="lo-toolbar lo-toolbar-standard">
@@ -339,7 +339,7 @@ export class LibreOfficeSuite {
     `;
   }
 
-  // --- Render LibreOffice Calc Formula Bar ---
+  // --- Render Formula Bar ---
   renderFormulaBar() {
     return `
       <div class="lo-formula-bar" id="lo-calc-formula-bar">
@@ -352,7 +352,7 @@ export class LibreOfficeSuite {
     `;
   }
 
-  // --- Render LibreOffice Writer Measurement Ruler ---
+  // --- Render Measurement Ruler ---
   renderRuler() {
     return `
       <div class="lo-ruler-wrap" id="lo-writer-ruler">
@@ -370,7 +370,7 @@ export class LibreOfficeSuite {
     `;
   }
 
-  // --- Render LibreOffice Impress Slides Sorter Pane ---
+  // --- Render Slides Sorter Pane ---
   renderSlidesPane(slides = []) {
     const listHtml = (slides.length ? slides : [{ title: 'Slide 1' }]).map((s, idx) => `
       <div class="lo-slide-thumb-card ${idx === 0 ? 'active' : ''}" data-slide-idx="${idx}">
@@ -397,9 +397,9 @@ export class LibreOfficeSuite {
     `;
   }
 
-  // --- Render LibreOffice Right Sidebar Deck ---
+  // --- Render Right Sidebar Deck ---
   renderSidebarDeck(tool) {
-    const I = LibreOfficeSuite.ICONS;
+    const I = OrbitDesktopSuite.ICONS;
 
     return `
       <aside class="lo-sidebar-deck" id="lo-sidebar-deck">
@@ -455,7 +455,7 @@ export class LibreOfficeSuite {
     `;
   }
 
-  // --- Render LibreOffice Bottom Status Bar ---
+  // --- Render Bottom Status Bar ---
   renderStatusBar(tool, stats = {}) {
     let leftInfo = '';
     if (tool === 'drift') {
@@ -505,7 +505,7 @@ export class LibreOfficeSuite {
 
   // --- Menus Configuration for Each Tool ---
   getMenusForTool(tool) {
-    const I = LibreOfficeSuite.ICONS;
+    const I = OrbitDesktopSuite.ICONS;
 
     const commonFile = [
       { label: 'New', icon: I.newDoc, cmd: 'new', shortcut: 'Ctrl+N' },
@@ -557,10 +557,10 @@ export class LibreOfficeSuite {
     ];
 
     const commonHelp = [
-      { label: 'LibreOffice Help', icon: '❓', cmd: 'help', shortcut: 'F1' },
+      { label: 'Giri Orbit Help', icon: '❓', cmd: 'help', shortcut: 'F1' },
       { label: 'Girionix Pro AI Assistant', icon: '⚡', cmd: 'ai-agent', shortcut: 'Alt+A' },
       { separator: true },
-      { label: 'About LibreOffice / Giri Orbit', icon: 'ℹ️', cmd: 'about' }
+      { label: 'About Giri Orbit Desktop Suite', icon: 'ℹ️', cmd: 'about' }
     ];
 
     if (tool === 'drift') {
@@ -1246,7 +1246,7 @@ export class LibreOfficeSuite {
   }
 
   // =========================================================================
-  // LIBREOFFICE DESKTOP DIALOGS SYSTEM
+  // GIRI ORBIT DESKTOP DIALOGS SYSTEM
   // =========================================================================
 
   // 1. Find & Replace Dialog
@@ -1835,7 +1835,7 @@ export class LibreOfficeSuite {
     }
     if (!slides || !slides.length) {
       slides = [
-        { title: 'Executive Keynote', subtitle: 'LibreOffice Impress Desktop Show', points: ['High-Velocity Vector Engine', 'Sovereign Presentation Architecture', 'Seamless Cloud Interoperability'] },
+        { title: 'Executive Keynote', subtitle: 'Giri Kinetic Desktop Show', points: ['High-Velocity Vector Engine', 'Sovereign Presentation Architecture', 'Seamless Cloud Interoperability'] },
         { title: 'Market Performance', subtitle: 'Q3 Growth Metrics', points: ['142% Year-over-Year Trajectory', 'Zero Data Harvesting', 'Native Format Portability'] }
       ];
     }
@@ -1847,7 +1847,7 @@ export class LibreOfficeSuite {
       const pts = Array.isArray(s.points) ? s.points.map(p => `<li style="margin:12px 0;">${p}</li>`).join('') : '';
       return `
         <div class="lo-slideshow-slide" id="lo-active-slide-frame">
-          <span style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:#ea580c; font-weight:700;">Giri Kinetic • LibreOffice Impress</span>
+          <span style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:#ea580c; font-weight:700;">Giri Kinetic • Strategy Presentation</span>
           <h1 style="font-size:52px; font-weight:800; color:#0f172a; margin:18px 0 6px 0;">${s.title || 'Slide ' + (idx + 1)}</h1>
           <h3 style="font-size:24px; color:#64748b; font-weight:500; margin-bottom:28px;">${s.subtitle || ''}</h3>
           <ul style="font-size:22px; color:#334155; line-height:1.6; padding-left:28px;">
@@ -1906,7 +1906,7 @@ export class LibreOfficeSuite {
     window.addEventListener('keydown', handleKey);
   }
 
-  // 13. About LibreOffice / Giri Orbit Dialog
+  // 13. About Giri Orbit Desktop Suite Dialog
   openAboutDialog(tool) {
     document.getElementById('lo-about-modal')?.remove();
     const modal = document.createElement('div');
@@ -1916,17 +1916,17 @@ export class LibreOfficeSuite {
     modal.innerHTML = `
       <div class="lo-dialog-window" style="width:480px; text-align:center;">
         <div class="lo-dialog-header">
-          <span>About LibreOffice • Giri Orbit Edition</span>
+          <span>About Giri Orbit Desktop Suite</span>
           <button class="lo-dialog-close" id="lo-close-about">✕</button>
         </div>
         <div class="lo-dialog-body" style="align-items:center; padding:24px 20px;">
           <div style="width:52px; height:52px; border-radius:12px; background:linear-gradient(135deg,#15803d,#1d4ed8); display:flex; align-items:center; justify-content:center; font-size:26px; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,0.3); margin-bottom:12px;">
             📄
           </div>
-          <strong style="font-size:18px; color:var(--lo-text);">LibreOffice 24.8 Desktop Parity</strong>
+          <strong style="font-size:18px; color:var(--lo-text);">Giri Orbit 24.8 Sovereign Desktop Suite</strong>
           <span style="font-size:12.5px; color:var(--lo-accent); font-weight:600; margin-top:2px;">Giri Orbit Sovereign Edition</span>
           <p style="font-size:12px; color:var(--lo-text-muted); line-height:1.5; margin:14px 0 0 0;">
-            A complete 1:1 desktop-parity browser implementation of LibreOffice Writer, Calc, Impress, and Draw.
+            A complete sovereign desktop-grade browser implementation of Drift Writer, Axis Spreadsheets, Kinetic Presentations, and Aegis PDF Studio.
             Zero cloud requirement, native OpenDocument (.odt, .ods, .odp) and Office (.docx, .xlsx, .pptx) interoperability,
             sovereign client memory encryption, and full offline autonomy.
           </p>
@@ -1947,5 +1947,5 @@ export class LibreOfficeSuite {
   }
 }
 
-export const libreOfficeSuite = new LibreOfficeSuite();
-window.libreOfficeSuite = libreOfficeSuite;
+export const orbitDesktopSuite = new OrbitDesktopSuite();
+window.orbitDesktopSuite = orbitDesktopSuite;

@@ -4261,10 +4261,10 @@ class GiriOrbitPlatform {
   getFormatsForTool(tool) {
     const formatConfigs = {
       drift: [
-        { ext: 'gdrift', name: 'Giri Drift Document (.gdrift)', desc: 'Universal Wordprocessing format — LibreOffice Writer & MS Word native interoperability', color: '#e42528', label: 'GDRIFT' },
+        { ext: 'gdrift', name: 'Giri Drift Document (.gdrift)', desc: 'Universal Wordprocessing format — MS Word & OpenDocument native interoperability', color: '#e42528', label: 'GDRIFT' },
         { ext: 'docx', name: 'Word Document (.docx)', desc: 'Word Open XML document format', color: '#2563eb', label: 'DOCX' },
         { ext: 'doc', name: 'Word 97-2003 (.doc)', desc: 'Legacy Word binary format', color: '#1d4ed8', label: 'DOC' },
-        { ext: 'odt', name: 'Open Document Text (.odt)', desc: 'LibreOffice/OpenOffice Writer format', color: '#1a6b3c', label: 'ODT' },
+        { ext: 'odt', name: 'Open Document Text (.odt)', desc: 'OpenDocument Text (.odt) format', color: '#1a6b3c', label: 'ODT' },
         { ext: 'rtf', name: 'Rich Text Format (.rtf)', desc: 'Cross-application rich text exchange', color: '#7c3aed', label: 'RTF' },
         { ext: 'md', name: 'Markdown (.md)', desc: 'GitHub-flavored markdown format', color: '#0891b2', label: 'MD' },
         { ext: 'txt', name: 'Plain Text (.txt)', desc: 'Universal plain text document', color: '#64748b', label: 'TXT' },
@@ -4273,10 +4273,10 @@ class GiriOrbitPlatform {
         { ext: 'epub', name: 'eBook (.epub)', desc: 'Open ebook container format', color: '#059669', label: 'EPUB' }
       ],
       axis: [
-        { ext: 'gaxis', name: 'Giri Axis Workbook (.gaxis)', desc: 'Universal Spreadsheet format — LibreOffice Calc & MS Excel native interoperability', color: '#e42528', label: 'GAXIS' },
+        { ext: 'gaxis', name: 'Giri Axis Workbook (.gaxis)', desc: 'Universal Spreadsheet format — MS Excel & OpenDocument native interoperability', color: '#e42528', label: 'GAXIS' },
         { ext: 'xlsx', name: 'Spreadsheet Workbook (.xlsx)', desc: 'Modern Open XML spreadsheet', color: '#107c41', label: 'XLSX' },
         { ext: 'xls', name: 'Spreadsheet 97-2003 (.xls)', desc: 'Legacy spreadsheet format', color: '#15803d', label: 'XLS' },
-        { ext: 'ods', name: 'Open Spreadsheet (.ods)', desc: 'LibreOffice/OpenOffice Calc format', color: '#1a6b3c', label: 'ODS' },
+        { ext: 'ods', name: 'Open Spreadsheet (.ods)', desc: 'Open Spreadsheet (.ods) format', color: '#1a6b3c', label: 'ODS' },
         { ext: 'csv', name: 'CSV File (.csv)', desc: 'Universal Comma-Separated Values table', color: '#0d9488', label: 'CSV' },
         { ext: 'tsv', name: 'Tab-Separated (.tsv)', desc: 'Tab-delimited data values export', color: '#0284c7', label: 'TSV' },
         { ext: 'json', name: 'JSON Data (.json)', desc: 'Structured JSON data format', color: '#7c3aed', label: 'JSON' },
@@ -4285,16 +4285,16 @@ class GiriOrbitPlatform {
         { ext: 'html', name: 'HTML Table (.html)', desc: 'Browser-viewable data table', color: '#ea580c', label: 'HTML' }
       ],
       kinetic: [
-        { ext: 'gkinetic', name: 'Giri Kinetic Deck (.gkinetic)', desc: 'Universal Presentation format — LibreOffice Impress & MS PowerPoint native interoperability', color: '#e42528', label: 'GKINETIC' },
+        { ext: 'gkinetic', name: 'Giri Kinetic Deck (.gkinetic)', desc: 'Universal Presentation format — MS PowerPoint & OpenDocument native interoperability', color: '#e42528', label: 'GKINETIC' },
         { ext: 'pptx', name: 'Presentation (.pptx)', desc: 'Office Open XML Presentation (.pptx)', color: '#ea580c', label: 'PPTX' },
         { ext: 'ppt', name: 'Presentation 97-2003 (.ppt)', desc: 'Legacy presentation format (.ppt)', color: '#c2410c', label: 'PPT' },
-        { ext: 'odp', name: 'Open Presentation (.odp)', desc: 'LibreOffice/OpenOffice Impress format', color: '#1a6b3c', label: 'ODP' },
+        { ext: 'odp', name: 'Open Presentation (.odp)', desc: 'Open Presentation (.odp) format', color: '#1a6b3c', label: 'ODP' },
         { ext: 'pdf', name: 'PDF Slide Deck (.pdf)', desc: 'High-resolution printable slide handouts', color: '#dc2626', label: 'PDF' },
         { ext: 'html', name: 'HTML Slideshow (.html)', desc: 'Browser-based interactive presentation', color: '#ea580c', label: 'HTML' },
         { ext: 'json', name: 'Kinetic Deck (.json)', desc: 'Native Giri Kinetic presentation data model', color: '#7c3aed', label: 'JSON' }
       ],
       pdf: [
-        { ext: 'gaegis', name: 'Giri Aegis Document (.gaegis)', desc: 'Universal Vector & PDF format — Adobe Acrobat & LibreOffice Draw native interoperability', color: '#e42528', label: 'GAEGIS' },
+        { ext: 'gaegis', name: 'Giri Aegis Document (.gaegis)', desc: 'Universal Vector & PDF format — Adobe Acrobat & Vector Draw native interoperability', color: '#e42528', label: 'GAEGIS' },
         { ext: 'pdf', name: 'PDF Document (.pdf)', desc: 'Finalized stamped PDF with signatures', color: '#dc2626', label: 'PDF' },
         { ext: 'docx', name: 'Word Document (.docx)', desc: 'Converted editable Word document', color: '#2563eb', label: 'DOCX' },
         { ext: 'txt', name: 'Plain Text (.txt)', desc: 'Clean extracted document text', color: '#64748b', label: 'TXT' },
@@ -4331,7 +4331,7 @@ class GiriOrbitPlatform {
    * Enterprise Multi-Format File Generation
    */
   generateAndDownloadFile(tool, ext, fullFileName, baseName) {
-    // Universal sovereign Giri formats — 100% interoperable across LibreOffice, MS Office & Giri Orbit
+    // Universal sovereign Giri formats — 100% interoperable across standard office suites, MS Office & Giri Orbit
     if (ext === 'gdrift') {
       const paper = document.getElementById('drift-paper-canvas');
       const titleEl = document.getElementById('drift-doc-title');

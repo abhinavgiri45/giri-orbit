@@ -1,7 +1,7 @@
 import { AEGIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { FluentFontPicker } from '../components/fontPicker.js';
 import { localSync } from '../components/localFileDirectSync.js';
-import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { orbitDesktopSuite } from '../components/orbitDesktopSuite.js';
 import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
@@ -894,11 +894,11 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
 
   container.innerHTML = `
     <div class="pdf-studio-shell" id="pdf-studio-shell">
-      <!-- LibreOffice Draw Classic Desktop Chrome -->
+      <!-- Giri Aegis Classic Desktop Chrome -->
       <div class="lo-classic-chrome">
-        ${libreOfficeSuite.renderWindowHeader('pdf', 'Drawing 1 - LibreOffice Draw')}
-        ${libreOfficeSuite.renderMenubar('pdf')}
-        ${libreOfficeSuite.renderToolbars('pdf')}
+        ${orbitDesktopSuite.renderWindowHeader('pdf', 'Drawing 1 - Giri Aegis PDF Studio')}
+        ${orbitDesktopSuite.renderMenubar('pdf')}
+        ${orbitDesktopSuite.renderToolbars('pdf')}
       </div>
 
       <!-- Enterprise Multi-Group Office Ribbon -->
@@ -1985,8 +1985,8 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
         <button class="mobile-tool-btn" id="btn-mobile-pdf-save" title="Download PDF" style="color:#ef4444;">💾</button>
       </div>
 
-      <!-- LibreOffice Draw Bottom Status Bar -->
-      ${libreOfficeSuite.renderStatusBar('pdf', { currentPage: 1, totalPages: pages.length })}
+      <!-- Giri Aegis Bottom Status Bar -->
+      ${orbitDesktopSuite.renderStatusBar('pdf', { currentPage: 1, totalPages: pages.length })}
     </div>
   `;
 
@@ -1995,8 +1995,8 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
 }
 
 function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText, isWatermarkActive, currentZoom, onPdfUpdate) {
-  // LibreOffice Draw Desktop Suite Event Binding
-  libreOfficeSuite.bindEvents(container, 'pdf', {
+  // Giri Aegis Desktop Suite Event Binding
+  orbitDesktopSuite.bindEvents(container, 'pdf', {
     onNew: () => mountPdfEditor(container, 'blank', onPdfUpdate),
     onOpen: () => container.querySelector('#pdf-file-open-input')?.click(),
     onSave: () => {

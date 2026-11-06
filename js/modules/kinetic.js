@@ -10,7 +10,7 @@ import {
 } from '../data/templates.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { thesaurusManager } from '../components/thesaurusManager.js';
-import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { orbitDesktopSuite } from '../components/orbitDesktopSuite.js';
 import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
@@ -2386,11 +2386,11 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 
   container.innerHTML = `
     <div class="kinetic-app-shell" id="kinetic-app-shell">
-      <!-- LibreOffice Impress Classic Desktop Chrome -->
+      <!-- Giri Kinetic Classic Desktop Chrome -->
       <div class="lo-classic-chrome">
-        ${libreOfficeSuite.renderWindowHeader('kinetic', 'Presentation 1 - LibreOffice Impress')}
-        ${libreOfficeSuite.renderMenubar('kinetic')}
-        ${libreOfficeSuite.renderToolbars('kinetic')}
+        ${orbitDesktopSuite.renderWindowHeader('kinetic', 'Presentation 1 - Giri Kinetic Presentation')}
+        ${orbitDesktopSuite.renderMenubar('kinetic')}
+        ${orbitDesktopSuite.renderToolbars('kinetic')}
       </div>
 
       <!-- Enterprise Multi-Tab Office Ribbon -->
@@ -3421,12 +3421,12 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             </div>
           </div>
         </aside>
-        <!-- LibreOffice Impress Right Sidebar Deck -->
-        ${libreOfficeSuite.renderSidebarDeck('kinetic')}
+        <!-- Giri Kinetic Right Sidebar Deck -->
+        ${orbitDesktopSuite.renderSidebarDeck('kinetic')}
       </div>
 
-      <!-- LibreOffice Impress Bottom Status Bar -->
-      ${libreOfficeSuite.renderStatusBar('kinetic', { totalSlides: slidesData.length })}
+      <!-- Giri Kinetic Bottom Status Bar -->
+      ${orbitDesktopSuite.renderStatusBar('kinetic', { totalSlides: slidesData.length })}
 
       <!-- Presenter Station HUD & Fullscreen Overlay -->
       <div class="presenter-fullscreen-overlay" id="presenter-overlay">
@@ -3625,8 +3625,8 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 }
 
 function initKineticWorkspace(container, slidesData, currentSlideIndex, currentTheme, currentTransition, aspectRatio, onDeckUpdate) {
-  // LibreOffice Impress Desktop Suite Event Binding
-  libreOfficeSuite.bindEvents(container, 'kinetic', {
+  // Giri Kinetic Desktop Suite Event Binding
+  orbitDesktopSuite.bindEvents(container, 'kinetic', {
     onNew: () => mountKineticEditor(container, 'blank', onDeckUpdate),
     onOpen: () => container.querySelector('#btn-kinetic-open-deck')?.click(),
     onSave: () => saveDeck(),
