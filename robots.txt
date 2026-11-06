@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://giri-orbit.pages.dev/sitemap.xml
-Sitemap: https://giricorporationpvt-stack.github.io/giri-orbit/sitemap.xml
+Sitemap: https://abhinavgiri45.github.io/giri-orbit/sitemap.xml
 
