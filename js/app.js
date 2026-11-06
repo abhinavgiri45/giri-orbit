@@ -23,6 +23,7 @@ import { localSync } from './components/localFileDirectSync.js?v=11.6';
 import { driveSyncManager } from './modules/driveSyncManager.js?v=11.6';
 import { GirionixAgentManager } from './components/girionixAgent.js?v=11.6';
 import girionixEngine from './modules/girionixEngine.js?v=11.6';
+import { GiriOfficeFormats } from './components/giriOfficeFormats.js?v=12.2';
 
 class GiriOrbitPlatform {
   constructor() {
@@ -3842,15 +3843,74 @@ class GiriOrbitPlatform {
         const content = event.target?.result;
         if (typeof content !== 'string') return;
 
-        if (ext === 'md' || ext === 'txt') {
+        // Document / Writer formats
+        if (['gdrift', 'gdoc', 'docx', 'doc', 'odt', 'rtf', 'md', 'txt', 'html', 'htm'].includes(ext)) {
+          const parsed = GiriOfficeFormats.parseGDrift(content);
+          localStorage.setItem('giri_orbit_drift_doc', parsed.content);
           this.navigateTo('drift', file.name);
-          this.showToast(`Imported ${file.name} into Giri Writer`, 'blue');
-        } else if (ext === 'csv') {
+          this.showToast(`Imported "${file.name}" into Giri Writer (Universal Parity)`, 'blue');
+        }
+        // Spreadsheet / Calc formats
+        else if (['gaxis', 'gsheet', 'xlsx', 'xls', 'ods', 'csv', 'tsv'].includes(ext)) {
+          const parsed = GiriOfficeFormats.parseGAxis(content);
+          if (parsed && parsed.sheetsData && Object.keys(parsed.sheetsData).length > 0) {
+            localStorage.setItem('giri_orbit_axis_sheets', JSON.stringify(parsed.sheetsData));
+          }
           this.navigateTo('axis', file.name);
-          this.showToast(`Imported ${file.name} into Giri Sheet`, 'green');
-        } else if (ext === 'json') {
+          this.showToast(`Imported "${file.name}" into Giri Sheet (Universal Parity)`, 'green');
+        }
+        // Presentation / Impress formats
+        else if (['gkinetic', 'gslide', 'pptx', 'ppt', 'odp'].includes(ext)) {
+          const parsed = GiriOfficeFormats.parseGKinetic(content);
+          if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
+            localStorage.setItem('giri_orbit_kinetic_deck', JSON.stringify(parsed.slides));
+          }
           this.navigateTo('kinetic', file.name);
-          this.showToast(`Imported ${file.name} into Giri Show`, 'red');
+          this.showToast(`Imported "${file.name}" into Giri Show (Universal Parity)`, 'red');
+        }
+        // Vector / PDF Studio formats
+        else if (['gaegis', 'gpdf', 'pdf'].includes(ext)) {
+          const parsed = GiriOfficeFormats.parseGAegis(content);
+          if (Array.isArray(parsed.pages) && parsed.pages.length > 0) {
+            localStorage.setItem('giri_orbit_pdf_pages', JSON.stringify(parsed.pages));
+          }
+          this.navigateTo('pdf', file.name);
+          this.showToast(`Imported "${file.name}" into Giri Aegis PDF Studio`, 'red');
+        }
+        // Universal multi-tool workspace project
+        else if (ext === 'giri') {
+          const project = GiriOfficeFormats.parseGiriProject(content);
+          if (project && project.tools) {
+            if (project.tools.drift) localStorage.setItem('giri_orbit_drift_doc', project.tools.drift);
+            if (project.tools.axis) localStorage.setItem('giri_orbit_axis_sheets', project.tools.axis);
+            if (project.tools.kinetic) localStorage.setItem('giri_orbit_kinetic_deck', project.tools.kinetic);
+            if (project.tools.pdf) localStorage.setItem('giri_orbit_pdf_pages', project.tools.pdf);
+            this.showToast(`Restored Giri Sovereign Project "${project.title || file.name}" across all office tools`, 'violet');
+          }
+        }
+        // Fallback JSON handling
+        else if (ext === 'json') {
+          try {
+            const parsed = JSON.parse(content);
+            if (parsed.format === 'gdrift' || parsed.content) {
+              const driftParsed = GiriOfficeFormats.parseGDrift(content);
+              localStorage.setItem('giri_orbit_drift_doc', driftParsed.content);
+              this.navigateTo('drift', file.name);
+            } else if (parsed.format === 'gaxis' || parsed.Sheet1 || (typeof parsed === 'object' && !Array.isArray(parsed))) {
+              const axisParsed = GiriOfficeFormats.parseGAxis(content);
+              localStorage.setItem('giri_orbit_axis_sheets', JSON.stringify(axisParsed.sheetsData));
+              this.navigateTo('axis', file.name);
+            } else if (parsed.format === 'gkinetic' || Array.isArray(parsed)) {
+              const kineticParsed = GiriOfficeFormats.parseGKinetic(content);
+              localStorage.setItem('giri_orbit_kinetic_deck', JSON.stringify(kineticParsed.slides));
+              this.navigateTo('kinetic', file.name);
+            } else {
+              this.navigateTo('drift', file.name);
+            }
+            this.showToast(`Imported ${file.name}`, 'violet');
+          } catch {
+            this.navigateTo('drift', file.name);
+          }
         }
       };
 
@@ -4201,7 +4261,7 @@ class GiriOrbitPlatform {
   getFormatsForTool(tool) {
     const formatConfigs = {
       drift: [
-        { ext: 'gdrift', name: 'Giri Drift Document (.gdrift)', desc: 'Native sovereign Giri Drift format — full fidelity', color: '#e42528', label: 'GDRIFT' },
+        { ext: 'gdrift', name: 'Giri Drift Document (.gdrift)', desc: 'Universal Wordprocessing format — LibreOffice Writer & MS Word native interoperability', color: '#e42528', label: 'GDRIFT' },
         { ext: 'docx', name: 'Word Document (.docx)', desc: 'Word Open XML document format', color: '#2563eb', label: 'DOCX' },
         { ext: 'doc', name: 'Word 97-2003 (.doc)', desc: 'Legacy Word binary format', color: '#1d4ed8', label: 'DOC' },
         { ext: 'odt', name: 'Open Document Text (.odt)', desc: 'LibreOffice/OpenOffice Writer format', color: '#1a6b3c', label: 'ODT' },
@@ -4213,7 +4273,7 @@ class GiriOrbitPlatform {
         { ext: 'epub', name: 'eBook (.epub)', desc: 'Open ebook container format', color: '#059669', label: 'EPUB' }
       ],
       axis: [
-        { ext: 'gaxis', name: 'Giri Axis Workbook (.gaxis)', desc: 'Native sovereign Giri Axis spreadsheet format', color: '#e42528', label: 'GAXIS' },
+        { ext: 'gaxis', name: 'Giri Axis Workbook (.gaxis)', desc: 'Universal Spreadsheet format — LibreOffice Calc & MS Excel native interoperability', color: '#e42528', label: 'GAXIS' },
         { ext: 'xlsx', name: 'Spreadsheet Workbook (.xlsx)', desc: 'Modern Open XML spreadsheet', color: '#107c41', label: 'XLSX' },
         { ext: 'xls', name: 'Spreadsheet 97-2003 (.xls)', desc: 'Legacy spreadsheet format', color: '#15803d', label: 'XLS' },
         { ext: 'ods', name: 'Open Spreadsheet (.ods)', desc: 'LibreOffice/OpenOffice Calc format', color: '#1a6b3c', label: 'ODS' },
@@ -4225,7 +4285,7 @@ class GiriOrbitPlatform {
         { ext: 'html', name: 'HTML Table (.html)', desc: 'Browser-viewable data table', color: '#ea580c', label: 'HTML' }
       ],
       kinetic: [
-        { ext: 'gkinetic', name: 'Giri Kinetic Deck (.gkinetic)', desc: 'Native sovereign Giri Kinetic presentation format', color: '#e42528', label: 'GKINETIC' },
+        { ext: 'gkinetic', name: 'Giri Kinetic Deck (.gkinetic)', desc: 'Universal Presentation format — LibreOffice Impress & MS PowerPoint native interoperability', color: '#e42528', label: 'GKINETIC' },
         { ext: 'pptx', name: 'Presentation (.pptx)', desc: 'Office Open XML Presentation (.pptx)', color: '#ea580c', label: 'PPTX' },
         { ext: 'ppt', name: 'Presentation 97-2003 (.ppt)', desc: 'Legacy presentation format (.ppt)', color: '#c2410c', label: 'PPT' },
         { ext: 'odp', name: 'Open Presentation (.odp)', desc: 'LibreOffice/OpenOffice Impress format', color: '#1a6b3c', label: 'ODP' },
@@ -4234,7 +4294,7 @@ class GiriOrbitPlatform {
         { ext: 'json', name: 'Kinetic Deck (.json)', desc: 'Native Giri Kinetic presentation data model', color: '#7c3aed', label: 'JSON' }
       ],
       pdf: [
-        { ext: 'gaegis', name: 'Giri Aegis Document (.gaegis)', desc: 'Native sovereign Giri Aegis PDF studio format', color: '#e42528', label: 'GAEGIS' },
+        { ext: 'gaegis', name: 'Giri Aegis Document (.gaegis)', desc: 'Universal Vector & PDF format — Adobe Acrobat & LibreOffice Draw native interoperability', color: '#e42528', label: 'GAEGIS' },
         { ext: 'pdf', name: 'PDF Document (.pdf)', desc: 'Finalized stamped PDF with signatures', color: '#dc2626', label: 'PDF' },
         { ext: 'docx', name: 'Word Document (.docx)', desc: 'Converted editable Word document', color: '#2563eb', label: 'DOCX' },
         { ext: 'txt', name: 'Plain Text (.txt)', desc: 'Clean extracted document text', color: '#64748b', label: 'TXT' },
@@ -4242,6 +4302,7 @@ class GiriOrbitPlatform {
         { ext: 'md', name: 'Markdown (.md)', desc: 'Markdown text with formatting', color: '#0891b2', label: 'MD' }
       ],
       launcher: [
+        { ext: 'giri', name: 'Giri Sovereign Project (.giri)', desc: 'Universal multi-tool office project container', color: '#e42528', label: 'GIRI' },
         { ext: 'json', name: 'Full Suite Backup (.json)', desc: 'Complete sovereign workspace snapshot', color: '#2563eb', label: 'JSON' },
         { ext: 'docx', name: 'Executive Document (.docx)', desc: 'Active Word document (.docx)', color: '#2563eb', label: 'DOCX' },
         { ext: 'xlsx', name: 'Financial Model (.xlsx)', desc: 'Active spreadsheet (.xlsx)', color: '#16a34a', label: 'XLSX' },
@@ -4270,52 +4331,78 @@ class GiriOrbitPlatform {
    * Enterprise Multi-Format File Generation
    */
   generateAndDownloadFile(tool, ext, fullFileName, baseName) {
-    // Native sovereign Giri formats — full-fidelity export
+    // Universal sovereign Giri formats — 100% interoperable across LibreOffice, MS Office & Giri Orbit
     if (ext === 'gdrift') {
       const paper = document.getElementById('drift-paper-canvas');
       const titleEl = document.getElementById('drift-doc-title');
-      const payload = JSON.stringify({
-        format: 'gdrift', version: '1.0',
-        title: titleEl?.value || baseName,
-        content: paper ? paper.innerHTML : (localStorage.getItem('giri_orbit_drift_doc') || ''),
-        exportedAt: new Date().toISOString()
-      }, null, 2);
-      this.downloadBlob(payload, 'application/x-gdrift+json', fullFileName);
-      this.showToast(`✅ Exported ${fullFileName} (Giri Drift native format)`, 'red');
+      const docTitle = titleEl?.value || baseName;
+      const docHtml = paper ? paper.innerHTML : (localStorage.getItem('giri_orbit_drift_doc') || '');
+      const payload = GiriOfficeFormats.formatGDrift({
+        title: docTitle,
+        content: docHtml,
+        rawState: { content: docHtml, title: docTitle }
+      });
+      this.downloadBlob(payload, 'application/msword', fullFileName);
+      this.showToast(`✅ Exported ${fullFileName} (Universal Office & Writer format)`, 'red');
       return;
     }
 
     if (ext === 'gaxis') {
-      const payload = JSON.stringify({
-        format: 'gaxis', version: '1.0',
-        data: JSON.parse(localStorage.getItem('giri_orbit_axis_sheets') || '{}'),
-        exportedAt: new Date().toISOString()
-      }, null, 2);
-      this.downloadBlob(payload, 'application/x-gaxis+json', fullFileName);
-      this.showToast(`✅ Exported ${fullFileName} (Giri Axis native format)`, 'red');
+      let sheetsData = {};
+      try {
+        sheetsData = JSON.parse(localStorage.getItem('giri_orbit_axis_sheets') || '{}');
+      } catch { }
+      const payload = GiriOfficeFormats.formatGAxis({
+        sheetsData,
+        activeSheet: Object.keys(sheetsData)[0] || 'Sheet1',
+        title: baseName
+      });
+      this.downloadBlob(payload, 'application/vnd.ms-excel', fullFileName);
+      this.showToast(`✅ Exported ${fullFileName} (Universal Office & Calc spreadsheet)`, 'green');
       return;
     }
 
     if (ext === 'gkinetic') {
-      const payload = JSON.stringify({
-        format: 'gkinetic', version: '1.0',
-        slides: JSON.parse(localStorage.getItem('giri_orbit_kinetic_deck') || '[]'),
-        exportedAt: new Date().toISOString()
-      }, null, 2);
-      this.downloadBlob(payload, 'application/x-gkinetic+json', fullFileName);
-      this.showToast(`✅ Exported ${fullFileName} (Giri Kinetic native format)`, 'red');
+      let slidesData = [];
+      try {
+        slidesData = JSON.parse(localStorage.getItem('giri_orbit_kinetic_deck') || '[]');
+      } catch { }
+      const payload = GiriOfficeFormats.formatGKinetic({
+        slidesData,
+        title: baseName
+      });
+      this.downloadBlob(payload, 'application/vnd.ms-powerpoint', fullFileName);
+      this.showToast(`✅ Exported ${fullFileName} (Universal Office & Impress presentation)`, 'red');
       return;
     }
 
-    if (ext === 'gaegis') {
-      const pdfSheet = document.getElementById('pdf-sheet');
-      const payload = JSON.stringify({
-        format: 'gaegis', version: '1.0',
-        content: pdfSheet ? pdfSheet.innerHTML : (localStorage.getItem('giri_orbit_pdf_pages') || ''),
-        exportedAt: new Date().toISOString()
-      }, null, 2);
-      this.downloadBlob(payload, 'application/x-gaegis+json', fullFileName);
-      this.showToast(`✅ Exported ${fullFileName} (Giri Aegis native format)`, 'red');
+    if (ext === 'gaegis' || ext === 'gpdf') {
+      let pages = [];
+      try {
+        pages = JSON.parse(localStorage.getItem('giri_orbit_pdf_pages') || '[]');
+      } catch {
+        const pdfSheet = document.getElementById('pdf-sheet');
+        pages = [{ title: baseName, content: pdfSheet ? pdfSheet.innerHTML : '' }];
+      }
+      const payload = GiriOfficeFormats.formatGAegis({
+        pages,
+        title: baseName
+      });
+      this.downloadBlob(payload, 'application/pdf', fullFileName);
+      this.showToast(`✅ Exported ${fullFileName} (Universal Office & PDF format)`, 'red');
+      return;
+    }
+
+    if (ext === 'giri') {
+      const payload = GiriOfficeFormats.formatGiriProject({
+        drift: localStorage.getItem('giri_orbit_drift_doc'),
+        axis: localStorage.getItem('giri_orbit_axis_sheets'),
+        kinetic: localStorage.getItem('giri_orbit_kinetic_deck'),
+        pdf: localStorage.getItem('giri_orbit_pdf_pages'),
+        title: baseName
+      });
+      this.downloadBlob(payload, 'application/msword', fullFileName);
+      this.showToast(`✅ Exported ${fullFileName} (Universal Workspace Project)`, 'red');
       return;
     }
 
@@ -4891,25 +4978,38 @@ ${(s.features || []).map(f => `- **${f.num}** ${f.title}: ${f.desc}`).join('\n')
 
     // Format map: source-ext → available targets
     const FORMAT_MAP = {
-      docx:   ['pdf', 'txt', 'html', 'md', 'gdoc'],
-      doc:    ['pdf', 'txt', 'html', 'md', 'gdoc'],
-      xlsx:   ['pdf', 'json', 'csv', 'html', 'txt', 'gsheet'],
-      xls:    ['pdf', 'json', 'csv', 'html', 'txt', 'gsheet'],
-      csv:    ['json', 'html', 'txt', 'gsheet'],
-      json:   ['csv', 'txt', 'html'],
-      txt:    ['html', 'md', 'pdf'],
-      md:     ['html', 'txt', 'pdf'],
-      html:   ['txt', 'md', 'pdf'],
-      htm:    ['txt', 'md', 'pdf'],
-      pptx:   ['pdf', 'txt', 'html', 'gslide'],
-      ppt:    ['pdf', 'txt', 'html', 'gslide'],
-      gdoc:   ['docx', 'pdf', 'txt', 'html', 'md'],
-      gsheet: ['xlsx', 'csv', 'json', 'html', 'txt', 'pdf'],
-      gslide: ['pptx', 'pdf', 'txt', 'html'],
-      giri:   ['docx', 'xlsx', 'pptx', 'pdf', 'json', 'txt'],
+      gdrift: ['docx', 'odt', 'pdf', 'txt', 'html', 'md', 'giri'],
+      gaxis:  ['xlsx', 'ods', 'csv', 'json', 'html', 'txt', 'pdf', 'giri'],
+      gkinetic: ['pptx', 'odp', 'pdf', 'txt', 'html', 'giri'],
+      gaegis: ['pdf', 'docx', 'txt', 'html', 'md', 'giri'],
+      gpdf:   ['pdf', 'docx', 'txt', 'html', 'md', 'giri'],
+      docx:   ['gdrift', 'pdf', 'txt', 'html', 'md', 'gdoc'],
+      doc:    ['gdrift', 'pdf', 'txt', 'html', 'md', 'gdoc'],
+      odt:    ['gdrift', 'docx', 'pdf', 'txt', 'html', 'md'],
+      xlsx:   ['gaxis', 'pdf', 'json', 'csv', 'html', 'txt', 'gsheet'],
+      xls:    ['gaxis', 'pdf', 'json', 'csv', 'html', 'txt', 'gsheet'],
+      ods:    ['gaxis', 'xlsx', 'csv', 'json', 'html', 'pdf'],
+      csv:    ['gaxis', 'xlsx', 'json', 'html', 'txt', 'gsheet'],
+      json:   ['gaxis', 'gkinetic', 'csv', 'txt', 'html'],
+      txt:    ['gdrift', 'html', 'md', 'pdf'],
+      md:     ['gdrift', 'html', 'txt', 'pdf'],
+      html:   ['gdrift', 'txt', 'md', 'pdf'],
+      htm:    ['gdrift', 'txt', 'md', 'pdf'],
+      pptx:   ['gkinetic', 'pdf', 'txt', 'html', 'gslide'],
+      ppt:    ['gkinetic', 'pdf', 'txt', 'html', 'gslide'],
+      odp:    ['gkinetic', 'pptx', 'pdf', 'txt', 'html'],
+      gdoc:   ['gdrift', 'docx', 'pdf', 'txt', 'html', 'md'],
+      gsheet: ['gaxis', 'xlsx', 'csv', 'json', 'html', 'txt', 'pdf'],
+      gslide: ['gkinetic', 'pptx', 'pdf', 'txt', 'html'],
+      giri:   ['gdrift', 'gaxis', 'gkinetic', 'gaegis', 'docx', 'xlsx', 'pptx', 'pdf', 'json', 'txt'],
     };
 
     const FORMAT_LABELS = {
+      gdrift: '🔴 Giri Drift Document (.gdrift)',
+      gaxis:  '🟢 Giri Axis Spreadsheet (.gaxis)',
+      gkinetic:'🟠 Giri Kinetic Presentation (.gkinetic)',
+      gaegis: '🔵 Giri Aegis Document (.gaegis)',
+      gpdf:   '🔵 Giri PDF Document (.gpdf)',
       pdf:    '📄 PDF Document (.pdf)',
       txt:    '📝 Plain Text (.txt)',
       html:   '🌐 HTML Page (.html)',
@@ -4919,10 +5019,13 @@ ${(s.features || []).map(f => `- **${f.num}** ${f.title}: ${f.desc}`).join('\n')
       xlsx:   '📗 Excel Workbook (.xlsx)',
       docx:   '📘 Word Document (.docx)',
       pptx:   '📙 PowerPoint Presentation (.pptx)',
+      odt:    '📗 OpenDocument Text (.odt)',
+      ods:    '📗 OpenDocument Spreadsheet (.ods)',
+      odp:    '📙 OpenDocument Presentation (.odp)',
       gdoc:   '🔵 Giri Drift Document (.gdoc)',
       gsheet: '🟢 Giri Axis Spreadsheet (.gsheet)',
       gslide: '🔴 Giri Kinetic Presentation (.gslide)',
-      giri:   '⚡ Giri Native Format (.giri)',
+      giri:   '⚡ Giri Sovereign Suite (.giri)',
     };
 
     const getExt = name => (name.split('.').pop() || '').toLowerCase();

@@ -2,6 +2,7 @@ import { FluentFontPicker } from '../components/fontPicker.js';
 import { AXIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI AXIS: ADVANCED SPREADSHEET STUDIO (axis.js)
@@ -201,15 +202,15 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <span>Upload File</span>
               </button>
-              <input type="file" id="axis-hero-file-input" accept=".csv,.xlsx,.xls,.tsv,.json,.txt" style="display:none;">
+              <input type="file" id="axis-hero-file-input" accept=".gaxis,.csv,.xlsx,.xls,.tsv,.json,.txt,.xml" style="display:none;">
               <button class="btn-tool-new-template-cta" id="btn-axis-hero-custom">
                 <span>+ Custom Template</span>
               </button>
-              <button class="btn-tool-new-template-cta" id="btn-axis-hero-import-tpl" style="background:#1e293b; color:#38bdf8; border:1px solid #334155;" title="Import Custom Template (.json, .csv, .tsv, .xlsx, .txt)">
+              <button class="btn-tool-new-template-cta" id="btn-axis-hero-import-tpl" style="background:#1e293b; color:#38bdf8; border:1px solid #334155;" title="Import Custom Template (.gaxis, .json, .csv, .tsv, .xlsx, .txt)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 <span>↑ Import Template</span>
               </button>
-              <input type="file" id="axis-import-tpl-input" accept=".json,.csv,.tsv,.xlsx,.xls,.txt" style="display:none;">
+              <input type="file" id="axis-import-tpl-input" accept=".gaxis,.json,.csv,.tsv,.xlsx,.xls,.txt,.xml" style="display:none;">
             </div>
           </div>
 
@@ -1034,7 +1035,7 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
           </div>
         </div>
 
-        <input type="file" id="axis-csv-file-input" accept=".csv,.xlsx,.xls,.tsv,.json,.txt" style="display:none;">
+        <input type="file" id="axis-csv-file-input" accept=".gaxis,.csv,.xlsx,.xls,.tsv,.json,.txt,.xml" style="display:none;">
 
         <!-- Fluent Ribbon Panes -->
         <div class="fluent-ribbon-panes">
@@ -4373,12 +4374,17 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
 
   const performAxisDirectSave = async (forcePicker = false) => {
     saveCurrentSheet();
+    const formattedWorkbook = GiriOfficeFormats.formatGAxis({
+      sheetsData,
+      activeSheet,
+      title: activeSheet ? `Workbook_${activeSheet}` : 'Workbook'
+    });
     const res = await localSync.saveToDevice({
       tool: 'axis',
-      content: JSON.stringify(sheetsData, null, 2),
+      content: formattedWorkbook,
       suggestedName: activeSheet ? `Workbook_${activeSheet}` : 'Workbook',
       extension: 'gaxis',
-      mimeType: 'application/json',
+      mimeType: 'application/vnd.ms-excel',
       forcePicker
     });
 
@@ -4391,19 +4397,22 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
   const performAxisDirectOpen = async () => {
     const res = await localSync.openFromDevice({
       tool: 'axis',
-      acceptTypes: { 'application/json': ['.gaxis', '.json'] }
+      acceptTypes: {
+        'application/vnd.ms-excel': ['.gaxis', '.xml', '.xls', '.xlsx'],
+        'application/json': ['.json']
+      }
     });
     if (res && res.content) {
       try {
-        const parsed = JSON.parse(res.content);
-        if (parsed && typeof parsed === 'object') {
-          sheetsData = parsed;
-          const firstSheet = Object.keys(parsed)[0] || 'Sheet1';
+        const parsed = GiriOfficeFormats.parseGAxis(res.content);
+        if (parsed && parsed.sheetsData && Object.keys(parsed.sheetsData).length > 0) {
+          sheetsData = parsed.sheetsData;
+          const firstSheet = parsed.activeSheet || Object.keys(sheetsData)[0] || 'Sheet1';
           activeSheet = firstSheet;
           renderSheetTabs();
           loadSheet(firstSheet);
           saveAllSheets();
-          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${res.name}" with live direct disk sync`);
+          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${res.name}" (Universal Office & Calc Parity)`);
         }
       } catch (err) {
         alert('Invalid workbook file format.');
@@ -6233,6 +6242,22 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     const reader = new FileReader();
     reader.onload = (evt) => {
       const text = evt.target.result;
+      const ext = file.name.split('.').pop().toLowerCase();
+
+      if (['gaxis', 'xml', 'json'].includes(ext) || text.includes('<Workbook') || text.startsWith('{')) {
+        const parsed = GiriOfficeFormats.parseGAxis(text);
+        if (parsed && parsed.sheetsData && Object.keys(parsed.sheetsData).length > 0) {
+          sheetsData = parsed.sheetsData;
+          const firstSheet = parsed.activeSheet || Object.keys(sheetsData)[0] || 'Sheet1';
+          activeSheet = firstSheet;
+          renderSheetTabs();
+          loadSheet(firstSheet);
+          saveAllSheets();
+          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Imported ${file.name} (Universal Office & Calc Parity)`);
+          return;
+        }
+      }
+
       const lines = text.split(/\r?\n/);
       lines.forEach((line, rIdx) => {
         const rowNum = rIdx + 1;

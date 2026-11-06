@@ -3,6 +3,7 @@ import { symbolsManager } from '../components/symbolsManager.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { thesaurusManager } from '../components/thesaurusManager.js';
 import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI DRIFT: ENTERPRISE WORD PROCESSOR & TEMPLATE HUB (drift.js)
@@ -3528,13 +3529,21 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
               localSync.openFromDevice({
                 tool: 'drift',
                 acceptTypes: {
-                  'text/html': ['.gdrift', '.html', '.txt', '.md']
+                  'application/msword': ['.gdrift', '.doc', '.docx'],
+                  'text/html': ['.gdrift', '.html', '.htm', '.txt', '.md']
                 }
               }).then(result => {
                 if (result) {
-                  paper.innerHTML = result.content;
-                  currentDocTitle = result.name.replace(/\.[^/.]+$/, '');
+                  const parsed = GiriOfficeFormats.parseGDrift(result.content);
+                  let content = parsed.content;
+                  if (!content.includes('drift-page-sheet')) {
+                    content = `<div class="drift-page-sheet active-sheet" contenteditable="true" spellcheck="true" data-page="1" style="font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 11pt;">${content.trim() || '<p><br></p>'}</div>`;
+                  }
+                  paper.innerHTML = content;
+                  currentDocTitle = parsed.title !== 'Untitled Document' && parsed.title !== 'Imported Document' ? parsed.title : result.name.replace(/\.[^/.]+$/, '');
+                  ensurePagesStructure(paper);
                   saveDocument();
+                  renderPageThumbnails();
                 }
               });
               break;
@@ -3556,22 +3565,24 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
             case 'open': {
               const fileInput = document.createElement('input');
               fileInput.type = 'file';
-              fileInput.accept = '.docx,.doc,.txt,.md,.html,.gdrift';
+              fileInput.accept = '.gdrift,.docx,.doc,.odt,.txt,.md,.html,.htm';
               fileInput.onchange = (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
                 reader.onload = (evt) => {
-                  let content = evt.target.result || '';
+                  let raw = evt.target.result || '';
+                  const parsed = GiriOfficeFormats.parseGDrift(raw);
+                  let content = parsed.content;
                   if (!content.includes('drift-page-sheet')) {
                     content = `<div class="drift-page-sheet active-sheet" contenteditable="true" spellcheck="true" data-page="1" style="font-family: Calibri, \'Segoe UI\', Arial, sans-serif; font-size: 11pt;">${content.trim() || '<p><br></p>'}</div>`;
                   }
                   paper.innerHTML = content;
                   ensurePagesStructure(paper);
-                  currentDocTitle = file.name.replace(/\.[^/.]+$/, '');
+                  currentDocTitle = parsed.title !== 'Untitled Document' && parsed.title !== 'Imported Document' ? parsed.title : file.name.replace(/\.[^/.]+$/, '');
                   saveDocument();
                   renderPageThumbnails();
-                  if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${file.name}"`);
+                  if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${file.name}" (Universal Office Parity)`);
                 };
                 reader.readAsText(file);
               };
@@ -6606,12 +6617,17 @@ function calculateMetrics(records) {
       const syncStatusText = container.querySelector('#txt-drift-sync-status');
 
       const performDirectSave = async (forcePicker = false) => {
+        const officeFormattedDoc = GiriOfficeFormats.formatGDrift({
+          title: currentDocTitle,
+          content: paper.innerHTML,
+          rawState: { content: paper.innerHTML, title: currentDocTitle }
+        });
         const res = await localSync.saveToDevice({
           tool: 'drift',
-          content: paper.innerHTML,
+          content: officeFormattedDoc,
           suggestedName: currentDocTitle,
           extension: 'gdrift',
-          mimeType: 'text/html',
+          mimeType: 'application/msword',
           forcePicker
         });
 

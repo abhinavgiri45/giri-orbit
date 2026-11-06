@@ -11,6 +11,7 @@ import {
 import { localSync } from '../components/localFileDirectSync.js';
 import { thesaurusManager } from '../components/thesaurusManager.js';
 import { libreOfficeSuite } from '../components/libreofficeSuite.js';
+import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI KINETIC: ENTERPRISE PRESENTATION SUITE (kinetic.js)
@@ -1733,7 +1734,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <span>Upload presentation</span>
               </button>
-              <input type="file" id="kinetic-hero-file-input" accept=".json,.pptx" style="display:none;">
+              <input type="file" id="kinetic-hero-file-input" accept=".gkinetic,.pptx,.ppt,.odp,.json,.html" style="display:none;">
               <button class="btn-tool-new-template-cta" id="btn-kinetic-hero-custom">
                 <span>+ Custom Template</span>
               </button>
@@ -3792,12 +3793,16 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
   const performKineticDirectSave = async (forcePicker = false) => {
     saveDeck();
     const currentTitle = slidesData[0]?.title || 'Presentation';
+    const formattedDeck = GiriOfficeFormats.formatGKinetic({
+      slidesData,
+      title: currentTitle
+    });
     const res = await localSync.saveToDevice({
       tool: 'kinetic',
-      content: JSON.stringify(slidesData, null, 2),
+      content: formattedDeck,
       suggestedName: currentTitle.replace(/[^a-zA-Z0-9_-]/g, '_'),
       extension: 'gkinetic',
-      mimeType: 'application/json',
+      mimeType: 'application/vnd.ms-powerpoint',
       forcePicker
     });
     if (res.success && res.mode === 'direct' && kineticSyncStatusText) {
@@ -3809,18 +3814,21 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
   const performKineticDirectOpen = async () => {
     const res = await localSync.openFromDevice({
       tool: 'kinetic',
-      acceptTypes: { 'application/json': ['.gkinetic', '.json'] }
+      acceptTypes: {
+        'application/vnd.ms-powerpoint': ['.gkinetic', '.html'],
+        'application/json': ['.json']
+      }
     });
     if (res && res.content) {
       try {
-        const parsed = JSON.parse(res.content);
-        if (Array.isArray(parsed)) {
-          slidesData = parsed;
+        const parsed = GiriOfficeFormats.parseGKinetic(res.content);
+        if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
+          slidesData = parsed.slides;
           currentSlideIndex = 0;
           renderNavThumbnails();
           renderActiveSlide();
           saveDeck();
-          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${res.name}" with live direct disk sync`);
+          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${res.name}" (Universal Office & Impress Parity)`);
         }
       } catch (err) {
         alert('Invalid presentation file format.');
@@ -7891,7 +7899,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
               
               <div style="display:flex; align-items:center; gap:8px;">
                 <button class="btn-giri-primary" id="btn-kinetic-modal-upload" style="padding:6px 12px; font-size:11.5px; background:#2563eb; border:none; border-radius:6px; color:#fff; cursor:pointer;" title="Upload custom presentation template (.json, .pptx, .html)">+ Upload Template</button>
-                <input type="file" id="kinetic-modal-file-upload-input" accept=".json,.pptx,.html" style="display:none;">
+                <input type="file" id="kinetic-modal-file-upload-input" accept=".gkinetic,.pptx,.ppt,.odp,.json,.html" style="display:none;">
                 <input type="text" id="kinetic-modal-template-search" class="tool-search-templates-input" placeholder="Search 3,500+ templates..." style="width: 220px; padding: 6px 12px; font-size: 12px; border: 1px solid #334155; background: #0f172a; color: #f8fafc; border-radius: 6px;" spellcheck="false">
               </div>
             </div>

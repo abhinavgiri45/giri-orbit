@@ -51,9 +51,11 @@ Write-Host "`n[3/5] Rebuilding dedicated Android APK..." -ForegroundColor Yellow
 $androidDir = "C:\Users\abhin\OneDrive\Desktop\giri-orbit-android"
 if (Test-Path $androidDir) {
     Copy-Item -Path (Join-Path $rootDir "index.html") -Destination (Join-Path $androidDir "app\src\main\assets\www\index.html") -Force
-    Copy-Item -Path (Join-Path $rootDir "js\app.js") -Destination (Join-Path $androidDir "app\src\main\assets\www\js\app.js") -Force
     Copy-Item -Path (Join-Path $rootDir "sw.js") -Destination (Join-Path $androidDir "app\src\main\assets\www\sw.js") -Force
     Copy-Item -Path (Join-Path $rootDir "version.json") -Destination (Join-Path $androidDir "app\src\main\assets\www\version.json") -Force
+    Copy-Item -Path (Join-Path $rootDir "manifest.json") -Destination (Join-Path $androidDir "app\src\main\assets\www\manifest.json") -Force
+    Copy-Item -Path (Join-Path $rootDir "js\*") -Destination (Join-Path $androidDir "app\src\main\assets\www\js") -Recurse -Force
+    Copy-Item -Path (Join-Path $rootDir "css\*") -Destination (Join-Path $androidDir "app\src\main\assets\www\css") -Recurse -Force
     powershell.exe -ExecutionPolicy Bypass -File (Join-Path $androidDir "build_apk.ps1")
 }
 
