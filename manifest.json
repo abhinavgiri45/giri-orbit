@@ -1,13 +1,13 @@
 {
-  "name": "Giri Orbit \u2014 Office Suite",
+  "name": "Giri Orbit Sovereign Suite",
   "short_name": "Giri Orbit",
   "description": "Complete cloud-free office suite: Documents, Spreadsheets, Presentations & PDF Studio",
-  "start_url": "/",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0f172a",
   "orientation": "any",
-  "scope": "/",
+  "scope": "./",
   "categories": [
     "productivity",
     "utilities",

@@ -1,8 +1,8 @@
-﻿{
+{
   "version": "11.8.2",
   "versionCode": 2,
   "releaseDate": "2026-11-06",
-  "buildTimestamp": 1793981973368,
+  "buildTimestamp": 1793982661221,
   "changelog": "Enhanced auto-update capabilities for Web, Windows Desktop, and Android Mobile applications with zero-telemetry client data sovereignty.",
   "assetsBundleUrl": "https://raw.githubusercontent.com/abhinavgiri45/giri-orbit/main/downloads/assets-bundle.zip",
   "windows": {

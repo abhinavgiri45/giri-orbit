@@ -217,7 +217,7 @@ export class GiriOfficeFormats {
     }
   </style>
   <script id="giri-orbit-manifest" type="application/json">
-${manifestJson}
+${utf8ToBase64(manifestJson)}
   </script>
 </head>
 <body>
@@ -239,7 +239,7 @@ ${manifestJson}
     const manifestMatch = trimmed.match(/<script[^>]*id=["']giri-orbit-manifest["'][^>]*>([\s\S]*?)<\/script>/i);
     if (manifestMatch && manifestMatch[1]) {
       try {
-        const manifest = JSON.parse(manifestMatch[1]);
+        let manifestText = manifestMatch[1].trim(); if (!manifestText.startsWith("{") && !manifestText.startsWith("[")) manifestText = base64ToUtf8(manifestText); const manifest = JSON.parse(manifestText);
         let extractedContent = '';
         
         // Extract body / Section1 if manifest doesn't have rawState
@@ -778,7 +778,7 @@ ${rowsXml}  </Table>
     }
   </style>
   <script id="giri-orbit-manifest" type="application/json">
-${manifestJson}
+${utf8ToBase64(manifestJson)}
   </script>
 </head>
 <body>
@@ -798,7 +798,7 @@ ${slidesHtml}
     const manifestMatch = trimmed.match(/<script[^>]*id=["']giri-orbit-manifest["'][^>]*>([\s\S]*?)<\/script>/i);
     if (manifestMatch && manifestMatch[1]) {
       try {
-        const manifest = JSON.parse(manifestMatch[1]);
+        let manifestText = manifestMatch[1].trim(); if (!manifestText.startsWith("{") && !manifestText.startsWith("[")) manifestText = base64ToUtf8(manifestText); const manifest = JSON.parse(manifestText);
         if (Array.isArray(manifest.slides)) {
           return {
             slides: manifest.slides,
@@ -1043,7 +1043,7 @@ startxref
   <meta name="Generator" content="Giri Orbit Sovereign Suite 12.2 - Universal Multi-Tool Project Container">
   <title>${escapeXml(title)}</title>
   <script id="giri-orbit-manifest" type="application/json">
-${manifestJson}
+${utf8ToBase64(manifestJson)}
   </script>
   <style>
     body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; padding: 24px; color: #0f172a; line-height: 1.6; }
@@ -1075,7 +1075,7 @@ ${manifestJson}
     const manifestMatch = trimmed.match(/<script[^>]*id=["']giri-orbit-manifest["'][^>]*>([\s\S]*?)<\/script>/i);
     if (manifestMatch && manifestMatch[1]) {
       try {
-        return JSON.parse(manifestMatch[1]);
+        let manifestText = manifestMatch[1].trim(); if (!manifestText.startsWith("{") && !manifestText.startsWith("[")) manifestText = base64ToUtf8(manifestText); return JSON.parse(manifestText);
       } catch (e) {
         console.warn('Error parsing .giri manifest:', e);
       }

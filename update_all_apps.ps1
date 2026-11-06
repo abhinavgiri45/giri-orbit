@@ -18,7 +18,7 @@ Write-Host "`n[1/5] Updating version.json metadata..." -ForegroundColor Yellow
 $timestamp = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
 $versionContent = Get-Content $versionJsonPath -Raw
 $versionContent = [System.Text.RegularExpressions.Regex]::Replace($versionContent, '"buildTimestamp":\s*\d+', "`"buildTimestamp`": $timestamp")
-Set-Content -Path $versionJsonPath -Value $versionContent -Encoding UTF8
+[System.IO.File]::WriteAllText($versionJsonPath, $versionContent, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host "  Updated build timestamp to: $timestamp" -ForegroundColor Green
 
 # 2. Package OTA Assets Bundle (.zip)
