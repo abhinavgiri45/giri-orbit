@@ -3,38 +3,50 @@
  * GIRI ORBIT — HIGH-CONCURRENCY PWA SERVICE WORKER (sw.js)
  * By GIRI Corporation (A Subsidiary of Giri Group)
  * ============================================================================
- * Optimized to sustain 1,000,000+ requests/sec via zero-server local disk cache.
- * Implements Stale-While-Revalidate and Cache-First strategies.
+ * Auto-updating sovereign offline cache with zero-telemetry client data sovereignty.
+ * Implements Network-First for code/documents with instant Stale-While-Revalidate fallback.
  */
 
-const CACHE_NAME = 'giri-orbit-sovereign-v12.1';
+const CACHE_NAME = 'giri-orbit-sovereign-v12.2';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/privacy.html',
-  '/terms.html',
-  '/css/styles.css',
-  '/css/print.css',
-  '/css/social.css',
-  '/css/fileMenu.css',
-  '/js/app.js',
-  '/js/physics.js',
-  '/js/components/fontPicker.js',
-  '/js/components/localFileDirectSync.js',
-  '/js/components/printManager.js',
-  '/js/components/symbolsManager.js',
-  '/js/components/girionixAgent.js',
-  '/js/modules/girionixEngine.js',
-  '/js/data/templates.js',
-  '/js/modules/drift.js',
-  '/js/modules/axis.js',
-  '/js/modules/kinetic.js',
-  '/js/modules/pdfStudio.js',
-  '/assets/giri-corp-logo-transparent.png',
-  '/assets/giri-corp-logo.png',
-  '/assets/giri-group-symbol-dark.png',
-  '/assets/girionix-logo.png',
-  '/manifest.json'
+  './',
+  './index.html',
+  './privacy.html',
+  './terms.html',
+  './version.json',
+  './manifest.json',
+  './css/styles.css',
+  './css/libreoffice.css',
+  './css/fontsAndSelection.css',
+  './css/hub.css',
+  './css/mobile.css',
+  './css/sync.css',
+  './css/print.css',
+  './css/social.css',
+  './css/fileMenu.css',
+  './js/app.js',
+  './js/physics.js',
+  './js/components/libreofficeSuite.js',
+  './js/components/fontPicker.js',
+  './js/components/thesaurusManager.js',
+  './js/components/symbolsManager.js',
+  './js/components/localFileDirectSync.js',
+  './js/components/printManager.js',
+  './js/components/girionixAgent.js',
+  './js/modules/girionixEngine.js',
+  './js/modules/driveSyncManager.js',
+  './js/modules/syncManager.js',
+  './js/modules/drift.js',
+  './js/modules/axis.js',
+  './js/modules/kinetic.js',
+  './js/modules/pdfStudio.js',
+  './js/data/fonts.js',
+  './js/data/templates.js',
+  './js/data/presentationGoCatalog.js',
+  './assets/giri-corp-logo-transparent.png',
+  './assets/giri-corp-logo.png',
+  './assets/giri-group-symbol-dark.png',
+  './assets/girionix-logo.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -57,19 +69,27 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // Network-First for HTML documents and scripts so updates are immediate
+  // Network-First for HTML documents, version manifest, and code scripts so updates are immediate
   const isCode = event.request.mode === 'navigate' ||
                  event.request.destination === 'document' ||
                  event.request.destination === 'script' ||
                  url.pathname.endsWith('.js') ||
                  url.pathname.endsWith('.css') ||
                  url.pathname.endsWith('.html') ||
-                 url.pathname === '/';
+                 url.pathname.endsWith('version.json') ||
+                 url.pathname === '/' ||
+                 url.pathname.endsWith('/');
 
   if (isCode) {
     event.respondWith(

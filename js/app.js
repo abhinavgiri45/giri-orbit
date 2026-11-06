@@ -1460,6 +1460,45 @@ class GiriOrbitPlatform {
       }
     });
 
+    // In-app Update Checker
+    const checkUpdatesBtn = document.getElementById('btn-check-orbit-updates');
+    const performUpdateCheck = async (isManual = true) => {
+      if (checkUpdatesBtn) {
+        checkUpdatesBtn.innerHTML = '<span>⏳</span><span>Checking...</span>';
+        checkUpdatesBtn.disabled = true;
+      }
+      try {
+        if (window.AndroidBridge && typeof window.AndroidBridge.checkForUpdates === 'function') {
+          window.AndroidBridge.checkForUpdates();
+          return;
+        }
+
+        const res = await fetch(`./version.json?_t=${Date.now()}`);
+        if (!res.ok) throw new Error('Network response not ok');
+        const verData = await res.json();
+        const currentVer = '11.8.2';
+        const isNewer = verData.version && verData.version !== currentVer;
+
+        if (isNewer) {
+          this.showToast(`🚀 New Giri Orbit update available: v${verData.version}!`, 'green');
+          if (window.giriCheckForUpdates) {
+            window.giriCheckForUpdates();
+          }
+        } else if (isManual) {
+          this.showToast(`✓ Giri Orbit is up to date (v${currentVer})`, 'blue');
+        }
+      } catch (err) {
+        console.warn('Update check failed:', err);
+        if (isManual) this.showToast('Could not reach update server. You are running offline.', 'orange');
+      } finally {
+        if (checkUpdatesBtn) {
+          checkUpdatesBtn.innerHTML = '<span>🔄</span><span>Check for Updates</span>';
+          checkUpdatesBtn.disabled = false;
+        }
+      }
+    };
+    checkUpdatesBtn?.addEventListener('click', () => performUpdateCheck(true));
+
     // Mobile Virtual Keyboard Viewport Adjustment for Floating Toolbars
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', () => {
