@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Next-Generation Sovereign Office Suite Engineered for Absolute Privacy and Enterprise Velocity.</strong><br>
-  By <a href="https://giri-corporation.pages.dev/"><strong>GIRI Corporation</strong></a> (A Subsidiary of Giri Group)
+  By <a href="https://giri-corporation.pages.dev/"><strong>Abhinav Giri</strong></a>
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@ The official production environment is actively deployed on Cloudflare Pages:
 > 2. **No Commercial or Non-Commercial Exploitation**: External individuals, organizations, or third parties are strictly prohibited from using, hosting, redistributing, or incorporating any component of this platform into other products or services.
 > 3. **Private Sovereign Technology**: Access to this repository is provided solely for internal inspection and authorized development by GIRI Corporation. No license or permission, express or implied, is granted under any patent, copyright, trademark, or trade secret rights of GIRI Corporation.
 >
-> *For licensing inquiries or authorized institutional partnerships, contact GIRI Corporation at `giricorporationpvt@gmail.com`.*
+> *For licensing inquiries or authorized institutional partnerships, contact GIRI Corporation at `abhinavgiri370@gmail.com`.*
 
 ---
 
