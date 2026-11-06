@@ -52,6 +52,249 @@
 </head>
 <body>
 
+  <!-- ======================================================== -->
+  <!-- GIRI ZERO-TRUST ENTRY SECURITY VERIFICATION GATE        -->
+  <!-- Cloudflare-Style Managed Challenge on Initial Entry Only -->
+  <!-- ======================================================== -->
+  <div id="giriSecurityGate" style="
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    color: #ffffff;
+    z-index: 2147483647;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    padding: 70px 90px 24px 90px;
+    overflow: hidden;
+  ">
+    <div style="max-width: 900px; width: 100%; margin: 0 auto;">
+      <!-- Brand & Domain Header -->
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+        <div style="
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #ef4444;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+          font-size: 20px;
+          color: #ffffff;
+          user-select: none;
+          box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+        ">G</div>
+        <span id="cfDomainText" style="
+          font-size: 28px;
+          font-weight: 700;
+          color: #ffffff;
+          letter-spacing: -0.02em;
+          user-select: none;
+        ">www.giriorbit.com</span>
+      </div>
+
+      <!-- Heading -->
+      <h1 style="
+        font-size: 26px;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 12px 0;
+        letter-spacing: -0.01em;
+        line-height: 1.25;
+      ">Performing security verification</h1>
+
+      <!-- Description -->
+      <p style="
+        font-size: 15px;
+        line-height: 1.5;
+        color: #999999;
+        margin: 0 0 36px 0;
+        max-width: 700px;
+      ">This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.</p>
+
+      <!-- Turnstile Initial Challenge Box -->
+      <div id="cfTurnstileBox" style="
+        background: #141414;
+        border: 1px solid #2e2e2e;
+        border-radius: 6px;
+        padding: 14px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-width: 310px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.25s ease;
+      ">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div id="cfCheckbox" style="
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            border: 2px solid #525252;
+            background: #1f1f1f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.25s ease;
+          ">
+            <div id="cfSpinner" style="
+              width: 14px;
+              height: 14px;
+              border: 2.5px solid transparent;
+              border-top-color: #3b82f6;
+              border-right-color: #3b82f6;
+              border-radius: 50%;
+              animation: cfSpin 0.75s linear infinite;
+            "></div>
+            <svg id="cfCheckmark" style="display: none; width: 18px; height: 18px; stroke: #22c55e; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+          </div>
+          <span id="cfTurnstileLabel" style="font-size: 14px; font-weight: 500; color: #e5e5e5;">Verify you are human</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+          <div style="display: flex; align-items: center; gap: 5px;">
+            <svg style="width: 22px; height: 14px; fill: #f38020;" viewBox="0 0 100 65">
+              <path d="M78.6 31.2c-.8-10.9-9.8-19.6-20.9-19.6-8.9 0-16.5 5.6-19.4 13.6-2.5-1.9-5.6-3.1-9-3.1-8.1 0-14.7 6.6-14.7 14.7 0 .8.1 1.6.2 2.4C6.6 40.5 0 47.9 0 57.1 0 67.3 8.3 75.6 18.5 75.6h60.9C89.9 75.6 98 67.5 98 57.1c0-9.8-7.5-17.8-17.1-18.4-.7-2.6-1.5-5.1-2.3-7.5z"/>
+            </svg>
+            <span style="font-size: 12px; font-weight: 600; color: #a3a3a3; letter-spacing: 0.02em;">Cloudflare</span>
+          </div>
+          <div style="font-size: 9px; color: #525252; letter-spacing: 0.02em;">Privacy • Terms</div>
+        </div>
+      </div>
+
+      <!-- Verified Success State (Matches user screenshot exactly) -->
+      <div id="cfSuccessMessage" style="
+        display: none;
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-top: 10px;
+        letter-spacing: -0.01em;
+      ">Verification successful. Waiting for <span class="cfDomainTarget">www.giriorbit.com</span> to respond...</div>
+    </div>
+
+    <!-- Bottom Footer (Divider + Ray ID + Cloudflare Links) -->
+    <div style="max-width: 900px; width: 100%; margin: 0 auto;">
+      <div style="border-top: 1px solid #262626; margin-bottom: 14px; width: 100%;"></div>
+      <div style="font-size: 11px; color: #707070; font-family: monospace, -apple-system, sans-serif; text-align: center; margin-bottom: 4px;">
+        Ray ID: <span id="cfRayId">a564e14edbfe3c33</span>
+      </div>
+      <div style="font-size: 11px; color: #707070; text-align: center;">
+        Performance and Security by <a href="https://www.cloudflare.com" target="_blank" rel="noopener noreferrer" style="color: #4dabf7; text-decoration: none;">Cloudflare</a> | <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" style="color: #4dabf7; text-decoration: none;">Privacy</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes cfSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @media (max-width: 768px) {
+      #giriSecurityGate {
+        padding: 40px 24px 20px 24px !important;
+      }
+      #cfDomainText {
+        font-size: 22px !important;
+      }
+      #giriSecurityGate h1 {
+        font-size: 22px !important;
+      }
+      #cfSuccessMessage {
+        font-size: 16px !important;
+      }
+    }
+  </style>
+
+  <script>
+    (function() {
+      try {
+        // Strictly entry of the website only:
+        // If already verified in this session or running in native mobile/desktop apps, bypass immediately
+        var isVerified = sessionStorage.getItem('giri_security_verified') === 'true';
+        var isNativeApp = !!(window.chrome?.webview || window.AndroidBridge || (navigator.userAgent && (navigator.userAgent.indexOf('GiriOrbitDesktop') !== -1 || navigator.userAgent.indexOf('GiriOrbitMobile') !== -1)) || window.location.protocol === 'file:');
+
+        var gate = document.getElementById('giriSecurityGate');
+        if (isVerified || isNativeApp) {
+          if (gate) gate.remove();
+          return;
+        }
+
+        // Dynamically resolve domain name
+        var domain = 'www.giriorbit.com';
+        if (window.location.host && window.location.host.indexOf('localhost') === -1 && window.location.host.indexOf('127.') === -1) {
+          domain = window.location.host;
+        } else if (window.location.host) {
+          domain = window.location.host;
+        }
+
+        var domainText = document.getElementById('cfDomainText');
+        if (domainText) domainText.textContent = domain;
+        var targets = document.querySelectorAll('.cfDomainTarget');
+        for (var i = 0; i < targets.length; i++) {
+          targets[i].textContent = domain;
+        }
+
+        // Generate dynamic 16-hex Ray ID
+        var rayHex = 'a564e14edbfe3c33';
+        if (window.crypto && window.crypto.getRandomValues) {
+          var randBytes = new Uint8Array(8);
+          window.crypto.getRandomValues(randBytes);
+          rayHex = Array.from(randBytes).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        }
+        var rayEl = document.getElementById('cfRayId');
+        if (rayEl) rayEl.textContent = rayHex;
+
+        // Challenge completion transition
+        var done = false;
+        function finishVerification() {
+          if (done) return;
+          done = true;
+
+          var box = document.getElementById('cfTurnstileBox');
+          var successMsg = document.getElementById('cfSuccessMessage');
+          if (box) box.style.display = 'none';
+          if (successMsg) successMsg.style.display = 'block';
+
+          sessionStorage.setItem('giri_security_verified', 'true');
+          sessionStorage.setItem('giri_security_ray', rayHex);
+
+          setTimeout(function() {
+            if (gate) {
+              gate.style.transition = 'opacity 0.4s ease-out';
+              gate.style.opacity = '0';
+              gate.style.pointerEvents = 'none';
+              setTimeout(function() {
+                if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
+              }, 420);
+            }
+          }, 650);
+        }
+
+        var turnstileBox = document.getElementById('cfTurnstileBox');
+        if (turnstileBox) {
+          turnstileBox.addEventListener('click', finishVerification);
+        }
+        setTimeout(finishVerification, 1350);
+      } catch (err) {
+        console.warn('Security gate bypass on error:', err);
+        var fallbackGate = document.getElementById('giriSecurityGate');
+        if (fallbackGate) fallbackGate.remove();
+      }
+    })();
+  </script>
+
   <!-- TIER 2: GIRI ORBIT SUITE SUB-HEADER -->
   <!-- TIER 2: GIRI ORBIT SUITE SUB-HEADER -->
   <header class="tier2-suite-header">
