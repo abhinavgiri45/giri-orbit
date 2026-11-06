@@ -593,17 +593,43 @@ class GiriOrbitPlatform {
             Giri Orbit by GIRI Corporation delivers unified, zero-latency computing. Unbind your workflows with Drift document architecture, Axis financial modeling, Kinetic cinematic presentations, and Aegis cryptographic document validation — powered by instant in-memory state.
           </p>
 
-          <!-- Executive Giri Orbit Primary CTA Button -->
-          <button class="btn-giri-primary" id="btn-try-suite">
-            <span>Launch Giri Orbit Suite</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </button>
+          <!-- Executive Giri Orbit Action Row: Launch Suite & Download Apps -->
+          <div class="hero-actions-row" style="display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
+            <button class="btn-giri-primary" id="btn-try-suite" style="margin-bottom:0;">
+              <span>Launch Giri Orbit Suite</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+
+            <!-- Dedicated Download App Button (PC & Mobile) -->
+            <button class="btn-giri-download" id="btn-hero-download-app" title="Download Dedicated App for Windows (x64, x86, ARM64) & Android (APK)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Download App</span>
+              <span style="background:rgba(255,255,255,0.22); padding:2px 7px; border-radius:5px; font-size:11px; font-weight:800; letter-spacing:0.02em;">PC &amp; Mobile</span>
+            </button>
+          </div>
 
           
           <!-- GIRI CORPORATION & FOLLOW THE JOURNEY CARDS -->
           <div class="follow-journey-wrap" style="display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <span class="follow-journey-label">DOWNLOAD APP</span>
+              <div class="giri-corp-card" id="btn-hero-card-download" style="cursor:pointer; border:1.5px solid #10b981; background:rgba(16,185,129,0.04);" title="Download Dedicated App for Windows (x64, x86, ARM64) & Android (APK)">
+                <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:linear-gradient(135deg, #10b981, #0284c7); border:1px solid #34d399; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 0 12px rgba(16,185,129,0.4); font-size:18px;">
+                  💻📱
+                </div>
+                <div class="instagram-card-text">
+                  <strong class="instagram-handle" style="color:#0f172a; display:flex; align-items:center; gap:5px;">
+                    <span>Download App</span>
+                    <span style="font-size:9.5px; background:#10b981; color:#fff; padding:1px 5px; border-radius:4px; font-weight:800;">FREE</span>
+                  </strong>
+                  <span class="instagram-sub" style="color:#059669; font-weight:600;">Windows &amp; Android &rarr;</span>
+                </div>
+              </div>
+            </div>
             <div style="display:flex; flex-direction:column; gap:6px;">
               <span class="follow-journey-label">OFFICIAL PORTAL</span>
               <a href="https://giri-corporation.pages.dev/" target="_blank" rel="noopener" class="giri-corp-card" title="Visit Giri Corporation Official Website">
@@ -648,6 +674,19 @@ class GiriOrbitPlatform {
 
           <!-- 4 Distinct Giri Tool Switcher Cards -->
           <div class="zoho-product-cards-strip">
+            <!-- Native Apps Download -->
+            <div class="zoho-app-card" id="btn-strip-download-app" role="button" tabindex="0" title="Download Dedicated App for Windows & Android" style="border:1.5px solid #10b981; background:#f0fdf4;">
+              <div class="app-card-icon" style="background:#dcfce7;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+              </div>
+              <div class="app-card-meta">
+                <span class="app-card-prefix" style="color:#16a34a;">NATIVE</span>
+                <span class="app-card-title">Download App</span>
+                <span class="app-card-url-badge" style="color:#16a34a; background:#dcfce7;">PC &amp; APK</span>
+              </div>
+            </div>
             <!-- 1. Drift (Docs) -->
             <div class="zoho-app-card" data-launch="drift" role="button" tabindex="0" title="Launch Drift Document Composer (http://127.0.0.1:5000/#drift)">
               <div class="app-card-icon">
@@ -975,6 +1014,21 @@ class GiriOrbitPlatform {
     });
 
     // Bind Primary CTA button to open Writer
+    
+    // Bind Hero Download App buttons to open Downloads Corner
+    const triggerDownloadsModal = () => {
+      const openBtn = document.getElementById('btn-open-downloads-corner');
+      if (openBtn) {
+        openBtn.click();
+      } else {
+        const dlModal = document.getElementById('downloads-corner-modal');
+        if (dlModal) dlModal.style.display = 'flex';
+      }
+    };
+    landingContainer.querySelector('#btn-hero-download-app')?.addEventListener('click', triggerDownloadsModal);
+    landingContainer.querySelector('#btn-hero-card-download')?.addEventListener('click', triggerDownloadsModal);
+    landingContainer.querySelector('#btn-strip-download-app')?.addEventListener('click', triggerDownloadsModal);
+
     landingContainer.querySelector('#btn-try-suite')?.addEventListener('click', () => {
       this.navigateTo('drift', 'Enterprise Strategic Charter');
     });
