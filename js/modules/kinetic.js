@@ -3079,28 +3079,75 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 
           <!-- 4. TRANSITIONS TAB PANE -->
           <div class="fluent-ribbon-pane" id="pane-kinetic-transitions">
-            <!-- Transitions Group -->
+            <!-- Preview Group -->
             <div class="fluent-ribbon-group">
               <div class="fluent-group-controls">
-                <button class="fluent-btn-small active" data-transition="fade" style="width:auto; padding:0 8px;">Fade</button>
-                <button class="fluent-btn-small" data-transition="slide-push" style="width:auto; padding:0 8px;">Slide Push</button>
-                <button class="fluent-btn-small" data-transition="zoom-in" style="width:auto; padding:0 8px;">Zoom In</button>
-                <button class="fluent-btn-small" data-transition="flip" style="width:auto; padding:0 8px;">Card Flip</button>
+                <button class="fluent-btn-large" id="btn-kinetic-preview-trans" title="Preview Transition on Current Slide (P)">
+                  <span style="font-size:16px;">▶</span>
+                  <span>Preview</span>
+                </button>
               </div>
-              <div class="fluent-group-label">Transition</div>
+              <div class="fluent-group-label">Preview</div>
+            </div>
+
+            <!-- Subtle Transitions Group -->
+            <div class="fluent-ribbon-group">
+              <div class="fluent-group-controls">
+                <div class="fluent-group-col">
+                  <div class="fluent-group-row">
+                    <button class="fluent-btn-small" data-transition="none" style="width:auto; padding:0 6px;">None</button>
+                    <button class="fluent-btn-small active" data-transition="fade" style="width:auto; padding:0 6px;">Fade</button>
+                    <button class="fluent-btn-small" data-transition="push-left" style="width:auto; padding:0 6px;">Push Left →</button>
+                    <button class="fluent-btn-small" data-transition="push-right" style="width:auto; padding:0 6px;">Push Right ←</button>
+                  </div>
+                  <div class="fluent-group-row">
+                    <button class="fluent-btn-small" data-transition="push-up" style="width:auto; padding:0 6px;">Push Up ↑</button>
+                    <button class="fluent-btn-small" data-transition="push-down" style="width:auto; padding:0 6px;">Push Down ↓</button>
+                    <button class="fluent-btn-small" data-transition="wipe-right" style="width:auto; padding:0 6px;">Wipe Right</button>
+                    <button class="fluent-btn-small" data-transition="wipe-down" style="width:auto; padding:0 6px;">Wipe Down</button>
+                  </div>
+                </div>
+              </div>
+              <div class="fluent-group-label">Subtle &amp; Flow</div>
+            </div>
+
+            <!-- Dynamic & 3D Transitions Group -->
+            <div class="fluent-ribbon-group">
+              <div class="fluent-group-controls">
+                <div class="fluent-group-col">
+                  <div class="fluent-group-row">
+                    <button class="fluent-btn-small" data-transition="zoom-in" style="width:auto; padding:0 6px; color:#38bdf8;">Zoom In</button>
+                    <button class="fluent-btn-small" data-transition="zoom-out" style="width:auto; padding:0 6px; color:#38bdf8;">Zoom Out</button>
+                    <button class="fluent-btn-small" data-transition="flip" style="width:auto; padding:0 6px; color:#ec4899;">3D Flip</button>
+                  </div>
+                  <div class="fluent-group-row">
+                    <button class="fluent-btn-small" data-transition="cube" style="width:auto; padding:0 6px; color:#a855f7;">3D Cube</button>
+                    <button class="fluent-btn-small" data-transition="dissolve" style="width:auto; padding:0 6px; color:#10b981;">Dissolve</button>
+                  </div>
+                </div>
+              </div>
+              <div class="fluent-group-label">Dynamic &amp; 3D</div>
             </div>
 
             <!-- Timing Group -->
             <div class="fluent-ribbon-group">
               <div class="fluent-group-controls">
-                <select class="fluent-select-dark" id="kinetic-trans-speed" style="width:105px;">
-                  <option value="0.2s">Fast (0.2s)</option>
-                  <option value="0.4s" selected>Normal (0.4s)</option>
-                  <option value="0.8s">Slow (0.8s)</option>
-                </select>
-                <button class="fluent-btn-small" id="btn-kinetic-apply-all-trans" title="Apply to All Slides" style="width:auto; padding:0 8px;">
-                  Apply to All
-                </button>
+                <div class="fluent-group-col">
+                  <div class="fluent-group-row" style="align-items:center; gap:6px;">
+                    <span style="font-size:10px; color:#94a3b8;">Duration:</span>
+                    <select class="fluent-select-dark" id="kinetic-trans-speed" style="width:95px; font-size:10.5px;">
+                      <option value="0.25s">Fast (0.25s)</option>
+                      <option value="0.45s" selected>Normal (0.45s)</option>
+                      <option value="0.8s">Slow (0.8s)</option>
+                      <option value="1.2s">Cinematic (1.2s)</option>
+                    </select>
+                  </div>
+                  <div class="fluent-group-row" style="align-items:center; gap:4px; margin-top:2px;">
+                    <button class="fluent-btn-small" id="btn-kinetic-apply-all-trans" title="Apply Current Transition to All Slides" style="width:auto; padding:0 8px; font-size:10px; background:#2563eb; color:#fff; border-color:#1d4ed8;">
+                      Apply to All Slides
+                    </button>
+                  </div>
+                </div>
               </div>
               <div class="fluent-group-label">Timing</div>
             </div>
@@ -3135,6 +3182,8 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
                     <button class="fluent-btn-small" data-anim-effect="k-zoomIn" data-anim-type="entrance" title="Zoom In" style="width:auto; padding:0 6px; color:#22c55e;">★ Zoom In</button>
                     <button class="fluent-btn-small" data-anim-effect="k-bounceIn" data-anim-type="entrance" title="Bounce In" style="width:auto; padding:0 6px; color:#22c55e;">★ Bounce</button>
                     <button class="fluent-btn-small" data-anim-effect="k-wipeIn" data-anim-type="entrance" title="Wipe In" style="width:auto; padding:0 6px; color:#22c55e;">★ Wipe In</button>
+                    <button class="fluent-btn-small" data-anim-effect="k-flipInX" data-anim-type="entrance" title="Flip In X" style="width:auto; padding:0 6px; color:#22c55e;">★ Flip In X</button>
+                    <button class="fluent-btn-small" data-anim-effect="k-spinIn" data-anim-type="entrance" title="Spin In" style="width:auto; padding:0 6px; color:#22c55e;">★ Spin In</button>
                   </div>
                 </div>
               </div>
@@ -3151,6 +3200,8 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
                     <button class="fluent-btn-small" data-anim-effect="k-pulse" data-anim-type="emphasis" title="Pulse" style="width:auto; padding:0 6px; color:#eab308;">★ Pulse</button>
                     <button class="fluent-btn-small" data-anim-effect="k-spin" data-anim-type="emphasis" title="Spin 360" style="width:auto; padding:0 6px; color:#eab308;">★ Spin 360°</button>
                     <button class="fluent-btn-small" data-anim-effect="k-teeter" data-anim-type="emphasis" title="Teeter" style="width:auto; padding:0 6px; color:#eab308;">★ Teeter</button>
+                    <button class="fluent-btn-small" data-anim-effect="k-waveFloat" data-anim-type="emphasis" title="Wave Float" style="width:auto; padding:0 6px; color:#eab308;">★ Wave</button>
+                    <button class="fluent-btn-small" data-anim-effect="k-growShrink" data-anim-type="emphasis" title="Grow/Shrink" style="width:auto; padding:0 6px; color:#eab308;">★ Grow</button>
                   </div>
                 </div>
               </div>
@@ -3166,6 +3217,8 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
                   <div class="fluent-group-row">
                     <button class="fluent-btn-small" data-anim-effect="k-fadeOut" data-anim-type="exit" title="Fade Out" style="width:auto; padding:0 6px; color:#ef4444;">★ Fade Out</button>
                     <button class="fluent-btn-small" data-anim-effect="k-flyOutDown" data-anim-type="exit" title="Fly Out Down" style="width:auto; padding:0 6px; color:#ef4444;">★ Fly Out ↓</button>
+                    <button class="fluent-btn-small" data-anim-effect="k-zoomOut" data-anim-type="exit" title="Zoom Out" style="width:auto; padding:0 6px; color:#ef4444;">★ Zoom Out</button>
+                    <button class="fluent-btn-small" data-anim-effect="k-slideOutRight" data-anim-type="exit" title="Slide Out Right" style="width:auto; padding:0 6px; color:#ef4444;">★ Slide Out →</button>
                   </div>
                 </div>
               </div>
@@ -4027,12 +4080,33 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
     // Apply Transition animation
     slideFrame.style.animation = 'none';
     slideFrame.offsetHeight; // trigger reflow
-    if (currentTransition === 'fade') {
-      slideFrame.style.animation = 'fadeIn 0.35s ease';
-    } else if (currentTransition === 'slide-push') {
-      slideFrame.style.animation = 'modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-    } else if (currentTransition === 'zoom-in') {
-      slideFrame.style.animation = 'zoomIn 0.3s ease';
+    const t = slide.transition || currentTransition || 'fade';
+    const spd = slide.transitionSpeed || currentTransitionSpeed || '0.45s';
+    
+    if (t === 'fade') {
+      slideFrame.style.animation = `k-trans-fade ${spd} ease`;
+    } else if (t === 'push-left' || t === 'slide-push') {
+      slideFrame.style.animation = `k-trans-push-left ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'push-right') {
+      slideFrame.style.animation = `k-trans-push-right ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'push-up') {
+      slideFrame.style.animation = `k-trans-push-up ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'push-down') {
+      slideFrame.style.animation = `k-trans-push-down ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'wipe-right') {
+      slideFrame.style.animation = `k-trans-wipe-right ${spd} ease-out`;
+    } else if (t === 'wipe-down') {
+      slideFrame.style.animation = `k-trans-wipe-down ${spd} ease-out`;
+    } else if (t === 'zoom-in') {
+      slideFrame.style.animation = `k-trans-zoom-in ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'zoom-out') {
+      slideFrame.style.animation = `k-trans-zoom-out ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'flip') {
+      slideFrame.style.animation = `k-trans-flip ${spd} ease-out`;
+    } else if (t === 'cube') {
+      slideFrame.style.animation = `k-trans-cube-left ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    } else if (t === 'dissolve') {
+      slideFrame.style.animation = `k-trans-dissolve ${spd} ease-in-out`;
     }
 
     // ── Apply resolved theme, vector artwork & executive typography ──
@@ -5618,18 +5692,61 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
   });
 
   // =========================================================================
-  // TRANSITIONS TAB CONTROLS
+  // TRANSITIONS TAB CONTROLS & LIVE PREVIEW
   // =========================================================================
+  let currentTransitionSpeed = '0.45s';
+  const transSpeedSelect = container.querySelector('#kinetic-trans-speed');
+  transSpeedSelect?.addEventListener('change', (e) => {
+    currentTransitionSpeed = e.target.value;
+    if (slidesData[currentSlideIndex]) {
+      slidesData[currentSlideIndex].transitionSpeed = currentTransitionSpeed;
+    }
+  });
+
+  function playSlideTransition(tName, tSpeed) {
+    if (!slideFrame) return;
+    slideFrame.style.animation = 'none';
+    slideFrame.offsetHeight; // trigger reflow
+    const t = tName || currentTransition || 'fade';
+    const spd = tSpeed || currentTransitionSpeed || '0.45s';
+    
+    if (t === 'fade') slideFrame.style.animation = `k-trans-fade ${spd} ease`;
+    else if (t === 'push-left' || t === 'slide-push') slideFrame.style.animation = `k-trans-push-left ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'push-right') slideFrame.style.animation = `k-trans-push-right ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'push-up') slideFrame.style.animation = `k-trans-push-up ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'push-down') slideFrame.style.animation = `k-trans-push-down ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'wipe-right') slideFrame.style.animation = `k-trans-wipe-right ${spd} ease-out`;
+    else if (t === 'wipe-down') slideFrame.style.animation = `k-trans-wipe-down ${spd} ease-out`;
+    else if (t === 'zoom-in') slideFrame.style.animation = `k-trans-zoom-in ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'zoom-out') slideFrame.style.animation = `k-trans-zoom-out ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'flip') slideFrame.style.animation = `k-trans-flip ${spd} ease-out`;
+    else if (t === 'cube') slideFrame.style.animation = `k-trans-cube-left ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    else if (t === 'dissolve') slideFrame.style.animation = `k-trans-dissolve ${spd} ease-in-out`;
+  }
+
   container.querySelectorAll('[data-transition]').forEach(btn => {
     btn.addEventListener('click', () => {
       container.querySelectorAll('[data-transition]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentTransition = btn.dataset.transition;
+      if (slidesData[currentSlideIndex]) {
+        slidesData[currentSlideIndex].transition = currentTransition;
+        slidesData[currentSlideIndex].transitionSpeed = currentTransitionSpeed;
+      }
+      playSlideTransition(currentTransition, currentTransitionSpeed);
     });
   });
 
+  container.querySelector('#btn-kinetic-preview-trans')?.addEventListener('click', () => {
+    playSlideTransition(currentTransition, currentTransitionSpeed);
+  });
+
   container.querySelector('#btn-kinetic-apply-all-trans')?.addEventListener('click', () => {
-    if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Applied ${currentTransition.toUpperCase()} transition to all ${slidesData.length} slides`);
+    slidesData.forEach(s => {
+      s.transition = currentTransition;
+      s.transitionSpeed = currentTransitionSpeed;
+    });
+    if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Applied ${currentTransition.toUpperCase()} (${currentTransitionSpeed}) transition to all ${slidesData.length} slides`);
   });
 
   // =========================================================================
@@ -5913,6 +6030,24 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
   // =========================================================================
   let presenterAnimStep = 0;
 
+    function resolvePresenterTransition(slide) {
+    const t = slide?.transition || currentTransition || 'fade';
+    const spd = slide?.transitionSpeed || currentTransitionSpeed || '0.45s';
+    if (t === 'fade') return `k-trans-fade ${spd} ease`;
+    if (t === 'push-left' || t === 'slide-push') return `k-trans-push-left ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'push-right') return `k-trans-push-right ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'push-up') return `k-trans-push-up ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'push-down') return `k-trans-push-down ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'wipe-right') return `k-trans-wipe-right ${spd} ease-out`;
+    if (t === 'wipe-down') return `k-trans-wipe-down ${spd} ease-out`;
+    if (t === 'zoom-in') return `k-trans-zoom-in ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'zoom-out') return `k-trans-zoom-out ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'flip') return `k-trans-flip ${spd} ease-out`;
+    if (t === 'cube') return `k-trans-cube-left ${spd} cubic-bezier(0.16, 1, 0.3, 1)`;
+    if (t === 'dissolve') return `k-trans-dissolve ${spd} ease-in-out`;
+    return 'none';
+  }
+
   function launchPresenter(startIndex = 0) {
     isPresenting = true;
     presenterOverlay.classList.add('active');
@@ -5962,7 +6097,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
       <div class="presenter-studio-dual">
         <!-- Live Current Slide Viewport -->
         <div class="presenter-live-frame" id="presenter-live-frame-clicker" style="cursor:pointer;" title="Click to reveal next animation or advance slide">
-          <div class="kinetic-slide-frame ${currentTheme}" id="presenter-active-slide-frame" style="width:100%; height:100%; box-shadow:none; border:none; pointer-events:none;">
+          <div class="kinetic-slide-frame ${currentTheme}" id="presenter-active-slide-frame" style="width:100%; height:100%; box-shadow:none; border:none; pointer-events:none; animation:${resolvePresenterTransition(slide)};">
             <div>
               <div class="slide-tag-pill" id="slide-tag">${slide.tag}</div>
               <h1 class="slide-h1-editable" id="slide-title">${slide.title}</h1>
