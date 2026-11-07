@@ -443,6 +443,24 @@ void PerformInstallation(HWND hwnd) {
         InstallAppFile(1001, L"GiriOrbit.exe", binSource);
     }
 
+    updateStep(85, L"Installing Enterprise Template Gallery & Lexicon Dictionary...");
+    try {
+        std::filesystem::create_directories(g_installDir + L"\\Templates");
+        std::filesystem::create_directories(g_installDir + L"\\Dict");
+
+        std::wstring tmplSrc = g_sourceDir + L"\\templates";
+        if (!PathFileExistsW(tmplSrc.c_str())) tmplSrc = g_sourceDir + L"\\..\\templates";
+        if (PathFileExistsW(tmplSrc.c_str())) {
+            std::filesystem::copy(tmplSrc, g_installDir + L"\\Templates", std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+        }
+
+        std::wstring dictSrc = g_sourceDir + L"\\dict";
+        if (!PathFileExistsW(dictSrc.c_str())) dictSrc = g_sourceDir + L"\\..\\dict";
+        if (PathFileExistsW(dictSrc.c_str())) {
+            std::filesystem::copy(dictSrc, g_installDir + L"\\Dict", std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+        }
+    } catch (...) {}
+
     if (g_createShortcut) {
         updateStep(90, L"Creating desktop shortcuts...");
         wchar_t szDesktop[MAX_PATH] = { 0 };
