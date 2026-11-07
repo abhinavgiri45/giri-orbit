@@ -1,6 +1,6 @@
 /* ============================================================================
  * GIRI ORBIT — MICROSOFT 365 COPILOT MODERN DASHBOARD THEME (m365-copilot.css)
- * Pixel-Accurate Microsoft 365 Sovereign Light/Clean Workspace UI
+ * Pixel-Accurate Giri Orbit Sovereign Light/Clean Workspace UI
  * ============================================================================
  */
 
@@ -165,7 +165,7 @@
   gap: 32px;
 }
 
-/* Hero Section: Welcome to Microsoft 365 Sovereign */
+/* Hero Section: Welcome to Giri Orbit Sovereign */
 .m365-hero {
   display: flex;
   flex-direction: column;
@@ -731,7 +731,7 @@
 }
 
 
-/* Clean Full-Screen Viewport for Microsoft 365 Hub */
+/* Clean Full-Screen Viewport for Giri Orbit Hub */
 body:not(.in-tool) .tier2-suite-header {
   display: none !important;
 }

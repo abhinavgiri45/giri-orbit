@@ -7243,3 +7243,54 @@ body.light-theme .export-filename-input {
 .pdf-page-canvas-wrap {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
 }
+
+
+/* ============================================================================
+   GIRI ORBIT ULTRA-HIGH PERFORMANCE & GPU ACCELERATION STYLES
+   Hardware-accelerated transforms, zero layout thrashing, content containment
+   ============================================================================ */
+
+/* GPU Compositing & Hardware Acceleration */
+.m365-hub-root,
+.m365-canvas,
+.fluent-ribbon-bar,
+.girionix-ai-drawer,
+.giri-modal-dialog,
+.office-a4-paper,
+.axis-grid-viewport {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Modals & Drawers: 120fps Smooth Transitions */
+.giri-modal-dialog,
+.girionix-ai-drawer {
+  will-change: transform, opacity;
+}
+
+/* CSS Containment: Prevents background views from triggering global reflows */
+.suite-view-pane:not(.active),
+.orbit-tool-viewport:not(.active) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px 700px;
+}
+
+/* Smooth Scrolling & Optimized Font Rendering */
+body, html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Table layout optimization for instant rendering */
+.m365-table {
+  table-layout: fixed;
+  contain: layout style;
+}
+
+/* Document cards row containment */
+.m365-cards-row {
+  contain: layout paint;
+}

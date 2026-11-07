@@ -1112,15 +1112,22 @@ class GiriOrbitPlatform {
       this.openGoogleDriveAccountModal();
     });
 
-    // 3. Search Bar Live Filtering
+    // 3. High-Performance Debounced Search Filtering (Zero Reflow using textContent & RAF)
     const searchInput = container.querySelector('#m365-search-box');
+    let searchDebounceTimer = null;
     searchInput?.addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      const rows = container.querySelectorAll('#m365-table-body tr');
-      rows.forEach(r => {
-        const text = r.innerText.toLowerCase();
-        r.style.display = (!q || text.includes(q)) ? '' : 'none';
-      });
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        requestAnimationFrame(() => {
+          const q = e.target.value.toLowerCase().trim();
+          const rows = container.querySelectorAll('#m365-table-body tr');
+          for (let i = 0; i < rows.length; i++) {
+            const r = rows[i];
+            const text = r.textContent.toLowerCase();
+            r.style.display = (!q || text.includes(q)) ? '' : 'none';
+          }
+        });
+      }, 50);
     });
 
     // 4. Quick Access Filter Pills
@@ -1334,15 +1341,23 @@ class GiriOrbitPlatform {
    * Google Drive Sovereign Account Modal (No Login Required)
    */
   calculateLocalDataUsage() {
+    const now = Date.now();
+    if (this._cachedLocalUsage && (now - (this._lastLocalUsageCheck || 0) < 10000)) {
+      return this._cachedLocalUsage;
+    }
     try {
       let bytes = 0;
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
         bytes += (k.length + (localStorage.getItem(k) || '').length) * 2;
       }
-      if (bytes < 1024) return bytes + ' Bytes';
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+      let res = '';
+      if (bytes < 1024) res = bytes + ' Bytes';
+      else if (bytes < 1024 * 1024) res = (bytes / 1024).toFixed(1) + ' KB';
+      else res = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+      this._cachedLocalUsage = res;
+      this._lastLocalUsageCheck = now;
+      return res;
     } catch (_) {
       return '16.4 KB';
     }
