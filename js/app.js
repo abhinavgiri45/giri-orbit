@@ -596,523 +596,612 @@ class GiriOrbitPlatform {
    */
   mountZohoLandingHub() {
     const landingContainer = document.createElement('div');
-    landingContainer.className = 'zoho-suite-landing';
+    landingContainer.className = 'm365-hub-root';
 
     landingContainer.innerHTML = `
-      <!-- HERO SECTION (Giri Orbit Spatial Executive Architecture) -->
-      <section class="zoho-hero-section">
-        <div class="zoho-hero-left">
-          <h1 class="zoho-hero-title">The Sovereign Enterprise Workspace</h1>
-          <p class="zoho-hero-subtitle">
-            Giri Orbit — Made by Abhinav Giri delivers unified, zero-latency sovereign computing. Unbind your workflows with Drift document architecture, Axis financial modeling, Kinetic cinematic presentations, and Aegis cryptographic document validation — powered by instant in-memory state.
-          </p>
-
-          <!-- Executive Giri Orbit Action Row: Launch Suite & Download Apps -->
-          <div class="hero-actions-row" style="display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
-            <button class="btn-giri-primary" id="btn-try-suite" style="margin-bottom:0;">
-              <span>Launch Giri Orbit Suite</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      <!-- LEFT NAVIGATION RAIL -->
+      <nav class="m365-left-rail" aria-label="Main Navigation">
+        <div class="m365-rail-top">
+          <!-- 1. Home -->
+          <button class="m365-rail-btn active" id="rail-btn-home" data-rail="home" title="Home">
+            <div class="m365-rail-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
-            </button>
+            </div>
+            <span class="m365-rail-label">Home</span>
+          </button>
 
-            <!-- Dedicated Download App Button (PC & Mobile) -->
-            <button class="btn-giri-download" id="btn-hero-download-app" title="Download Dedicated App for Windows (x64, x86, ARM64) & Android (APK)">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          <!-- 2. Copilot -->
+          <button class="m365-rail-btn" id="rail-btn-copilot" data-rail="copilot" title="Girionix Copilot">
+            <div class="m365-rail-icon-wrap" style="color:#7c3aed;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
               </svg>
-              <span>Download App</span>
-              <span style="background:rgba(255,255,255,0.22); padding:2px 7px; border-radius:5px; font-size:11px; font-weight:800; letter-spacing:0.02em;">PC &amp; Mobile</span>
-            </button>
+            </div>
+            <span class="m365-rail-label">Copilot</span>
+          </button>
+
+          <!-- 3. Create -->
+          <button class="m365-rail-btn" id="rail-btn-create" data-rail="create" title="Create New Document">
+            <div class="m365-rail-icon-wrap">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Create</span>
+          </button>
+
+          <!-- 4. My Content -->
+          <button class="m365-rail-btn" id="rail-btn-content" data-rail="content" title="My Sovereign Files">
+            <div class="m365-rail-icon-wrap">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">My Content</span>
+          </button>
+
+          <!-- 5. Apps -->
+          <button class="m365-rail-btn" id="rail-btn-apps" data-rail="apps" title="All Applications">
+            <div class="m365-rail-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Apps</span>
+          </button>
+
+          <div class="m365-rail-divider"></div>
+
+          <!-- Direct Office Tool Icons -->
+          <!-- Word (Drift) -->
+          <button class="m365-rail-btn" id="rail-btn-drift" data-launch="drift" title="Giri Drift (Word Processor)">
+            <div class="m365-rail-icon-wrap" style="background:#eff6ff;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#2563eb">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8" fill="#93c5fd"/><line x1="8" y1="13" x2="16" y2="13" stroke="#fff" stroke-width="2"/><line x1="8" y1="17" x2="14" y2="17" stroke="#fff" stroke-width="2"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Word</span>
+          </button>
+
+          <!-- Excel (Axis) -->
+          <button class="m365-rail-btn" id="rail-btn-axis" data-launch="axis" title="Giri Axis (Excel Spreadsheet)">
+            <div class="m365-rail-icon-wrap" style="background:#f0fdf4;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#16a34a">
+                <rect x="3" y="3" width="18" height="18" rx="3" fill="#16a34a"/>
+                <line x1="8" y1="8" x2="16" y2="16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="16" y1="8" x2="8" y2="16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Excel</span>
+          </button>
+
+          <!-- PowerPoint (Kinetic) -->
+          <button class="m365-rail-btn" id="rail-btn-kinetic" data-launch="kinetic" title="Giri Kinetic (PowerPoint Presentations)">
+            <div class="m365-rail-icon-wrap" style="background:#fff7ed;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#ea580c">
+                <rect x="3" y="3" width="18" height="18" rx="3" fill="#ea580c"/>
+                <path d="M9 8h4a2.5 2.5 0 0 1 0 5H9z" fill="#fff"/>
+                <line x1="9" y1="8" x2="9" y2="16" stroke="#fff" stroke-width="2.2"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">PowerPoint</span>
+          </button>
+
+          <!-- PDF (Aegis) -->
+          <button class="m365-rail-btn" id="rail-btn-pdf" data-launch="pdf" title="Giri Aegis (PDF Studio & Digital Seal)">
+            <div class="m365-rail-icon-wrap" style="background:#fef2f2;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#dc2626">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><text x="6" y="16" font-size="7" font-weight="900" fill="#fff">PDF</text>
+              </svg>
+            </div>
+            <span class="m365-rail-label">PDF</span>
+          </button>
+
+          <!-- More Tools (...) -->
+          <button class="m365-rail-btn" id="rail-btn-more" title="More Applications">
+            <div class="m365-rail-icon-wrap">
+              <span style="font-weight:900; font-size:16px; color:#94a3b8; line-height:1;">•••</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="m365-rail-bottom">
+          <!-- Settings -->
+          <button class="m365-rail-btn" id="rail-btn-settings" title="Settings">
+            <div class="m365-rail-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+          </button>
+
+          <!-- User Avatar -->
+          <div class="m365-rail-avatar" id="rail-avatar-btn" title="Abhinav Giri (abhinavgiri370@gmail.com)">
+            <span>AG</span>
           </div>
+        </div>
+      </nav>
 
+      <!-- MAIN WORKSPACE CANVAS -->
+      <main class="m365-canvas">
+        <div class="m365-inner-wrapper">
           
-          <!-- GIRI CORPORATION & FOLLOW THE JOURNEY CARDS -->
-          <div class="follow-journey-wrap" style="display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
-            <div style="display:flex; flex-direction:column; gap:6px;">
-              <span class="follow-journey-label">DOWNLOAD APP</span>
-              <div class="giri-corp-card" id="btn-hero-card-download" style="cursor:pointer; border:1.5px solid #10b981; background:rgba(16,185,129,0.04);" title="Download Dedicated App for Windows (x64, x86, ARM64) & Android (APK)">
-                <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:linear-gradient(135deg, #10b981, #0284c7); border:1px solid #34d399; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 0 12px rgba(16,185,129,0.4); font-size:18px;">
-                  💻📱
+          <!-- Top Hero Welcome -->
+          <section class="m365-hero">
+            <h1 class="m365-hero-title">Welcome to Microsoft 365 Copilot</h1>
+            <div class="m365-hero-meta">
+              <span class="m365-badge-free">Free</span>
+              <span class="m365-storage-stat">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                </svg>
+                1.2 MB used of 5 GB (0%)
+              </span>
+            </div>
+          </section>
+
+          <!-- Wide Centered Search Bar -->
+          <div class="m365-search-wrap">
+            <div class="m365-search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="m365-search-box" placeholder="Search for apps, files, templates and more" spellcheck="false" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Create New Section -->
+          <section class="m365-create-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 class="m365-section-title">Create New</h2>
+            </div>
+
+            <!-- 7 Authentic Document Preview Cards -->
+            <div class="m365-cards-row">
+              <!-- 1. Document (Word) -->
+              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Word Document (Giri Drift)">
+                <div class="m365-card-preview preview-word">
+                  <div class="sheet-word">
+                    <div class="line-blue" style="width:45%; height:5px;"></div>
+                    <div class="line-blue" style="width:90%; opacity:0.5;"></div>
+                    <div class="line-blue" style="width:80%; opacity:0.5;"></div>
+                    <div class="line-blue" style="width:65%; opacity:0.5;"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#2563eb">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    </svg>
+                  </div>
                 </div>
-                <div class="instagram-card-text">
-                  <strong class="instagram-handle" style="color:#0f172a; display:flex; align-items:center; gap:5px;">
-                    <span>Download App</span>
-                    <span style="font-size:9.5px; background:#10b981; color:#fff; padding:1px 5px; border-radius:4px; font-weight:800;">FREE</span>
-                  </strong>
-                  <span class="instagram-sub" style="color:#059669; font-weight:600;">Windows &amp; Android &rarr;</span>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Document</strong>
+                  <span class="m365-card-sub">Word</span>
+                </div>
+              </div>
+
+              <!-- 2. Presentation (PowerPoint) -->
+              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New PowerPoint Presentation (Giri Kinetic)">
+                <div class="m365-card-preview preview-ppt">
+                  <div class="sheet-ppt">
+                    <div class="ppt-top-bar"></div>
+                    <div class="ppt-body-cols">
+                      <div class="ppt-body-col"></div>
+                      <div class="ppt-body-col"></div>
+                    </div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#ea580c">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Presentation</strong>
+                  <span class="m365-card-sub">PowerPoint</span>
+                </div>
+              </div>
+
+              <!-- 3. Workbook (Excel) -->
+              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Excel Spreadsheet (Giri Axis)">
+                <div class="m365-card-preview preview-excel">
+                  <div class="sheet-excel">
+                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
+                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
+                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#16a34a">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Workbook</strong>
+                  <span class="m365-card-sub">Excel</span>
+                </div>
+              </div>
+
+              <!-- 4. Form (Forms) -->
+              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form">
+                <div class="m365-card-preview preview-form">
+                  <div class="sheet-form">
+                    <div class="form-bar"></div>
+                    <div class="form-box"></div>
+                    <div class="form-box"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#0d9488">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Form</strong>
+                  <span class="m365-card-sub">Forms</span>
+                </div>
+              </div>
+
+              <!-- 5. Quiz (Forms) -->
+              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz">
+                <div class="m365-card-preview preview-quiz">
+                  <div class="sheet-quiz">
+                    <div class="form-bar" style="background:#6ee7b7;"></div>
+                    <div class="quiz-option"><div class="quiz-dot"></div><div class="quiz-line"></div></div>
+                    <div class="quiz-option"><div class="quiz-dot"></div><div class="quiz-line"></div></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Quiz</strong>
+                  <span class="m365-card-sub">Forms</span>
+                </div>
+              </div>
+
+              <!-- 6. List (Lists) -->
+              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix">
+                <div class="m365-card-preview preview-list">
+                  <div class="sheet-list">
+                    <div class="list-row" style="background:#d8b4fe;"></div>
+                    <div class="list-row"></div>
+                    <div class="list-row"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#7c3aed">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">List</strong>
+                  <span class="m365-card-sub">Lists</span>
+                </div>
+              </div>
+
+              <!-- 7. Design (Designer) -->
+              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase">
+                <div class="m365-card-preview preview-designer">
+                  <div class="sheet-designer">
+                    <div class="designer-circ"></div>
+                    <div class="designer-rect"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#db2777">
+                      <circle cx="12" cy="12" r="8"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Design</strong>
+                  <span class="m365-card-sub">Designer</span>
                 </div>
               </div>
             </div>
-            <div style="display:flex; flex-direction:column; gap:6px;">
-              <span class="follow-journey-label">OFFICIAL PORTAL</span>
-              <a href="https://giri-corporation.pages.dev/" target="_blank" rel="noopener" class="giri-corp-card" title="Visit Giri Corporation Official Website">
-                <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                  <img src="assets/giri-logo-symbol.png" alt="Giri Corporation" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
-                </div>
-                <div class="instagram-card-text">
-                  <strong class="instagram-handle" style="color:#0f172a;">Giri Corporation</strong>
-                  <span class="instagram-sub" style="color:#0284c7;">giri-corporation.pages.dev &rarr;</span>
-                </div>
-              </a>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:2px;">
+              <a href="#" class="m365-see-more" id="m365-see-more-link">See more in Create &rarr;</a>
             </div>
-            <div style="display:flex; flex-direction:column; gap:6px;">
-              <span class="follow-journey-label">FOLLOW THE JOURNEY</span>
-              <a href="https://www.instagram.com/abhinavgiri45/" target="_blank" rel="noopener" class="giri-instagram-card" title="Connect with Abhinav Giri on Instagram">
-                <div class="instagram-logo-badge">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2.5" y="2.5" width="19" height="19" rx="5.2" stroke="#ffffff" stroke-width="2" fill="none"/>
-                    <circle cx="12" cy="12" r="4.2" stroke="#ffffff" stroke-width="2" fill="none"/>
-                    <circle cx="16.8" cy="7.2" r="1.1" fill="#ffffff"/>
+          </section>
+
+          <!-- Quick Access Section -->
+          <section class="m365-quick-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 class="m365-section-title">Quick access</h2>
+            </div>
+
+            <!-- Toolbar with Filter Pills & Upload Button -->
+            <div class="m365-quick-toolbar">
+              <div class="m365-pills-wrap">
+                <button class="m365-pill active" id="pill-filter-recent" data-filter="recent">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                   </svg>
+                  <span>Recently opened</span>
+                </button>
+                <button class="m365-pill" id="pill-filter-shared" data-filter="shared">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                  <span>Shared</span>
+                </button>
+                <button class="m365-pill" id="pill-filter-favorites" data-filter="favorites">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Favorites</span>
+                </button>
+              </div>
+
+              <div class="m365-action-tools">
+                <button class="m365-upload-btn" id="btn-m365-upload-file" title="Open or Upload Local Document (.docx, .xlsx, .pptx, .giri)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <span>Upload</span>
+                </button>
+                <div class="m365-view-toggle">
+                  <button class="m365-view-btn active" id="btn-m365-view-list" title="List View">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                      <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                  </button>
+                  <button class="m365-view-btn" id="btn-m365-view-grid" title="Grid View">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                      <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                  </button>
                 </div>
-                <div class="instagram-card-text">
-                  <strong class="instagram-handle">@abhinavgiri45</strong>
-                  <span class="instagram-sub">Connect on Instagram &rarr;</span>
-                </div>
-              </a>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:6px;">
-              <span class="follow-journey-label">GIRIONIX AI</span>
-              <div class="giri-corp-card" id="btn-hero-launch-girionix" style="cursor:pointer;" title="Launch Girionix AI Polymath Studio">
-                <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:linear-gradient(135deg, #06b6d4, #2563eb); border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 0 12px rgba(6,182,212,0.5);">
-                  <img src="assets/girionix-logo.png" style="width:28px; height:28px; object-fit:contain; border-radius:6px;" alt="Girionix AI">
-                </div>
-                <div class="instagram-card-text">
-                  <strong class="instagram-handle" style="color:#0f172a;">Girionix AI</strong>
-                  <span class="instagram-sub" style="color:#0284c7;">girionix-ai.pages.dev/chat &rarr;</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4 Distinct Giri Tool Switcher Cards -->
-          <div class="zoho-product-cards-strip">
-            <!-- Native Apps Download -->
-            <div class="zoho-app-card" id="btn-strip-download-app" role="button" tabindex="0" title="Download Dedicated App for Windows & Android" style="border:1.5px solid #10b981; background:#f0fdf4;">
-              <div class="app-card-icon" style="background:#dcfce7;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix" style="color:#16a34a;">NATIVE</span>
-                <span class="app-card-title">Download App</span>
-                <span class="app-card-url-badge" style="color:#16a34a; background:#dcfce7;">PC &amp; APK</span>
-              </div>
-            </div>
-            <!-- 1. Drift (Docs) -->
-            <div class="zoho-app-card" data-launch="drift" role="button" tabindex="0" title="Launch Drift Document Composer (http://127.0.0.1:5000/#drift)">
-              <div class="app-card-icon" style="background:#eff6ff; display:flex; align-items:center; justify-content:center;">
-                <img src="assets/drift-symbol.png" alt="Drift" style="width:28px; height:28px; object-fit:contain;">
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">GIRI</span>
-                <span class="app-card-title">Drift Docs</span>
-                <span class="app-card-url-badge">#drift</span>
               </div>
             </div>
 
-            <!-- 2. Axis (Sheets) -->
-            <div class="zoho-app-card" data-launch="axis" role="button" tabindex="0" title="Launch Axis Data Matrix (http://127.0.0.1:5000/#axis)">
-              <div class="app-card-icon">
-                <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="4" width="24" height="24" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
-                  <line x1="4" y1="12" x2="28" y2="12" stroke="#16a34a" stroke-width="1.8"/>
-                  <line x1="12" y1="4" x2="12" y2="28" stroke="#16a34a" stroke-width="1.8"/>
-                  <line x1="20" y1="4" x2="20" y2="28" stroke="#16a34a" stroke-width="1.8"/>
-                </svg>
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">GIRI</span>
-                <span class="app-card-title">Axis Sheets</span>
-                <span class="app-card-url-badge" style="color:#16a34a; background:#f0fdf4;">#axis</span>
-              </div>
+            <!-- Documents Table -->
+            <div class="m365-table-wrap">
+              <table class="m365-table" id="m365-recent-table">
+                <thead>
+                  <tr>
+                    <th style="width:42%;">Name</th>
+                    <th style="width:20%;">Date modified</th>
+                    <th style="width:20%;">Sharing</th>
+                    <th style="width:18%;">Activity</th>
+                  </tr>
+                </thead>
+                <tbody id="m365-table-body">
+                  <!-- Populated by JavaScript -->
+                </tbody>
+              </table>
             </div>
+          </section>
 
-            <!-- 3. Kinetic (Presentation) -->
-            <div class="zoho-app-card" data-launch="kinetic" role="button" tabindex="0" title="Launch Kinetic Presentation (http://127.0.0.1:5000/#kinetic)">
-              <div class="app-card-icon">
-                <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="5" width="24" height="18" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
-                  <polygon points="13 10 21 14 13 18 13 10" fill="#dc2626"/>
-                  <line x1="10" y1="27" x2="22" y2="27" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
-                  <line x1="16" y1="23" x2="16" y2="27" stroke="#dc2626" stroke-width="2"/>
-                </svg>
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">GIRI</span>
-                <span class="app-card-title">Kinetic Show</span>
-                <span class="app-card-url-badge" style="color:#dc2626; background:#fef2f2;">#kinetic</span>
-              </div>
-            </div>
-
-            <!-- 4. Aegis (PDF Studio) -->
-            <div class="zoho-app-card" data-launch="pdf" role="button" tabindex="0" title="Launch Aegis PDF Studio (http://127.0.0.1:5000/#pdf)">
-              <div class="app-card-icon">
-                <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="4" width="24" height="24" rx="5" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
-                  <path d="M16 8L23 11V16C23 20 19.5 23.5 16 25C12.5 23.5 9 20 9 16V11L16 8Z" fill="#ea580c" fill-opacity="0.15" stroke="#ea580c" stroke-width="1.8"/>
-                  <polyline points="13 16 15 18 19 14" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">GIRI</span>
-                <span class="app-card-title">Aegis PDF</span>
-                <span class="app-card-url-badge" style="color:#ea580c; background:#fff7ed;">#pdf</span>
-              </div>
-            </div>
-
-            <!-- 5. File Converter -->
-            <div class="zoho-app-card" id="btn-open-file-converter" role="button" tabindex="0" title="Giri File Converter — convert documents, spreadsheets, and more">
-              <div class="app-card-icon">
-                <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="4" width="24" height="24" rx="5" fill="#fdf4ff" stroke="#9333ea" stroke-width="2"/>
-                  <path d="M11 10h6l3 3v9H11V10z" fill="#9333ea" fill-opacity="0.15" stroke="#9333ea" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M17 10v3h3" stroke="#9333ea" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M20 20l-4 3-4-3" stroke="#9333ea" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <line x1="16" y1="23" x2="16" y2="17" stroke="#9333ea" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">GIRI</span>
-                <span class="app-card-title">File Convert</span>
-                <span class="app-card-url-badge" style="color:#9333ea; background:#fdf4ff;">CONVERT</span>
-              </div>
-            </div>
-
-            <!-- 6. Girionix AI Polymath Studio -->
-            <div class="zoho-app-card" data-launch="girionix" role="button" tabindex="0" title="Launch Girionix AI Polymath Studio (https://girionix-ai.pages.dev/chat)">
-              <div class="app-card-icon" style="display:flex; align-items:center; justify-content:center;">
-                <img src="assets/girionix-logo.png" style="width:26px; height:26px; object-fit:contain; border-radius:4px;" alt="Girionix AI">
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">GIRI</span>
-                <span class="app-card-title">Girionix AI</span>
-                <span class="app-card-url-badge" style="color:#0891b2; background:#ecfeff;">#girionix</span>
-              </div>
-            </div>
-
-            <!-- 7. Girionix Autonomous AI Agent -->
-            <div class="zoho-app-card" id="btn-card-launch-agent" role="button" tabindex="0" title="Launch Girionix Autonomous AI Agent (Alt+A)">
-              <div class="app-card-icon" style="background:#fdf4ff; display:flex; align-items:center; justify-content:center;">
-                <span style="font-size:24px;">🤖</span>
-              </div>
-              <div class="app-card-meta">
-                <span class="app-card-prefix">AUTONOMOUS</span>
-                <span class="app-card-title">AI Agent</span>
-                <span class="app-card-url-badge" style="color:#a855f7; background:#faf5ff;">ALT+A</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Girionix AI Official Strategic Enterprise Partnership Showcase Card -->
-          <div class="girionix-hero-banner" style="margin-top:16px; padding:16px 20px; background:linear-gradient(135deg, rgba(6,182,212,0.1), rgba(59,130,246,0.15)); border:1px solid rgba(56,189,248,0.4); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; box-shadow:0 4px 20px rgba(6,182,212,0.12);">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #06b6d4, #2563eb); display:flex; align-items:center; justify-content:center; box-shadow:0 0 16px rgba(6,182,212,0.6); flex-shrink:0;">
-                <img src="assets/girionix-logo.png" style="width:26px; height:26px; object-fit:contain; border-radius:4px;" alt="Girionix AI">
-              </div>
-              <div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <strong style="font-size:14px; color:#0f172a;">Giri Orbit × Girionix AI | Official Strategic AI Partner</strong>
-                  <span class="girionix-partner-badge" style="font-size:10px; padding:2px 8px;">
-                    <span class="girionix-partner-pulse"></span>
-                    VERIFIED PARTNERSHIP
-                  </span>
-                </div>
-                <p style="font-size:12px; color:#475569; margin:3px 0 0 0; line-height:1.4;">
-                  Sovereign client computing paired with autonomous polymath intelligence. 2-way seamless bridge across Drift, Axis, Kinetic &amp; Aegis with zero telemetry.
-                </p>
-              </div>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <button class="btn-giri-primary" id="btn-banner-launch-agent" style="padding:7px 16px; font-size:12px; background:linear-gradient(135deg, #06b6d4, #2563eb); border:none; font-weight:700; box-shadow:0 0 14px rgba(6,182,212,0.5);">
-                <span>🤖 Run Autonomous Agent</span>
-              </button>
-              <button class="btn-giri-primary" id="btn-banner-launch-girionix" style="padding:7px 14px; font-size:12px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); font-weight:600;">
-                <span>Launch Girionix AI ⚡</span>
-              </button>
-              <button class="girionix-mini-btn" id="btn-banner-assistant-girionix" style="padding:7px 12px; font-size:12px;">
-                <span>💬 Copilot</span>
-              </button>
-            </div>
-          </div>
         </div>
-
-        <!-- Hero Right: Custom Spatial Orbital Architecture Diagram -->
-        <div class="zoho-hero-right">
-          <svg class="hero-vector-art" viewBox="0 0 520 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="orbitalCoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#2563eb"/>
-                <stop offset="100%" stop-color="#06b6d4"/>
-              </linearGradient>
-              <filter id="orbitalCardShadow" x="-10%" y="-10%" width="130%" height="130%">
-                <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.08"/>
-              </filter>
-            </defs>
-
-            <!-- Concentric Orbital Paths -->
-            <ellipse cx="260" cy="200" rx="220" ry="110" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6 6" fill="none" transform="rotate(-12 260 200)"/>
-            <ellipse cx="260" cy="200" rx="150" ry="75" stroke="#bfdbfe" stroke-width="1.5" stroke-dasharray="3 3" fill="none" transform="rotate(22 260 200)"/>
-            <ellipse cx="260" cy="200" rx="80" ry="40" stroke="#93c5fd" stroke-width="1.2" fill="none" transform="rotate(-30 260 200)"/>
-
-            <!-- Vector Energy Wave Arcs -->
-            <path d="M120 120 C 180 180, 220 200, 260 200" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4 4" stroke-opacity="0.6"/>
-            <path d="M380 110 C 330 150, 300 180, 260 200" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" stroke-opacity="0.6"/>
-            <path d="M260 300 C 260 270, 260 240, 260 200" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4 4" stroke-opacity="0.6"/>
-
-            <!-- Central Gravity Nexus Node with Giri Group Master Emblem (Provided by User) -->
-            <g transform="translate(260, 200)">
-              <circle cx="0" cy="0" r="38" fill="#2563eb" fill-opacity="0.08"/>
-              <circle cx="0" cy="0" r="26" fill="#000000" stroke="#334155" stroke-width="1.5"/>
-              <clipPath id="centralLogoClip">
-                <circle cx="0" cy="0" r="24"/>
-              </clipPath>
-              <image href="assets/giri-logo-symbol.png" x="-24" y="-24" width="48" height="48" clip-path="url(#centralLogoClip)"/>
-            </g>
-
-            <!-- Floating Card 1: Drift Executive Document (Top Left) -->
-            <g transform="translate(45, 50)" filter="url(#orbitalCardShadow)">
-              <rect width="175" height="110" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
-              <rect x="14" y="14" width="34" height="6" rx="3" fill="#2563eb"/>
-              <rect x="14" y="27" width="115" height="8" rx="4" fill="#0f172a"/>
-              <rect x="14" y="43" width="145" height="4" rx="2" fill="#94a3b8"/>
-              <rect x="14" y="52" width="130" height="4" rx="2" fill="#cbd5e1"/>
-              <rect x="14" y="61" width="105" height="4" rx="2" fill="#cbd5e1"/>
-              <rect x="14" y="78" width="70" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe"/>
-              <text x="49" y="90" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#2563eb" text-anchor="middle">DRIFT // 60 FPS</text>
-            </g>
-
-            <!-- Floating Card 2: Axis High-Velocity Ledger (Top Right) -->
-            <g transform="translate(300, 35)" filter="url(#orbitalCardShadow)">
-              <rect width="180" height="115" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
-              <rect x="14" y="14" width="38" height="6" rx="3" fill="#16a34a"/>
-              <rect x="14" y="26" width="95" height="8" rx="4" fill="#0f172a"/>
-              <!-- Mini Pillar Charts -->
-              <rect x="18" y="68" width="16" height="26" rx="2" fill="#16a34a"/>
-              <rect x="40" y="54" width="16" height="40" rx="2" fill="#2563eb"/>
-              <rect x="62" y="44" width="16" height="50" rx="2" fill="#06b6d4"/>
-              <rect x="84" y="34" width="16" height="60" rx="2" fill="#7c3aed"/>
-              <text x="138" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="800" fill="#0f172a">+38%</text>
-              <text x="138" y="72" font-family="sans-serif" font-size="7.5" font-weight="700" fill="#16a34a">Q3 RUNWAY</text>
-            </g>
-
-            <!-- Floating Card 3: Kinetic Presentation Widescreen (Bottom) -->
-            <g transform="translate(150, 240)" filter="url(#orbitalCardShadow)">
-              <rect width="220" height="120" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
-              <rect x="16" y="14" width="48" height="7" rx="3.5" fill="#dc2626"/>
-              <rect x="16" y="28" width="140" height="9" rx="4" fill="#ffffff"/>
-              <rect x="16" y="43" width="175" height="4.5" rx="2" fill="#94a3b8"/>
-              <!-- Node metric pills -->
-              <rect x="16" y="60" width="56" height="44" rx="6" fill="#1e293b"/>
-              <text x="44" y="78" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#f43f5e" text-anchor="middle">60 FPS</text>
-              <text x="44" y="93" font-family="sans-serif" font-size="6.5" fill="#94a3b8" text-anchor="middle">PHYSICS</text>
-
-              <rect x="82" y="60" width="56" height="44" rx="6" fill="#1e293b"/>
-              <text x="110" y="78" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#38bdf8" text-anchor="middle">0 KB</text>
-              <text x="110" y="93" font-family="sans-serif" font-size="6.5" fill="#94a3b8" text-anchor="middle">ZERO-DB</text>
-
-              <rect x="148" y="60" width="56" height="44" rx="6" fill="#1e293b"/>
-              <text x="176" y="78" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#34d399" text-anchor="middle">100%</text>
-              <text x="176" y="93" font-family="sans-serif" font-size="6.5" fill="#94a3b8" text-anchor="middle">SOVEREIGN</text>
-            </g>
-
-            <!-- Satellite Orbit Particles -->
-            <circle cx="95" cy="180" r="3.5" fill="#2563eb"/>
-            <circle cx="430" cy="190" r="3" fill="#06b6d4"/>
-            <circle cx="210" cy="95" r="2.5" fill="#10b981"/>
-            <circle cx="340" cy="270" r="3" fill="#f43f5e"/>
-          </svg>
-        </div>
-      </section>
-
-      <!-- RECENT DOCUMENTS SECTION (Clean Executive Grid - Zero Clutter) -->
-      <section class="zoho-recent-docs-section" style="max-width:1240px; margin:36px auto; padding:0 28px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
-          <div>
-            <h2 style="font-size:19px; font-weight:700; color:#0f172a; margin:0 0 4px 0;">Recent Documents</h2>
-            <p style="font-size:12.5px; color:#64748b; margin:0;">Access sovereign in-memory documents, models, and presentations</p>
-          </div>
-
-          <div style="display:flex; gap:10px; align-items:center;">
-            <div style="display:flex; align-items:center; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; padding:4px 10px; gap:6px;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" id="recent-docs-search-input" placeholder="Search recent documents..." style="border:none; outline:none; background:transparent; font-size:12px; width:180px;" spellcheck="false">
-            </div>
-            <div style="display:flex; gap:4px;" id="recent-filter-pills">
-              <button class="tool-category-pill active" data-filter="all">All</button>
-              <button class="tool-category-pill" data-filter="drift">Writer</button>
-              <button class="tool-category-pill" data-filter="axis">Sheet</button>
-              <button class="tool-category-pill" data-filter="kinetic">Show</button>
-              <button class="tool-category-pill" data-filter="pdf">PDF</button>
-            </div>
-            <div style="display:flex; align-items:center; gap:5px; margin-left:2px;" id="recent-sort-wrap">
-              <span style="font-size:11px; color:#64748b; font-weight:600;">Sort:</span>
-              <select id="recent-sort-select" style="font-size:11.5px; padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:600; cursor:pointer; outline:none;" title="Sort recent documents">
-                <option value="recent">🕒 Recent</option>
-                <option value="name-asc">🔤 Name (A-Z)</option>
-                <option value="name-desc">🔤 Name (Z-A)</option>
-                <option value="type">📁 Type</option>
-              </select>
-            </div>
-            <div style="display:flex; gap:6px; margin-left:4px;">
-              <button id="btn-landing-backup-device" class="btn-giri-action-pill" title="Save entire office workspace snapshot directly to your computer (Zero-DB disk sync)" style="background:#059669; color:#fff; border:1px solid #047857; font-size:11.5px; padding:5px 11px; border-radius:6px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:opacity 0.15s;">
-                <span>💾</span> Backup to Device
-              </button>
-              <button id="btn-landing-restore-device" class="btn-giri-action-pill" title="Restore entire workspace from a previously saved .giriworkspace or .json file" style="background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; font-size:11.5px; padding:5px 11px; border-radius:6px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:background 0.15s;">
-                <span>📥</span> Restore Workspace
-              </button>
-              <button id="btn-landing-open-drive" class="btn-giri-action-pill" title="Open Google Drive Cloud Workspace" style="background:#2563eb; color:#fff; border:1px solid #1d4ed8; font-size:11.5px; padding:5px 11px; border-radius:6px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:opacity 0.15s;">
-                <span>☁️</span> Google Drive
-              </button>
-              <button id="btn-landing-download-windows" class="btn-giri-action-pill" title="Download Dedicated Windows Desktop App (x64, x86, ARM64)" style="background:linear-gradient(135deg, #10b981, #0284c7); color:#fff; border:1px solid #0284c7; font-size:11.5px; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 2px 8px rgba(2,132,199,0.25);">
-                <span>💻</span> Desktop App .exe
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div id="recent-docs-cards-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(270px, 1fr)); gap:16px;">
-          <!-- Dynamically injected by renderRecentDocsGrid() -->
-        </div>
-      </section>
-
-      <!-- GOOGLE DRIVE CLOUD FILES SECTION -->
-      <section class="zoho-drive-docs-section" style="max-width:1240px; margin:24px auto 40px auto; padding:0 28px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M7.71 3.5L1.15 15l3.43 6 6.56-11.5L7.71 3.5z" fill="#0066DA"/>
-              <path d="M16.29 3.5h-8.58l6.56 11.5h8.58l-6.56-11.5z" fill="#00AC47"/>
-              <path d="M22.85 15H9.71l-3.43 6h13.14l3.43-6z" fill="#EA4335"/>
-              <path d="M14.27 15l-3.42 6-3.43-6h6.85z" fill="#FFBA00"/>
-            </svg>
-            <div>
-              <h2 style="font-size:18px; font-weight:700; color:#0f172a; margin:0 0 2px 0;">Google Drive Cloud Workspace</h2>
-              <p style="font-size:12px; color:#64748b; margin:0;">Direct editing &amp; live cloud auto-save across Docs, Sheets, Slides, and PDFs</p>
-            </div>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn-giri-primary" id="btn-hub-new-drive-file" style="padding:6px 14px; font-size:11.5px;">+ New Drive File</button>
-            <button class="btn-giri-secondary" id="btn-hub-open-drive-modal" style="padding:6px 14px; font-size:11.5px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; font-weight:600; color:#334155;">Browse All Files ➔</button>
-          </div>
-        </div>
-
-        <div id="hub-drive-files-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(270px, 1fr)); gap:16px;">
-          <!-- Dynamically injected by renderHubDriveFilesGrid() -->
-        </div>
-      </section>
+      </main>
     `;
 
+    this.workspace.innerHTML = '';
     this.workspace.appendChild(landingContainer);
 
-    // Initial render of dynamic recent synced work and Google Drive cloud files
-    this.renderRecentDocsGrid(landingContainer);
-    this.renderHubDriveFilesGrid(landingContainer);
+    // Bind Event Listeners
+    this.bindM365HubEvents(landingContainer);
+    this.renderM365RecentDocuments(landingContainer);
+  }
 
-    // Bind Hub Google Drive Actions
-    landingContainer.querySelector('#btn-landing-open-drive')?.addEventListener('click', () => {
-      driveSyncManager.openDriveModal('browser');
-    });
-    landingContainer.querySelector('#btn-hub-new-drive-file')?.addEventListener('click', () => {
-      driveSyncManager.openDriveModal('new');
-    });
-    landingContainer.querySelector('#btn-hub-open-drive-modal')?.addEventListener('click', () => {
-      driveSyncManager.openDriveModal('browser');
-    });
-
-    // Bind Primary CTA button to open Writer
-    
-    // Bind Hero Download App buttons to open Downloads Corner
-    const triggerDownloadsModal = () => {
-      const openBtn = document.getElementById('btn-open-downloads-corner');
-      if (openBtn) {
-        openBtn.click();
-      } else {
-        const dlModal = document.getElementById('downloads-corner-modal');
-        if (dlModal) dlModal.style.display = 'flex';
-      }
-    };
-    landingContainer.querySelector('#btn-hero-download-app')?.addEventListener('click', triggerDownloadsModal);
-    landingContainer.querySelector('#btn-hero-card-download')?.addEventListener('click', triggerDownloadsModal);
-    landingContainer.querySelector('#btn-strip-download-app')?.addEventListener('click', triggerDownloadsModal);
-
-    landingContainer.querySelector('#btn-try-suite')?.addEventListener('click', () => {
-      this.navigateTo('drift', 'Enterprise Strategic Charter');
-    });
-
-    // Bind 4 Product Switcher Cards (skip File Converter which has no data-launch)
-    const appCards = landingContainer.querySelectorAll('.zoho-app-card[data-launch]');
-    appCards.forEach(card => {
-      card.addEventListener('click', () => {
-        const tool = card.dataset.launch;
-        this.navigateTo(tool);
-      });
-    });
-
-    // Bind File Converter Card
-    landingContainer.querySelector('#btn-open-file-converter')?.addEventListener('click', () => {
-      this.mountFileConverterTool();
-    });
-
-    // Bind Girionix AI Hub Banner & Hero Actions
-    landingContainer.querySelector('#btn-hero-launch-girionix')?.addEventListener('click', () => {
-      this.navigateTo('girionix');
-    });
-    landingContainer.querySelector('#btn-card-launch-agent')?.addEventListener('click', () => {
-      this.openGirionixAgent();
-    });
-    landingContainer.querySelector('#btn-banner-launch-agent')?.addEventListener('click', () => {
-      this.openGirionixAgent();
-    });
-    landingContainer.querySelector('#btn-banner-launch-girionix')?.addEventListener('click', () => {
-      this.navigateTo('girionix');
-    });
-    landingContainer.querySelector('#btn-banner-assistant-girionix')?.addEventListener('click', () => {
-      this.openGirionixAiDrawer('quick');
-    });
-
-    // Bind Direct-to-Device Workspace Backup & Restore
-    landingContainer.querySelector('#btn-landing-backup-device')?.addEventListener('click', () => {
-      this.saveWorkspaceToDevice();
-    });
-    landingContainer.querySelector('#btn-landing-restore-device')?.addEventListener('click', () => {
-      this.restoreWorkspaceFromDevice();
-    });
-
-    // Recent Documents Search, Filter & Sort
-    const searchInput = landingContainer.querySelector('#recent-docs-search-input');
-    const filterBtns = landingContainer.querySelectorAll('#recent-filter-pills .tool-category-pill');
-    const sortSelect = landingContainer.querySelector('#recent-sort-select');
-
-    const runRecentFilters = () => {
-      const q = (searchInput?.value || '').toLowerCase().trim();
-      const activeBtn = landingContainer.querySelector('#recent-filter-pills .tool-category-pill.active');
-      const filter = activeBtn?.dataset.filter || 'all';
-
-      const recentCards = landingContainer.querySelectorAll('.recent-doc-card');
-      recentCards.forEach(card => {
-        const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
-        const tool = card.dataset.tool;
-        const matchQ = !q || title.includes(q);
-        const matchF = filter === 'all' || tool === filter;
-        card.style.display = matchQ && matchF ? 'flex' : 'none';
-      });
-    };
-
-    searchInput?.addEventListener('input', runRecentFilters);
-    filterBtns.forEach(btn => {
+  /**
+   * Bind All Interactive Controls in Microsoft 365 Copilot Hub
+   */
+  bindM365HubEvents(container) {
+    // 1. Left Rail Navigation
+    container.querySelectorAll('.m365-rail-btn[data-launch]').forEach(btn => {
       btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        runRecentFilters();
+        const tool = btn.dataset.launch;
+        if (tool) this.navigateTo(tool);
       });
     });
 
-    sortSelect?.addEventListener('change', () => {
-      this.renderRecentDocsGrid(landingContainer);
-      runRecentFilters();
+    container.querySelector('#rail-btn-copilot')?.addEventListener('click', () => {
+      this.navigateTo('girionix');
+    });
+
+    container.querySelector('#rail-btn-create')?.addEventListener('click', () => {
+      container.querySelector('.m365-create-section')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    container.querySelector('#rail-btn-content')?.addEventListener('click', () => {
+      this.openDriveModal();
+    });
+
+    container.querySelector('#rail-btn-apps')?.addEventListener('click', () => {
+      const moreBtn = document.getElementById('suite-product-brand');
+      if (moreBtn) moreBtn.click();
+    });
+
+    container.querySelector('#rail-btn-settings')?.addEventListener('click', () => {
+      this.openSettingsModal();
+    });
+
+    container.querySelector('#rail-avatar-btn')?.addEventListener('click', () => {
+      this.showToast('Giri Orbit Sovereign Account • Abhinav Giri (abhinavgiri370@gmail.com)', 'blue');
+    });
+
+    container.querySelector('#rail-btn-more')?.addEventListener('click', () => {
+      this.openFileConverterTool();
+    });
+
+    // 2. Create New Cards
+    container.querySelectorAll('.m365-create-card[data-create]').forEach(card => {
+      card.addEventListener('click', () => {
+        const type = card.dataset.create;
+        if (type === 'drift') {
+          this.navigateTo('drift', 'Untitled Document', true, true);
+        } else if (type === 'kinetic') {
+          this.navigateTo('kinetic', null, true, true);
+        } else if (type === 'axis') {
+          this.navigateTo('axis', null, true, true);
+        } else if (type === 'form') {
+          this.navigateTo('drift', 'Executive Charter Form', true, true);
+        } else if (type === 'quiz') {
+          this.navigateTo('axis', 'Assessment Matrix', true, true);
+        } else if (type === 'list') {
+          this.navigateTo('axis', 'Task Tracker List', true, true);
+        } else if (type === 'designer') {
+          this.navigateTo('kinetic', 'Creative Pitch Deck', true, true);
+        }
+      });
+    });
+
+    container.querySelector('#m365-see-more-link')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openDriveModal();
+    });
+
+    // 3. Search Bar Live Filtering
+    const searchInput = container.querySelector('#m365-search-box');
+    searchInput?.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const rows = container.querySelectorAll('#m365-table-body tr');
+      rows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        r.style.display = (!q || text.includes(q)) ? '' : 'none';
+      });
+    });
+
+    // 4. Quick Access Filter Pills
+    container.querySelectorAll('.m365-pill[data-filter]').forEach(pill => {
+      pill.addEventListener('click', () => {
+        container.querySelectorAll('.m365-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        this.renderM365RecentDocuments(container, pill.dataset.filter);
+      });
+    });
+
+    // 5. Upload File Button
+    container.querySelector('#btn-m365-upload-file')?.addEventListener('click', () => {
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = '.docx,.doc,.xlsx,.xls,.pptx,.ppt,.pdf,.giri,.gdrift,.gaxis,.gkinetic,.txt,.csv';
+      inp.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          this.handleUniversalFileSelection(file);
+        }
+      };
+      inp.click();
+    });
+
+    // 6. View Toggle (List / Grid)
+    const btnList = container.querySelector('#btn-m365-view-list');
+    const btnGrid = container.querySelector('#btn-m365-view-grid');
+    btnList?.addEventListener('click', () => {
+      btnList.classList.add('active');
+      btnGrid.classList.remove('active');
+      this.renderM365RecentDocuments(container, 'recent', 'list');
+    });
+    btnGrid?.addEventListener('click', () => {
+      btnGrid.classList.add('active');
+      btnList.classList.remove('active');
+      this.renderM365RecentDocuments(container, 'recent', 'grid');
+    });
+  }
+
+  /**
+   * Render Recent Documents Table in Microsoft 365 Copilot Hub
+   */
+  renderM365RecentDocuments(container, filter = 'recent', viewMode = 'list') {
+    const tbody = container.querySelector('#m365-table-body');
+    if (!tbody) return;
+
+    // Authentic pre-loaded and localStorage documents
+    const defaultDocs = [
+      {
+        id: 'doc-1',
+        title: 'Strategic Enterprise Charter.gdrift',
+        type: 'drift',
+        appName: 'Word',
+        date: 'Just now',
+        sharing: 'Only you',
+        activity: 'You edited',
+        iconBg: '#eff6ff',
+        iconColor: '#2563eb'
+      },
+      {
+        id: 'doc-2',
+        title: 'Annual Corporate Financial Forecast 2026.gaxis',
+        type: 'axis',
+        appName: 'Excel',
+        date: '2 hours ago',
+        sharing: 'Only you',
+        activity: 'You edited',
+        iconBg: '#f0fdf4',
+        iconColor: '#16a34a'
+      },
+      {
+        id: 'doc-3',
+        title: 'Executive Keynote Pitch Deck.gkinetic',
+        type: 'kinetic',
+        appName: 'PowerPoint',
+        date: 'Yesterday',
+        sharing: 'Shared with Giri Group',
+        activity: 'You presented',
+        iconBg: '#fff7ed',
+        iconColor: '#ea580c'
+      },
+      {
+        id: 'doc-4',
+        title: 'Sovereign Digital Agreement & Non-Disclosure.gaegis',
+        type: 'pdf',
+        appName: 'PDF',
+        date: '3 days ago',
+        sharing: 'Cryptographically Sealed',
+        activity: 'You signed',
+        iconBg: '#fef2f2',
+        iconColor: '#dc2626'
+      },
+      {
+        id: 'doc-5',
+        title: 'हिन्दी आधिकारिक प्रस्ताव (Hindi Proposal).gdrift',
+        type: 'drift',
+        appName: 'Word (Google Devanagari)',
+        date: '4 days ago',
+        sharing: 'Only you',
+        activity: 'You authored in Hindi',
+        iconBg: '#eff6ff',
+        iconColor: '#2563eb'
+      }
+    ];
+
+    tbody.innerHTML = '';
+    defaultDocs.forEach(doc => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div class="m365-doc-title-cell">
+            <div class="m365-doc-icon" style="background:${doc.iconBg}; color:${doc.iconColor};">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-size:13px; font-weight:600; color:#0f172a;">${doc.title}</div>
+              <div class="m365-doc-subtext">${doc.appName} &bull; Sovereign In-Memory</div>
+            </div>
+          </div>
+        </td>
+        <td style="color:#64748b; font-size:12px;">${doc.date}</td>
+        <td style="color:#64748b; font-size:12px;">${doc.sharing}</td>
+        <td style="color:#64748b; font-size:12px;">${doc.activity}</td>
+      `;
+
+      tr.addEventListener('click', () => {
+        this.navigateTo(doc.type, doc.title.replace(/\.[^.]+$/, ''));
+      });
+
+      tbody.appendChild(tr);
     });
   }
 
