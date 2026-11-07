@@ -2,7 +2,7 @@
 
 > **100% Offline Standalone Desktop Applications Built From Scratch in Native C++**  
 > **Author & Creator:** Abhinav Giri  
-> **GitHub:** [@abhinavgiri45](https://github.com/abhinavgiri45) • **Instagram:** [@abhinavgiri45](https://instagram.com/abhinavgiri45)  
+> **GitHub:** [@abhinavgiri45](https://github.com/abhinavgiri45) • **Instagram:** [@abhinavgiri45](https://instagram.com/abhinavgiri45) • **Email:** [abhinavgiri370@gmail.com](mailto:abhinavgiri370@gmail.com)  
 > **Architecture:** Pure Native Win32 C++20 • Zero Browser • Zero Cloud Telemetry • In-Memory Confidential Computing
 
 ---
