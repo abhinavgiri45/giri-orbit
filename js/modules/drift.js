@@ -548,7 +548,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
         <!-- Top App Brand Bar in Hub Mode -->
         <div class="drift-hub-top-bar">
           <div class="drift-hub-brand-left">
-            <div class="drift-app-icon-badge">D</div>
+            <img src="assets/drift-symbol.png" alt="Giri Drift" style="width:28px; height:28px; object-fit:contain; border-radius:6px; margin-right:8px; vertical-align:middle; filter:drop-shadow(0 2px 6px rgba(37,99,235,0.4));">
             <div class="tool-hub-brand-dropdown-wrap" id="drift-brand-dropdown-wrap">
               <button class="tool-hub-brand-btn" id="drift-brand-dropdown-trigger" style="display:flex; align-items:center; gap:6px; background:transparent; border:none; cursor:pointer; padding:4px 6px; border-radius:4px;" title="Switch Suite Tool">
                 <span style="color:#ffffff; font-family:var(--font-display, sans-serif); font-weight:700; font-size:14px;">Giri Drift</span>
@@ -566,7 +566,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
                   <span class="switcher-link-tag">#hub</span>
                 </a>
                 <a href="#drift" class="suite-switcher-item active" data-switch="drift">
-                  <div class="switcher-icon drift">D</div>
+                  <div class="switcher-icon drift" style="display:flex; align-items:center; justify-content:center; background:#eff6ff;"><img src="assets/drift-symbol.png" alt="Drift" style="width:18px; height:18px; object-fit:contain;"></div>
                   <div class="switcher-info">
                     <strong>Giri Drift</strong>
                     <span>Word Processor &amp; Document Composer</span>
@@ -625,6 +625,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
         <!-- Sleek Dark Hero Banner -->
         <section class="drift-hub-hero">
           <div class="drift-hero-left">
+            <div style="margin-bottom:14px;"><img src="assets/drift-logo-white.png" alt="Drift" style="height:36px; object-fit:contain; display:block;"></div>
             <h1 class="drift-hero-title">Welcome to Drift for free on the web</h1>
             <p class="drift-hero-subtitle">
               Sovereign in-memory document composer for high-velocity teams. Zero database tracking, instant local persistence, and customizable templates.

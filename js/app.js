@@ -689,13 +689,8 @@ class GiriOrbitPlatform {
             </div>
             <!-- 1. Drift (Docs) -->
             <div class="zoho-app-card" data-launch="drift" role="button" tabindex="0" title="Launch Drift Document Composer (http://127.0.0.1:5000/#drift)">
-              <div class="app-card-icon">
-                <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="4" width="24" height="24" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
-                  <line x1="9" y1="10" x2="18" y2="10" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-                  <line x1="9" y1="15" x2="23" y2="15" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-                  <line x1="9" y1="20" x2="19" y2="20" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+              <div class="app-card-icon" style="background:#eff6ff; display:flex; align-items:center; justify-content:center;">
+                <img src="assets/drift-symbol.png" alt="Drift" style="width:28px; height:28px; object-fit:contain;">
               </div>
               <div class="app-card-meta">
                 <span class="app-card-prefix">GIRI</span>

@@ -107,17 +107,21 @@ export class OrbitDesktopSuite {
   // --- Render Application Window Header ---
   renderWindowHeader(tool, docTitle = 'Untitled 1') {
     const titles = {
-      drift: { name: 'Giri Drift Writer', badge: 'W', class: 'writer' },
-      axis: { name: 'Giri Axis Spreadsheet', badge: 'C', class: 'calc' },
-      kinetic: { name: 'Giri Kinetic Presentation', badge: 'I', class: 'impress' },
-      pdf: { name: 'Giri Aegis PDF Studio', badge: 'D', class: 'draw' }
+      drift: {
+        name: 'Giri Drift Document Composer',
+        badgeHtml: '<img src="assets/drift-symbol.png" alt="Drift" style="width:18px; height:18px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:6px;">',
+        class: 'drift'
+      },
+      axis: { name: 'Giri Axis Spreadsheet', badge: 'A', class: 'calc' },
+      kinetic: { name: 'Giri Kinetic Presentation', badge: 'K', class: 'impress' },
+      pdf: { name: 'Giri Aegis PDF Studio', badge: 'Æ', class: 'draw' }
     };
     const t = titles[tool] || titles.drift;
 
     return `
       <div class="lo-window-header">
         <div class="lo-window-title-left">
-          <span class="lo-app-badge ${t.class}">${t.badge}</span>
+          ${t.badgeHtml ? t.badgeHtml : `<span class="lo-app-badge ${t.class}">${t.badge}</span>`}
           <span class="lo-window-title-text">${t.name}</span>
           <span>—</span>
           <span class="lo-window-doc-name" id="lo-doc-title-display">[${docTitle}]</span>
