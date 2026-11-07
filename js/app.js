@@ -1071,16 +1071,15 @@ class GiriOrbitPlatform {
     });
 
     container.querySelector('#rail-btn-create')?.addEventListener('click', () => {
-      container.querySelector('.m365-create-section')?.scrollIntoView({ behavior: 'smooth' });
+      this.openCreateTemplatesModal();
     });
 
     container.querySelector('#rail-btn-content')?.addEventListener('click', () => {
-      this.openGoogleDriveAccountModal();
+      this.openMyContentModal();
     });
 
     container.querySelector('#rail-btn-apps')?.addEventListener('click', () => {
-      const moreBtn = document.getElementById('suite-product-brand');
-      if (moreBtn) moreBtn.click();
+      this.openAllAppsModal();
     });
 
     // Settings Modal Trigger
@@ -1088,9 +1087,9 @@ class GiriOrbitPlatform {
       this.openSettingsModal();
     });
 
-    // Google Drive Sovereign Account Triggers
+    // Profile & Google Drive Sovereign Account Triggers
     container.querySelector('#rail-avatar-btn')?.addEventListener('click', () => {
-      this.openGoogleDriveAccountModal();
+      this.openUserProfileModal();
     });
     container.querySelector('#m365-gdrive-stat')?.addEventListener('click', () => {
       this.openGoogleDriveAccountModal();
@@ -1139,7 +1138,7 @@ class GiriOrbitPlatform {
 
     container.querySelector('#m365-see-more-link')?.addEventListener('click', (e) => {
       e.preventDefault();
-      this.openGoogleDriveAccountModal();
+      this.openCreateTemplatesModal();
     });
 
     // 3. High-Performance Debounced Search Filtering (Zero Reflow using textContent & RAF)
@@ -1370,6 +1369,19 @@ class GiriOrbitPlatform {
   /**
    * Google Drive Sovereign Account Modal (No Login Required)
    */
+  /**
+   * Escape HTML utility for safe UI interpolation
+   */
+  escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   calculateLocalDataUsage() {
     const now = Date.now();
     if (this._cachedLocalUsage && (now - (this._lastLocalUsageCheck || 0) < 10000)) {
@@ -1830,6 +1842,41 @@ class GiriOrbitPlatform {
       localStorage.removeItem('giri_orbit_cache');
       this.showToast('Local temporary in-memory cache purged successfully!', 'green');
     });
+
+    // Theme selector
+    const themeSelect = overlay.querySelector('#settings-theme-select');
+    if (themeSelect) {
+      themeSelect.value = localStorage.getItem('giri_theme') || 'light';
+      themeSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        localStorage.setItem('giri_theme', val);
+        document.documentElement.setAttribute('data-theme', val);
+        this.showToast(`Theme updated to ${val}`, 'blue');
+      });
+    }
+
+    // Typography font selector
+    const fontSelect = overlay.querySelector('#settings-font-select');
+    if (fontSelect) {
+      fontSelect.value = localStorage.getItem('giri_default_font') || 'Segoe UI';
+      fontSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        localStorage.setItem('giri_default_font', val);
+        document.body.style.fontFamily = `"${val}", Segoe UI, system-ui, sans-serif`;
+        this.showToast(`Default font set to ${val}`, 'blue');
+      });
+    }
+
+    // Autosave interval selector
+    const autosaveSelect = overlay.querySelector('#settings-autosave-select');
+    if (autosaveSelect) {
+      autosaveSelect.value = localStorage.getItem('giri_autosave_interval') || '30';
+      autosaveSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        localStorage.setItem('giri_autosave_interval', val);
+        this.showToast(val === '0' ? 'Continuous instant autosave enabled' : `Autosave interval set to ${val}s`, 'green');
+      });
+    }
   }
 
   /**
@@ -1950,6 +1997,513 @@ class GiriOrbitPlatform {
 
     overlay.querySelector('#btn-close-dl-modal')?.addEventListener('click', () => overlay.remove());
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  }
+
+  /**
+   * User Profile & Sovereignty Hub Modal
+   */
+  openUserProfileModal() {
+    const existing = document.getElementById('giri-user-profile-modal');
+    if (existing) existing.remove();
+
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
+    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Abhinav Giri');
+    const initials = (currentName || 'AG').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+    const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
+
+    const overlay = document.createElement('div');
+    overlay.className = 'giri-modal-overlay';
+    overlay.id = 'giri-user-profile-modal';
+
+    overlay.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:560px;">
+        <div class="giri-modal-header">
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            User Profile &amp; Sovereignty Hub
+          </h2>
+          <button class="giri-modal-close-btn" id="btn-close-profile-modal" title="Close">&times;</button>
+        </div>
+        <div class="giri-modal-body">
+          <!-- Profile Header Card -->
+          <div style="display:flex; align-items:center; gap:16px; padding:18px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:18px;">
+            <div id="profile-modal-avatar" style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; box-shadow:0 4px 12px rgba(37,99,235,0.3); flex-shrink:0;">
+              ${this.escapeHtml(initials)}
+            </div>
+            <div style="flex:1;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <input type="text" id="profile-display-name-input" value="${this.escapeHtml(currentName)}" style="font-size:15px; font-weight:700; color:#0f172a; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; width:100%; max-width:260px;" placeholder="Your Name" />
+                <button class="giri-dl-btn" id="btn-save-profile-name" style="margin-top:0; padding:6px 14px; font-size:12px;">Save</button>
+              </div>
+              <div style="font-size:12px; color:#64748b; margin-top:6px;">
+                ${isGoogleConnected ? this.escapeHtml(googleUser.email) : 'Sovereign Offline User &bull; 100% Private (No Login Required)'}
+              </div>
+            </div>
+          </div>
+
+          <!-- Sovereignty & Cloud Status -->
+          <div class="giri-setting-group">
+            <label class="giri-setting-label">Cloud Sovereignty &amp; Storage</label>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:13px; font-weight:600; color:#0f172a;">Storage Mode</span>
+                <span class="giri-badge-sovereign" style="${isGoogleConnected ? 'background:#dbeafe; color:#1e40af; border-color:#bfdbfe;' : ''}">
+                  ${isGoogleConnected ? '✓ Google Drive Cloud Sync Active' : '✓ Sovereign Local (No Login Needed)'}
+                </span>
+              </div>
+              <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
+                ${isGoogleConnected 
+                  ? 'Your documents sync directly with your private Google Drive (15 GB free cloud quota).' 
+                  : 'Zero corporate login required. Documents are stored in cryptographic local memory on your hardware.'}
+              </div>
+              <div style="display:flex; gap:8px;">
+                ${isGoogleConnected ? `
+                  <button class="giri-dl-btn secondary" id="btn-profile-sync-now" style="margin-top:0; font-size:12px; padding:7px 12px;">Sync Drive Now</button>
+                  <button class="giri-dl-btn secondary" id="btn-profile-disconnect-gdrive" style="margin-top:0; font-size:12px; padding:7px 12px; color:#dc2626;">Disconnect</button>
+                ` : `
+                  <button class="giri-dl-btn" id="btn-profile-connect-gdrive" style="margin-top:0; font-size:12px; padding:7px 14px;">🔗 Connect Google Drive</button>
+                `}
+              </div>
+            </div>
+          </div>
+
+          <!-- Real Local Storage Metrics -->
+          <div class="giri-setting-group">
+            <label class="giri-setting-label">System Metrics</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+                <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:600;">Local Data Usage</div>
+                <div style="font-size:16px; font-weight:700; color:#0f172a; margin-top:2px;">${localUsage}</div>
+              </div>
+              <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+                <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:600;">Telemetry Leaks</div>
+                <div style="font-size:16px; font-weight:700; color:#16a34a; margin-top:2px;">0 (Blocked)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Navigation -->
+          <div style="display:flex; gap:10px; margin-top:14px;">
+            <button class="giri-dl-btn secondary" id="btn-profile-open-settings" style="flex:1; margin-top:0; justify-content:center;">
+              ⚙ Open Suite Settings
+            </button>
+            <button class="giri-dl-btn secondary" id="btn-profile-open-downloads" style="flex:1; margin-top:0; justify-content:center;">
+              📥 Download Apps
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#btn-close-profile-modal')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    overlay.querySelector('#btn-save-profile-name')?.addEventListener('click', () => {
+      const input = overlay.querySelector('#profile-display-name-input');
+      const val = input ? input.value.trim() : '';
+      if (val) {
+        localStorage.setItem('giri_user_name', val);
+        const newInitials = val.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+        const modalAvatar = overlay.querySelector('#profile-modal-avatar');
+        if (modalAvatar) modalAvatar.textContent = newInitials;
+        const railAvatar = document.querySelector('#rail-avatar-btn span');
+        if (railAvatar && !isGoogleConnected) railAvatar.textContent = newInitials;
+        this.showToast('Profile name saved successfully!', 'green');
+      }
+    });
+
+    overlay.querySelector('#btn-profile-connect-gdrive')?.addEventListener('click', () => {
+      overlay.remove();
+      driveSyncManager.promptGoogleDirectLogin();
+    });
+
+    overlay.querySelector('#btn-profile-sync-now')?.addEventListener('click', async () => {
+      overlay.remove();
+      await driveSyncManager.fetchRealGoogleDriveFiles();
+    });
+
+    overlay.querySelector('#btn-profile-disconnect-gdrive')?.addEventListener('click', () => {
+      driveSyncManager.disconnectGoogleAccount();
+      overlay.remove();
+      this.showToast('Disconnected Google Drive.', 'blue');
+      this.mountZohoLandingHub();
+    });
+
+    overlay.querySelector('#btn-profile-open-settings')?.addEventListener('click', () => {
+      overlay.remove();
+      this.openSettingsModal();
+    });
+
+    overlay.querySelector('#btn-profile-open-downloads')?.addEventListener('click', () => {
+      overlay.remove();
+      this.openDownloadSuiteModal();
+    });
+  }
+
+  /**
+   * Create New Document & Template Studio Modal
+   */
+  openCreateTemplatesModal() {
+    const existing = document.getElementById('giri-create-templates-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'giri-modal-overlay';
+    overlay.id = 'giri-create-templates-modal';
+
+    const templates = [
+      // Drift (Word)
+      { id: 'drift-blank', tool: 'drift', category: 'drift', badge: 'D', badgeBg: '#2563eb', title: 'Blank Document', desc: 'Clean, distraction-free sovereign document canvas with full typographic ribbon.' },
+      { id: 'drift-proposal', tool: 'drift', category: 'drift', badge: 'D', badgeBg: '#2563eb', title: 'Executive Business Proposal', desc: 'Structured corporate business plan with executive summary, KPIs, and deliverables.' },
+      { id: 'drift-nda', tool: 'drift', category: 'drift', badge: 'D', badgeBg: '#2563eb', title: 'Mutual NDA & Confidentiality Agreement', desc: 'Standard non-disclosure legal agreement with binding clauses and digital seal lines.' },
+      { id: 'drift-academic', tool: 'drift', category: 'drift', badge: 'D', badgeBg: '#2563eb', title: 'Academic Research Paper', desc: 'Formal formatting with abstract, methodology, citations, and mathematical formulas.' },
+
+      // Axis (Excel)
+      { id: 'axis-blank', tool: 'axis', category: 'axis', badge: 'A', badgeBg: '#16a34a', title: 'Blank Workbook', desc: 'High-performance spreadsheet with 40+ built-in math & statistical functions.' },
+      { id: 'axis-forecast', tool: 'axis', category: 'axis', badge: 'A', badgeBg: '#16a34a', title: 'Corporate Financial Forecast 2026', desc: 'Quarterly revenue model with dynamic SUM, AVERAGE, and profit margin analysis.' },
+      { id: 'axis-cap-table', tool: 'axis', category: 'axis', badge: 'A', badgeBg: '#16a34a', title: 'SaaS Unit Economics & Cap Table', desc: 'LTV, CAC, churn rate, monthly recurring revenue projections, and equity share.' },
+      { id: 'axis-gantt', tool: 'axis', category: 'axis', badge: 'A', badgeBg: '#16a34a', title: 'Project Milestone Schedule', desc: 'Task breakdown, deliverables timeline, progress indicators, and team allocation.' },
+
+      // Kinetic (PowerPoint)
+      { id: 'kinetic-blank', tool: 'kinetic', category: 'kinetic', badge: 'K', badgeBg: '#ea580c', title: 'Blank Presentation', desc: 'Fluid 16:9 widescreen presentation canvas with slide manager and animations.' },
+      { id: 'kinetic-pitch', tool: 'kinetic', category: 'kinetic', badge: 'K', badgeBg: '#ea580c', title: 'Strategic Investor Pitch Deck', desc: '10-slide venture deck covering problem, solution, market size, and traction.' },
+      { id: 'kinetic-keynote', tool: 'kinetic', category: 'kinetic', badge: 'K', badgeBg: '#ea580c', title: 'Executive Keynote Presentation', desc: 'Bold typography, high-impact slide layouts, and keynote transitions.' },
+      { id: 'kinetic-review', tool: 'kinetic', category: 'kinetic', badge: 'K', badgeBg: '#ea580c', title: 'Company Quarterly Review', desc: 'Departmental scorecards, achievement highlights, and upcoming roadmap.' },
+
+      // Forms
+      { id: 'forms-survey', tool: 'forms', category: 'forms', badge: 'F', badgeBg: '#0d9488', title: 'Customer Feedback Survey', desc: 'Collect user sentiment, NPS rating, satisfaction scores, and feature feedback.' },
+      { id: 'forms-rsvp', tool: 'forms', category: 'forms', badge: 'F', badgeBg: '#0d9488', title: 'Event Registration & RSVP', desc: 'Guest attendee capture, dietary requirements, and session preferences.' },
+
+      // Quiz
+      { id: 'quiz-cert', tool: 'quiz', category: 'quiz', badge: 'Q', badgeBg: '#0284c7', title: 'Certification Assessment Quiz', desc: 'Multiple-choice graded test with automated scoring and passing certificate.' },
+      { id: 'quiz-compliance', tool: 'quiz', category: 'quiz', badge: 'Q', badgeBg: '#0284c7', title: 'Employee Compliance Check', desc: 'Interactive annual regulatory assessment with instant result evaluation.' },
+
+      // Lists
+      { id: 'lists-sprint', tool: 'lists', category: 'lists', badge: 'L', badgeBg: '#7c3aed', title: 'Agile Sprint Kanban Matrix', desc: 'Sprint backlog, in-progress tasks, code review, and completed deliverables.' },
+      { id: 'lists-assets', tool: 'lists', category: 'lists', badge: 'L', badgeBg: '#7c3aed', title: 'IT Asset Inventory Tracker', desc: 'Hardware inventory, license assignments, purchase dates, and status tracking.' },
+
+      // Designer
+      { id: 'designer-banner', tool: 'designer', category: 'designer', badge: 'G', badgeBg: '#db2777', title: 'Corporate Marketing Banner', desc: 'High-resolution vector canvas for digital announcements and marketing cards.' },
+      { id: 'designer-social', tool: 'designer', category: 'designer', badge: 'G', badgeBg: '#db2777', title: 'Social Media Keynote Asset', desc: 'Optimized visual layouts for announcements, releases, and executive quotes.' }
+    ];
+
+    overlay.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:980px; max-height:90vh;">
+        <div class="giri-modal-header">
+          <div>
+            <h2>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Create New Document &amp; Template Studio
+            </h2>
+            <div style="font-size:12px; color:#64748b; margin-top:2px;">
+              Choose from 20 curated templates or start from scratch across any Giri Orbit application.
+            </div>
+          </div>
+          <button class="giri-modal-close-btn" id="btn-close-templates-modal" title="Close">&times;</button>
+        </div>
+        <div class="giri-modal-body">
+          
+          <!-- Category Filter Pills -->
+          <div class="giri-filter-pills" id="template-filter-pills">
+            <button class="giri-filter-pill-btn active" data-filter="all">All Templates (20)</button>
+            <button class="giri-filter-pill-btn" data-filter="drift">Documents (Drift)</button>
+            <button class="giri-filter-pill-btn" data-filter="axis">Spreadsheets (Axis)</button>
+            <button class="giri-filter-pill-btn" data-filter="kinetic">Presentations (Kinetic)</button>
+            <button class="giri-filter-pill-btn" data-filter="forms">Surveys (Forms)</button>
+            <button class="giri-filter-pill-btn" data-filter="quiz">Assessments (Quiz)</button>
+            <button class="giri-filter-pill-btn" data-filter="lists">Lists &amp; Kanban</button>
+            <button class="giri-filter-pill-btn" data-filter="designer">Graphics (Designer)</button>
+          </div>
+
+          <!-- Template Cards Grid -->
+          <div class="giri-template-grid" id="template-cards-grid">
+            ${templates.map(t => `
+              <div class="giri-template-card" data-category="${t.category}" data-tool="${t.tool}" data-title="${this.escapeHtml(t.title)}">
+                <div>
+                  <div class="giri-template-thumb" style="background:${t.badgeBg}12; color:${t.badgeBg};">
+                    <span style="font-size:32px;">${t.badge}</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:11px; font-weight:700; color:${t.badgeBg}; text-transform:uppercase;">${t.tool.toUpperCase()}</span>
+                  </div>
+                  <strong style="font-size:14px; color:#0f172a; display:block; margin-bottom:6px; line-height:1.35;">${this.escapeHtml(t.title)}</strong>
+                  <p style="font-size:12px; color:#64748b; margin:0 0 14px 0; line-height:1.45;">${this.escapeHtml(t.desc)}</p>
+                </div>
+                <button class="giri-dl-btn" style="width:100%; justify-content:center; padding:8px 14px; font-size:12.5px; background:${t.badgeBg}; margin-top:0;">
+                  Create ${t.badge === 'D' ? 'Document' : t.badge === 'A' ? 'Workbook' : t.badge === 'K' ? 'Deck' : 'File'} &rarr;
+                </button>
+              </div>
+            `).join('')}
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#btn-close-templates-modal')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    // Category Filter Logic
+    overlay.querySelectorAll('.giri-filter-pill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        overlay.querySelectorAll('.giri-filter-pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        overlay.querySelectorAll('.giri-template-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Template Click Handler
+    overlay.querySelectorAll('.giri-template-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const tool = card.dataset.tool;
+        const title = card.dataset.title;
+        overlay.remove();
+        this.recordRecentDocument(title, tool, tool.charAt(0).toUpperCase() + tool.slice(1));
+        this.navigateTo(tool, title, true, true);
+      });
+    });
+  }
+
+  /**
+   * All Applications Grid Launcher Modal
+   */
+  openAllAppsModal() {
+    const existing = document.getElementById('giri-all-apps-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'giri-modal-overlay';
+    overlay.id = 'giri-all-apps-modal';
+
+    const apps = [
+      { id: 'drift', name: 'Giri Drift', type: 'Word Processor', desc: 'Create elegant documents, reports, and books with Devanagari Hindi typography and DOCX/PDF export.', icon: 'W', iconBg: '#2563eb' },
+      { id: 'axis', name: 'Giri Axis', type: 'Spreadsheet Studio', desc: 'Analyze data with 40+ formula calculations, dynamic cell grids, statistical functions, and XLSX export.', icon: 'X', iconBg: '#16a34a' },
+      { id: 'kinetic', name: 'Giri Kinetic', type: 'Presentation Master', desc: 'Design stunning slide decks with smooth keynote layouts, animations, transitions, and PPTX export.', icon: 'P', iconBg: '#ea580c' },
+      { id: 'forms', name: 'Giri Forms', type: 'Survey & Data Collection', desc: 'Build interactive web forms and surveys with instant local and cloud response aggregation.', icon: 'F', iconBg: '#0d9488' },
+      { id: 'quiz', name: 'Giri Quiz', type: 'Assessment & Test Engine', desc: 'Create scored quizzes, multiple-choice tests, timed exams, and automated score certificates.', icon: 'Q', iconBg: '#0284c7' },
+      { id: 'lists', name: 'Giri Lists', type: 'Agile & Project Tracking', desc: 'Track tasks, manage agile sprints, view Kanban boards, and organize structured data lists.', icon: 'L', iconBg: '#7c3aed' },
+      { id: 'designer', name: 'Giri Designer', type: 'Graphics & Vector Studio', desc: 'Design graphics, promotional banners, vector illustrations, and visual social media assets.', icon: 'G', iconBg: '#db2777' },
+      { id: 'pdf', name: 'Giri Aegis PDF Studio', type: 'PDF Reader & Signer', desc: 'Read, annotate, highlight, and cryptographically sign PDF documents with zero external dependencies.', icon: 'PDF', iconBg: '#dc2626' },
+      { id: 'converter', name: 'Giri File Converter', type: 'Universal Converter', desc: 'Offline conversion between DOCX, XLSX, PPTX, PDF, CSV, JSON, and plain text formats.', icon: '⇄', iconBg: '#475569' },
+      { id: 'girionix', name: 'Girionix AI', type: 'Sovereign AI Assistant', desc: 'Private document analysis, intelligent drafting, translation, and summarization assistant.', icon: 'AI', iconBg: '#7c3aed' }
+    ];
+
+    overlay.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:920px; max-height:88vh;">
+        <div class="giri-modal-header">
+          <div>
+            <h2>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+              All Applications &bull; Giri Orbit Sovereign Suite
+            </h2>
+            <div style="font-size:12px; color:#64748b; margin-top:2px;">
+              Every tool is 100% sovereign, free, offline-capable, and private on your hardware.
+            </div>
+          </div>
+          <button class="giri-modal-close-btn" id="btn-close-apps-modal" title="Close">&times;</button>
+        </div>
+        <div class="giri-modal-body">
+          
+          <!-- Live App Filter Search -->
+          <input type="text" id="all-apps-search-box" class="giri-input" placeholder="Search applications by name or capability..." style="margin-bottom:14px; padding:10px 14px; font-size:13.5px;" />
+
+          <!-- Apps Grid -->
+          <div class="giri-apps-grid" id="all-apps-container">
+            ${apps.map(app => `
+              <div class="giri-app-card" data-app-id="${app.id}" data-app-name="${this.escapeHtml(app.name)}" data-app-desc="${this.escapeHtml(app.desc)}">
+                <div class="giri-app-card-icon" style="background:${app.iconBg};">
+                  ${app.icon}
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="font-size:14.5px; color:#0f172a;">${this.escapeHtml(app.name)}</strong>
+                    <span style="font-size:11px; color:#64748b; background:#f1f5f9; padding:2px 7px; border-radius:4px;">${this.escapeHtml(app.type)}</span>
+                  </div>
+                  <p style="font-size:12px; color:#64748b; margin:6px 0 10px 0; line-height:1.45;">${this.escapeHtml(app.desc)}</p>
+                  <button class="giri-dl-btn secondary" style="margin-top:0; padding:5px 12px; font-size:12px; border-radius:6px;">
+                    Open ${this.escapeHtml(app.name)} &rarr;
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#btn-close-apps-modal')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    // Live search filter
+    const searchInput = overlay.querySelector('#all-apps-search-box');
+    searchInput?.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      overlay.querySelectorAll('.giri-app-card').forEach(card => {
+        const name = (card.dataset.appName || '').toLowerCase();
+        const desc = (card.dataset.appDesc || '').toLowerCase();
+        card.style.display = (name.includes(q) || desc.includes(q)) ? 'flex' : 'none';
+      });
+    });
+
+    // App card launch click
+    overlay.querySelectorAll('.giri-app-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const appId = card.dataset.appId;
+        overlay.remove();
+        if (appId === 'converter') {
+          this.openFileConverterTool();
+        } else {
+          this.navigateTo(appId);
+        }
+      });
+    });
+  }
+
+  /**
+   * My Content & Document Vault Modal
+   */
+  openMyContentModal() {
+    const existing = document.getElementById('giri-my-content-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'giri-modal-overlay';
+    overlay.id = 'giri-my-content-modal';
+
+    const recentItems = syncManager.getAllSyncedWork ? syncManager.getAllSyncedWork() : [];
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser);
+
+    overlay.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:920px; max-height:88vh;">
+        <div class="giri-modal-header">
+          <div>
+            <h2>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              My Content &amp; Document Vault
+            </h2>
+            <div style="font-size:12px; color:#64748b; margin-top:2px;">
+              Manage and search all your sovereign offline and Google Drive documents.
+            </div>
+          </div>
+          <button class="giri-modal-close-btn" id="btn-close-content-modal" title="Close">&times;</button>
+        </div>
+        <div class="giri-modal-body">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;">
+            <input type="text" id="my-content-search-input" class="giri-input" placeholder="Search documents by filename..." style="flex:1; min-width:240px; padding:8px 12px; font-size:13px;" />
+            <div style="display:flex; gap:8px;">
+              <button class="giri-dl-btn" id="btn-content-new-doc" style="margin-top:0; padding:8px 14px; font-size:12.5px;">+ Create New</button>
+              <button class="giri-dl-btn secondary" id="btn-content-upload-doc" style="margin-top:0; padding:8px 14px; font-size:12.5px;">Upload File</button>
+            </div>
+          </div>
+
+          <!-- Document List Table -->
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; overflow:hidden;">
+            <table class="giri-content-table" id="my-content-table">
+              <thead>
+                <tr>
+                  <th style="width:40%;">Document Name</th>
+                  <th>Application</th>
+                  <th>Last Modified</th>
+                  <th>Storage Location</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="my-content-tbody">
+                ${recentItems.length > 0 ? recentItems.map(item => `
+                  <tr data-doc-title="${this.escapeHtml(item.title || '')}" data-doc-tool="${item.tool || 'drift'}">
+                    <td>
+                      <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="width:24px; height:24px; border-radius:5px; background:${item.badgeBg || '#2563eb'}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;">
+                          ${(item.tool || 'd').charAt(0).toUpperCase()}
+                        </span>
+                        <strong style="font-size:13px; color:#0f172a;">${this.escapeHtml(item.title || 'Untitled Document')}</strong>
+                      </div>
+                    </td>
+                    <td style="color:#64748b; font-size:12px;">${this.escapeHtml(item.toolName || item.tool || 'Drift')}</td>
+                    <td style="color:#64748b; font-size:12px;">${item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : 'Today'}</td>
+                    <td>
+                      <span class="giri-badge-sovereign" style="font-size:10.5px; padding:2px 7px;">Sovereign Local</span>
+                    </td>
+                    <td style="text-align:right;">
+                      <button class="btn-open-doc-item giri-dl-btn secondary" style="margin-top:0; padding:4px 10px; font-size:11.5px;" data-tool="${item.tool}" data-title="${this.escapeHtml(item.title || '')}">Open</button>
+                    </td>
+                  </tr>
+                `).join('') : `
+                  <tr>
+                    <td colspan="5" style="text-align:center; padding:40px 20px; color:#64748b;">
+                      <div style="font-size:28px; margin-bottom:8px;">📄</div>
+                      <strong style="color:#0f172a; font-size:14px; display:block; margin-bottom:4px;">No saved documents found</strong>
+                      <p style="font-size:12px; margin:0; color:#94a3b8;">Create your first document in Drift, Axis, Kinetic, or upload any office file.</p>
+                    </td>
+                  </tr>
+                `}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#btn-close-content-modal')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    overlay.querySelector('#btn-content-new-doc')?.addEventListener('click', () => {
+      overlay.remove();
+      this.openCreateTemplatesModal();
+    });
+
+    overlay.querySelector('#btn-content-upload-doc')?.addEventListener('click', () => {
+      overlay.remove();
+      this.fileInput?.click();
+    });
+
+    overlay.querySelectorAll('.btn-open-doc-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const tool = btn.dataset.tool;
+        const title = btn.dataset.title;
+        overlay.remove();
+        this.navigateTo(tool, title);
+      });
+    });
+
+    // Real-time search filter
+    const searchInput = overlay.querySelector('#my-content-search-input');
+    searchInput?.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      overlay.querySelectorAll('#my-content-tbody tr').forEach(row => {
+        const title = (row.dataset.docTitle || '').toLowerCase();
+        row.style.display = title.includes(q) ? '' : 'none';
+      });
+    });
   }
 
   renderRecentDocsGrid(container) {
