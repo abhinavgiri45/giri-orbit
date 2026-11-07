@@ -768,6 +768,10 @@ function renderTemplateVisualThumbnail(tpl) {
           </div>
         </div>
 
+        <!-- Watermark Link -->
+        <div class="pgo-watermark-line" style="bottom:6px; left:10px;">
+          <a href="https://www.presentationgo.com/" target="_blank" rel="noopener noreferrer" title="PresentationGO (www.presentationgo.com)" onclick="event.stopPropagation();">www.presentationgo.com</a>
+        </div>
         <!-- slides badge overlay -->
         <div class="pgo-slides-count-pill">${slideCount} slides</div>
       </div>
@@ -1169,7 +1173,9 @@ function renderTemplateVisualThumbnail(tpl) {
   return `
     <div class="pgo-diagram-canvas">
       ${diagramSvg}
-      
+      <div class="pgo-watermark-line">
+        <a href="https://www.presentationgo.com/" target="_blank" rel="noopener noreferrer" title="PresentationGO (www.presentationgo.com)" onclick="event.stopPropagation();">www.presentationgo.com</a>
+      </div>
       ${tpl.optionsText ? `<div class="pgo-slides-count-pill" style="bottom:6px; right:8px; font-size:9.5px; padding:2px 7px;">${tpl.optionsText}</div>` : ''}
     </div>
   `;
@@ -1765,7 +1771,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
         <main class="tool-templates-section">
           <div class="tool-templates-section-header">
             <div style="display:flex; align-items:center; gap:10px;">
-              <h2 class="tool-templates-heading" style="margin:0;">Global Presentation Template Engine & Library</h2>
+              <h2 class="tool-templates-heading" style="margin:0;">PresentationGO & Global Presentation Library</h2>
               <span class="tool-source-badge">
                 <span class="dot"></span>
                 <span>3,500+ Free Templates &amp; Diagrams</span>
@@ -1823,7 +1829,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             <!-- Telemetry & Count Status Bar -->
             <div class="tool-templates-meta-bar">
               <span id="kinetic-templates-count-label">Loading Global Presentation Library...</span>
-              <span style="font-size:11px; color:#94a3b8;">PresentationGO • Free for personal &amp; commercial presentations</span>
+              <span style="font-size:11px; color:#94a3b8;">PresentationGO • Free for personal &amp; commercial presentations (<a href="https://www.presentationgo.com/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa; text-decoration:underline;">www.presentationgo.com</a>)</span>
             </div>
           </div>
 
@@ -1939,6 +1945,13 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             </div>
             <h4 class="pgo-card-title" title="${tpl.name}">${tpl.name}</h4>
             <p class="pgo-card-desc" title="${tpl.desc || ''}">${tpl.desc || ''}</p>
+            <div class="pgo-watermark-row" style="display:flex; align-items:center; justify-content:space-between; margin-top:6px; padding-top:4px; border-top:1px dashed #e2e8f0; font-size:9.5px;">
+              <a href="https://www.presentationgo.com/" target="_blank" rel="noopener noreferrer" style="color:#0284c7; text-decoration:none; display:inline-flex; align-items:center; gap:3px; font-weight:700;" onclick="event.stopPropagation();">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                www.presentationgo.com
+              </a>
+              <span style="color:#94a3b8; font-size:8.5px;">Free Template</span>
+            </div>
             ${tpl.category === 'custom' ? `
               <div style="display:flex; justify-content:flex-end; gap:6px; margin-top:6px;" onclick="event.stopPropagation()">
                 <button class="btn-export-kinetic-tpl" title="Export as JSON" style="background:#1e293b; border:1px solid #334155; color:#38bdf8; border-radius:4px; padding:3px 8px; font-size:10px; cursor:pointer;">↓ Export</button>
@@ -7878,7 +7891,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
             <div class="axis-modal-title" style="color: #ffffff; display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 20px;">🌍</span>
               <div>
-                <span style="font-size: 15px; font-weight: 700;">Global Presentation Template Engine & Library</span>
+                <span style="font-size: 15px; font-weight: 700;">PresentationGO & Global Presentation Library</span>
                 <span style="display: block; font-size: 11px; color: #94a3b8; font-weight: 400;">3,500+ Free Templates, Process Diagrams, Timelines, Matrices, and Infographics</span>
               </div>
             </div>

@@ -1,7 +1,7 @@
 ﻿/**
  * ============================================================================
  * GIRI ORBIT / GIRI KINETIC — PRESENTATIONGO & PRESENTATION TEMPLATES REPOSITORY
- * Inspired by Global Presentation Engine (https://www.global.com/)
+ * Inspired by PresentationGO (https://www.presentationgo.com/)
  * ============================================================================
  * Extensive library of 3,500+ presentation templates, diagrams, and Executive presentation decks:
  * - Executive Presentation Decks (Executive Pitch, Annual Report, AI & DeepTech, Minimalist, Healthcare, etc.)
