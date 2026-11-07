@@ -41,10 +41,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/giri-logo-symbol.png">
   <link rel="apple-touch-icon" href="assets/giri-logo-symbol.png">
-  <link rel="stylesheet" href="css/styles.css?v=13.2">
+  <link rel="stylesheet" href="css/styles.css?v=13.3">
   <link rel="stylesheet" href="css/orbitDesktop.css?v=1.0">
   <link rel="stylesheet" href="css/hub.css?v=10.2">
-  <link rel="stylesheet" href="css/m365-copilot.css?v=13.2">
+  <link rel="stylesheet" href="css/m365-copilot.css?v=13.3">
   <link rel="stylesheet" href="css/fontsAndSelection.css?v=10.2">
   <link rel="stylesheet" href="css/sync.css?v=10.9">
   <link rel="stylesheet" href="css/mobile.css?v=10.2">
@@ -244,7 +244,412 @@
 
   <!-- PRIMARY WORKSPACE VIEWPORT -->
   <main class="orbit-workspace" id="orbit-workspace">
-    <!-- Rendered by app.js?v=8.0: Zoho-Style Suite Landing Hub OR Full-Screen Desktop Tool Workspaces -->
+    <div class="m365-hub-root">
+
+      <!-- LEFT NAVIGATION RAIL -->
+      <nav class="m365-left-rail" aria-label="Main Navigation">
+        <div class="m365-rail-top">
+          <!-- 1. Home -->
+          <button class="m365-rail-btn active" id="rail-btn-home" data-rail="home" title="Home">
+            <div class="m365-rail-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Home</span>
+          </button>
+
+          <!-- 2. Girionix AI -->
+          <button class="m365-rail-btn" id="rail-btn-girionix" data-rail="girionix" title="Girionix AI Sovereign Assistant">
+            <div class="m365-rail-icon-wrap" style="color:#7c3aed;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Girionix AI</span>
+          </button>
+
+          <!-- 3. Create -->
+          <button class="m365-rail-btn" id="rail-btn-create" data-rail="create" title="Create New Document">
+            <div class="m365-rail-icon-wrap">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Create</span>
+          </button>
+
+          <!-- 4. My Content -->
+          <button class="m365-rail-btn" id="rail-btn-content" data-rail="content" title="My Sovereign Google Drive Files">
+            <div class="m365-rail-icon-wrap">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">My Content</span>
+          </button>
+
+          <!-- 5. Apps -->
+          <button class="m365-rail-btn" id="rail-btn-apps" data-rail="apps" title="All Applications">
+            <div class="m365-rail-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Apps</span>
+          </button>
+
+          <div class="m365-rail-divider"></div>
+
+          <!-- Direct Office Tool Icons: Giri Drift, Axis, Kinetic, Aegis -->
+          <!-- 1. Drift (Word Processor) -->
+          <button class="m365-rail-btn" id="rail-btn-drift" data-launch="drift" title="Giri Drift (Document Composer & Sovereign Word Processor)">
+            <div class="m365-rail-icon-wrap" style="background:#eff6ff;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#2563eb">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8" fill="#93c5fd"/><line x1="8" y1="13" x2="16" y2="13" stroke="#fff" stroke-width="2"/><line x1="8" y1="17" x2="14" y2="17" stroke="#fff" stroke-width="2"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Drift</span>
+          </button>
+
+          <!-- 2. Axis (Spreadsheet Engine) -->
+          <button class="m365-rail-btn" id="rail-btn-axis" data-launch="axis" title="Giri Axis (Financial Matrix & Spreadsheet Engine)">
+            <div class="m365-rail-icon-wrap" style="background:#f0fdf4;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#16a34a">
+                <rect x="3" y="3" width="18" height="18" rx="3" fill="#16a34a"/>
+                <line x1="8" y1="8" x2="16" y2="16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="16" y1="8" x2="8" y2="16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Axis</span>
+          </button>
+
+          <!-- 3. Kinetic (Keynotes & Presentations) -->
+          <button class="m365-rail-btn" id="rail-btn-kinetic" data-launch="kinetic" title="Giri Kinetic (16:9 Presentation Studio & Keynotes)">
+            <div class="m365-rail-icon-wrap" style="background:#fff7ed;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#ea580c">
+                <rect x="3" y="3" width="18" height="18" rx="3" fill="#ea580c"/>
+                <path d="M9 8h4a2.5 2.5 0 0 1 0 5H9z" fill="#fff"/>
+                <line x1="9" y1="8" x2="9" y2="16" stroke="#fff" stroke-width="2.2"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Kinetic</span>
+          </button>
+
+          <!-- 4. Aegis (PDF Studio & Digital Seal) -->
+          <button class="m365-rail-btn" id="rail-btn-pdf" data-launch="pdf" title="Giri Aegis (PDF Studio & Cryptographic Seal)">
+            <div class="m365-rail-icon-wrap" style="background:#fef2f2;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#dc2626">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><text x="6" y="16" font-size="7" font-weight="900" fill="#fff">PDF</text>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Aegis</span>
+          </button>
+
+          <!-- 5. More Tools (...) -->
+          <button class="m365-rail-btn" id="rail-btn-more" title="File Converter & More Tools">
+            <div class="m365-rail-icon-wrap">
+              <span style="font-weight:900; font-size:16px; color:#94a3b8; line-height:1;">&bull;&bull;&bull;</span>
+            </div>
+          </button>
+
+          <div class="m365-rail-divider"></div>
+
+          <!-- 6. Download Office Suite (.exe / .apk) -->
+          <button class="m365-rail-btn" id="rail-btn-download" title="Download Giri Orbit Suite (.exe / .apk)">
+            <div class="m365-rail-icon-wrap" style="background:#eff6ff; color:#2563eb;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label" style="color:#2563eb; font-weight:700;">Download</span>
+          </button>
+        </div>
+
+        <div class="m365-rail-bottom">
+          <!-- Settings -->
+          <button class="m365-rail-btn" id="rail-btn-settings" title="Settings & Personalization">
+            <div class="m365-rail-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Settings</span>
+          </button>
+
+          <!-- User Account / Sovereign Avatar -->
+          <div class="m365-rail-avatar" id="rail-avatar-btn" style="background:#475569;" title="Sovereign Local Mode (No Account Required — Click to Connect Google Drive)">
+            <span>SO</span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- MAIN WORKSPACE CANVAS -->
+      <main class="m365-canvas">
+        <div class="m365-inner-wrapper">
+          
+          <!-- Top Hero Welcome -->
+          <section class="m365-hero">
+            <h1 class="m365-hero-title">Welcome to Giri Orbit</h1>
+            <div class="m365-hero-meta">
+              <span class="m365-badge-free">100% Free</span>
+              <span class="m365-storage-stat" id="m365-gdrive-stat" style="cursor:pointer;" title="100% Sovereign Local Storage • Click to Connect Google Drive">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                </svg>
+                Sovereign Local Storage &bull; No Login Required &bull; Connect Google Drive (Optional)
+              </span>
+              <button class="m365-hero-download-btn" id="hero-btn-download-suite" title="Download Windows Installer (.exe) and Android APK (.apk)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download Suite (.exe / .apk)
+              </button>
+            </div>
+          </section>
+
+          <!-- Wide Centered Search Bar -->
+          <div class="m365-search-wrap">
+            <div class="m365-search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="m365-search-box" placeholder="Search for apps, files, templates and more" spellcheck="false" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Create New Section -->
+          <section class="m365-create-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 class="m365-section-title">Create New</h2>
+            </div>
+
+            <!-- 7 Authentic Document Preview Cards: Drift, Kinetic, Axis, Forms, Quiz, Lists, Designer -->
+            <div class="m365-cards-row">
+              <!-- 1. Document (Drift) -->
+              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Document (Giri Drift)">
+                <div class="m365-card-preview preview-word">
+                  <div class="sheet-word">
+                    <div class="line-blue" style="width:45%; height:5px;"></div>
+                    <div class="line-blue" style="width:90%; opacity:0.5;"></div>
+                    <div class="line-blue" style="width:80%; opacity:0.5;"></div>
+                    <div class="line-blue" style="width:65%; opacity:0.5;"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#2563eb">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Document</strong>
+                  <span class="m365-card-sub">Drift</span>
+                </div>
+              </div>
+
+              <!-- 2. Presentation (Kinetic) -->
+              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New Presentation (Giri Kinetic)">
+                <div class="m365-card-preview preview-ppt">
+                  <div class="sheet-ppt">
+                    <div class="ppt-top-bar"></div>
+                    <div class="ppt-body-cols">
+                      <div class="ppt-body-col"></div>
+                      <div class="ppt-body-col"></div>
+                    </div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#ea580c">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Presentation</strong>
+                  <span class="m365-card-sub">Kinetic</span>
+                </div>
+              </div>
+
+              <!-- 3. Workbook (Axis) -->
+              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Spreadsheet (Giri Axis)">
+                <div class="m365-card-preview preview-excel">
+                  <div class="sheet-excel">
+                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
+                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
+                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#16a34a">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Workbook</strong>
+                  <span class="m365-card-sub">Axis</span>
+                </div>
+              </div>
+
+              <!-- 4. Form (Forms) -->
+              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form">
+                <div class="m365-card-preview preview-form">
+                  <div class="sheet-form">
+                    <div class="form-bar"></div>
+                    <div class="form-box"></div>
+                    <div class="form-box"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#0d9488">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Form</strong>
+                  <span class="m365-card-sub">Forms</span>
+                </div>
+              </div>
+
+              <!-- 5. Quiz (Quiz) -->
+              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz">
+                <div class="m365-card-preview preview-quiz">
+                  <div class="sheet-quiz">
+                    <div class="form-bar" style="background:#6ee7b7;"></div>
+                    <div class="quiz-option"><div class="quiz-dot"></div><div class="quiz-line"></div></div>
+                    <div class="quiz-option"><div class="quiz-dot"></div><div class="quiz-line"></div></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Quiz</strong>
+                  <span class="m365-card-sub">Quiz</span>
+                </div>
+              </div>
+
+              <!-- 6. List (Lists) -->
+              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix">
+                <div class="m365-card-preview preview-list">
+                  <div class="sheet-list">
+                    <div class="list-row" style="background:#d8b4fe;"></div>
+                    <div class="list-row"></div>
+                    <div class="list-row"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#7c3aed">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">List</strong>
+                  <span class="m365-card-sub">Lists</span>
+                </div>
+              </div>
+
+              <!-- 7. Design (Designer) -->
+              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase">
+                <div class="m365-card-preview preview-designer">
+                  <div class="sheet-designer">
+                    <div class="designer-circ"></div>
+                    <div class="designer-rect"></div>
+                  </div>
+                  <div class="badge-corner">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#db2777">
+                      <circle cx="12" cy="12" r="8"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="m365-card-meta">
+                  <strong class="m365-card-title">Design</strong>
+                  <span class="m365-card-sub">Designer</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:2px;">
+              <a href="#" class="m365-see-more" id="m365-see-more-link">See more in Create &rarr;</a>
+            </div>
+          </section>
+
+          <!-- Quick Access Section -->
+          <section class="m365-quick-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 class="m365-section-title">Quick access</h2>
+            </div>
+
+            <!-- Toolbar with Filter Pills & Upload Button -->
+            <div class="m365-quick-toolbar">
+              <div class="m365-pills-wrap">
+                <button class="m365-pill active" id="pill-filter-recent" data-filter="recent">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  <span>Recently opened</span>
+                </button>
+                <button class="m365-pill" id="pill-filter-shared" data-filter="shared">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                  <span>Shared</span>
+                </button>
+                <button class="m365-pill" id="pill-filter-favorites" data-filter="favorites">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Favorites</span>
+                </button>
+              </div>
+
+              <div class="m365-action-tools">
+                <button class="m365-upload-btn" id="btn-m365-upload-file" title="Open or Upload Local Document (.docx, .xlsx, .pptx, .giri)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <span>Upload</span>
+                </button>
+                <div class="m365-view-toggle">
+                  <button class="m365-view-btn active" id="btn-m365-view-list" title="List View">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                      <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                  </button>
+                  <button class="m365-view-btn" id="btn-m365-view-grid" title="Grid View">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                      <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Documents Table Container -->
+            <div class="m365-table-wrap" id="m365-table-container">
+              <table class="m365-table" id="m365-recent-table">
+                <thead>
+                  <tr>
+                    <th style="width:42%;">Name</th>
+                    <th style="width:20%;">Date modified</th>
+                    <th style="width:20%;">Sharing</th>
+                    <th style="width:18%;">Activity</th>
+                  </tr>
+                </thead>
+                <tbody id="m365-table-body">
+                  <!-- Real user documents populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    
+    </div>
   </main>
 
   <!-- PROFESSIONAL EXPORT FORMAT MODAL DIALOG -->
@@ -742,7 +1147,7 @@
   <div class="orbit-toast-wrap" id="orbit-toast-wrap" aria-live="polite"></div>
 
   <!-- Main Orchestrator -->
-  <script type="module" src="js/app.js?v=13.2"></script>
+  <script type="module" src="js/app.js?v=13.3"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

@@ -599,8 +599,10 @@ class GiriOrbitPlatform {
     const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
     const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
 
-    const landingContainer = document.createElement('div');
-    landingContainer.className = 'm365-hub-root';
+    let landingContainer = this.workspace.querySelector('.m365-hub-root');
+    if (!landingContainer) {
+      landingContainer = document.createElement('div');
+      landingContainer.className = 'm365-hub-root';
 
     landingContainer.innerHTML = `
       <!-- LEFT NAVIGATION RAIL -->
@@ -1017,7 +1019,15 @@ class GiriOrbitPlatform {
     `;
 
     this.workspace.innerHTML = '';
-    this.workspace.appendChild(landingContainer);
+      this.workspace.appendChild(landingContainer);
+    } else {
+      // Update dynamic user badges if connected
+      const avatarBtn = landingContainer.querySelector('#rail-avatar-btn');
+      if (avatarBtn) {
+        avatarBtn.style.background = isGoogleConnected ? '#16a34a' : '#475569';
+        avatarBtn.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : 'SO';
+      }
+    }
 
     // Bind Event Listeners
     this.bindM365HubEvents(landingContainer);
