@@ -76,6 +76,15 @@ void ApplyTemplateContent(int templateIndex);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
     g_hInst = hInstance;
+    // Register Google Hindi and International Fonts dynamically
+    wchar_t exePath[MAX_PATH] = { 0 };
+    GetModuleFileNameW(NULL, exePath, MAX_PATH);
+    PathRemoveFileSpecW(exePath);
+    std::wstring fontPath1 = std::wstring(exePath) + L"\\Fonts\\NotoSansDevanagari.ttf";
+    std::wstring fontPath2 = std::wstring(exePath) + L"\\..\\fonts\\NotoSansDevanagari.ttf";
+    if (PathFileExistsW(fontPath1.c_str())) AddFontResourceExW(fontPath1.c_str(), FR_PRIVATE, NULL);
+    else if (PathFileExistsW(fontPath2.c_str())) AddFontResourceExW(fontPath2.c_str(), FR_PRIVATE, NULL);
+
 
     // Load RichEdit library
     g_hRichEditLib = LoadLibraryW(L"msftedit.dll");
@@ -289,8 +298,9 @@ void CreateRibbonToolbar(HWND hwnd) {
         4, 5, 140, 260, g_hToolbarPanel, (HMENU)IDC_COMBO_FONT, g_hInst, NULL
     );
     const wchar_t* fonts[] = {
-        L"Segoe UI", L"Arial", L"Calibri", L"Times New Roman",
-        L"Georgia", L"Verdana", L"Trebuchet MS", L"Consolas", L"Courier New", L"Tahoma"
+        L"Segoe UI", L"Noto Sans Devanagari", L"Mangal", L"Nirmala UI", L"Calibri", L"Arial",
+        L"Times New Roman", L"Georgia", L"Verdana", L"Trebuchet MS", L"Consolas", L"Courier New", L"Tahoma",
+        L"Noto Sans Arabic", L"Microsoft YaHei", L"Meiryo"
     };
     for (const wchar_t* f : fonts) {
         SendMessageW(g_hFontCombo, CB_ADDSTRING, 0, (LPARAM)f);
@@ -553,9 +563,29 @@ void ApplyTemplateContent(int templateIndex) {
             L" • Giri Axis (Financial Matrix)\r\n"
             L" • Giri Kinetic (Presentation Studio)\r\n\r\n"
             L"Contact: abhinavgiri370@gmail.com\r\n";
+    } else if (templateIndex == 4) {
+        content =
+            L"गोपनीय व्यावसायिक प्रस्ताव (कार्यकारी हिन्दी प्रारूप)\r\n"
+            L"निर्माता: अभिनव गिरी (github.com/abhinavgiri45 | abhinavgiri370@gmail.com)\r\n"
+            L"सॉवरेन सुइट: गिरी ऑर्बिट — १००% ऑफ़लाइन डेस्कटॉप सुइट\r\n\r\n"
+            L"१. उद्देश्य एवं सारांश\r\n"
+            L"यह दस्तावेज़ गूगल नोतो संस देवनागरी (Google Noto Sans Devanagari) फ़ॉन्ट शैली के उपयोग के साथ तैयार किया गया है। यह संपूर्ण डेटा संप्रभुता और गोपनीयता सुनिश्चित करता है।\r\n\r\n"
+            L"२. मुख्य विशेषताएं\r\n"
+            L" • शून्य क्लाउड निर्भरता: बिना किसी इंटरनेट कनेक्शन के संपूर्ण निष्पादन।\r\n"
+            L" • बहुभाषी भाषा पैक: १००+ अंतरराष्ट्रीय भाषाओं एवं देवनागरी लिपियों का पूर्ण समर्थन।\r\n"
+            L" • उच्च गति निष्पादन: तीव्र आरंभ (<३० मिलीसेकंड) तथा न्यूनतम रैम उपयोग।\r\n\r\n"
+            L"३. हस्ताक्षर एवं अनुमोदन\r\n"
+            L"अभिनव गिरी — मुख्य संप्रभु वास्तुकार\r\n";
     }
 
     SetWindowTextW(g_hRichEdit, content.c_str());
+    if (templateIndex == 4) {
+        CHARFORMAT2W cf = { sizeof(CHARFORMAT2W) };
+        cf.dwMask = CFM_FACE | CFM_SIZE;
+        cf.yHeight = 260; // 13pt
+        wcscpy_s(cf.szFaceName, L"Noto Sans Devanagari");
+        SendMessageW(g_hRichEdit, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
+    }
     SendMessageW(g_hRichEdit, EM_SETMODIFY, FALSE, 0);
 }
 
@@ -564,6 +594,7 @@ void DoShowTemplatesMenu(HWND hwnd) {
     AppendMenuW(hPopup, MF_STRING, 4001, L"1. Executive Strategic Charter");
     AppendMenuW(hPopup, MF_STRING, 4002, L"2. Corporate Mutual NDA");
     AppendMenuW(hPopup, MF_STRING, 4003, L"3. Enterprise Transformation Proposal");
+    AppendMenuW(hPopup, MF_STRING, 4004, L"4. कार्यकारी हिन्दी प्रारूप (Google Hindi Style)");
 
     RECT btnRect;
     HWND hBtn = GetDlgItem(g_hToolbarPanel, IDC_BTN_TEMPLATES);
@@ -713,6 +744,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 case 4001: ApplyTemplateContent(1); break;
                 case 4002: ApplyTemplateContent(2); break;
                 case 4003: ApplyTemplateContent(3); break;
+                case 4004: ApplyTemplateContent(4); break;
 
                 case IDM_TOOLS_WORDCOUNT:
                 case IDC_BTN_STATS: DoWordCount(hwnd); break;

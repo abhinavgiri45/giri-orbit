@@ -29,6 +29,9 @@
 #define IDC_CHK_HUB         5024
 #define IDC_CHK_SHORTCUT    5025
 #define IDC_CHK_ASSOC       5026
+#define IDC_CHK_LANG        5027
+#define IDC_CHK_FONTS       5028
+#define IDC_CHK_RUNTIMES    5029
 
 #define IDC_PROGRESS_BAR    5030
 #define IDC_LBL_STATUS      5031
@@ -56,6 +59,9 @@ bool g_installDrift = true;
 bool g_installAxis = true;
 bool g_installKinetic = true;
 bool g_installHub = true;
+bool g_installLang = true;
+bool g_installFonts = true;
+bool g_installRuntimes = true;
 bool g_createShortcut = true;
 bool g_registerAssoc = true;
 bool g_licenseAccepted = true;
@@ -209,17 +215,29 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     HWND hChkHub = CreateWindowExW(0, L"BUTTON", L"Giri Orbit Hub (Desktop Workspace & Update Orchestrator)",
                                   WS_CHILD | BS_AUTOCHECKBOX, 260, 205, 450, 24, g_hMainWnd, (HMENU)IDC_CHK_HUB, hInstance, NULL);
 
-    HWND hChkShort = CreateWindowExW(0, L"BUTTON", L"Create Desktop Shortcuts for selected tools",
-                                    WS_CHILD | BS_AUTOCHECKBOX, 240, 250, 470, 24, g_hMainWnd, (HMENU)IDC_CHK_SHORTCUT, hInstance, NULL);
+    HWND hChkFonts = CreateWindowExW(0, L"BUTTON", L"International Fonts & Google Hindi (Noto Sans Devanagari) [~600 MB]",
+                                     WS_CHILD | BS_AUTOCHECKBOX, 240, 235, 470, 22, g_hMainWnd, (HMENU)IDC_CHK_FONTS, hInstance, NULL);
+
+    HWND hChkLang = CreateWindowExW(0, L"BUTTON", L"Language Packs (100+ Multilingual Satellite DLLs & Dictionaries) [~2.5 GB]",
+                                    WS_CHILD | BS_AUTOCHECKBOX, 240, 258, 470, 22, g_hMainWnd, (HMENU)IDC_CHK_LANG, hInstance, NULL);
+
+    HWND hChkRuntimes = CreateWindowExW(0, L"BUTTON", L"Web & Telemetry Runtimes (Edge WebView2 & Orbit Sync Daemon) [~800 MB]",
+                                       WS_CHILD | BS_AUTOCHECKBOX, 240, 281, 470, 22, g_hMainWnd, (HMENU)IDC_CHK_RUNTIMES, hInstance, NULL);
+
+    HWND hChkShort = CreateWindowExW(0, L"BUTTON", L"Create Desktop Shortcuts for selected sovereign tools",
+                                    WS_CHILD | BS_AUTOCHECKBOX, 240, 310, 470, 22, g_hMainWnd, (HMENU)IDC_CHK_SHORTCUT, hInstance, NULL);
 
     HWND hChkAssoc = CreateWindowExW(0, L"BUTTON", L"Associate Universal Office files (.giri, .gdrift, .gaxis, .gkinetic)",
-                                    WS_CHILD | BS_AUTOCHECKBOX, 240, 280, 470, 24, g_hMainWnd, (HMENU)IDC_CHK_ASSOC, hInstance, NULL);
+                                    WS_CHILD | BS_AUTOCHECKBOX, 240, 332, 470, 22, g_hMainWnd, (HMENU)IDC_CHK_ASSOC, hInstance, NULL);
 
     SendMessageW(hChkAll, BM_SETCHECK, BST_CHECKED, 0);
     SendMessageW(hChkDrift, BM_SETCHECK, BST_CHECKED, 0);
     SendMessageW(hChkAxis, BM_SETCHECK, BST_CHECKED, 0);
     SendMessageW(hChkKinetic, BM_SETCHECK, BST_CHECKED, 0);
     SendMessageW(hChkHub, BM_SETCHECK, BST_CHECKED, 0);
+    SendMessageW(hChkFonts, BM_SETCHECK, BST_CHECKED, 0);
+    SendMessageW(hChkLang, BM_SETCHECK, BST_CHECKED, 0);
+    SendMessageW(hChkRuntimes, BM_SETCHECK, BST_CHECKED, 0);
     SendMessageW(hChkShort, BM_SETCHECK, BST_CHECKED, 0);
     SendMessageW(hChkAssoc, BM_SETCHECK, BST_CHECKED, 0);
 
@@ -230,6 +248,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     g_pageControls[PAGE_COMPONENTS].push_back(hChkAxis);
     g_pageControls[PAGE_COMPONENTS].push_back(hChkKinetic);
     g_pageControls[PAGE_COMPONENTS].push_back(hChkHub);
+    g_pageControls[PAGE_COMPONENTS].push_back(hChkFonts);
+    g_pageControls[PAGE_COMPONENTS].push_back(hChkLang);
+    g_pageControls[PAGE_COMPONENTS].push_back(hChkRuntimes);
     g_pageControls[PAGE_COMPONENTS].push_back(hChkShort);
     g_pageControls[PAGE_COMPONENTS].push_back(hChkAssoc);
 
@@ -460,6 +481,47 @@ void PerformInstallation(HWND hwnd) {
             std::filesystem::copy(dictSrc, g_installDir + L"\\Dict", std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
         }
     } catch (...) {}
+
+
+    if (g_installFonts) {
+        updateStep(86, L"Installing International Fonts & Google Hindi Font (Noto Sans Devanagari)...");
+        try {
+            std::filesystem::create_directories(g_installDir + L"\\Fonts");
+            std::wstring fontSrc = g_sourceDir + L"\\fonts";
+            if (!PathFileExistsW(fontSrc.c_str())) fontSrc = g_sourceDir + L"\\..\\fonts";
+            if (PathFileExistsW(fontSrc.c_str())) {
+                std::filesystem::copy(fontSrc, g_installDir + L"\\Fonts", std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+            }
+            std::wstring hindiFont = g_installDir + L"\\Fonts\\NotoSansDevanagari.ttf";
+            if (PathFileExistsW(hindiFont.c_str())) {
+                AddFontResourceExW(hindiFont.c_str(), FR_PRIVATE, NULL);
+            }
+        } catch (...) {}
+    }
+
+    if (g_installLang) {
+        updateStep(87, L"Installing 100+ Multilingual Satellite Language Packs (~2.5 GB)...");
+        try {
+            std::filesystem::create_directories(g_installDir + L"\\Languages");
+            std::wstring langSrc = g_sourceDir + L"\\languages";
+            if (!PathFileExistsW(langSrc.c_str())) langSrc = g_sourceDir + L"\\..\\languages";
+            if (PathFileExistsW(langSrc.c_str())) {
+                std::filesystem::copy(langSrc, g_installDir + L"\\Languages", std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+            }
+        } catch (...) {}
+    }
+
+    if (g_installRuntimes) {
+        updateStep(88, L"Installing Web & Telemetry Runtimes (WebView2 & Orbit Sync Daemon)...");
+        try {
+            std::filesystem::create_directories(g_installDir + L"\\Runtimes");
+            std::wstring rtSrc = g_sourceDir + L"\\runtimes";
+            if (!PathFileExistsW(rtSrc.c_str())) rtSrc = g_sourceDir + L"\\..\\runtimes";
+            if (PathFileExistsW(rtSrc.c_str())) {
+                std::filesystem::copy(rtSrc, g_installDir + L"\\Runtimes", std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+            }
+        } catch (...) {}
+    }
 
     if (g_createShortcut) {
         updateStep(90, L"Creating desktop shortcuts...");
