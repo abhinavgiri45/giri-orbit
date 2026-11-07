@@ -149,7 +149,7 @@ void CheckUpdatesAsync(HWND hwnd) {
 
         HINTERNET hConnect = InternetOpenUrlW(
             hInternet,
-            L"https://raw.githubusercontent.com/giricorporationpvt-stack/giri-orbit-pc/main/version.json",
+            L"https://raw.githubusercontent.com/abhinavgiri45/giri-orbit/main/version.json",
             NULL, 0, INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE, 0
         );
 
