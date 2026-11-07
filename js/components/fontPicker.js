@@ -7,12 +7,19 @@
  * - Trigger button displaying active font name in its own typeface (defaulting to Calibri)
  * - Fixed position portal dropdown that NEVER clips on ribbon boundaries
  * - Search bar with instant real-time live filtering and clear button
- * - 100+ world fonts organized into categorized groups
- * - Real typeface preview for each row with checkmark indicator
+ * - 175+ world fonts organized into categorized groups
+ * - Real typeface preview for each row with checkmark indicator and web font loader
  * - Full keyboard navigation (Up, Down, Enter, Escape)
  */
 
-import { WORLD_FONTS_CATALOG, DEFAULT_FONT_NAME, DEFAULT_FONT_FAMILY } from '../data/fonts.js';
+import { 
+  WORLD_FONTS_CATALOG, 
+  DEFAULT_FONT_NAME, 
+  DEFAULT_FONT_FAMILY, 
+  loadGoogleFont, 
+  getFontFamilyByName, 
+  findFont 
+} from '../data/fonts.js';
 
 export class FluentFontPicker {
   constructor(mountContainer, options = {}) {
@@ -21,15 +28,14 @@ export class FluentFontPicker {
     this.currentFontFamily = this.getFamilyByName(this.currentFontName);
     this.onSelect = options.onSelect || (() => {});
     this.isOpen = false;
-    this.recentFonts = ['Calibri', 'Aptos', 'Times New Roman', 'Arial', 'Segoe UI'];
+    this.recentFonts = ['Calibri', 'Aptos', 'Times New Roman', 'Arial', 'Segoe UI', 'Inter'];
 
     this.render();
     this.bindEvents();
   }
 
   getFamilyByName(name) {
-    const found = WORLD_FONTS_CATALOG.find(f => f.name.toLowerCase() === name.toLowerCase());
-    return found ? found.family : DEFAULT_FONT_FAMILY;
+    return getFontFamilyByName(name);
   }
 
   render() {
@@ -64,7 +70,7 @@ export class FluentFontPicker {
         <svg class="font-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" class="font-picker-search-input" id="font-picker-search-input" placeholder="Search fonts..." spellcheck="false" autocomplete="off">
+        <input type="text" class="font-picker-search-input" id="font-picker-search-input" placeholder="Search fonts (e.g. Calibri, Aptos, Poppins)..." spellcheck="false" autocomplete="off">
         <button type="button" class="font-picker-search-clear" id="btn-clear-font-search" style="display:none;" title="Clear">✕</button>
       </div>
 
@@ -87,8 +93,8 @@ export class FluentFontPicker {
   positionDropdown() {
     if (!this.dropdown || !this.triggerBtn) return;
     const rect = this.triggerBtn.getBoundingClientRect();
-    const dropdownWidth = 300;
-    const dropdownHeight = 380;
+    const dropdownWidth = 320;
+    const dropdownHeight = 400;
 
     let left = rect.left;
     if (left + dropdownWidth > window.innerWidth - 12) {
@@ -105,7 +111,7 @@ export class FluentFontPicker {
         this.dropdown.style.maxHeight = `${availableHeight}px`;
       }
     } else {
-      this.dropdown.style.maxHeight = '380px';
+      this.dropdown.style.maxHeight = '400px';
     }
 
     this.dropdown.style.position = 'fixed';
@@ -128,7 +134,7 @@ export class FluentFontPicker {
 
     if (matchedFonts.length === 0) {
       this.listContainer.innerHTML = `
-        <div class="font-picker-no-results">
+        <div class="font-picker-no-results" style="padding:24px 16px; text-align:center; color:#64748b; font-size:12px;">
           <span>No fonts matching "<strong>${query}</strong>"</span>
         </div>
       `;
@@ -152,7 +158,7 @@ export class FluentFontPicker {
       this.listContainer.appendChild(recentHeader);
 
       this.recentFonts.forEach(rName => {
-        const rFont = WORLD_FONTS_CATALOG.find(f => f.name === rName);
+        const rFont = findFont(rName);
         if (rFont) {
           this.appendFontRow(rFont, true);
         }
@@ -181,14 +187,21 @@ export class FluentFontPicker {
     row.title = `${font.name} (${font.category})`;
 
     row.innerHTML = `
-      <div class="font-item-preview" style="font-family: ${font.family};">
+      <div class="font-item-preview" style="font-family: ${font.family}; font-size: 13.5px;">
         ${font.name}
       </div>
-      <div class="font-item-meta">
-        <span class="font-item-tag">${font.category}</span>
-        ${isSelected ? '<span class="font-item-check">✓</span>' : ''}
+      <div class="font-item-meta" style="display:flex; align-items:center; gap:6px;">
+        <span class="font-item-tag" style="font-size:9.5px; opacity:0.75;">${font.category}</span>
+        ${isSelected ? '<span class="font-item-check" style="color:#2563eb; font-weight:bold;">✓</span>' : ''}
       </div>
     `;
+
+    // Dynamic lazy-loading of web font on mouse hover
+    row.addEventListener('mouseenter', () => {
+      if (font.googleFont) {
+        loadGoogleFont(font.name);
+      }
+    });
 
     row.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -202,6 +215,9 @@ export class FluentFontPicker {
     this.currentFontName = name;
     this.currentFontFamily = family;
 
+    // Load web font if online
+    loadGoogleFont(name);
+
     // Update button label
     if (this.activeLabel) {
       this.activeLabel.textContent = name;
@@ -209,7 +225,7 @@ export class FluentFontPicker {
     }
 
     // Update recently used
-    this.recentFonts = [name, ...this.recentFonts.filter(f => f !== name)].slice(0, 5);
+    this.recentFonts = [name, ...this.recentFonts.filter(f => f !== name)].slice(0, 6);
 
     // Close dropdown
     this.close();
@@ -218,16 +234,39 @@ export class FluentFontPicker {
     this.onSelect(name, family);
   }
 
-  setFont(name) {
-    if (!name) return;
-    const cleanName = name.replace(/['"]/g, '').split(',')[0].trim();
-    const found = WORLD_FONTS_CATALOG.find(f => f.name.toLowerCase() === cleanName.toLowerCase());
+  setFont(nameOrFamily) {
+    if (!nameOrFamily) return;
+    const found = findFont(nameOrFamily);
     if (found) {
       this.currentFontName = found.name;
       this.currentFontFamily = found.family;
+      loadGoogleFont(found.name);
+
       if (this.activeLabel) {
         this.activeLabel.textContent = found.name;
         this.activeLabel.style.fontFamily = found.family;
+      }
+
+      // Update checkmarks in dropdown if open
+      if (this.dropdown) {
+        this.dropdown.querySelectorAll('.font-picker-item').forEach(item => {
+          const isItemActive = item.dataset.fontName.toLowerCase() === found.name.toLowerCase();
+          item.classList.toggle('active', isItemActive);
+          const meta = item.querySelector('.font-item-meta');
+          if (meta) {
+            let check = meta.querySelector('.font-item-check');
+            if (isItemActive && !check) {
+              const chk = document.createElement('span');
+              chk.className = 'font-item-check';
+              chk.style.color = '#2563eb';
+              chk.style.fontWeight = 'bold';
+              chk.textContent = '✓';
+              meta.appendChild(chk);
+            } else if (!isItemActive && check) {
+              check.remove();
+            }
+          }
+        });
       }
     }
   }

@@ -1,5 +1,6 @@
 import { AEGIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { FluentFontPicker } from '../components/fontPicker.js';
+import { WORLD_FONTS_CATALOG, loadGoogleFont, populateFontSelect, findFont } from '../data/fonts.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { orbitDesktopSuite } from '../components/orbitDesktopSuite.js';
 import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
@@ -2809,15 +2810,49 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
 
   // Mount Fluent Font Picker in Home Tab
   const fontMount = container.querySelector('#pdf-font-picker-mount');
+  let pdfFontPicker = null;
   if (fontMount) {
-    new FluentFontPicker(fontMount, {
+    pdfFontPicker = new FluentFontPicker(fontMount, {
       defaultFont: 'Calibri',
       onSelect: (fontName, fontFamily) => {
-        document.execCommand('fontName', false, fontFamily);
+        loadGoogleFont(fontName);
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+          document.execCommand('fontName', false, fontName);
+          try {
+            const range = sel.getRangeAt(0);
+            const common = range.commonAncestorContainer;
+            const containerEl = common.nodeType === 1 ? common : common.parentElement;
+            if (containerEl) {
+              containerEl.querySelectorAll('font[face]').forEach(f => {
+                f.removeAttribute('face');
+                f.style.fontFamily = fontFamily;
+              });
+            }
+          } catch (e) {}
+        } else {
+          const activePage = container.querySelector('.pdf-page-card.active, .pdf-blank-page-content');
+          if (activePage) activePage.style.fontFamily = fontFamily;
+        }
         contentWrapper.focus();
+        if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Applied ${fontName} to document`);
       }
     });
   }
+
+  // Active selection listener in PDF Studio
+  const updatePdfFontFromSelection = () => {
+    if (!pdfFontPicker) return;
+    const sel = window.getSelection();
+    if (!sel || !sel.anchorNode) return;
+    if (!contentWrapper || !contentWrapper.contains(sel.anchorNode)) return;
+    const el = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
+    if (el) {
+      const comp = el.style.fontFamily || window.getComputedStyle(el).fontFamily;
+      if (comp) pdfFontPicker.setFont(comp);
+    }
+  };
+  document.addEventListener('selectionchange', updatePdfFontFromSelection);
 
   // Font pt size
   const fontSizeSelect = container.querySelector('#pdf-font-size-pt');
@@ -3953,16 +3988,73 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
     window.open('https://www.instagram.com/abhinavgiri45/', '_blank');
   });
 
-  // Font Dialog launcher
+  // Font Dialog launcher & dynamic global font population
+  const pdfFontSelect = container.querySelector('#pdf-dialog-font-family');
+  if (pdfFontSelect) {
+    populateFontSelect(pdfFontSelect, 'Calibri');
+  }
+
+  const updatePdfModalPreview = () => {
+    const fam = pdfFontSelect?.value || 'Calibri';
+    const sz = container.querySelector('#pdf-dialog-font-size')?.value || '11';
+    const style = container.querySelector('#pdf-dialog-font-style')?.value || 'normal';
+    const prev = container.querySelector('#pdf-dialog-font-preview');
+    if (prev) {
+      prev.style.fontFamily = fam;
+      prev.style.fontSize = `${sz}pt`;
+      prev.style.fontWeight = style.includes('bold') ? 'bold' : 'normal';
+      prev.style.fontStyle = style.includes('italic') ? 'italic' : 'normal';
+      const opt = pdfFontSelect ? pdfFontSelect.options[pdfFontSelect.selectedIndex] : null;
+      const name = opt ? opt.textContent : 'Calibri';
+      prev.textContent = `${name} — Executive Document & Digital Seal (ABC 123)`;
+    }
+  };
+
+  pdfFontSelect?.addEventListener('change', () => {
+    const opt = pdfFontSelect.options[pdfFontSelect.selectedIndex];
+    if (opt && opt.dataset && opt.dataset.fontName) {
+      loadGoogleFont(opt.dataset.fontName);
+    }
+    updatePdfModalPreview();
+  });
+  container.querySelector('#pdf-dialog-font-size')?.addEventListener('input', updatePdfModalPreview);
+  container.querySelector('#pdf-dialog-font-style')?.addEventListener('change', updatePdfModalPreview);
+
   container.querySelector('#btn-pdf-launcher-font')?.addEventListener('click', () => {
+    updatePdfModalPreview();
     fontDialogModal.classList.add('open');
   });
   container.querySelector('#btn-close-pdf-font-dialog')?.addEventListener('click', () => fontDialogModal.classList.remove('open'));
   container.querySelector('#btn-cancel-pdf-font-dialog')?.addEventListener('click', () => fontDialogModal.classList.remove('open'));
   container.querySelector('#btn-apply-pdf-font-dialog')?.addEventListener('click', () => {
-    const fam = container.querySelector('#pdf-dialog-font-family')?.value;
+    const fam = pdfFontSelect?.value;
+    const opt = pdfFontSelect?.options[pdfFontSelect.selectedIndex];
+    const fontName = opt ? opt.textContent : 'Calibri';
     const sz = container.querySelector('#pdf-dialog-font-size')?.value;
-    if (fam) document.execCommand('fontName', false, fam);
+    const style = container.querySelector('#pdf-dialog-font-style')?.value;
+
+    if (fam) {
+      if (pdfFontPicker) pdfFontPicker.setFont(fontName);
+      loadGoogleFont(fontName);
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+        document.execCommand('fontName', false, fontName);
+        try {
+          const range = sel.getRangeAt(0);
+          const common = range.commonAncestorContainer;
+          const containerEl = common.nodeType === 1 ? common : common.parentElement;
+          if (containerEl) {
+            containerEl.querySelectorAll('font[face]').forEach(f => {
+              f.removeAttribute('face');
+              f.style.fontFamily = fam;
+            });
+          }
+        } catch (e) {}
+      } else {
+        const activePage = container.querySelector('.pdf-page-card.active, .pdf-blank-page-content');
+        if (activePage) activePage.style.fontFamily = fam;
+      }
+    }
     if (sz) {
       document.execCommand('fontSize', false, '3');
       const sel = window.getSelection();
@@ -3971,8 +4063,12 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
         if (el) el.style.fontSize = `${sz}pt`;
       }
     }
+    if (style) {
+      if (style.includes('bold')) document.execCommand('bold', false, null);
+      if (style.includes('italic')) document.execCommand('italic', false, null);
+    }
     fontDialogModal.classList.remove('open');
-    if (window.orbitPlatform) window.orbitPlatform.triggerToast('Font settings applied');
+    if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Applied ${fontName} typography`);
   });
 
   // Other launchers

@@ -1,4 +1,5 @@
 import { FluentFontPicker } from '../components/fontPicker.js';
+import { WORLD_FONTS_CATALOG, loadGoogleFont, populateFontSelect, findFont } from '../data/fonts.js';
 import { symbolsManager } from '../components/symbolsManager.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { thesaurusManager } from '../components/thesaurusManager.js';
@@ -5898,12 +5899,55 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
         driftFontPicker = new FluentFontPicker(fontMount, {
           defaultFont: 'Calibri',
           onSelect: (fontName, fontFamily) => {
-            document.execCommand('fontName', false, fontFamily);
+            loadGoogleFont(fontName);
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+              document.execCommand('fontName', false, fontName);
+              try {
+                const range = sel.getRangeAt(0);
+                const common = range.commonAncestorContainer;
+                const containerEl = common.nodeType === 1 ? common : common.parentElement;
+                if (containerEl) {
+                  containerEl.querySelectorAll('font[face]').forEach(f => {
+                    f.removeAttribute('face');
+                    f.style.fontFamily = fontFamily;
+                  });
+                  if (containerEl.tagName === 'FONT') {
+                    containerEl.removeAttribute('face');
+                    containerEl.style.fontFamily = fontFamily;
+                  }
+                }
+              } catch (e) {}
+            } else {
+              const anchor = sel && sel.anchorNode ? (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement) : null;
+              const block = anchor ? anchor.closest('p, h1, h2, h3, h4, h5, h6, li, td, th, div.drift-page-sheet') : null;
+              if (block) {
+                block.style.fontFamily = fontFamily;
+              } else {
+                const sheet = paper.querySelector('.drift-page-sheet.active-sheet') || paper.querySelector('.drift-page-sheet');
+                if (sheet) sheet.style.fontFamily = fontFamily;
+              }
+            }
             paper.focus();
             saveDocument();
           }
         });
       }
+
+      // Cursor movement tracking to update font picker with active font
+      const updateDriftFontFromSelection = () => {
+        if (!paper || !driftFontPicker) return;
+        const sel = window.getSelection();
+        if (!sel || !sel.anchorNode || !paper.contains(sel.anchorNode)) return;
+        const el = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
+        if (el) {
+          const comp = el.style.fontFamily || window.getComputedStyle(el).fontFamily;
+          if (comp) driftFontPicker.setFont(comp);
+        }
+      };
+      document.addEventListener('selectionchange', updateDriftFontFromSelection);
+      paper.addEventListener('click', updateDriftFontFromSelection);
+      paper.addEventListener('keyup', updateDriftFontFromSelection);
 
       // Floating Mini Formatting Toolbar (Quick Floating Format Style)
       miniToolbar = document.getElementById('drift-mini-toolbar');
@@ -6930,19 +6974,86 @@ function calculateMetrics(records) {
       });
 
       const fontDialog = container.querySelector('#drift-font-dialog-modal');
-      container.querySelector('#btn-drift-launcher-font')?.addEventListener('click', () => fontDialog?.classList.add('open'));
+      const modalFontSelect = container.querySelector('#modal-font-family');
+      if (modalFontSelect) {
+        populateFontSelect(modalFontSelect, 'Calibri');
+      }
+
+      const updateDriftModalPreview = () => {
+        const fam = modalFontSelect?.value || 'Calibri';
+        const sz = container.querySelector('#modal-font-size-val')?.value || '16';
+        const color = container.querySelector('#modal-font-color-picker')?.value || '#0f172a';
+        const style = container.querySelector('#modal-font-weight-style')?.value || 'normal';
+        const prev = container.querySelector('#modal-font-preview');
+        if (prev) {
+          prev.style.fontFamily = fam;
+          prev.style.fontSize = `${sz}px`;
+          prev.style.color = color;
+          prev.style.fontWeight = style.includes('bold') ? 'bold' : 'normal';
+          prev.style.fontStyle = style.includes('italic') ? 'italic' : 'normal';
+          const opt = modalFontSelect ? modalFontSelect.options[modalFontSelect.selectedIndex] : null;
+          const name = opt ? opt.textContent : 'Calibri';
+          prev.textContent = `${name} — The quick brown fox jumps over the lazy dog (1234567890)`;
+        }
+      };
+
+      modalFontSelect?.addEventListener('change', () => {
+        const opt = modalFontSelect.options[modalFontSelect.selectedIndex];
+        if (opt && opt.dataset && opt.dataset.fontName) {
+          loadGoogleFont(opt.dataset.fontName);
+        }
+        updateDriftModalPreview();
+      });
+      container.querySelector('#modal-font-size-val')?.addEventListener('input', updateDriftModalPreview);
+      container.querySelector('#modal-font-color-picker')?.addEventListener('input', updateDriftModalPreview);
+      container.querySelector('#modal-font-weight-style')?.addEventListener('change', updateDriftModalPreview);
+
+      container.querySelector('#btn-drift-launcher-font')?.addEventListener('click', () => {
+        updateDriftModalPreview();
+        fontDialog?.classList.add('open');
+      });
       container.querySelector('#btn-close-font-dialog')?.addEventListener('click', () => fontDialog?.classList.remove('open'));
       container.querySelector('#btn-cancel-font-dialog')?.addEventListener('click', () => fontDialog?.classList.remove('open'));
       container.querySelector('#btn-apply-font-dialog')?.addEventListener('click', () => {
-        const family = container.querySelector('#modal-font-family')?.value;
+        const family = modalFontSelect?.value;
+        const opt = modalFontSelect?.options[modalFontSelect.selectedIndex];
+        const fontName = opt ? opt.textContent : 'Calibri';
         const size = container.querySelector('#modal-font-size-val')?.value;
         const color = container.querySelector('#modal-font-color-picker')?.value;
-        if (family) document.execCommand('fontName', false, family);
+        const style = container.querySelector('#modal-font-weight-style')?.value;
+
+        if (family) {
+          if (driftFontPicker) driftFontPicker.setFont(fontName);
+          loadGoogleFont(fontName);
+          const sel = window.getSelection();
+          if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+            document.execCommand('fontName', false, fontName);
+            try {
+              const range = sel.getRangeAt(0);
+              const common = range.commonAncestorContainer;
+              const containerEl = common.nodeType === 1 ? common : common.parentElement;
+              if (containerEl) {
+                containerEl.querySelectorAll('font[face]').forEach(f => {
+                  f.removeAttribute('face');
+                  f.style.fontFamily = family;
+                });
+              }
+            } catch (e) {}
+          } else {
+            const anchor = sel && sel.anchorNode ? (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement) : null;
+            const block = anchor ? anchor.closest('p, h1, h2, h3, h4, h5, h6, li, td, th, div.drift-page-sheet') : null;
+            if (block) block.style.fontFamily = family;
+          }
+        }
         if (size) document.execCommand('fontSize', false, Math.min(7, Math.max(1, Math.round(parseInt(size) / 4))));
         if (color) document.execCommand('foreColor', false, color);
+        if (style) {
+          if (style.includes('bold')) document.execCommand('bold', false, null);
+          if (style.includes('italic')) document.execCommand('italic', false, null);
+        }
         fontDialog?.classList.remove('open');
         saveDocument();
-        if (window.orbitPlatform) window.orbitPlatform.triggerToast('Applied font settings');
+        if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Applied ${fontName} typography`);
       });
 
       const paraDialog = container.querySelector('#drift-paragraph-dialog-modal');

@@ -1,4 +1,5 @@
 import { FluentFontPicker } from '../components/fontPicker.js';
+import { WORLD_FONTS_CATALOG, loadGoogleFont, populateFontSelect, findFont } from '../data/fonts.js';
 import { AXIS_BUILTIN_TEMPLATES } from '../data/templates.js';
 import { localSync } from '../components/localFileDirectSync.js';
 import { orbitDesktopSuite } from '../components/orbitDesktopSuite.js';
@@ -2929,6 +2930,15 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     activeCell.classList.add('active-cell');
     if (activeRefEl) activeRefEl.textContent = cellId;
 
+    if (axisFontPicker && activeCell) {
+      const cellFont = activeCell.dataset.fontName || activeCell.style.fontFamily;
+      if (cellFont) {
+        axisFontPicker.setFont(cellFont);
+      } else {
+        axisFontPicker.setFont('Calibri');
+      }
+    }
+
     // Handle in-cell data validation picker
     gridTable.querySelectorAll('.axis-validation-picker-btn').forEach(b => b.remove());
     if (axisDataValidations.has(cellId)) {
@@ -4462,8 +4472,13 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     axisFontPicker = new FluentFontPicker(axisFontMount, {
       defaultFont: 'Calibri',
       onSelect: (fontName, fontFamily) => {
+        loadGoogleFont(fontName);
         const targets = getTargetCells();
-        targets.forEach(c => c.style.fontFamily = fontFamily);
+        targets.forEach(c => {
+          c.style.fontFamily = fontFamily;
+          c.dataset.fontFamily = fontFamily;
+          c.dataset.fontName = fontName;
+        });
         saveCurrentSheet();
       }
     });

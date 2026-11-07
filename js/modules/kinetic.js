@@ -1,4 +1,5 @@
 import { FluentFontPicker } from '../components/fontPicker.js';
+import { WORLD_FONTS_CATALOG, loadGoogleFont, populateFontSelect, findFont } from '../data/fonts.js';
 import {
   KINETIC_BUILTIN_TEMPLATES,
   PRESENTATION_GO_TEMPLATES,
@@ -4851,6 +4852,11 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
     shape.classList.add('selected');
     render8PointHandles(shape);
     renderShapeQuickbar(shape);
+    if (kineticFontPicker && shape) {
+      const child = shape.querySelector('*');
+      const shapeFont = shape.style.fontFamily || (child ? child.style.fontFamily : null);
+      if (shapeFont) kineticFontPicker.setFont(shapeFont);
+    }
   }
 
   function clearShapeSelection() {
@@ -4977,13 +4983,48 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
     kineticFontPicker = new FluentFontPicker(kineticFontMount, {
       defaultFont: 'Calibri',
       onSelect: (fontName, fontFamily) => {
-        selectedShapes.forEach(shape => {
-          shape.style.fontFamily = fontFamily;
-        });
-        document.execCommand('fontName', false, fontFamily);
+        loadGoogleFont(fontName);
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+          document.execCommand('fontName', false, fontName);
+          try {
+            const range = sel.getRangeAt(0);
+            const common = range.commonAncestorContainer;
+            const containerEl = common.nodeType === 1 ? common : common.parentElement;
+            if (containerEl) {
+              containerEl.querySelectorAll('font[face]').forEach(f => {
+                f.removeAttribute('face');
+                f.style.fontFamily = fontFamily;
+              });
+            }
+          } catch (e) {}
+        }
+        if (selectedShapes.size > 0) {
+          selectedShapes.forEach(shape => {
+            shape.style.fontFamily = fontFamily;
+            shape.querySelectorAll('*').forEach(el => el.style.fontFamily = fontFamily);
+          });
+        }
+        try { renderSlideCollageThumbnails(); } catch (e) {}
+        if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Applied ${fontName} to presentation`);
       }
     });
   }
+
+  // Active text selection listener in slide canvas
+  const updateKineticFontFromSelection = () => {
+    if (!kineticFontPicker) return;
+    const sel = window.getSelection();
+    if (!sel || !sel.anchorNode) return;
+    const canvas = container.querySelector('#kinetic-canvas-container, .kinetic-canvas');
+    if (!canvas || !canvas.contains(sel.anchorNode)) return;
+    const el = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
+    if (el) {
+      const comp = el.style.fontFamily || window.getComputedStyle(el).fontFamily;
+      if (comp) kineticFontPicker.setFont(comp);
+    }
+  };
+  document.addEventListener('selectionchange', updateKineticFontFromSelection);
 
   // INSERT TAB CONTROLS: SHAPES, TEXTBOX, IMAGE, AI SLIDE
   // =========================================================================
