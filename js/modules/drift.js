@@ -1453,6 +1453,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
 
                       <button class="fluent-btn-small" id="btn-font-grow" title="Grow Font (Ctrl+Shift+>)">A<sup>▲</sup></button>
                       <button class="fluent-btn-small" id="btn-font-shrink" title="Shrink Font (Ctrl+Shift+<)">A<sup>▼</sup></button>
+                      <button class="fluent-btn-small" id="btn-drift-hindi-font" title="Google Hindi Font & Writing Style (Noto Sans Devanagari)" style="font-weight:700; color:#38bdf8; border:1px solid rgba(56,189,248,0.35); padding:0 6px; font-size:11px; background:rgba(56,189,248,0.08); border-radius:3px;">अ हिन्दी</button>
                       <button class="fluent-btn-small" id="btn-drift-clear-format" data-cmd="removeFormat" title="Clear All Formatting (Tx)">T<span style="font-size:9px; color:#ef4444; margin-left:1px;">✕</span></button>
                     </div>
 
@@ -6220,6 +6221,13 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
         const curIdx = ptSizes.indexOf(fontSizeSelect.value);
         const nextSize = curIdx !== -1 && curIdx < ptSizes.length - 1 ? ptSizes[curIdx + 1] : '14pt';
         applyFontSize(nextSize);
+      });
+      container.querySelector('#btn-drift-hindi-font')?.addEventListener('click', () => {
+        const hindiFont = "'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', sans-serif";
+        document.execCommand('fontName', false, hindiFont);
+        const ed = container.querySelector('#drift-editor') || container.querySelector('.drift-page-content');
+        if (ed) ed.style.fontFamily = hindiFont;
+        if (typeof window.showToast === 'function') window.showToast('Google Hindi (Devanagari) Writing Style Active', 'blue');
       });
       container.querySelector('#btn-font-shrink')?.addEventListener('click', () => {
         const curIdx = ptSizes.indexOf(fontSizeSelect.value);

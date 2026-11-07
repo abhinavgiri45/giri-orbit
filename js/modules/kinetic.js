@@ -2663,6 +2663,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
                     </select>
                     <button class="fluent-btn-small" id="btn-kinetic-font-grow" title="Grow Font">A<sup>▲</sup></button>
                     <button class="fluent-btn-small" id="btn-kinetic-font-shrink" title="Shrink Font">A<sup>▼</sup></button>
+                    <button class="fluent-btn-small" id="btn-kinetic-hindi-font" title="Google Hindi Font & Writing Style (Noto Sans Devanagari)" style="font-weight:700; color:#ef4444; border:1px solid rgba(239,68,68,0.35); padding:0 6px; font-size:11px; background:rgba(239,68,68,0.08); border-radius:3px;">अ हिन्दी</button>
                     <button class="fluent-btn-small" id="btn-kinetic-clear-formatting" title="Clear Formatting (Tx)">T<span style="font-size:9px; color:#ef4444; margin-left:1px;">✕</span></button>
                   </div>
 
@@ -4534,6 +4535,12 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
 
   container.querySelector('#btn-kinetic-font-grow')?.addEventListener('click', () => {
     document.execCommand('fontSize', false, 5);
+  });
+  container.querySelector('#btn-kinetic-hindi-font')?.addEventListener('click', () => {
+    if (typeof applyActiveObjectStyle === 'function') {
+      applyActiveObjectStyle('fontFamily', "'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', sans-serif");
+    }
+    if (typeof window.showToast === 'function') window.showToast('Google Hindi (Devanagari) Font Active', 'red');
   });
   container.querySelector('#btn-kinetic-font-shrink')?.addEventListener('click', () => {
     document.execCommand('fontSize', false, 2);

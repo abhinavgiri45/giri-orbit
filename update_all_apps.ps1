@@ -29,7 +29,7 @@ import zipfile, os
 
 base_dir = r'$rootDir'
 out_zip = r'$outZip'
-include_items = ['index.html', 'version.json', 'manifest.json', 'sw.js', 'css', 'js', 'assets']
+include_items = ['index.html', 'version.json', 'manifest.json', 'sw.js', 'css', 'js', 'assets', 'fonts']
 
 with zipfile.ZipFile(out_zip, 'w', compression=zipfile.ZIP_DEFLATED) as z:
     for item in include_items:

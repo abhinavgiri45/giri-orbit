@@ -1106,6 +1106,7 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
 
                     <button class="fluent-btn-small" id="btn-axis-font-grow" title="Increase Font Size">A<sup>▲</sup></button>
                     <button class="fluent-btn-small" id="btn-axis-font-shrink" title="Decrease Font Size">A<sup>▼</sup></button>
+                    <button class="fluent-btn-small" id="btn-axis-hindi-font" title="Google Hindi Font & Writing Style (Noto Sans Devanagari)" style="font-weight:700; color:#10b981; border:1px solid rgba(16,185,129,0.35); padding:0 6px; font-size:11px; background:rgba(16,185,129,0.08); border-radius:3px;">अ हिन्दी</button>
                     <button class="fluent-btn-small" id="btn-axis-clear-formatting" title="Clear Formatting (Tx)">T<span style="color:#f43f5e; font-size:9px; font-weight:700;">x</span></button>
 
                     <select class="fluent-select-dark" id="axis-border-select" title="Borders" style="width:90px;">
@@ -7333,7 +7334,13 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     saveCurrentSheet();
   });
 
-  container.querySelector('#btn-axis-font-shrink')?.addEventListener('click', () => {
+  container.querySelector('#btn-axis-hindi-font')?.addEventListener('click', () => {
+        if (typeof applyFontStyleToSelectedCells === 'function') {
+          applyFontStyleToSelectedCells({ fontFamily: "'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', sans-serif" });
+        }
+        if (typeof window.showToast === 'function') window.showToast('Google Hindi (Devanagari) Font Active', 'green');
+      });
+      container.querySelector('#btn-axis-font-shrink')?.addEventListener('click', () => {
     const targets = getTargetCells();
     if (targets.length === 0) return;
     const cur = axisFontSizeSelect ? axisFontSizeSelect.value : '13px';
