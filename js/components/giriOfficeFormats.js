@@ -1274,6 +1274,54 @@ ${utf8ToBase64(manifestJson)}
     if (!rawString) return null;
     let text = typeof rawString === 'string' ? rawString.trim() : '';
 
+    // 0. Native C++ Sovereign Format Signature (GIRI_ORBIT_SOVEREIGN_V1)
+    if (text.startsWith('GIRI_ORBIT_SOVEREIGN_V1')) {
+      let tool = 'drift';
+      const lines = text.split('\n');
+      let inData = false;
+      const dataLines = [];
+      for (const line of lines) {
+        if (!inData) {
+          if (line.startsWith('TOOL:')) tool = line.substring(5).trim().toLowerCase();
+          if (line.trim() === 'DATA_START') inData = true;
+        } else {
+          dataLines.push(line);
+        }
+      }
+      const content = dataLines.join('\n');
+      if (tool === 'axis') {
+        return GiriOfficeFormats._normalizeGiriManifest({
+          primary_type: 'spreadsheet',
+          title: 'Imported Axis Workbook',
+          author: 'Abhinav Giri',
+          tools: { axis: content }
+        });
+      } else if (tool === 'kinetic') {
+        const slideChunks = content.split('---SLIDE---');
+        const slides = [];
+        for (const chunk of slideChunks) {
+          if (!chunk.trim()) continue;
+          const chunkLines = chunk.trim().split('\n');
+          const title = chunkLines[0] || 'Slide';
+          const body = chunkLines.slice(1).join('\n') || '';
+          slides.push({ title, subtitle: '', content: body, body });
+        }
+        return GiriOfficeFormats._normalizeGiriManifest({
+          primary_type: 'presentation',
+          title: 'Imported Kinetic Deck',
+          author: 'Abhinav Giri',
+          tools: { kinetic: slides }
+        });
+      } else {
+        return GiriOfficeFormats._normalizeGiriManifest({
+          primary_type: 'document',
+          title: 'Imported Drift Document',
+          author: 'Abhinav Giri',
+          tools: { drift: content }
+        });
+      }
+    }
+
     // 1. Direct JSON object passed
     if (typeof rawString === 'object' && rawString !== null) {
       return GiriOfficeFormats._normalizeGiriManifest(rawString);
