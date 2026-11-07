@@ -16,6 +16,10 @@ import { renderDriftApp } from './modules/drift.js?v=11.6';
 import { renderAxisApp } from './modules/axis.js?v=11.6';
 import { renderKineticApp } from './modules/kinetic.js?v=11.6';
 import { renderPdfStudioApp } from './modules/pdfStudio.js?v=11.6';
+import { renderFormsApp } from './modules/forms.js?v=13.4';
+import { renderQuizApp } from './modules/quiz.js?v=13.4';
+import { renderListsApp } from './modules/lists.js?v=13.4';
+import { renderDesignerApp } from './modules/designer.js?v=13.4';
 import { LauncherPhysicsEngine } from './physics.js?v=11.6';
 import { PrintStudioManager } from './components/printManager.js?v=11.6';
 import { syncManager } from './modules/syncManager.js?v=11.6';
@@ -151,6 +155,10 @@ class GiriOrbitPlatform {
     if (['axis', 'sheet', 'sheets', 'excel', 'matrix'].includes(target)) return 'axis';
     if (['kinetic', 'presentation', 'presentations', 'show', 'deck', 'decks', 'ppt', 'powerpoint'].includes(target)) return 'kinetic';
     if (['pdf', 'aegis', 'pdfstudio', 'pdf-studio'].includes(target)) return 'pdf';
+    if (['forms', 'form', 'survey', 'surveys'].includes(target)) return 'forms';
+    if (['quiz', 'quizs', 'quizzes', 'exam', 'test', 'assessment'].includes(target)) return 'quiz';
+    if (['lists', 'list', 'tasks', 'tracker', 'kanban', 'board'].includes(target)) return 'lists';
+    if (['designer', 'design', 'canva', 'graphics', 'banner'].includes(target)) return 'designer';
     if (['girionix', 'ai', 'copilot', 'assistant', 'chat', 'polymath'].includes(target)) return 'girionix';
     return 'launcher';
   }
@@ -556,6 +564,18 @@ class GiriOrbitPlatform {
     } else if (view === 'pdf') {
       renderPdfStudioApp(this.workspace, null, startEditor);
       this.showToast('Giri Aegis PDF Studio Ready', 'orange');
+    } else if (view === 'forms') {
+      renderFormsApp(this.workspace, null, startEditor);
+      this.showToast('Giri Forms & Survey Studio Ready', 'teal');
+    } else if (view === 'quiz') {
+      renderQuizApp(this.workspace, null, startEditor);
+      this.showToast('Giri Quiz Assessment Studio Ready', 'cyan');
+    } else if (view === 'lists') {
+      renderListsApp(this.workspace, null, startEditor);
+      this.showToast('Giri Lists & Task Matrix Ready', 'purple');
+    } else if (view === 'designer') {
+      renderDesignerApp(this.workspace, null, startEditor);
+      this.showToast('Giri Designer Creative Studio Ready', 'pink');
     } else if (view === 'girionix') {
       this.mountGirionixAiStudio();
       this.showToast('Girionix AI Polymath Studio Connected', 'blue');
@@ -1102,17 +1122,17 @@ class GiriOrbitPlatform {
           this.recordRecentDocument('Untitled Spreadsheet', 'axis', 'Axis');
           this.navigateTo('axis', null, true, true);
         } else if (type === 'form') {
-          this.recordRecentDocument('Executive Charter Form', 'drift', 'Drift');
-          this.navigateTo('drift', 'Executive Charter Form', true, true);
+          this.recordRecentDocument('Customer Feedback Survey', 'forms', 'Forms');
+          this.navigateTo('forms', 'Customer Feedback Survey', true, true);
         } else if (type === 'quiz') {
-          this.recordRecentDocument('Assessment Matrix', 'axis', 'Axis');
-          this.navigateTo('axis', 'Assessment Matrix', true, true);
+          this.recordRecentDocument('Certification Assessment Quiz', 'quiz', 'Quiz');
+          this.navigateTo('quiz', 'Certification Assessment Quiz', true, true);
         } else if (type === 'list') {
-          this.recordRecentDocument('Task Tracker List', 'axis', 'Axis');
-          this.navigateTo('axis', 'Task Tracker List', true, true);
+          this.recordRecentDocument('Enterprise Task Matrix', 'lists', 'Lists');
+          this.navigateTo('lists', 'Enterprise Task Matrix', true, true);
         } else if (type === 'designer') {
-          this.recordRecentDocument('Creative Pitch Deck', 'kinetic', 'Kinetic');
-          this.navigateTo('kinetic', 'Creative Pitch Deck', true, true);
+          this.recordRecentDocument('Keynote Social Banner', 'designer', 'Designer');
+          this.navigateTo('designer', 'Keynote Social Banner', true, true);
         }
       });
     });
