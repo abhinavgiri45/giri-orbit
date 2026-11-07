@@ -1,10 +1,10 @@
-/**
+﻿/**
  * ============================================================================
- * GIRI ORBIT / GIRI KINETIC — PRESENTATIONGO & POWERPOINT TEMPLATES REPOSITORY
- * Inspired by PresentationGO (https://www.presentationgo.com/)
+ * GIRI ORBIT / GIRI KINETIC — PRESENTATIONGO & PRESENTATION TEMPLATES REPOSITORY
+ * Inspired by Global Presentation Engine (https://www.global.com/)
  * ============================================================================
- * Extensive library of 3,500+ presentation templates, diagrams, and PowerPoint decks:
- * - PowerPoint Presentation Decks (Executive Pitch, Annual Report, AI & DeepTech, Minimalist, Healthcare, etc.)
+ * Extensive library of 3,500+ presentation templates, diagrams, and Executive presentation decks:
+ * - Executive Presentation Decks (Executive Pitch, Annual Report, AI & DeepTech, Minimalist, Healthcare, etc.)
  * - Processes & Steps (4-Phase Circular Loop, 5-Step Zigzag Diamond, Chevron Flow, Linear Cards)
  * - Timelines & Roadmaps (Winding Milestone Road, Horizontal Milestones, Chronological Tracks)
  * - Matrix & SWOT (Strategic 2x2 SWOT Matrix, Eisenhower Priority Matrix, BCG Matrix)
@@ -17,7 +17,7 @@
 
 export const PRESENTATION_GO_CATEGORIES = [
   { id: 'all', label: 'All Templates (3,500+)' },
-  { id: 'powerpoint', label: 'PowerPoint Decks' },
+  { id: 'presentation', label: 'Executive Presentation Decks' },
   { id: 'processes', label: 'Processes & Steps' },
   { id: 'timelines', label: 'Timelines & Roadmaps' },
   { id: 'matrix', label: 'Matrix & SWOT' },
@@ -47,7 +47,7 @@ export const PRESENTATION_GO_STEP_FILTERS = [
   { id: '6', label: '6+ Steps' }
 ];
 
-// Curated Landmark Visual Diagrams & Authentic PowerPoint Presentation Decks
+// Curated Landmark Visual Diagrams & Authentic Executive Presentation Decks
 const CURATED_LANDMARKS = [
   // ==========================================================================
   // 1. OFFICIAL PRESENTATIONGO PRESENTATION TEMPLATES (EXACT MATCH TO USER SCREENSHOTS)
@@ -55,7 +55,7 @@ const CURATED_LANDMARKS = [
   {
     id: 'pgo-golden-light-prestige',
     name: 'Golden Light Prestige Template',
-    category: 'powerpoint',
+    category: 'presentation',
     categoryLabel: 'Templates',
     subCategories: ['Templates', 'Themes'],
     diagramType: 'presentation-collage',
@@ -65,7 +65,7 @@ const CURATED_LANDMARKS = [
     color: 'amber',
     previewAccent: '#eab308',
     desc: 'Elevate your executive presentations with luxurious golden light waves and elegant typography. Perfect for high-stakes corporate briefings, luxury brands, and investor pitches.',
-    tags: ['template', 'golden', 'prestige', 'powerpoint', 'deck', 'google slides', '6 slides', 'luxury', 'presentationgo'],
+    tags: ['template', 'golden', 'prestige', 'presentation', 'deck', 'google slides', '6 slides', 'luxury', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'EXECUTIVE BRIEFING',
@@ -139,7 +139,7 @@ const CURATED_LANDMARKS = [
   {
     id: 'pgo-abstract-teal-flow',
     name: 'Abstract Teal Flow Template',
-    category: 'powerpoint',
+    category: 'presentation',
     categoryLabel: 'Templates',
     subCategories: ['Templates', 'Themes'],
     diagramType: 'presentation-collage',
@@ -149,7 +149,7 @@ const CURATED_LANDMARKS = [
     color: 'cyan',
     previewAccent: '#06b6d4',
     desc: 'Sleek and modern presentation theme featuring fluid abstract teal ribbons. Designed for technology startups, design agencies, and innovative enterprise reviews.',
-    tags: ['template', 'abstract', 'teal', 'flow', 'powerpoint', 'deck', 'google slides', '6 slides', 'cyan', 'presentationgo'],
+    tags: ['template', 'abstract', 'teal', 'flow', 'presentation', 'deck', 'google slides', '6 slides', 'cyan', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'TECHNOLOGY BRIEF',
@@ -222,7 +222,7 @@ const CURATED_LANDMARKS = [
   {
     id: 'pgo-neon-data-waves',
     name: 'Neon Data Waves Template',
-    category: 'powerpoint',
+    category: 'presentation',
     categoryLabel: 'Templates',
     subCategories: ['Templates', 'Themes'],
     diagramType: 'presentation-collage',
@@ -232,7 +232,7 @@ const CURATED_LANDMARKS = [
     color: 'purple',
     previewAccent: '#a855f7',
     desc: 'Dynamic high-tech presentation deck powered by glowing neon wireframes and cybernetic waves. Engineered for AI research, cybersecurity, and deep-tech briefings.',
-    tags: ['template', 'neon', 'cyber', 'data', 'waves', 'powerpoint', 'deck', 'google slides', '6 slides', 'purple', 'presentationgo'],
+    tags: ['template', 'neon', 'cyber', 'data', 'waves', 'presentation', 'deck', 'google slides', '6 slides', 'purple', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'FRONTIER AI',
@@ -318,7 +318,7 @@ const CURATED_LANDMARKS = [
     color: 'amber',
     previewAccent: '#d97706',
     desc: 'Winding asphalt perspective road roadmap with 4 colorful milestone pin markers (01 Blue, 02 Green, 03 Yellow, 04 Red) and editable callout boxes for chronological progression.',
-    tags: ['charts & diagrams', 'timelines', 'road', 'journey', 'milestones', '4 options', 'google slides', 'pptx', 'presentationgo'],
+    tags: ['charts & diagrams', 'timelines', 'road', 'journey', 'milestones', '4 options', 'google slides', 'pptx', 'global'],
     slides: [
       {
         id: 1, layout: 'milestone-road', diagramType: 'milestone-road', tag: 'TIMELINE // ROADMAP',
@@ -346,7 +346,7 @@ const CURATED_LANDMARKS = [
     color: 'blue',
     previewAccent: '#7c3aed',
     desc: 'Three hanging banner ribbons with downward chevron cuts and bold numbers (1, 2, 3). Perfect for linear 3-step workflows, core principles, and execution pillars.',
-    tags: ['charts & diagrams', 'processes', 'pentagon', 'flags', 'ribbons', 'banners', '3 options', 'google slides', 'pptx', 'presentationgo'],
+    tags: ['charts & diagrams', 'processes', 'pentagon', 'flags', 'ribbons', 'banners', '3 options', 'google slides', 'pptx', 'global'],
     slides: [
       {
         id: 1, layout: 'pentagon-flags', diagramType: 'pentagon-flags', tag: 'PROCESS // 3 STEPS',
@@ -373,7 +373,7 @@ const CURATED_LANDMARKS = [
     color: 'green',
     previewAccent: '#10b981',
     desc: 'Set of 3 hand-drawn quote speech bubbles with sketch outlines and soft fill colors. Ideal for customer testimonials, quotes, feedback, and conversational talking points.',
-    tags: ['charts & diagrams', 'text & tables', 'speech bubbles', 'hand drawn', 'quotes', 'testimonials', '3 options', 'google slides', 'pptx', 'presentationgo'],
+    tags: ['charts & diagrams', 'text & tables', 'speech bubbles', 'hand drawn', 'quotes', 'testimonials', '3 options', 'google slides', 'pptx', 'global'],
     slides: [
       {
         id: 1, layout: 'speech-bubbles', diagramType: 'speech-bubbles', tag: 'TESTIMONIALS // QUOTES',
@@ -400,7 +400,7 @@ const CURATED_LANDMARKS = [
     color: 'cyan',
     previewAccent: '#0891b2',
     desc: 'Three interlocking colorful mechanical gears illustrating how interconnected systems, teams, or processes operate in seamless synchronization.',
-    tags: ['charts & diagrams', 'processes', 'gears', 'interlocking', 'sync', '3 options', 'presentationgo'],
+    tags: ['charts & diagrams', 'processes', 'gears', 'interlocking', 'sync', '3 options', 'global'],
     slides: [
       {
         id: 1, layout: 'gears-process', diagramType: 'gears-process', tag: 'SYNCHRONIZATION // GEARS',
@@ -427,7 +427,7 @@ const CURATED_LANDMARKS = [
     color: 'amber',
     previewAccent: '#d97706',
     desc: 'Four-stage 3D sales and customer conversion funnel illustrating stage-gate qualification, attrition rates, and bottom-line customer acquisition.',
-    tags: ['charts & diagrams', 'funnels', 'pipeline', 'sales', 'conversion', '4 options', 'presentationgo'],
+    tags: ['charts & diagrams', 'funnels', 'pipeline', 'sales', 'conversion', '4 options', 'global'],
     slides: [
       {
         id: 1, layout: 'funnel-stages', diagramType: 'funnel-stages', tag: 'FUNNEL // PIPELINE',
@@ -455,7 +455,7 @@ const CURATED_LANDMARKS = [
     color: 'blue',
     previewAccent: '#3b82f6',
     desc: 'Six-cell hexagonal honeycomb cluster representing modular capabilities, organizational competencies, or strategic business units.',
-    tags: ['charts & diagrams', 'matrix', 'hexagon', 'honeycomb', 'cluster', '6 options', 'presentationgo'],
+    tags: ['charts & diagrams', 'matrix', 'hexagon', 'honeycomb', 'cluster', '6 options', 'global'],
     slides: [
       {
         id: 1, layout: 'hexagon-cluster', diagramType: 'hexagon-cluster', tag: 'MATRIX // HONEYCOMB',
@@ -475,22 +475,22 @@ const CURATED_LANDMARKS = [
   },
 
   // ==========================================================================
-  // 3. COMPLETE AUTHENTIC POWERPOINT PRESENTATION TEMPLATES (8-10 SLIDES EACH)
+  // 3. COMPLETE AUTHENTIC PRESENTATION PRESENTATION TEMPLATES (8-10 SLIDES EACH)
   // ==========================================================================
   {
     id: 'ppt-deck-annual-report',
-    name: 'Corporate Business Annual Report PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Corporate Business Annual Report Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'corporate-navy',
     optionsText: '10 slides',
     steps: 10,
     color: 'blue',
     previewAccent: '#2563eb',
-    desc: 'Official 10-slide PowerPoint presentation template for annual fiscal reviews, shareholder reports, CEO letters, financial statements, and multi-year executive targets.',
-    tags: ['powerpoint', 'deck', 'annual report', 'corporate', 'finance', 'pptx', '10 slides', 'executive', 'presentationgo'],
+    desc: 'Official 10-slide presentation deck template for annual fiscal reviews, shareholder reports, CEO letters, financial statements, and multi-year executive targets.',
+    tags: ['presentation', 'deck', 'annual report', 'corporate', 'finance', 'pptx', '10 slides', 'executive', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'ANNUAL REPORT FY26',
@@ -607,18 +607,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-unicorn-pitch',
-    name: 'Unicorn Venture Capital Pitch Deck PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Unicorn Venture Capital Pitch Deck Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'crimson-venture',
     optionsText: '10 slides',
     steps: 10,
     color: 'red',
     previewAccent: '#dc2626',
-    desc: 'High-impact 10-slide PowerPoint investor pitch deck engineered for Series A/B venture capital rounds, highlighting unfair advantage, market size, and hockey-stick traction.',
-    tags: ['powerpoint', 'deck', 'pitch', 'venture capital', 'series a', 'series b', 'startup', '10 slides', 'presentationgo'],
+    desc: 'High-impact 10-slide investor pitch deck engineered for Series A/B venture capital rounds, highlighting unfair advantage, market size, and hockey-stick traction.',
+    tags: ['presentation', 'deck', 'pitch', 'venture capital', 'series a', 'series b', 'startup', '10 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'VENTURE BRIEFING',
@@ -734,18 +734,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-modern-ai',
-    name: 'Modern Gradient AI & DeepTech PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Modern Gradient AI & DeepTech Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'creative-gradient',
     optionsText: '8 slides',
     steps: 8,
     color: 'purple',
     previewAccent: '#8b5cf6',
-    desc: 'Cutting-edge 8-slide PowerPoint presentation deck with vibrant modern gradients designed for artificial intelligence research, neural architectures, and frontier technology briefings.',
-    tags: ['powerpoint', 'deck', 'ai', 'deeptech', 'neural', 'machine learning', '8 slides', 'gradient', 'presentationgo'],
+    desc: 'Cutting-edge 8-slide cinematic presentation deck with vibrant modern gradients designed for artificial intelligence research, neural architectures, and frontier technology briefings.',
+    tags: ['presentation', 'deck', 'ai', 'deeptech', 'neural', 'machine learning', '8 slides', 'gradient', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'DEEPTECH 2026',
@@ -840,18 +840,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-minimalist-creative',
-    name: 'Minimalist Editorial & Creative Studio PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Minimalist Editorial & Creative Studio Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'obsidian-minimal',
     optionsText: '8 slides',
     steps: 8,
     color: 'dark',
     previewAccent: '#18181b',
-    desc: 'Sophisticated 8-slide PowerPoint template with stark monochrome aesthetics, elegant serif typography, and balanced white space for design agencies, fashion brands, and architecture studios.',
-    tags: ['powerpoint', 'deck', 'minimalist', 'editorial', 'creative', 'studio', 'agency', 'portfolio', '8 slides', 'presentationgo'],
+    desc: 'Sophisticated 8-slide presentation template with stark monochrome aesthetics, elegant serif typography, and balanced white space for design agencies, fashion brands, and architecture studios.',
+    tags: ['presentation', 'deck', 'minimalist', 'editorial', 'creative', 'studio', 'agency', 'portfolio', '8 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'STUDIO MONOLITH',
@@ -944,18 +944,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-healthcare-medical',
-    name: 'Medical, Healthcare & Clinical Research PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Medical, Healthcare & Clinical Research Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'medical-clean',
     optionsText: '8 slides',
     steps: 8,
     color: 'cyan',
     previewAccent: '#0284c7',
-    desc: 'Clinical 8-slide PowerPoint template designed for medical conferences, pharmaceutical phase trials, hospital administration reviews, and biotechnology investment briefings.',
-    tags: ['powerpoint', 'deck', 'medical', 'healthcare', 'clinical', 'pharma', 'biotech', 'research', '8 slides', 'presentationgo'],
+    desc: 'Clinical 8-slide presentation template designed for medical conferences, pharmaceutical phase trials, hospital administration reviews, and biotechnology investment briefings.',
+    tags: ['presentation', 'deck', 'medical', 'healthcare', 'clinical', 'pharma', 'biotech', 'research', '8 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'CLINICAL TRIAL BRIEFING',
@@ -1049,18 +1049,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-cybersecurity-zerotrust',
-    name: 'Enterprise Cybersecurity & Zero-Trust Architecture PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Enterprise Cybersecurity & Zero-Trust Architecture Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'cyber-matrix',
     optionsText: '8 slides',
     steps: 8,
     color: 'green',
     previewAccent: '#10b981',
-    desc: 'Defense-grade 8-slide PowerPoint template designed for CISOs, security councils, threat intelligence reviews, and sovereign zero-trust cryptographic audits.',
-    tags: ['powerpoint', 'deck', 'cybersecurity', 'security', 'zero trust', 'ciso', 'soc2', 'encryption', '8 slides', 'presentationgo'],
+    desc: 'Defense-grade 8-slide presentation template designed for CISOs, security councils, threat intelligence reviews, and sovereign zero-trust cryptographic audits.',
+    tags: ['presentation', 'deck', 'cybersecurity', 'security', 'zero trust', 'ciso', 'soc2', 'encryption', '8 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'DEFENSE BRIEFING',
@@ -1154,18 +1154,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-consulting-strategy',
-    name: 'Consulting Frameworks & McKinsey Strategy PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Consulting Frameworks & McKinsey Strategy Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'violet-luxury',
     optionsText: '8 slides',
     steps: 8,
     color: 'purple',
     previewAccent: '#7c3aed',
-    desc: 'Elite 8-slide PowerPoint strategy presentation modeled on top-tier management consulting frameworks: Porter\'s Five Forces, Value Chain diagnostics, and 100-day transformation playbooks.',
-    tags: ['powerpoint', 'deck', 'consulting', 'strategy', 'mckinsey', 'frameworks', 'advisory', '8 slides', 'presentationgo'],
+    desc: 'Elite 8-slide Presentation strategy presentation modeled on top-tier management consulting frameworks: Porter\'s Five Forces, Value Chain diagnostics, and 100-day transformation playbooks.',
+    tags: ['presentation', 'deck', 'consulting', 'strategy', 'mckinsey', 'frameworks', 'advisory', '8 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'STRATEGIC ADVISORY',
@@ -1260,18 +1260,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-marketing-omnichannel',
-    name: 'Omnichannel Marketing Strategy & Growth PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'Omnichannel Marketing Strategy & Growth Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'sunset-warm',
     optionsText: '8 slides',
     steps: 8,
     color: 'amber',
     previewAccent: '#f97316',
-    desc: 'Vibrant 8-slide PowerPoint template designed for Chief Marketing Officers, growth teams, product marketing launches, omnichannel advertising campaigns, and funnel economics.',
-    tags: ['powerpoint', 'deck', 'marketing', 'growth', 'omnichannel', 'advertising', 'funnel', '8 slides', 'presentationgo'],
+    desc: 'Vibrant 8-slide presentation template designed for Chief Marketing Officers, growth teams, product marketing launches, omnichannel advertising campaigns, and funnel economics.',
+    tags: ['presentation', 'deck', 'marketing', 'growth', 'omnichannel', 'advertising', 'funnel', '8 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'GO-TO-MARKET 2026',
@@ -1334,7 +1334,7 @@ const CURATED_LANDMARKS = [
         title: 'Quarterly Campaign & Product Launch Horizon',
         desc: 'Synchronized go-to-market activations throughout the fiscal year.',
         features: [
-          { num: 'Q1 Launch', title: 'Kinetic 3.0', desc: 'Major release with PresentationGO library' },
+          { num: 'Q1 Launch', title: 'Kinetic 3.0', desc: 'Major release with Global Presentation Engine library' },
           { num: 'Q2 Summit', title: 'Sovereign World', desc: 'Global virtual developer conference' },
           { num: 'Q3 Push', title: 'Enterprise Fall', desc: 'Targeted account-based sales campaign' },
           { num: 'Q4 Wrap', title: 'Year-End Review', desc: 'Annual customer celebration & awards' }
@@ -1366,18 +1366,18 @@ const CURATED_LANDMARKS = [
   },
   {
     id: 'ppt-deck-saas-enterprise-sales',
-    name: 'SaaS Enterprise Sales Pitch & ROI Proposal PowerPoint Template',
-    category: 'powerpoint',
-    categoryLabel: 'PowerPoint Decks',
-    subCategories: ['PowerPoint Decks', 'Templates'],
+    name: 'SaaS Enterprise Sales Pitch & ROI Proposal Presentation Deck',
+    category: 'presentation',
+    categoryLabel: 'Executive Presentation Decks',
+    subCategories: ['Executive Presentation Decks', 'Templates'],
     diagramType: 'presentation-collage',
     themeStyle: 'emerald-growth',
     optionsText: '8 slides',
     steps: 8,
     color: 'green',
     previewAccent: '#059669',
-    desc: 'Commercial 8-slide PowerPoint deck tailored for enterprise sales executives, procurement discussions, ROI cost calculators, and software consolidation proposals.',
-    tags: ['powerpoint', 'deck', 'saas', 'enterprise', 'sales', 'roi', 'pricing', 'proposal', '8 slides', 'presentationgo'],
+    desc: 'Commercial 8-slide presentation deck tailored for enterprise sales executives, procurement discussions, ROI cost calculators, and software consolidation proposals.',
+    tags: ['presentation', 'deck', 'saas', 'enterprise', 'sales', 'roi', 'pricing', 'proposal', '8 slides', 'global'],
     slides: [
       {
         id: 1, layout: 'title', tag: 'ENTERPRISE PROPOSAL',
@@ -1482,11 +1482,11 @@ const CURATED_LANDMARKS = [
     steps: 4,
     color: 'blue',
     previewAccent: '#2563eb',
-    desc: 'Landmark circular loop process diagram from PresentationGO featuring 4 interconnected colored quadrants for continuous improvement, PDCA cycles, and agile sprints.',
-    tags: ['circular', 'process', 'cycle', '4 steps', 'loop', 'pdca', 'agile', 'presentationgo'],
+    desc: 'Landmark circular loop process diagram from Global Presentation Engine featuring 4 interconnected colored quadrants for continuous improvement, PDCA cycles, and agile sprints.',
+    tags: ['circular', 'process', 'cycle', '4 steps', 'loop', 'pdca', 'agile', 'global'],
     slides: [
       {
-        id: 1, layout: 'circular-loop', diagramType: 'circular-loop', tag: 'PRESENTATIONGO // PROCESS',
+        id: 1, layout: 'circular-loop', diagramType: 'circular-loop', tag: 'GLOBAL // PROCESS',
         title: '4-Phase Continuous Improvement Cycle',
         desc: 'Iterative operational cycle framework ensuring continuous improvement, seamless handoffs, and rapid delivery velocity.',
         features: [
@@ -1508,11 +1508,11 @@ const CURATED_LANDMARKS = [
     steps: 5,
     color: 'cyan',
     previewAccent: '#0891b2',
-    desc: 'Signature PresentationGO zigzag process diagram featuring 5 diamond milestone nodes alternating across a dynamic connecting path line.',
-    tags: ['zigzag', 'process', 'steps', 'diamond', 'flow', 'milestones', '5 steps', 'presentationgo'],
+    desc: 'Signature Global Presentation Engine zigzag process diagram featuring 5 diamond milestone nodes alternating across a dynamic connecting path line.',
+    tags: ['zigzag', 'process', 'steps', 'diamond', 'flow', 'milestones', '5 steps', 'global'],
     slides: [
       {
-        id: 1, layout: 'zigzag-process', diagramType: 'zigzag-process', tag: 'PRESENTATIONGO // PROCESS',
+        id: 1, layout: 'zigzag-process', diagramType: 'zigzag-process', tag: 'GLOBAL // PROCESS',
         title: '5-Step Zigzag Diamond Process Track',
         desc: 'Alternating sequential process flow guiding strategic execution through five structured milestones.',
         features: [
@@ -1536,10 +1536,10 @@ const CURATED_LANDMARKS = [
     color: 'green',
     previewAccent: '#059669',
     desc: 'Interlocking horizontal chevron process diagram illustrating linear sequential stages from discovery to global launch.',
-    tags: ['chevron', 'arrow', 'process', 'linear', 'flow', 'stages', 'presentationgo'],
+    tags: ['chevron', 'arrow', 'process', 'linear', 'flow', 'stages', 'global'],
     slides: [
       {
-        id: 1, layout: 'chevron-flow', diagramType: 'chevron-flow', tag: 'PRESENTATIONGO // PROCESS',
+        id: 1, layout: 'chevron-flow', diagramType: 'chevron-flow', tag: 'GLOBAL // PROCESS',
         title: '4-Stage Chevron Sequential Process Flow',
         desc: 'Direct linear workflow with interlocking arrows guiding cross-functional teams from discovery to launch.',
         features: [
@@ -1561,11 +1561,11 @@ const CURATED_LANDMARKS = [
     steps: 4,
     color: 'blue',
     previewAccent: '#2563eb',
-    desc: 'Classic 2x2 SWOT analysis matrix from PresentationGO with dedicated color-coded quadrants for Strengths, Weaknesses, Opportunities, and Threats.',
-    tags: ['swot', 'matrix', 'strategy', 'analysis', 'strengths', 'weaknesses', 'opportunities', 'threats', 'presentationgo'],
+    desc: 'Classic 2x2 SWOT analysis matrix from Global Presentation Engine with dedicated color-coded quadrants for Strengths, Weaknesses, Opportunities, and Threats.',
+    tags: ['swot', 'matrix', 'strategy', 'analysis', 'strengths', 'weaknesses', 'opportunities', 'threats', 'global'],
     slides: [
       {
-        id: 1, layout: 'swot-matrix', diagramType: 'swot-matrix', tag: 'PRESENTATIONGO // STRATEGY',
+        id: 1, layout: 'swot-matrix', diagramType: 'swot-matrix', tag: 'GLOBAL // STRATEGY',
         title: 'Strategic Enterprise SWOT Analysis',
         desc: 'Holistic 2x2 strategic framework synthesizing internal organizational capabilities against external market dynamics.',
         features: [
@@ -1587,11 +1587,11 @@ const CURATED_LANDMARKS = [
     steps: 5,
     color: 'amber',
     previewAccent: '#d97706',
-    desc: 'Five-level segmented hierarchy pyramid from PresentationGO illustrating layered foundations, capability tiers, or psychological hierarchies.',
-    tags: ['pyramid', 'hierarchy', 'maslow', 'levels', 'foundation', 'tiers', 'structure', 'presentationgo'],
+    desc: 'Five-level segmented hierarchy pyramid from Global Presentation Engine illustrating layered foundations, capability tiers, or psychological hierarchies.',
+    tags: ['pyramid', 'hierarchy', 'maslow', 'levels', 'foundation', 'tiers', 'structure', 'global'],
     slides: [
       {
-        id: 1, layout: 'pyramid-hierarchy', diagramType: 'pyramid-hierarchy', tag: 'PRESENTATIONGO // HIERARCHY',
+        id: 1, layout: 'pyramid-hierarchy', diagramType: 'pyramid-hierarchy', tag: 'GLOBAL // HIERARCHY',
         title: '5-Tier Enterprise Value Pyramid',
         desc: 'Hierarchical structural capability model mapping baseline runtime necessities up to apex cognitive innovation.',
         features: [
@@ -1614,11 +1614,11 @@ const CURATED_LANDMARKS = [
     steps: 4,
     color: 'purple',
     previewAccent: '#7c3aed',
-    desc: 'Four-stage customer acquisition conversion funnel from PresentationGO with percentage attrition metrics and stage-gate qualification criteria.',
-    tags: ['funnel', 'sales', 'conversion', 'stages', 'pipeline', 'marketing', 'acquisition', 'presentationgo'],
+    desc: 'Four-stage customer acquisition conversion funnel from Global Presentation Engine with percentage attrition metrics and stage-gate qualification criteria.',
+    tags: ['funnel', 'sales', 'conversion', 'stages', 'pipeline', 'marketing', 'acquisition', 'global'],
     slides: [
       {
-        id: 1, layout: 'funnel-stages', diagramType: 'funnel-stages', tag: 'PRESENTATIONGO // CONVERSION',
+        id: 1, layout: 'funnel-stages', diagramType: 'funnel-stages', tag: 'GLOBAL // CONVERSION',
         title: 'Customer Acquisition Conversion Funnel',
         desc: 'Stage-gate conversion tracking across four defined lifecycle phases with attrition telemetry.',
         features: [
@@ -1640,11 +1640,11 @@ const CURATED_LANDMARKS = [
     steps: 6,
     color: 'cyan',
     previewAccent: '#0891b2',
-    desc: 'PresentationGO signature radial concept hub featuring a central strategic nucleus surrounded by 6 interconnected satellite nodes.',
-    tags: ['radial', 'spoke', 'hub', 'concept', 'circle', '6 steps', 'central', 'presentationgo'],
+    desc: 'Global Presentation Engine signature radial concept hub featuring a central strategic nucleus surrounded by 6 interconnected satellite nodes.',
+    tags: ['radial', 'spoke', 'hub', 'concept', 'circle', '6 steps', 'central', 'global'],
     slides: [
       {
-        id: 1, layout: 'radial-cycle', diagramType: 'radial-cycle', tag: 'PRESENTATIONGO // CONCEPT',
+        id: 1, layout: 'radial-cycle', diagramType: 'radial-cycle', tag: 'GLOBAL // CONCEPT',
         title: 'Radial 6-Spoke Central Concept Hub',
         desc: 'Unified architecture mapping six decentralized operational capabilities to a central sovereign nucleus.',
         features: [
@@ -1669,11 +1669,11 @@ const CURATED_LANDMARKS = [
     steps: 3,
     color: 'green',
     previewAccent: '#059669',
-    desc: 'PresentationGO 3-circle overlapping Venn diagram illustrating the sweet spot where technical capability, market demand, and business viability intersect.',
-    tags: ['venn', 'diagram', 'circles', 'overlap', 'intersection', 'sweet spot', 'presentationgo'],
+    desc: 'Global Presentation Engine 3-circle overlapping Venn diagram illustrating the sweet spot where technical capability, market demand, and business viability intersect.',
+    tags: ['venn', 'diagram', 'circles', 'overlap', 'intersection', 'sweet spot', 'global'],
     slides: [
       {
-        id: 1, layout: 'venn-diagram', diagramType: 'venn-diagram', tag: 'PRESENTATIONGO // INTERSECTION',
+        id: 1, layout: 'venn-diagram', diagramType: 'venn-diagram', tag: 'GLOBAL // INTERSECTION',
         title: 'Strategic 3-Circle Convergence Venn Diagram',
         desc: 'Identifying the apex competitive sweet spot where technical excellence, market demand, and sovereign security intersect.',
         features: [
@@ -1694,16 +1694,16 @@ const CURATED_LANDMARKS = [
     steps: 3,
     color: 'dark',
     previewAccent: '#18181b',
-    desc: 'Clean 3-tier pricing comparison matrix from PresentationGO detailing Starter, Professional, and Sovereign Enterprise tiers.',
-    tags: ['pricing', 'table', 'tiers', 'comparison', 'saas', 'subscription', 'plans', 'presentationgo'],
+    desc: 'Clean 3-tier pricing comparison matrix from Global Presentation Engine detailing Starter, Professional, and Sovereign Enterprise tiers.',
+    tags: ['pricing', 'table', 'tiers', 'comparison', 'saas', 'subscription', 'plans', 'global'],
     slides: [
       {
-        id: 1, layout: 'comparison-table', diagramType: 'comparison-table', tag: 'PRESENTATIONGO // PRICING',
+        id: 1, layout: 'comparison-table', diagramType: 'comparison-table', tag: 'GLOBAL // PRICING',
         title: 'SaaS 3-Tier Enterprise Pricing Comparison',
         desc: 'Transparent pricing matrix detailing Starter, Professional, and Sovereign Enterprise tiers.',
         features: [
           { num: '$0', title: 'Starter Free', desc: 'Complete 4-tool suite; local in-memory storage; universal exports.' },
-          { num: '$29', title: 'Professional (Popular)', desc: 'Full PresentationGO 3,500+ library; custom shapes; local disk sync; advanced formulas.' },
+          { num: '$29', title: 'Professional (Popular)', desc: 'Full Global Presentation Engine 3,500+ library; custom shapes; local disk sync; advanced formulas.' },
           { num: '$89', title: 'Sovereign Enterprise', desc: 'Air-gapped deployment; custom cryptographic PKI seals; priority enterprise support.' }
         ],
         notes: 'Recommend the Professional tier for executive teams.'
@@ -1713,12 +1713,12 @@ const CURATED_LANDMARKS = [
 ];
 
 // ============================================================================
-// 4. RICH GENERATOR ARCHETYPES (COVERING ALL CATEGORIES & POWERPOINT DECKS)
+// 4. RICH GENERATOR ARCHETYPES (COVERING ALL CATEGORIES & PRESENTATION DECKS)
 // ============================================================================
 
 const GENERATOR_ARCHETYPES = [
   // 1. Deck
-  { catId: 'powerpoint', catLabel: 'PowerPoint Decks', name: 'Executive Board Briefing Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'corporate-navy', steps: 6 },
+  { catId: 'presentation', catLabel: 'Executive Presentation Decks', name: 'Executive Board Briefing Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'corporate-navy', steps: 6 },
   // 2. Timeline
   { catId: 'timelines', catLabel: 'Timelines & Roadmaps', name: 'Winding Milestone Road Journey', diagramType: 'milestone-road', isDeck: false, steps: 4 },
   // 3. Process
@@ -1726,7 +1726,7 @@ const GENERATOR_ARCHETYPES = [
   // 4. Matrix
   { catId: 'matrix', catLabel: 'Matrix & SWOT', name: 'Strategic 2x2 SWOT Analysis Matrix', diagramType: 'swot-matrix', isDeck: false, steps: 4 },
   // 5. Deck
-  { catId: 'powerpoint', catLabel: 'PowerPoint Decks', name: 'High-Impact Venture Pitch Presentation', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'crimson-venture', steps: 6 },
+  { catId: 'presentation', catLabel: 'Executive Presentation Decks', name: 'High-Impact Venture Pitch Presentation', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'crimson-venture', steps: 6 },
   // 6. Funnel
   { catId: 'funnels', catLabel: 'Funnels & Pipelines', name: '4-Stage 3D Sales Conversion Funnel', diagramType: 'funnel-stages', isDeck: false, steps: 4 },
   // 7. Pyramid
@@ -1736,7 +1736,7 @@ const GENERATOR_ARCHETYPES = [
   // 9. Table
   { catId: 'tables', catLabel: 'Tables & Pricing', name: 'SaaS 3-Tier Enterprise Pricing Table', diagramType: 'comparison-table', isDeck: false, steps: 3 },
   // 10. Deck
-  { catId: 'powerpoint', catLabel: 'PowerPoint Decks', name: 'Modern Tech Horizon & AI Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'creative-gradient', steps: 6 },
+  { catId: 'presentation', catLabel: 'Executive Presentation Decks', name: 'Modern Tech Horizon & AI Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'creative-gradient', steps: 6 },
   // 11. Process
   { catId: 'processes', catLabel: 'Processes & Steps', name: 'Pentagon Banner Flag Process', diagramType: 'pentagon-flags', isDeck: false, steps: 3 },
   // 12. Timeline
@@ -1744,19 +1744,19 @@ const GENERATOR_ARCHETYPES = [
   // 13. Matrix
   { catId: 'matrix', catLabel: 'Matrix & SWOT', name: 'Hexagon Honeycomb Strategy Cluster', diagramType: 'hexagon-cluster', isDeck: false, steps: 6 },
   // 14. Deck
-  { catId: 'powerpoint', catLabel: 'PowerPoint Decks', name: 'Quarterly Business Review (QBR) Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'corporate-navy', steps: 6 },
+  { catId: 'presentation', catLabel: 'Executive Presentation Decks', name: 'Quarterly Business Review (QBR) Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'corporate-navy', steps: 6 },
   // 15. Diagram
   { catId: 'diagrams', catLabel: 'Charts & Diagrams', name: 'Radial 6-Spoke Central Concept Hub', diagramType: 'radial-cycle', isDeck: false, steps: 6 },
   // 16. Process
   { catId: 'processes', catLabel: 'Processes & Steps', name: 'Interlocking Gears Process Diagram', diagramType: 'gears-process', isDeck: false, steps: 3 },
   // 17. Deck
-  { catId: 'powerpoint', catLabel: 'PowerPoint Decks', name: 'Minimalist Creative Showcase Presentation', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'obsidian-minimal', steps: 6 },
+  { catId: 'presentation', catLabel: 'Executive Presentation Decks', name: 'Minimalist Creative Showcase Presentation', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'obsidian-minimal', steps: 6 },
   // 18. Funnel
   { catId: 'funnels', catLabel: 'Funnels & Pipelines', name: 'Customer Journey Acquisition Pipeline', diagramType: 'funnel-stages', isDeck: false, steps: 4 },
   // 19. Process
   { catId: 'processes', catLabel: 'Processes & Steps', name: '5-Step Zigzag Diamond Process Track', diagramType: 'zigzag-process', isDeck: false, steps: 5 },
   // 20. Deck
-  { catId: 'powerpoint', catLabel: 'PowerPoint Decks', name: 'SaaS Enterprise Proposal & Roadmap Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'emerald-growth', steps: 6 },
+  { catId: 'presentation', catLabel: 'Executive Presentation Decks', name: 'SaaS Enterprise Proposal & Roadmap Deck', diagramType: 'presentation-collage', isDeck: true, slideCount: 6, theme: 'emerald-growth', steps: 6 },
   // 21. Pyramid
   { catId: 'pyramids', catLabel: 'Pyramids & Hierarchy', name: 'Capability Foundation Stepped Pyramid', diagramType: 'pyramid-hierarchy', isDeck: false, steps: 5 },
   // 22. Diagram
@@ -1835,7 +1835,7 @@ const THEME_STYLES = [
 
 /**
  * Procedurally synthesize 3,500+ templates with rich slides, interleaved categories,
- * authentic PowerPoint decks, diverse diagrams, and zero monotonous repetition!
+ * authentic Executive presentation decks, diverse diagrams, and zero monotonous repetition!
  */
 function buildPresentationGoCatalog() {
   const catalog = CURATED_LANDMARKS.map(tpl => ({
@@ -1858,14 +1858,14 @@ function buildPresentationGoCatalog() {
     const steps = arch.steps || 4;
     const tplId = `pgo-${arch.catId}-${idCounter}`;
     const tplName = `${arch.name} // ${dom}`;
-    const tagCode = `PRESENTATIONGO // ${arch.catId.toUpperCase()}`;
+    const tagCode = `GLOBAL // ${arch.catId.toUpperCase()}`;
     const isDeck = arch.isDeck;
     const themeStyle = arch.theme || THEME_STYLES[idCounter % THEME_STYLES.length];
 
     let slides = [];
 
         if (isDeck) {
-          // --- FULL MULTI-SLIDE POWERPOINT PRESENTATION DECK (6 SLIDES) ---
+          // --- FULL MULTI-SLIDE PRESENTATION PRESENTATION DECK (6 SLIDES) ---
           slides = [
             {
               id: 1, layout: 'title', tag: `${dom.toUpperCase()} // BRIEFING`,
@@ -2007,7 +2007,7 @@ function buildPresentationGoCatalog() {
               diagramType: arch.diagramType,
               tag: tagCode,
               title: `${arch.name}: ${dom}`,
-              desc: `Executive visual diagram template from the PresentationGO Library. Engineered for clear communication, visual hierarchy, and strategic alignment.`,
+              desc: `Executive visual diagram template from the Global Presentation Engine Library. Engineered for clear communication, visual hierarchy, and strategic alignment.`,
               features: features,
               notes: `Present ${arch.name} focusing on the strategic goals for ${dom}.`
             },
@@ -2050,16 +2050,16 @@ function buildPresentationGoCatalog() {
           color: pal.color,
           previewAccent: pal.hex,
           desc: isDeck
-            ? `Complete ${slides.length}-slide PowerPoint presentation deck for ${dom}. Includes executive briefing, strategy pillars, metrics, timeline, and closing slides with ${themeStyle} styling.`
-            : `PresentationGO ${arch.name} visual diagram template customized for ${dom}. Includes ${steps} stages with ${pal.label} accent styling.`,
+            ? `Complete ${slides.length}-slide cinematic presentation deck for ${dom}. Includes executive briefing, strategy pillars, metrics, timeline, and closing slides with ${themeStyle} styling.`
+            : `Global Presentation Engine ${arch.name} visual diagram template customized for ${dom}. Includes ${steps} stages with ${pal.label} accent styling.`,
           tags: [
             arch.catId,
             arch.diagramType,
             dom.toLowerCase(),
             `${steps} steps`,
             pal.color,
-            'presentationgo',
-            isDeck ? 'powerpoint' : 'diagram',
+            'global',
+            isDeck ? 'presentation' : 'diagram',
             isDeck ? 'deck' : 'chart'
           ],
           slides: slides.map(s => ({
@@ -2084,7 +2084,7 @@ function buildPresentationGoCatalog() {
 export const PRESENTATION_GO_TEMPLATES = buildPresentationGoCatalog();
 
 /**
- * Filter the PresentationGO catalog by multiple criteria
+ * Filter the Global Presentation Engine catalog by multiple criteria
  */
 export function filterPresentationGoTemplates(pool = PRESENTATION_GO_TEMPLATES, { query = '', category = 'all', steps = 'all', color = 'all' } = {}) {
   const q = (query || '').toLowerCase().trim();
@@ -2092,8 +2092,8 @@ export function filterPresentationGoTemplates(pool = PRESENTATION_GO_TEMPLATES, 
   return pool.filter(tpl => {
     // Category match
     if (category !== 'all') {
-      if (category === 'powerpoint') {
-        if (tpl.category !== 'powerpoint' && tpl.diagramType !== 'presentation-collage' && tpl.diagramType !== 'powerpoint-deck' && tpl.category !== 'pitch' && tpl.category !== 'review') {
+      if (category === 'presentation') {
+        if (tpl.category !== 'presentation' && tpl.diagramType !== 'presentation-collage' && tpl.diagramType !== 'powerpoint-deck' && tpl.category !== 'pitch' && tpl.category !== 'review') {
           return false;
         }
       } else if (tpl.category !== category) {
@@ -2132,7 +2132,7 @@ export function filterPresentationGoTemplates(pool = PRESENTATION_GO_TEMPLATES, 
  * Get library telemetry & count
  */
 export function getPresentationGoStats() {
-  const pptCount = PRESENTATION_GO_TEMPLATES.filter(t => t.category === 'powerpoint' || t.diagramType === 'presentation-collage').length;
+  const pptCount = PRESENTATION_GO_TEMPLATES.filter(t => t.category === 'presentation' || t.diagramType === 'presentation-collage').length;
   return {
     total: PRESENTATION_GO_TEMPLATES.length,
     powerpointDecks: pptCount,

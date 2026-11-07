@@ -1554,6 +1554,17 @@ class GiriOrbitPlatform {
     };
     checkUpdatesBtn?.addEventListener('click', () => performUpdateCheck(true));
 
+    // Automatic periodic online update polling against GitHub repo (every 10 minutes)
+    if (navigator.onLine) {
+      setTimeout(() => performUpdateCheck(false), 15000);
+    }
+    window.addEventListener('online', () => {
+      setTimeout(() => performUpdateCheck(false), 3000);
+    });
+    setInterval(() => {
+      if (navigator.onLine) performUpdateCheck(false);
+    }, 10 * 60 * 1000);
+
     // Mobile Virtual Keyboard Viewport Adjustment for Floating Toolbars
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', () => {

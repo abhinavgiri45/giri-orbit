@@ -482,7 +482,7 @@ function renderTemplateVisualThumbnail(tpl) {
   const type = tpl.diagramType || (tpl.slides?.[0]?.diagramType) || (tpl.slides?.[0]?.layout) || '';
   const title = tpl.name || 'Template';
   const cleanId = String(tpl.id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, '');
-  const isDeck = tpl.category === 'powerpoint' || tpl.diagramType === 'presentation-collage' || tpl.diagramType === 'powerpoint-deck' || (tpl.slides && tpl.slides.length >= 4);
+  const isDeck = (tpl.category === 'presentation' || tpl.category === 'powerpoint' || tpl.diagramType === 'presentation-collage' || tpl.diagramType === 'powerpoint-deck' || (tpl.slides && tpl.slides.length >= 4));
 
   // --- MULTI-SLIDE COLLAGE PREVIEW FOR PRESENTATION DECKS ---
   if (isDeck) {
@@ -1169,7 +1169,7 @@ function renderTemplateVisualThumbnail(tpl) {
   return `
     <div class="pgo-diagram-canvas">
       ${diagramSvg}
-      <div class="pgo-watermark-line">www.presentationgo.com</div>
+      
       ${tpl.optionsText ? `<div class="pgo-slides-count-pill" style="bottom:6px; right:8px; font-size:9.5px; padding:2px 7px;">${tpl.optionsText}</div>` : ''}
     </div>
   `;
@@ -1404,7 +1404,7 @@ function renderSlideDiagram(container, slide, saveCallback, isReadOnly = false) 
               </div>
               <div>
                 <strong style="font-size:11px; color:#0f172a; display:block;">Option ${f.num || (idx + 1)}</strong>
-                <span style="font-size:9.5px; color:#64748b;">PresentationGO Quote</span>
+                <span style="font-size:9.5px; color:#64748b;">Executive Testimonial Quote</span>
               </div>
             </div>
           </div>
@@ -1765,7 +1765,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
         <main class="tool-templates-section">
           <div class="tool-templates-section-header">
             <div style="display:flex; align-items:center; gap:10px;">
-              <h2 class="tool-templates-heading" style="margin:0;">PresentationGO Template Library</h2>
+              <h2 class="tool-templates-heading" style="margin:0;">Global Presentation Template Engine & Library</h2>
               <span class="tool-source-badge">
                 <span class="dot"></span>
                 <span>3,500+ Free Templates &amp; Diagrams</span>
@@ -1774,7 +1774,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             <div class="tool-category-filter-row" style="margin-top:10px;">
               <div class="tool-category-pill-strip" id="kinetic-cat-strip">
                 <button class="tool-category-pill active" data-cat="all">All (3,500+)</button>
-                <button class="tool-category-pill" data-cat="powerpoint" style="color:#f97316; font-weight:700;">📊 PowerPoint Decks</button>
+                <button class="tool-category-pill" data-cat="presentation" style="color:#f97316; font-weight:700;">📊 Executive Presentation Decks</button>
                 <button class="tool-category-pill" data-cat="processes">Processes &amp; Steps</button>
                 <button class="tool-category-pill" data-cat="timelines">Timelines &amp; Roadmaps</button>
                 <button class="tool-category-pill" data-cat="matrix">Matrix &amp; SWOT</button>
@@ -1822,7 +1822,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 
             <!-- Telemetry & Count Status Bar -->
             <div class="tool-templates-meta-bar">
-              <span id="kinetic-templates-count-label">Loading PresentationGO Library...</span>
+              <span id="kinetic-templates-count-label">Loading Global Presentation Library...</span>
               <span style="font-size:11px; color:#94a3b8;">PresentationGO • Free for personal &amp; commercial presentations</span>
             </div>
           </div>
@@ -4176,7 +4176,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
       features = [
         { num: 'Q1', title: 'Foundation & Hardening', desc: 'Secure air-gapped local environment and core modules.' },
         { num: 'Q2', title: 'Integration Velocity', desc: 'Connect Drift, Axis, Kinetic, and PDF Studio file pipelines.' },
-        { num: 'Q3', title: 'Ecosystem Expansion', desc: 'Deploy 3,500+ PresentationGO visual diagram engines.' },
+        { num: 'Q3', title: 'Ecosystem Expansion', desc: 'Deploy 3,500+ global visual presentation diagram engines.' },
         { num: 'Q4', title: 'Sovereign Scale', desc: 'Enterprise cryptographic verification and zero telemetry.' }
       ];
     } else if (layout === 'pyramid-hierarchy') {
@@ -4219,7 +4219,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
       desc = 'Predictable, zero-hidden-fee pricing designed for startups to sovereign governments.';
       features = [
         { num: '$0', title: 'Starter Edition', desc: 'Unlimited local files, core tools, standard export options.' },
-        { num: '$29', title: 'Professional Suite', desc: '3,500+ PresentationGO diagrams, full export suites, batch converter.' },
+        { num: '$29', title: 'Professional Suite', desc: '3,500+ global visual diagrams, full export suites, batch converter.' },
         { num: '$89', title: 'Sovereign Enterprise', desc: 'Air-gapped PKI cryptographic verification, custom themes, dedicated support.' }
       ];
     } else {
@@ -7876,7 +7876,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
             <div class="axis-modal-title" style="color: #ffffff; display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 20px;">🌍</span>
               <div>
-                <span style="font-size: 15px; font-weight: 700;">PresentationGO Global Presentation Library</span>
+                <span style="font-size: 15px; font-weight: 700;">Global Presentation Template Engine & Library</span>
                 <span style="display: block; font-size: 11px; color: #94a3b8; font-weight: 400;">3,500+ Free Templates, Process Diagrams, Timelines, Matrices, and Infographics</span>
               </div>
             </div>
@@ -7886,7 +7886,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
               <div class="tool-cat-strip" id="kinetic-modal-cat-strip" style="display:flex; gap:6px; flex-wrap:wrap; max-width: 680px;">
                 <button class="tool-category-pill active" data-cat="all">All (3,500+)</button>
-                <button class="tool-category-pill" data-cat="powerpoint">📊 PowerPoint Decks</button>
+                <button class="tool-category-pill" data-cat="presentation">📊 Executive Presentation Decks</button>
                 <button class="tool-category-pill" data-cat="processes">Processes &amp; Steps</button>
                 <button class="tool-category-pill" data-cat="timelines">Timelines</button>
                 <button class="tool-category-pill" data-cat="diagrams">Diagrams</button>
@@ -7909,7 +7909,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
 
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: #94a3b8; border-bottom: 1px solid #334155; padding-bottom: 6px;">
               <span id="kinetic-modal-count-label">Loading library...</span>
-              <span>PresentationGO &bull; Free Commercial &amp; Personal License</span>
+              <span>Global Presentation Library • Enterprise Sovereign License</span>
             </div>
 
             <div id="kinetic-modal-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; overflow-y: auto; flex: 1; padding: 4px;">
@@ -7977,7 +7977,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
           cardsGrid.innerHTML = `
             <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: #94a3b8;">
               <div style="font-size: 28px; margin-bottom: 8px;">🔍</div>
-              <strong style="color: #f8fafc; font-size: 14px;">No matching PresentationGO templates found</strong>
+              <strong style="color: #f8fafc; font-size: 14px;">No matching presentation templates found</strong>
               <p style="font-size: 12px; margin: 4px 0 0 0;">Try searching for "timeline", "funnel", "process", "matrix", or clear search.</p>
             </div>
           `;
