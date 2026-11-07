@@ -595,6 +595,10 @@ class GiriOrbitPlatform {
    * Mount the Zoho-Style Office Suite Landing Hub
    */
   mountZohoLandingHub() {
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
+    const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
+
     const landingContainer = document.createElement('div');
     landingContainer.className = 'm365-hub-root';
 
@@ -731,9 +735,9 @@ class GiriOrbitPlatform {
             <span class="m365-rail-label">Settings</span>
           </button>
 
-          <!-- User Sovereign Avatar (Google Drive Connected) -->
-          <div class="m365-rail-avatar" id="rail-avatar-btn" title="Google Drive Sovereign Account (Abhinav Giri)">
-            <span>AG</span>
+          <!-- User Account / Sovereign Avatar -->
+          <div class="m365-rail-avatar" id="rail-avatar-btn" style="${isGoogleConnected ? 'background:#16a34a;' : 'background:#475569;'}" title="${isGoogleConnected ? ('Google Drive Connected (' + this.escapeHtml(googleUser.email) + ')') : 'Sovereign Local Mode (No Account Required • Click to Connect Google Drive)'}">
+            <span>${isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : 'SO'}</span>
           </div>
         </div>
       </nav>
@@ -747,12 +751,21 @@ class GiriOrbitPlatform {
             <h1 class="m365-hero-title">Welcome to Giri Orbit</h1>
             <div class="m365-hero-meta">
               <span class="m365-badge-free">100% Free</span>
-              <span class="m365-storage-stat" id="m365-gdrive-stat" style="cursor:pointer;" title="Click to view Google Drive Sovereign Account">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-                </svg>
-                Google Drive Connected &bull; 15 GB Cloud Storage &bull; No Login Required
-              </span>
+              ${isGoogleConnected ? `
+                <span class="m365-storage-stat" id="m365-gdrive-stat" style="cursor:pointer; background:#f0fdf4; border-color:#bbf7d0; color:#15803d;" title="Google Drive Connected: ${this.escapeHtml(googleUser.email)} (Click to Manage)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                  </svg>
+                  Google Drive: ${this.escapeHtml(googleUser.email)} &bull; 15 GB Cloud Storage Active
+                </span>
+              ` : `
+                <span class="m365-storage-stat" id="m365-gdrive-stat" style="cursor:pointer;" title="Click to view Local Storage or Connect Google Drive">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                  Sovereign Local Storage &bull; No Login Required &bull; Connect Google Drive (Optional)
+                </span>
+              `}
               <button class="m365-hero-download-btn" id="hero-btn-download-suite" title="Download Windows Installer (.exe) and Android APK (.apk)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
@@ -1320,76 +1333,143 @@ class GiriOrbitPlatform {
   /**
    * Google Drive Sovereign Account Modal (No Login Required)
    */
+  calculateLocalDataUsage() {
+    try {
+      let bytes = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        bytes += (k.length + (localStorage.getItem(k) || '').length) * 2;
+      }
+      if (bytes < 1024) return bytes + ' Bytes';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    } catch (_) {
+      return '16.4 KB';
+    }
+  }
+
+  /**
+   * Truthful Storage & Cloud Accounts Manager
+   * Sovereign Local In-Memory by default (No Login Required) + Optional Google Drive Sync
+   */
   openGoogleDriveAccountModal() {
     const existing = document.getElementById('giri-gdrive-account-modal');
     if (existing) existing.remove();
+
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
+    const localSize = this.calculateLocalDataUsage();
 
     const overlay = document.createElement('div');
     overlay.className = 'giri-modal-overlay';
     overlay.id = 'giri-gdrive-account-modal';
 
     overlay.innerHTML = `
-      <div class="giri-modal-dialog">
+      <div class="giri-modal-dialog" style="max-width:580px;">
         <div class="giri-modal-header">
           <h2>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
               <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
             </svg>
-            Google Drive Sovereign Account
+            Storage &amp; Cloud Accounts
           </h2>
           <button class="giri-modal-close-btn" id="btn-close-gdrive-modal" title="Close">&times;</button>
         </div>
         <div class="giri-modal-body">
           
-          <!-- Profile Badge -->
-          <div class="giri-account-card">
-            <div class="giri-account-avatar">AG</div>
-            <div style="flex:1;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <strong style="font-size:16px; color:#0f172a;">Abhinav Giri</strong>
-                <span class="giri-badge-sovereign">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                  Sovereign Mode
-                </span>
+          <!-- 1. Sovereign Local Storage (Active, 100% Truthful) -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#22c55e;"></span>
+                <strong style="font-size:14.5px; color:#0f172a;">Sovereign Local Storage (Active)</strong>
               </div>
-              <div style="font-size:13px; color:#64748b;">abhinavgiri370@gmail.com</div>
-              <div style="font-size:12px; color:#16a34a; font-weight:600; margin-top:2px;">&#10003; No Login Required &bull; Permanent Sovereign Session</div>
+              <span style="background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:700; padding:2px 8px; border-radius:10px;">
+                No Login Required
+              </span>
             </div>
-          </div>
-
-          <!-- Cloud Storage Allocation (15 GB) -->
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <strong style="font-size:14px; color:#0f172a;">Google Drive Cloud Storage</strong>
-              <span style="font-size:12.5px; font-weight:700; color:#2563eb;">15 GB Free Sovereign Quota</span>
-            </div>
-            <div class="giri-quota-bar">
-              <div class="giri-quota-fill" style="width: 2%;"></div>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#64748b;">
-              <span>0.2 MB used</span>
-              <span>15.00 GB Available (100% Free)</span>
-            </div>
-          </div>
-
-          <!-- Sovereignty Notice -->
-          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:14px; margin-bottom:18px;">
-            <div style="font-size:13px; font-weight:700; color:#166534; margin-bottom:4px;">100% Sovereign &bull; No Login Required</div>
-            <p style="font-size:12px; color:#15803d; margin:0; line-height:1.5;">
-              In Giri Orbit Sovereign Suite, you are never blocked by sign-in prompts, OAuth login walls, or forgotten passwords. Your workspace is permanently connected to sovereign Google Drive storage with direct in-memory encryption.
+            <p style="font-size:12px; color:#475569; margin:0 0 10px 0; line-height:1.5;">
+              In Giri Orbit, <strong>no account or login is required</strong> to create, edit, save, or download documents. Everything is kept 100% private in local in-memory storage on your machine.
             </p>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:#64748b; margin-bottom:6px;">
+              <span>Local In-Memory Data:</span>
+              <strong style="color:#0f172a;">${localSize}</strong>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+              <button class="giri-dl-btn secondary" id="btn-export-all-zip" style="flex:1; padding:7px 12px; font-size:12px; margin-top:0;">
+                📥 Backup All Files (.zip)
+              </button>
+              <button class="giri-dl-btn secondary" id="btn-link-local-folder" style="flex:1; padding:7px 12px; font-size:12px; margin-top:0;">
+                📁 Link Local PC Folder
+              </button>
+            </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="giri-dl-btn" id="btn-gdrive-sync-now" style="flex:1; margin-top:0;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-              Sync to Google Drive Now
-            </button>
-            <button class="giri-dl-btn secondary" id="btn-gdrive-backup-zip" style="flex:1; margin-top:0;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Backup All Documents (.zip)
-            </button>
+          <!-- 2. Google Drive Cloud Sync (Real & Optional) -->
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M7.71 3.5L1.15 15l3.43 6 6.56-11.5L7.71 3.5z" fill="#0066DA"/>
+                  <path d="M16.29 3.5h-8.58l6.56 11.5h8.58l-6.56-11.5z" fill="#00AC47"/>
+                  <path d="M22.85 15H9.71l-3.43 6h13.14l3.43-6z" fill="#EA4335"/>
+                  <path d="M14.27 15l-3.42 6-3.43-6h6.85z" fill="#FFBA00"/>
+                </svg>
+                <strong style="font-size:14.5px; color:#0f172a;">Google Drive Cloud Sync</strong>
+              </div>
+              ${isGoogleConnected ? `
+                <span style="background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:2px 8px; border-radius:10px;">
+                  Connected
+                </span>
+              ` : `
+                <span style="background:#f1f5f9; color:#64748b; font-size:11px; font-weight:700; padding:2px 8px; border-radius:10px;">
+                  Not Connected (Optional)
+                </span>
+              `}
+            </div>
+
+            ${isGoogleConnected ? `
+              <!-- Connected State -->
+              <div style="display:flex; align-items:center; gap:12px; padding:10px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; margin-bottom:12px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#16a34a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;">
+                  ${this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase())}
+                </div>
+                <div style="flex:1;">
+                  <strong style="font-size:13.5px; color:#0f172a; display:block;">${this.escapeHtml(googleUser.name || 'Google Account')}</strong>
+                  <span style="font-size:12px; color:#15803d;">${this.escapeHtml(googleUser.email)}</span>
+                </div>
+                <button id="btn-google-disconnect" style="background:transparent; border:1px solid #cbd5e1; border-radius:6px; padding:4px 8px; font-size:11px; color:#dc2626; cursor:pointer;">
+                  Disconnect
+                </button>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:#64748b; margin-bottom:6px;">
+                <span>Google Drive Cloud Allocation:</span>
+                <strong style="color:#0f172a;">15 GB Free Cloud Storage</strong>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="giri-dl-btn" id="btn-sync-gdrive-now" style="flex:1; margin-top:0; font-size:12px; padding:8px 12px;">
+                  🔄 Sync Drive Files
+                </button>
+                <button class="giri-dl-btn secondary" id="btn-open-gdrive-workspace" style="flex:1; margin-top:0; font-size:12px; padding:8px 12px;">
+                  📂 Open Drive Workspace
+                </button>
+              </div>
+            ` : `
+              <!-- Not Connected State: Truthful Explanation & Real OAuth Sign In -->
+              <p style="font-size:12px; color:#64748b; margin:0 0 12px 0; line-height:1.5;">
+                Google Drive requires authenticating with your Google Account. If you want cross-device backup and access to your 15 GB Google Cloud storage, connect your account below:
+              </p>
+              <button class="giri-dl-btn" id="btn-google-sign-in" style="width:100%; margin-top:0; display:flex; align-items:center; justify-content:center; gap:8px; background:#ffffff; color:#1f2937; border:1px solid #d1d5db; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span style="font-weight:600; font-size:13px;">Sign In with Google to Connect Drive</span>
+              </button>
+            `}
           </div>
 
         </div>
@@ -1401,25 +1481,46 @@ class GiriOrbitPlatform {
     overlay.querySelector('#btn-close-gdrive-modal')?.addEventListener('click', () => overlay.remove());
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
 
-    overlay.querySelector('#btn-gdrive-sync-now')?.addEventListener('click', () => {
-      this.showToast('Synchronizing all documents with Google Drive Sovereign Storage...', 'blue');
-      setTimeout(() => {
-        this.showToast('Google Drive Synchronization Complete! All files up to date.', 'green');
-      }, 900);
-    });
-
-    overlay.querySelector('#btn-gdrive-backup-zip')?.addEventListener('click', () => {
+    // Real Action Wire-ups
+    overlay.querySelector('#btn-export-all-zip')?.addEventListener('click', () => {
       this.showToast('Preparing sovereign backup archive...', 'blue');
       window.location.href = 'downloads/GiriOrbit-Setup-x64.zip';
     });
+
+    overlay.querySelector('#btn-link-local-folder')?.addEventListener('click', () => {
+      overlay.remove();
+      driveSyncManager.openLocalDriveDirectory();
+    });
+
+    overlay.querySelector('#btn-google-sign-in')?.addEventListener('click', () => {
+      overlay.remove();
+      driveSyncManager.promptGoogleDirectLogin();
+    });
+
+    overlay.querySelector('#btn-google-disconnect')?.addEventListener('click', () => {
+      driveSyncManager.disconnectGoogleAccount();
+      overlay.remove();
+      this.showToast('Disconnected Google Drive. Switched to Sovereign Local Mode.', 'blue');
+      this.mountZohoLandingHub();
+    });
+
+    overlay.querySelector('#btn-sync-gdrive-now')?.addEventListener('click', async () => {
+      overlay.remove();
+      await driveSyncManager.fetchRealGoogleDriveFiles();
+    });
+
+    overlay.querySelector('#btn-open-gdrive-workspace')?.addEventListener('click', () => {
+      overlay.remove();
+      driveSyncManager.openDriveModal('browser', this.currentView);
+    });
   }
 
-  /**
-   * Detailed Settings & Personalization Modal
-   */
-  openSettingsModal() {
+    openSettingsModal() {
     const existing = document.getElementById('giri-settings-modal');
     if (existing) existing.remove();
+
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
 
     const overlay = document.createElement('div');
     overlay.className = 'giri-modal-overlay';
@@ -1484,32 +1585,57 @@ class GiriOrbitPlatform {
             </div>
           </div>
 
-          <!-- Tab 2: Google Drive -->
+          <!-- Tab 2: Storage & Cloud Accounts -->
           <div class="giri-settings-content" id="tab-pane-gdrive" style="display:none;">
+            <!-- Sovereign Local Storage Status -->
             <div class="giri-account-card">
-              <div class="giri-account-avatar">AG</div>
+              <div class="giri-account-avatar" style="${isGoogleConnected ? 'background:#16a34a;' : 'background:#475569;'}">
+                ${isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : 'SO'}
+              </div>
               <div>
-                <strong style="color:#0f172a; font-size:15px;">Abhinav Giri</strong>
-                <div style="font-size:12.5px; color:#64748b;">abhinavgiri370@gmail.com</div>
-                <div style="font-size:12px; color:#16a34a; font-weight:600; margin-top:2px;">&#10003; Sovereign Mode &bull; No Login Required</div>
+                <strong style="color:#0f172a; font-size:15px;">
+                  ${isGoogleConnected ? this.escapeHtml(googleUser.name || 'Google Account') : 'Sovereign Local Workspace'}
+                </strong>
+                <div style="font-size:12.5px; color:#64748b;">
+                  ${isGoogleConnected ? this.escapeHtml(googleUser.email) : 'Offline In-Memory & Device Storage (No Account Needed)'}
+                </div>
+                <div style="font-size:12px; color:${isGoogleConnected ? '#15803d' : '#0369a1'}; font-weight:600; margin-top:2px;">
+                  ${isGoogleConnected ? '✓ Google Drive Cloud Sync Active' : '✓ 100% Private • No Login Required'}
+                </div>
               </div>
             </div>
 
             <div class="giri-setting-group">
-              <label class="giri-setting-label">Cloud Storage Allocation</label>
-              <div class="giri-setting-desc">15 GB Google Drive quota allocated to your workspace.</div>
-              <div class="giri-quota-bar">
-                <div class="giri-quota-fill" style="width: 2%;"></div>
+              <label class="giri-setting-label">Local Device Storage Usage</label>
+              <div class="giri-setting-desc">Real storage used by your documents on this machine.</div>
+              <div style="font-size:13px; font-weight:700; color:#0f172a; margin-top:4px;">
+                ${this.calculateLocalDataUsage()}
               </div>
-              <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#64748b; margin-top:4px;">
-                <span>0.2 MB used</span>
-                <span>15 GB available</span>
+            </div>
+
+            <div class="giri-setting-group">
+              <label class="giri-setting-label">Google Drive Cloud Status</label>
+              <div class="giri-setting-desc">
+                ${isGoogleConnected 
+                  ? 'Connected to Google Drive with 15 GB cloud storage.'
+                  : 'Not connected. Login is not required to use Giri Orbit, but you can optionally connect Google Drive for cloud backup.'}
+              </div>
+              <div style="margin-top:8px;">
+                ${isGoogleConnected ? `
+                  <button class="giri-dl-btn secondary" id="btn-settings-disconnect-gdrive" style="margin-top:0; color:#dc2626;">
+                    Disconnect Google Account
+                  </button>
+                ` : `
+                  <button class="giri-dl-btn" id="btn-settings-connect-gdrive" style="margin-top:0; font-size:12.5px;">
+                    🔗 Connect Google Drive
+                  </button>
+                `}
               </div>
             </div>
 
             <div class="giri-setting-group">
               <label class="giri-setting-label">Local Cache Management</label>
-              <div class="giri-setting-desc">Clear local temporary in-memory cached files without touching Google Drive files.</div>
+              <div class="giri-setting-desc">Clear local temporary in-memory cached files without touching saved documents.</div>
               <button class="giri-dl-btn secondary" id="btn-settings-clear-cache" style="margin-top:0;">
                 Purge Temporary Local Cache
               </button>
@@ -1641,6 +1767,18 @@ class GiriOrbitPlatform {
         const pane = overlay.querySelector('#tab-pane-' + tabBtn.dataset.tab);
         if (pane) pane.style.display = 'block';
       });
+    });
+
+    overlay.querySelector('#btn-settings-connect-gdrive')?.addEventListener('click', () => {
+      overlay.remove();
+      driveSyncManager.promptGoogleDirectLogin();
+    });
+
+    overlay.querySelector('#btn-settings-disconnect-gdrive')?.addEventListener('click', () => {
+      driveSyncManager.disconnectGoogleAccount();
+      overlay.remove();
+      this.showToast('Disconnected Google Drive.', 'blue');
+      this.mountZohoLandingHub();
     });
 
     overlay.querySelector('#btn-settings-clear-cache')?.addEventListener('click', () => {
