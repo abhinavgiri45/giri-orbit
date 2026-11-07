@@ -4406,13 +4406,15 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
     const res = await localSync.openFromDevice({
       tool: 'axis',
       acceptTypes: {
-        'application/vnd.ms-excel': ['.gaxis', '.xml', '.xls', '.xlsx'],
+        'application/vnd.ms-excel': ['.gaxis', '.giri', '.xml', '.xls', '.xlsx'],
+        'application/x-giri-universal-office': ['.giri'],
         'application/json': ['.json']
       }
     });
     if (res && res.content) {
       try {
-        const parsed = GiriOfficeFormats.parseGAxis(res.content);
+        const parsed = (GiriOfficeFormats.parseUniversalGiri && GiriOfficeFormats.parseUniversalGiri(res.content)) || GiriOfficeFormats.parseGAxis(res.content);
+        if (parsed && parsed.tools && parsed.tools.axis) parsed.sheetsData = parsed.tools.axis;
         if (parsed && parsed.sheetsData && Object.keys(parsed.sheetsData).length > 0) {
           sheetsData = parsed.sheetsData;
           const firstSheet = parsed.activeSheet || Object.keys(sheetsData)[0] || 'Sheet1';
@@ -6252,8 +6254,9 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
       const text = evt.target.result;
       const ext = file.name.split('.').pop().toLowerCase();
 
-      if (['gaxis', 'xml', 'json'].includes(ext) || text.includes('<Workbook') || text.startsWith('{')) {
-        const parsed = GiriOfficeFormats.parseGAxis(text);
+      if (['gaxis', 'giri', 'xml', 'json'].includes(ext) || text.includes('giri_magic') || text.includes('giri-orbit-manifest') || text.includes('<Workbook') || text.startsWith('{')) {
+        const parsed = (GiriOfficeFormats.parseUniversalGiri && GiriOfficeFormats.parseUniversalGiri(text)) || GiriOfficeFormats.parseGAxis(text);
+        if (parsed && parsed.tools && parsed.tools.axis) parsed.sheetsData = parsed.tools.axis;
         if (parsed && parsed.sheetsData && Object.keys(parsed.sheetsData).length > 0) {
           sheetsData = parsed.sheetsData;
           const firstSheet = parsed.activeSheet || Object.keys(sheetsData)[0] || 'Sheet1';

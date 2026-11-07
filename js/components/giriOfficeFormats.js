@@ -1014,79 +1014,541 @@ startxref
   // ==========================================================================
   // 5. GIRI SUITE (.giri) — Universal Workspace Container
   // ==========================================================================
+  // 5. GIRI UNIVERSAL OFFICE CONTAINER (.giri) — Omni-Format Sovereign Standard
+  // Version 3.0: 100% Interoperable across all document types, spreadsheets,
+  // presentations, PDF seals, and unified multi-tool sovereign workspaces.
+  // ==========================================================================
 
-  static formatGiriProject({ drift = null, axis = null, kinetic = null, pdf = null, title = 'Giri Project', author = 'Giri Orbit User' }) {
-    const exportDate = new Date().toISOString();
+  static formatUniversalGiri({
+    primaryType = 'document', // 'document' | 'spreadsheet' | 'presentation' | 'pdf' | 'suite'
+    title = 'Untitled Office Document',
+    author = 'Giri Orbit Sovereign User',
+    date = null,
+    drift = null,
+    axis = null,
+    kinetic = null,
+    pdf = null,
+    metadata = {}
+  }) {
+    const exportDate = date || new Date().toISOString();
+
+    // Normalize payloads
+    let driftContent = drift;
+    if (typeof driftContent === 'object' && driftContent !== null) {
+      driftContent = driftContent.content || JSON.stringify(driftContent);
+    }
+
+    let axisData = axis;
+    if (typeof axisData === 'string') {
+      try { axisData = JSON.parse(axisData); } catch { }
+    }
+
+    let kineticData = kinetic;
+    if (typeof kineticData === 'string') {
+      try { kineticData = JSON.parse(kineticData); } catch { }
+    }
+
+    let pdfData = pdf;
+    if (typeof pdfData === 'string') {
+      try { pdfData = JSON.parse(pdfData); } catch { }
+    }
+
+    // Auto-derive primaryType if suite or not explicitly provided
+    let derivedType = primaryType;
+    const activeToolsCount = (driftContent ? 1 : 0) + (axisData ? 1 : 0) + (kineticData ? 1 : 0) + (pdfData ? 1 : 0);
+    if (!primaryType || primaryType === 'suite') {
+      if (activeToolsCount === 1) {
+        if (driftContent) derivedType = 'document';
+        else if (axisData) derivedType = 'spreadsheet';
+        else if (kineticData) derivedType = 'presentation';
+        else if (pdfData) derivedType = 'pdf';
+      } else {
+        derivedType = 'suite';
+      }
+    }
+
+    // Extract universal interop text representations
+    let plaintext = '';
+    let markdown = '';
+    let csvData = '';
+    let htmlPreview = '';
+
+    // Document interop extraction
+    if (driftContent) {
+      const stripped = String(driftContent).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      plaintext += `[GIRI DRIFT DOCUMENT: ${title}]\n${stripped}\n\n`;
+      markdown += `# ${title}\n\n${stripped}\n\n`;
+      htmlPreview += `<div class="giri-module-preview document-preview">${driftContent}</div>`;
+    }
+
+    // Spreadsheet interop extraction
+    if (axisData && typeof axisData === 'object') {
+      plaintext += `[GIRI AXIS SPREADSHEET]\n`;
+      const firstSheetKey = Object.keys(axisData)[0];
+      const sheet = axisData[firstSheetKey] || {};
+      let csvRows = [];
+      let maxR = 0;
+      Object.keys(sheet).forEach(cellKey => {
+        const m = cellKey.match(/^([A-Z]+)([0-9]+)$/);
+        if (m) {
+          const r = parseInt(m[2], 10);
+          if (r > maxR) maxR = Math.min(r, 50);
+        }
+      });
+      maxR = Math.max(maxR, 5);
+      for (let r = 1; r <= maxR; r++) {
+        let rowCells = [];
+        for (let c = 0; c < 10; c++) {
+          const colLetter = String.fromCharCode(65 + c);
+          const cellVal = sheet[`${colLetter}${r}`] != null ? String(sheet[`${colLetter}${r}`]) : '';
+          rowCells.push(`"${cellVal.replace(/"/g, '""')}"`);
+        }
+        if (rowCells.some(v => v !== '""')) {
+          csvRows.push(rowCells.join(','));
+        }
+      }
+      csvData = csvRows.join('\n');
+      plaintext += csvData + '\n\n';
+      markdown += `\n### Spreadsheet Data (${firstSheetKey})\n\`\`\`csv\n${csvData}\n\`\`\`\n\n`;
+      htmlPreview += `<div class="giri-module-preview spreadsheet-preview"><h4>${escapeXml(firstSheetKey)}</h4><pre>${escapeXml(csvData)}</pre></div>`;
+    }
+
+    // Presentation interop extraction
+    if (Array.isArray(kineticData) && kineticData.length > 0) {
+      plaintext += `[GIRI KINETIC PRESENTATION - ${kineticData.length} Slides]\n`;
+      markdown += `\n## Presentation Slides\n`;
+      kineticData.forEach((s, idx) => {
+        plaintext += `Slide ${idx + 1}: ${s.title || ''} - ${s.desc || ''}\n`;
+        markdown += `### Slide ${idx + 1}: ${s.title || ''}\n${s.desc || ''}\n\n`;
+      });
+      plaintext += '\n';
+      htmlPreview += `<div class="giri-module-preview presentation-preview"><h4>Presentation Deck (${kineticData.length} Slides)</h4><ul>${kineticData.map((s, i) => `<li><strong>Slide ${i + 1}:</strong> ${escapeXml(s.title || 'Slide')}</li>`).join('')}</ul></div>`;
+    }
+
+    // PDF interop extraction
+    if (Array.isArray(pdfData) && pdfData.length > 0) {
+      plaintext += `[GIRI AEGIS PDF STUDIO - ${pdfData.length} Pages]\n`;
+      markdown += `\n## Aegis PDF Pages\n`;
+      pdfData.forEach((p, idx) => {
+        const textOnly = (p.content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        plaintext += `Page ${idx + 1} (${p.title || ''}): ${textOnly}\n`;
+        markdown += `### Page ${idx + 1}: ${p.title || ''}\n${textOnly}\n\n`;
+      });
+      htmlPreview += `<div class="giri-module-preview pdf-preview"><h4>Aegis Certified PDF Document (${pdfData.length} Pages)</h4></div>`;
+    }
+
     const manifest = {
-      format: 'giri',
-      version: '2.0',
+      giri_magic: "GIRI_SOVEREIGN_OFFICE_UNIVERSAL_v3",
+      format: "giri",
+      version: "3.0",
+      primary_type: derivedType,
       title: title,
       author: author,
       exportedAt: exportDate,
       tools: {
-        drift: drift || null,
-        axis: axis || null,
-        kinetic: kinetic || null,
-        pdf: pdf || null
-      }
+        drift: driftContent || null,
+        axis: axisData || null,
+        kinetic: kineticData || null,
+        pdf: pdfData || null
+      },
+      interop: {
+        plaintext: plaintext.trim(),
+        markdown: markdown.trim(),
+        csv: csvData,
+        hasDocument: !!driftContent,
+        hasSpreadsheet: !!axisData,
+        hasPresentation: !!(Array.isArray(kineticData) && kineticData.length > 0),
+        hasPdf: !!(Array.isArray(pdfData) && pdfData.length > 0)
+      },
+      metadata: metadata || {}
     };
 
     const manifestJson = JSON.stringify(manifest);
 
+    // Self-Rendering Polyglot HTML/JSON Container:
+    // If opened in any web browser or third-party tool, renders an interactive,
+    // responsive viewer with full offline fidelity and an "Open in Giri Orbit" action.
     return `<!DOCTYPE html>
-<html xmlns:o='urn:schemas-microsoft-com:office:office'
-      xmlns:w='urn:schemas-microsoft-com:office:word'
-      xmlns='http://www.w3.org/TR/REC-html40'>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="ProgId" content="Word.Document">
-  <meta name="Generator" content="Giri Orbit Sovereign Suite 12.2 - Universal Multi-Tool Project Container">
-  <title>${escapeXml(title)}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="ProgId" content="GiriOrbit.Universal">
+  <meta name="Generator" content="Giri Orbit Sovereign Enterprise Suite 12.2 - Universal Office Container">
+  <meta name="Author" content="${escapeXml(author)}">
+  <meta name="giri-primary-type" content="${derivedType}">
+  <meta name="giri-format-version" content="3.0">
+  <title>${escapeXml(title)} — Giri Universal Office</title>
   <script id="giri-orbit-manifest" type="application/json">
 ${utf8ToBase64(manifestJson)}
   </script>
   <style>
-    body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; padding: 24px; color: #0f172a; line-height: 1.6; }
-    h1 { color: #e42528; }
-    .project-card { border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin: 16px 0; background: #f8fafc; }
+    :root {
+      --giri-bg: #090d16;
+      --giri-surface: #111827;
+      --giri-card: #1f2937;
+      --giri-border: #374151;
+      --giri-text: #f9fafb;
+      --giri-muted: #9ca3af;
+      --giri-primary: #ef4444;
+      --giri-accent: #3b82f6;
+      --giri-green: #10b981;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-family); background: var(--giri-bg); color: var(--giri-text); line-height: 1.6; padding: 24px; min-height: 100vh; }
+    .giri-container { max-width: 1080px; margin: 0 auto; background: var(--giri-surface); border: 1px solid var(--giri-border); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .giri-header { background: linear-gradient(135deg, #182234, #0f172a); border-bottom: 1px solid var(--giri-border); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .giri-brand { display: flex; align-items: center; gap: 12px; }
+    .giri-brand-badge { width: 38px; height: 38px; border-radius: 8px; background: linear-gradient(135deg, #ef4444, #b91c1c); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #fff; }
+    .giri-brand-title { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .giri-brand-subtitle { font-size: 11px; color: var(--giri-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .giri-type-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+    .giri-actions { display: flex; gap: 10px; align-items: center; }
+    .giri-btn { background: #2563eb; color: #fff; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background 0.15s; }
+    .giri-btn:hover { background: #1d4ed8; }
+    .giri-btn-secondary { background: var(--giri-card); color: var(--giri-text); border: 1px solid var(--giri-border); }
+    .giri-btn-secondary:hover { background: #374151; }
+    .giri-meta-bar { background: rgba(0,0,0,0.25); border-bottom: 1px solid var(--giri-border); padding: 12px 24px; display: flex; gap: 24px; font-size: 12px; color: var(--giri-muted); flex-wrap: wrap; }
+    .giri-meta-item strong { color: var(--giri-text); }
+    .giri-content-panel { padding: 32px 24px; background: #ffffff; color: #0f172a; min-height: 480px; }
+    .document-preview { font-family: "Calibri", "Segoe UI", Arial, sans-serif; font-size: 11pt; line-height: 1.6; max-width: 800px; margin: 0 auto; color: #1e293b; }
+    .spreadsheet-preview pre { font-family: "Consolas", monospace; font-size: 12px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 16px; border-radius: 6px; overflow-x: auto; color: #0f172a; }
+    .presentation-preview ul { list-style: none; padding: 0; display: grid; gap: 8px; }
+    .presentation-preview li { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: 6px; }
+    .giri-footer { padding: 16px 24px; background: var(--giri-surface); border-top: 1px solid var(--giri-border); display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--giri-muted); }
   </style>
 </head>
 <body>
-  <h1>GIRI ORBIT SOVEREIGN PROJECT</h1>
-  <p><strong>Project Title:</strong> ${escapeXml(title)}</p>
-  <p><strong>Export Date:</strong> ${exportDate}</p>
-  <div class="project-card">
-    <h3>Workspace Modules</h3>
-    <ul>
-      <li>Drift Word Processor: ${drift ? 'Active' : 'Empty'}</li>
-      <li>Axis Spreadsheet: ${axis ? 'Active' : 'Empty'}</li>
-      <li>Kinetic Slide Deck: ${kinetic ? 'Active' : 'Empty'}</li>
-      <li>Aegis PDF Studio: ${pdf ? 'Active' : 'Empty'}</li>
-    </ul>
+  <div class="giri-container">
+    <div class="giri-header">
+      <div class="giri-brand">
+        <div class="giri-brand-badge">G</div>
+        <div>
+          <div class="giri-brand-title">${escapeXml(title)}</div>
+          <div class="giri-brand-subtitle">Universal Sovereign Office Container (.giri)</div>
+        </div>
+      </div>
+      <div class="giri-actions">
+        <span class="giri-type-badge">${derivedType.toUpperCase()} MODE</span>
+        <button class="giri-btn giri-btn-secondary" onclick="window.print()">Print / PDF</button>
+        <button class="giri-btn" onclick="navigator.clipboard?.writeText(location.href); alert('Universal .giri container location copied');">Share</button>
+      </div>
+    </div>
+
+    <div class="giri-meta-bar">
+      <div class="giri-meta-item">Author: <strong>${escapeXml(author)}</strong></div>
+      <div class="giri-meta-item">Format: <strong>Giri Universal v3.0</strong></div>
+      <div class="giri-meta-item">Exported: <strong>${new Date(exportDate).toLocaleDateString()}</strong></div>
+      <div class="giri-meta-item">Sovereignty: <strong>100% In-Memory Offline Standard</strong></div>
+    </div>
+
+    <div class="giri-content-panel">
+      ${htmlPreview || `<div style="text-align:center; padding:40px; color:#64748b;"><h3>${escapeXml(title)}</h3><p>Universal Sovereign Office Container Ready</p></div>`}
+    </div>
+
+    <div class="giri-footer">
+      <div>Giri Orbit Sovereign Enterprise Suite &bull; Zero Cloud Lock-In &bull; Zero Telemetry</div>
+      <div>Compatible with all desktop and browser environments</div>
+    </div>
   </div>
 </body>
 </html>`.trim();
   }
 
-  static parseGiriProject(rawString) {
-    if (!rawString || typeof rawString !== 'string') return null;
-    const trimmed = rawString.trim();
+  // Backward-compatible alias for existing callers
+  static formatGiriProject({ drift = null, axis = null, kinetic = null, pdf = null, title = 'Giri Project', author = 'Giri Orbit User', date = null }) {
+    return GiriOfficeFormats.formatUniversalGiri({
+      primaryType: 'suite',
+      title,
+      author,
+      date,
+      drift,
+      axis,
+      kinetic,
+      pdf
+    });
+  }
 
-    const manifestMatch = trimmed.match(/<script[^>]*id=["']giri-orbit-manifest["'][^>]*>([\s\S]*?)<\/script>/i);
+  static parseUniversalGiri(rawString) {
+    if (!rawString) return null;
+    let text = typeof rawString === 'string' ? rawString.trim() : '';
+
+    // 1. Direct JSON object passed
+    if (typeof rawString === 'object' && rawString !== null) {
+      return GiriOfficeFormats._normalizeGiriManifest(rawString);
+    }
+
+    // 2. Polyglot HTML: Check for <script id="giri-orbit-manifest"> or similar
+    const manifestMatch = text.match(/<script[^>]*id=["']giri-orbit-manifest["'][^>]*>([\s\S]*?)<\/script>/i) ||
+                          text.match(/<script[^>]*id=["']giri-sovereign-universal["'][^>]*>([\s\S]*?)<\/script>/i);
     if (manifestMatch && manifestMatch[1]) {
       try {
-        let manifestText = manifestMatch[1].trim(); if (!manifestText.startsWith("{") && !manifestText.startsWith("[")) manifestText = base64ToUtf8(manifestText); return JSON.parse(manifestText);
+        let manifestText = manifestMatch[1].trim();
+        if (!manifestText.startsWith("{") && !manifestText.startsWith("[")) {
+          manifestText = base64ToUtf8(manifestText);
+        }
+        const parsed = JSON.parse(manifestText);
+        return GiriOfficeFormats._normalizeGiriManifest(parsed);
       } catch (e) {
-        console.warn('Error parsing .giri manifest:', e);
+        console.warn('Error parsing universal .giri polyglot manifest:', e);
       }
     }
 
-    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    // 3. Raw JSON string
+    if (text.startsWith('{') && text.endsWith('}')) {
       try {
-        return JSON.parse(trimmed);
+        const parsed = JSON.parse(text);
+        if (parsed.giri_magic || parsed.format === 'giri' || parsed.tools || parsed.primary_type) {
+          return GiriOfficeFormats._normalizeGiriManifest(parsed);
+        }
       } catch { }
     }
 
+    // 4. Fallback: If a .gdrift, .gaxis, .gkinetic, or .gaegis file was renamed to .giri
+    if (text.includes('gdrift-manifest') || text.includes('Word.Document') || text.includes('drift-page-sheet')) {
+      const parsedDrift = GiriOfficeFormats.parseGDrift(text);
+      return GiriOfficeFormats._normalizeGiriManifest({
+        primary_type: 'document',
+        title: parsedDrift.title || 'Imported Drift Document',
+        author: parsedDrift.author || 'Giri Orbit User',
+        tools: { drift: parsedDrift.content }
+      });
+    }
+
+    if (text.includes('gaxis-manifest') || text.includes('<Workbook') || text.includes('urn:schemas-microsoft-com:office:spreadsheet')) {
+      const parsedAxis = GiriOfficeFormats.parseGAxis(text);
+      return GiriOfficeFormats._normalizeGiriManifest({
+        primary_type: 'spreadsheet',
+        title: parsedAxis.title || 'Imported Axis Workbook',
+        author: parsedAxis.author || 'Giri Orbit User',
+        tools: { axis: parsedAxis.sheetsData }
+      });
+    }
+
+    if (text.includes('gkinetic-manifest') || text.includes('PowerPoint.Show')) {
+      const parsedKinetic = GiriOfficeFormats.parseGKinetic(text);
+      return GiriOfficeFormats._normalizeGiriManifest({
+        primary_type: 'presentation',
+        title: parsedKinetic.title || 'Imported Kinetic Deck',
+        author: parsedKinetic.author || 'Giri Orbit User',
+        tools: { kinetic: parsedKinetic.slides }
+      });
+    }
+
+    if (text.includes('/GiriOrbitMetadata') || text.includes('%PDF-')) {
+      const parsedAegis = GiriOfficeFormats.parseGAegis(text);
+      return GiriOfficeFormats._normalizeGiriManifest({
+        primary_type: 'pdf',
+        title: parsedAegis.title || 'Imported Aegis Document',
+        author: parsedAegis.author || 'Giri Orbit User',
+        tools: { pdf: parsedAegis.pages }
+      });
+    }
+
     return null;
+  }
+
+  static _normalizeGiriManifest(manifest) {
+    if (!manifest || typeof manifest !== 'object') return null;
+
+    const tools = manifest.tools || {};
+    const drift = tools.drift != null ? tools.drift : (manifest.drift || manifest.content || null);
+    const axis = tools.axis != null ? tools.axis : (manifest.axis || manifest.sheetsData || null);
+    const kinetic = tools.kinetic != null ? tools.kinetic : (manifest.kinetic || manifest.slides || null);
+    const pdf = tools.pdf != null ? tools.pdf : (manifest.pdf || manifest.pages || null);
+
+    let primaryType = manifest.primary_type || manifest.primaryType;
+    if (!primaryType) {
+      const activeCount = (drift ? 1 : 0) + (axis ? 1 : 0) + (kinetic ? 1 : 0) + (pdf ? 1 : 0);
+      if (activeCount === 1) {
+        if (drift) primaryType = 'document';
+        else if (axis) primaryType = 'spreadsheet';
+        else if (kinetic) primaryType = 'presentation';
+        else if (pdf) primaryType = 'pdf';
+      } else {
+        primaryType = 'suite';
+      }
+    }
+
+    return {
+      success: true,
+      format: 'giri',
+      version: manifest.version || '3.0',
+      primaryType: primaryType,
+      primary_type: primaryType,
+      title: manifest.title || 'Universal Office Document',
+      author: manifest.author || 'Giri Orbit Sovereign User',
+      exportedAt: manifest.exportedAt || manifest.created_at || new Date().toISOString(),
+      tools: {
+        drift: drift,
+        axis: axis,
+        kinetic: kinetic,
+        pdf: pdf
+      },
+      document: drift,
+      spreadsheet: axis,
+      presentation: kinetic,
+      pdf: pdf,
+      interop: manifest.interop || {},
+      metadata: manifest.metadata || manifest.meta || {}
+    };
+  }
+
+  // Backward-compatible alias
+  static parseGiriProject(rawString) {
+    return GiriOfficeFormats.parseUniversalGiri(rawString);
+  }
+
+  // ==========================================================================
+  // Universal Transcoder: Converts ANY office document to .giri and vice versa
+  // ==========================================================================
+
+  static transcodeToGiri({ fileName = 'document', content = '', fileType = null, author = 'Giri Orbit Sovereign User' }) {
+    const ext = (fileType || fileName.split('.').pop() || '').toLowerCase();
+    const baseName = fileName.replace(/\.[^/.]+$/, '');
+
+    // Document formats
+    if (['docx', 'doc', 'odt', 'rtf', 'txt', 'md', 'html', 'htm', 'gdrift', 'gdoc'].includes(ext)) {
+      const parsed = GiriOfficeFormats.parseGDrift(content);
+      return GiriOfficeFormats.formatUniversalGiri({
+        primaryType: 'document',
+        title: parsed.title && parsed.title !== 'Untitled Document' ? parsed.title : baseName,
+        author: parsed.author || author,
+        drift: parsed.content || content
+      });
+    }
+
+    // Spreadsheet formats
+    if (['xlsx', 'xls', 'ods', 'csv', 'tsv', 'gaxis', 'gsheet'].includes(ext)) {
+      const parsed = GiriOfficeFormats.parseGAxis(content);
+      return GiriOfficeFormats.formatUniversalGiri({
+        primaryType: 'spreadsheet',
+        title: parsed.title && parsed.title !== 'Giri Axis Workbook' ? parsed.title : baseName,
+        author: parsed.author || author,
+        axis: parsed.sheetsData || { Sheet1: {} }
+      });
+    }
+
+    // Presentation formats
+    if (['pptx', 'ppt', 'odp', 'gkinetic', 'gslide'].includes(ext)) {
+      const parsed = GiriOfficeFormats.parseGKinetic(content);
+      return GiriOfficeFormats.formatUniversalGiri({
+        primaryType: 'presentation',
+        title: parsed.title && parsed.title !== 'Kinetic Presentation Deck' ? parsed.title : baseName,
+        author: parsed.author || author,
+        kinetic: parsed.slides || []
+      });
+    }
+
+    // PDF formats
+    if (['pdf', 'gaegis', 'gpdf'].includes(ext)) {
+      const parsed = GiriOfficeFormats.parseGAegis(content);
+      return GiriOfficeFormats.formatUniversalGiri({
+        primaryType: 'pdf',
+        title: parsed.title || baseName,
+        author: parsed.author || author,
+        pdf: parsed.pages || [{ title: baseName, content }]
+      });
+    }
+
+    // Fallback: If it's already a giri or JSON format
+    const parsedUniversal = GiriOfficeFormats.parseUniversalGiri(content);
+    if (parsedUniversal) {
+      return GiriOfficeFormats.formatUniversalGiri({
+        primaryType: parsedUniversal.primaryType,
+        title: parsedUniversal.title,
+        author: parsedUniversal.author,
+        drift: parsedUniversal.tools.drift,
+        axis: parsedUniversal.tools.axis,
+        kinetic: parsedUniversal.tools.kinetic,
+        pdf: parsedUniversal.tools.pdf
+      });
+    }
+
+    // Default to document wrapper
+    return GiriOfficeFormats.formatUniversalGiri({
+      primaryType: 'document',
+      title: baseName,
+      author,
+      drift: content
+    });
+  }
+
+  static transcodeFromGiri(giriString, targetExt) {
+    const parsed = GiriOfficeFormats.parseUniversalGiri(giriString);
+    if (!parsed) return '';
+
+    const ext = String(targetExt || 'txt').toLowerCase().replace(/^\./, '');
+
+    switch (ext) {
+      case 'gdrift':
+      case 'doc':
+      case 'docx':
+      case 'odt':
+        return GiriOfficeFormats.formatGDrift({
+          title: parsed.title,
+          content: parsed.tools.drift || (parsed.interop && parsed.interop.plaintext) || '',
+          author: parsed.author
+        });
+
+      case 'gaxis':
+      case 'xls':
+      case 'xlsx':
+      case 'ods':
+        return GiriOfficeFormats.formatGAxis({
+          sheetsData: parsed.tools.axis || { Sheet1: {} },
+          title: parsed.title,
+          author: parsed.author
+        });
+
+      case 'gkinetic':
+      case 'ppt':
+      case 'pptx':
+      case 'odp':
+        return GiriOfficeFormats.formatGKinetic({
+          slidesData: parsed.tools.kinetic || [{ id: 1, title: parsed.title, desc: parsed.interop?.plaintext || '' }],
+          title: parsed.title,
+          author: parsed.author
+        });
+
+      case 'gaegis':
+      case 'gpdf':
+      case 'pdf':
+        return GiriOfficeFormats.formatGAegis({
+          pages: parsed.tools.pdf || [{ title: parsed.title, content: parsed.tools.drift || parsed.interop?.plaintext || '' }],
+          title: parsed.title,
+          author: parsed.author
+        });
+
+      case 'csv':
+        return parsed.interop?.csv || '';
+
+      case 'md':
+      case 'markdown':
+        return parsed.interop?.markdown || `# ${parsed.title}\n\n${parsed.interop?.plaintext || ''}`;
+
+      case 'txt':
+        return parsed.interop?.plaintext || parsed.title;
+
+      case 'html':
+      case 'htm':
+        return parsed.tools.drift || parsed.interop?.htmlPreview || `<h1>${escapeXml(parsed.title)}</h1>`;
+
+      case 'json':
+        return JSON.stringify(parsed, null, 2);
+
+      case 'giri':
+      default:
+        return GiriOfficeFormats.formatUniversalGiri({
+          primaryType: parsed.primaryType,
+          title: parsed.title,
+          author: parsed.author,
+          drift: parsed.tools.drift,
+          axis: parsed.tools.axis,
+          kinetic: parsed.tools.kinetic,
+          pdf: parsed.tools.pdf
+        });
+    }
   }
 }

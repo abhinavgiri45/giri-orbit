@@ -3815,13 +3815,15 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
     const res = await localSync.openFromDevice({
       tool: 'kinetic',
       acceptTypes: {
-        'application/vnd.ms-powerpoint': ['.gkinetic', '.html'],
+        'application/vnd.ms-powerpoint': ['.gkinetic', '.giri', '.html'],
+        'application/x-giri-universal-office': ['.giri'],
         'application/json': ['.json']
       }
     });
     if (res && res.content) {
       try {
-        const parsed = GiriOfficeFormats.parseGKinetic(res.content);
+        const parsed = (GiriOfficeFormats.parseUniversalGiri && GiriOfficeFormats.parseUniversalGiri(res.content)) || GiriOfficeFormats.parseGKinetic(res.content);
+        if (parsed && parsed.tools && parsed.tools.kinetic) parsed.slides = parsed.tools.kinetic;
         if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
           slidesData = parsed.slides;
           currentSlideIndex = 0;

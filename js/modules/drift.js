@@ -3533,12 +3533,14 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
               localSync.openFromDevice({
                 tool: 'drift',
                 acceptTypes: {
-                  'application/msword': ['.gdrift', '.doc', '.docx'],
+                  'application/msword': ['.gdrift', '.giri', '.doc', '.docx'],
+                  'application/x-giri-universal-office': ['.giri'],
                   'text/html': ['.gdrift', '.html', '.htm', '.txt', '.md']
                 }
               }).then(result => {
                 if (result) {
-                  const parsed = GiriOfficeFormats.parseGDrift(result.content);
+                  const parsed = (GiriOfficeFormats.parseUniversalGiri && GiriOfficeFormats.parseUniversalGiri(result.content)) || GiriOfficeFormats.parseGDrift(result.content);
+                  if (parsed && parsed.tools && parsed.tools.drift) parsed.content = parsed.tools.drift;
                   let content = parsed.content;
                   if (!content.includes('drift-page-sheet')) {
                     content = `<div class="drift-page-sheet active-sheet" contenteditable="true" spellcheck="true" data-page="1" style="font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 11pt;">${content.trim() || '<p><br></p>'}</div>`;
@@ -3569,14 +3571,15 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
             case 'open': {
               const fileInput = document.createElement('input');
               fileInput.type = 'file';
-              fileInput.accept = '.gdrift,.docx,.doc,.odt,.txt,.md,.html,.htm';
+              fileInput.accept = '.giri,.gdrift,.docx,.doc,.odt,.txt,.md,.html,.htm';
               fileInput.onchange = (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
                 reader.onload = (evt) => {
                   let raw = evt.target.result || '';
-                  const parsed = GiriOfficeFormats.parseGDrift(raw);
+                  const parsed = (GiriOfficeFormats.parseUniversalGiri && GiriOfficeFormats.parseUniversalGiri(raw)) || GiriOfficeFormats.parseGDrift(raw);
+                  if (parsed && parsed.tools && parsed.tools.drift) parsed.content = parsed.tools.drift;
                   let content = parsed.content;
                   if (!content.includes('drift-page-sheet')) {
                     content = `<div class="drift-page-sheet active-sheet" contenteditable="true" spellcheck="true" data-page="1" style="font-family: Calibri, \'Segoe UI\', Arial, sans-serif; font-size: 11pt;">${content.trim() || '<p><br></p>'}</div>`;

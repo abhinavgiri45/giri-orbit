@@ -2220,17 +2220,32 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
   const performPdfDirectOpen = async () => {
     const res = await localSync.openFromDevice({
       tool: 'pdf',
-      acceptTypes: { 'application/json': ['.gpdf', '.json'] }
+      acceptTypes: {
+        'application/json': ['.gpdf', '.gaegis', '.giri', '.json'],
+        'application/pdf': ['.pdf', '.gaegis', '.giri'],
+        'application/x-giri-universal-office': ['.giri']
+      }
     });
     if (res && res.content) {
       try {
-        const parsed = JSON.parse(res.content);
-        if (Array.isArray(parsed)) {
-          pages = parsed;
+        const parsedUni = GiriOfficeFormats.parseUniversalGiri && GiriOfficeFormats.parseUniversalGiri(res.content);
+        const parsedAegis = !parsedUni && GiriOfficeFormats.parseGAegis ? GiriOfficeFormats.parseGAegis(res.content) : null;
+        let candidatePages = null;
+        if (parsedUni && parsedUni.tools && Array.isArray(parsedUni.tools.pdf)) {
+          candidatePages = parsedUni.tools.pdf;
+        } else if (parsedAegis && Array.isArray(parsedAegis.pages)) {
+          candidatePages = parsedAegis.pages;
+        } else {
+          const direct = JSON.parse(res.content);
+          if (Array.isArray(direct)) candidatePages = direct;
+          else if (direct.pages && Array.isArray(direct.pages)) candidatePages = direct.pages;
+        }
+        if (Array.isArray(candidatePages) && candidatePages.length > 0) {
+          pages = candidatePages;
           activePageIndex = 0;
           renderPagesSidebar();
           switchPage(0);
-          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${res.name}" with live direct disk sync`);
+          if (window.orbitPlatform) window.orbitPlatform.triggerToast(`Loaded "${res.name}" (Universal Office Parity)`);
         }
       } catch (err) {
         alert('Invalid PDF document data format.');
