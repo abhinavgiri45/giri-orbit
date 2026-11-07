@@ -10,30 +10,51 @@
 
 /* --- Root & Theme Variables --- */
 :root {
-  --lo-bg-main: #232731;
-  --lo-bg-toolbar: #2c313c;
-  --lo-bg-toolbar-hover: #3b4252;
-  --lo-bg-toolbar-active: #4c566a;
-  --lo-border: #3b4252;
-  --lo-border-light: #434c5e;
-  --lo-text: #eceff4;
-  --lo-text-muted: #d8dee9;
-  --lo-text-subtle: #8892b0;
+  --lo-bg-main: #f1f5f9;
+  --lo-bg-toolbar: #ffffff;
+  --lo-bg-toolbar-hover: #f1f5f9;
+  --lo-bg-toolbar-active: #e2e8f0;
+  --lo-border: #e2e8f0;
+  --lo-border-light: #cbd5e1;
+  --lo-text: #0f172a;
+  --lo-text-muted: #475569;
+  --lo-text-subtle: #94a3b8;
   
-  --lo-writer-blue: #1a73e8;
-  --lo-calc-green: #188038;
-  --lo-impress-orange: #e8710a;
-  --lo-draw-red: #d93025;
+  --lo-writer-blue: #185abd;
+  --lo-calc-green: #107c41;
+  --lo-impress-orange: #c43e1c;
+  --lo-draw-red: #dc2626;
   
-  --lo-accent: #38bdf8;
-  --lo-menu-bg: #21252b;
-  --lo-menu-hover: #2c313c;
-  --lo-menu-active: #0969da;
+  --lo-accent: #2563eb;
+  --lo-menu-bg: #ffffff;
+  --lo-menu-hover: #f1f5f9;
+  --lo-menu-active: #2563eb;
   
   --lo-paper-bg: #ffffff;
-  --lo-paper-text: #000000;
-  --lo-statusbar-bg: #1e2229;
-  --lo-ruler-bg: #282c34;
+  --lo-paper-text: #0f172a;
+  --lo-statusbar-bg: #f8fafc;
+  --lo-ruler-bg: #ffffff;
+}
+
+body.dark-theme {
+  --lo-bg-main: #1e293b;
+  --lo-bg-toolbar: #0f172a;
+  --lo-bg-toolbar-hover: #334155;
+  --lo-bg-toolbar-active: #475569;
+  --lo-border: #334155;
+  --lo-border-light: #475569;
+  --lo-text: #f8fafc;
+  --lo-text-muted: #cbd5e1;
+  --lo-text-subtle: #94a3b8;
+  
+  --lo-menu-bg: #0f172a;
+  --lo-menu-hover: #1e293b;
+  --lo-menu-active: #3b82f6;
+  
+  --lo-paper-bg: #ffffff;
+  --lo-paper-text: #0f172a;
+  --lo-statusbar-bg: #0f172a;
+  --lo-ruler-bg: #1e293b;
 }
 
 body.light-theme {

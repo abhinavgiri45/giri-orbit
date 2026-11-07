@@ -7004,3 +7004,242 @@ body.light-theme .export-filename-input {
 
 
 
+
+/* ============================================================================
+ * MODERN MICROSOFT 365 / LIBREOFFICE AUTHENTIC LIGHT THEME OVERRIDE
+ * Full Fidelity Word, Excel, PowerPoint & PDF Visual Styling
+ * ============================================================================
+ */
+.fluent-ribbon-bar {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.fluent-ribbon-tabs {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.fluent-tab-btn {
+  color: #475569 !important;
+  border-bottom: 3px solid transparent !important;
+}
+.fluent-tab-btn:hover {
+  color: #0f172a !important;
+  background: #f1f5f9 !important;
+}
+.fluent-tab-btn.active {
+  color: #2563eb !important;
+  border-bottom-color: #2563eb !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+}
+
+/* Tool Brand Accents */
+.axis-app-shell .fluent-tab-btn.active {
+  color: #16a34a !important;
+  border-bottom-color: #16a34a !important;
+}
+.kinetic-app-shell .fluent-tab-btn.active {
+  color: #ea580c !important;
+  border-bottom-color: #ea580c !important;
+}
+.pdf-app-shell .fluent-tab-btn.active {
+  color: #dc2626 !important;
+  border-bottom-color: #dc2626 !important;
+}
+
+/* File Tab Buttons */
+.fluent-tab-file-btn, .fluent-tab-file-trigger {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  padding: 4px 14px !important;
+  font-weight: 700 !important;
+}
+.axis-app-shell .fluent-tab-file-trigger {
+  background: #16a34a !important;
+}
+.kinetic-app-shell .fluent-tab-file-trigger {
+  background: #ea580c !important;
+}
+.pdf-app-shell .fluent-tab-file-trigger {
+  background: #dc2626 !important;
+}
+
+.fluent-tab-file-btn:hover, .fluent-tab-file-trigger:hover {
+  opacity: 0.92;
+  filter: brightness(1.05);
+}
+
+/* File Menu Dropdown */
+.office-file-menu-dropdown {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15) !important;
+}
+.file-menu-item {
+  color: #1e293b !important;
+}
+.file-menu-item:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+.file-menu-sep {
+  background: #e2e8f0 !important;
+}
+
+/* Ribbon Panes & Groups */
+.fluent-ribbon-panes {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+.fluent-ribbon-group {
+  border-right: 1px solid #e2e8f0 !important;
+}
+.fluent-group-label {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+}
+.fluent-btn-large {
+  color: #0f172a !important;
+}
+.fluent-btn-large:hover, .fluent-btn-small:hover, .fluent-btn-row-cmd:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+.fluent-btn-large.active, .fluent-btn-small.active, .fluent-btn-row-cmd.active {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #bfdbfe !important;
+}
+.axis-app-shell .fluent-btn-large.active, .axis-app-shell .fluent-btn-small.active {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+  border-color: #bbf7d0 !important;
+}
+.kinetic-app-shell .fluent-btn-large.active, .kinetic-app-shell .fluent-btn-small.active {
+  background: #fff7ed !important;
+  color: #ea580c !important;
+  border-color: #fed7aa !important;
+}
+
+.fluent-btn-small {
+  color: #334155 !important;
+}
+.fluent-btn-row-cmd {
+  color: #334155 !important;
+}
+
+/* Dropdowns in Ribbon */
+.fluent-select-dark {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.fluent-select-dark option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Styles Gallery Cards */
+.fluent-style-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.fluent-style-card:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
+}
+.fluent-style-card.active {
+  background: #eff6ff !important;
+  border: 2px solid #2563eb !important;
+}
+.fluent-style-card-title {
+  color: #0f172a !important;
+}
+.fluent-style-card-sub {
+  color: #64748b !important;
+}
+
+/* Top Action Pills */
+.fluent-top-action-pill {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.fluent-top-action-pill:hover {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Workspace Background & A4 Paper in Drift */
+.drift-app-shell {
+  background: #f1f5f9 !important;
+}
+.drift-workspace-scroll {
+  background: #f1f5f9 !important;
+}
+.drift-page-sheet {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Axis Excel Spreadsheet Styling */
+.axis-app-shell {
+  background: #ffffff !important;
+}
+.axis-grid-viewport {
+  background: #ffffff !important;
+}
+.lo-formula-bar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+.lo-name-box {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+.lo-formula-input {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+.axis-cell.selected {
+  outline: 2px solid #16a34a !important;
+}
+
+/* Kinetic PowerPoint Studio Styling */
+.kinetic-app-shell {
+  background: #0f172a !important;
+}
+.kinetic-slide-stage {
+  background: #0f172a !important;
+}
+.kinetic-slide-card {
+  background: #ffffff !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+.kinetic-sidebar-left {
+  background: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+.kinetic-thumb-card {
+  border: 1px solid #cbd5e1 !important;
+}
+.kinetic-thumb-card.active {
+  border: 2px solid #ea580c !important;
+  box-shadow: 0 0 0 1px rgba(234, 88, 12, 0.3) !important;
+}
+
+/* Aegis PDF Studio Styling */
+.pdf-app-shell {
+  background: #f1f5f9 !important;
+}
+.pdf-page-canvas-wrap {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+}
