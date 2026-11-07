@@ -112,9 +112,21 @@ export class OrbitDesktopSuite {
         badgeHtml: '<img src="assets/drift-symbol.png" alt="Drift" style="width:18px; height:18px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:6px;">',
         class: 'drift'
       },
-      axis: { name: 'Giri Axis Spreadsheet', badge: 'A', class: 'calc' },
-      kinetic: { name: 'Giri Kinetic Presentation', badge: 'K', class: 'impress' },
-      pdf: { name: 'Giri Aegis PDF Studio', badge: 'Æ', class: 'draw' }
+      axis: {
+        name: 'Giri Axis Spreadsheet',
+        badgeHtml: '<img src="assets/axis-logo.png" alt="Axis" style="width:18px; height:18px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:6px;">',
+        class: 'calc'
+      },
+      kinetic: {
+        name: 'Giri Kinetic Presentation',
+        badgeHtml: '<img src="assets/kinetic-logo.png" alt="Kinetic" style="width:18px; height:18px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:6px;">',
+        class: 'impress'
+      },
+      pdf: {
+        name: 'Giri Aegis PDF Studio',
+        badgeHtml: '<img src="assets/aegis-logo.png" alt="Aegis" style="width:18px; height:18px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:6px;">',
+        class: 'draw'
+      }
     };
     const t = titles[tool] || titles.drift;
 

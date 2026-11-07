@@ -37,7 +37,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
       <div class="pdf-hub-shell" id="pdf-hub-shell">
         <div class="tool-hub-top-bar">
           <div class="tool-hub-brand-left">
-            <div class="tool-app-icon-badge crimson">Æ</div>
+            <img src="assets/aegis-symbol-64.png" alt="Giri Aegis Logo" style="width:28px; height:28px; object-fit:contain; border-radius:6px; margin-right:4px;">
             <div class="tool-hub-brand-dropdown-wrap" id="pdf-brand-dropdown-wrap">
               <button class="tool-hub-brand-btn" id="pdf-brand-dropdown-trigger" style="display:flex; align-items:center; gap:6px; background:transparent; border:none; cursor:pointer; padding:4px 6px; border-radius:4px;" title="Switch Suite Tool">
                 <span style="color:#ffffff; font-family:var(--font-display, sans-serif); font-weight:700; font-size:14px;">Giri Aegis Studio</span>
@@ -79,7 +79,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
                   <span class="switcher-link-tag">#kinetic</span>
                 </a>
                 <a href="#pdf" class="suite-switcher-item active" data-switch="pdf">
-                  <div class="switcher-icon pdf">Æ</div>
+                  <img src="assets/aegis-symbol-64.png" alt="Giri Aegis" style="width:22px; height:22px; object-fit:contain; border-radius:4px; margin-right:8px;">
                   <div class="switcher-info">
                     <strong>Giri Aegis PDF</strong>
                     <span>Cryptographic PDF &amp; Document Security</span>
