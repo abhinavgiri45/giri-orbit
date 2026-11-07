@@ -16,7 +16,7 @@ import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI KINETIC: ENTERPRISE PRESENTATION SUITE (kinetic.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * Made by Abhinav Giri (GitHub: @abhinavgiri45 | Instagram: @abhinavgiri45)
  * ============================================================================
  * Features:
  * - Full 6-Tab Office Ribbon (Home, Insert, Design, Transitions, Slide Show, View)
@@ -1704,13 +1704,13 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label">OFFICIAL PORTAL</span>
-                <a href="https://giri-corporation.pages.dev/" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Giri Corporation Official Website">
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
                   <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                    <img src="assets/giri-logo-symbol.png" alt="Giri Corporation" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
+                    <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
                   </div>
                   <div class="instagram-card-text">
-                    <strong class="instagram-handle" style="color:#ffffff;">Giri Corporation</strong>
-                    <span class="instagram-sub" style="color:#38bdf8;">giri-corporation.pages.dev &rarr;</span>
+                    <strong class="instagram-handle" style="color:#ffffff;">Abhinav Giri</strong>
+                    <span class="instagram-sub" style="color:#38bdf8;">github.com/abhinavgiri45/giri-orbit &rarr;</span>
                   </div>
                 </a>
               </div>
@@ -7333,7 +7333,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
 
             <div>
               <label style="display:block;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;margin-bottom:6px;">Master Footer Notice</label>
-              <input type="text" id="kinetic-master-footer" value="© 2026 Giri Corporation • Confidential" style="width:100%;box-sizing:border-box;background:#09090b;border:1px solid #3f3f46;color:#f1f5f9;border-radius:6px;padding:8px 12px;font-size:12.5px;">
+              <input type="text" id="kinetic-master-footer" value="© 2026 Abhinav Giri • Confidential" style="width:100%;box-sizing:border-box;background:#09090b;border:1px solid #3f3f46;color:#f1f5f9;border-radius:6px;padding:8px 12px;font-size:12.5px;">
             </div>
 
             <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#cbd5e1;cursor:pointer;">

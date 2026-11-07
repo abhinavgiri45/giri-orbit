@@ -8,7 +8,7 @@ import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI DRIFT: ENTERPRISE WORD PROCESSOR & TEMPLATE HUB (drift.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * Made by Abhinav Giri (GitHub: @abhinavgiri45 | Instagram: @abhinavgiri45)
  * ============================================================================
  * Features:
  * - Fluent Office Document Start & Template Hub:
@@ -191,7 +191,7 @@ const BUILTIN_TEMPLATES = [
               <h3 style="font-size:12px; font-weight:800; text-transform:uppercase; border-bottom:1.5px solid #cbd5e1; padding-bottom:4px; margin-bottom:12px; color:#1e293b;">Work Experience</h3>
               <div style="margin-bottom:18px;">
                 <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#0f172a;">
-                  <span>Lead Architect &bull; Giri Corporation</span>
+                  <span>Lead Architect &bull; Abhinav Giri</span>
                   <span style="color:#64748b; font-weight:500; font-size:12px;">2022 &ndash; Present</span>
                 </div>
                 <p style="font-size:12px; color:#334155; line-height:1.6; margin-top:4px;">
@@ -305,7 +305,7 @@ const BUILTIN_TEMPLATES = [
         </div>
 
         <div style="display:flex; justify-content:space-between; background:#f8fafc; padding:14px; border-radius:6px; margin-bottom:22px; font-size:12px; border:1px solid #e2e8f0;">
-          <div><strong>Billed To:</strong><br>Giri Corporation<br>Attn: Enterprise Treasury Division</div>
+          <div><strong>Billed To:</strong><br>Abhinav Giri<br>Attn: Enterprise Treasury Division</div>
           <div style="text-align:right;"><strong>Invoice Date:</strong> 2026-09-11<br><strong>Due Date:</strong> 2026-10-11 (Net 30)</div>
         </div>
 
@@ -466,10 +466,10 @@ const DEFAULT_CUSTOM_TEMPLATES = [
     content: `
       <h1>Giri Orbit // Enterprise Strategic Charter</h1>
       <blockquote>
-        "Spatial computing and zero-gravity document orchestration form the executive cornerstone of modern cognitive efficiency." — GIRI Corporation Directorate
+        "Spatial computing and zero-gravity document orchestration form the executive cornerstone of modern cognitive efficiency." — Abhinav Giri Directorate
       </blockquote>
       <p>
-        This document serves as the operational architecture standard for <strong>Giri Orbit</strong>, developed as a sovereign productivity layer by <em>GIRI Corporation (Giri Group)</em>.
+        This document serves as the operational architecture standard for <strong>Giri Orbit</strong>, developed as a sovereign productivity layer by <em>Abhinav Giri (Giri Group)</em>.
       </p>
       <h2>1. Strategic Objectives</h2>
       <p>
@@ -503,7 +503,7 @@ const DEFAULT_CUSTOM_TEMPLATES = [
         <h1 style="font-size:22px; font-weight:800; text-align:center; border-bottom:2px solid #0f172a; padding-bottom:8px;">MUTUAL NON-DISCLOSURE AGREEMENT</h1>
         <p style="text-align:center; font-size:11px; font-family:var(--font-mono); color:#64748b;">CONFIDENTIALITY & INTELLECTUAL PROPERTY PRESERVATION</p>
         <p style="font-size:12.5px; line-height:1.7; margin:20px 0;">
-          This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of <strong>September 11, 2026</strong>, by and between <strong>Giri Corporation</strong> ("Disclosing Party") and the undersigned corporate affiliate ("Receiving Party").
+          This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of <strong>September 11, 2026</strong>, by and between <strong>Abhinav Giri</strong> ("Disclosing Party") and the undersigned corporate affiliate ("Receiving Party").
         </p>
         <h3 style="font-size:13px; font-weight:700;">1. Proprietary Information</h3>
         <p style="font-size:12.5px; line-height:1.7;">
@@ -635,13 +635,13 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
       <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
         <div style="display:flex; flex-direction:column; gap:6px;">
           <span class="follow-journey-label">OFFICIAL PORTAL</span>
-          <a href="https://giri-corporation.pages.dev/" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Giri Corporation Official Website">
+          <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
             <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-              <img src="assets/giri-logo-symbol.png" alt="Giri Corporation" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
+              <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
             </div>
             <div class="instagram-card-text">
-              <strong class="instagram-handle" style="color:#ffffff;">Giri Corporation</strong>
-              <span class="instagram-sub" style="color:#38bdf8;">giri-corporation.pages.dev &rarr;</span>
+              <strong class="instagram-handle" style="color:#ffffff;">Abhinav Giri</strong>
+              <span class="instagram-sub" style="color:#38bdf8;">github.com/abhinavgiri45/giri-orbit &rarr;</span>
             </div>
           </a>
         </div>
@@ -9336,7 +9336,7 @@ function calculateMetrics(records) {
             <div style="margin:16px 0; padding:18px 22px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; font-family:var(--font-sans, sans-serif);">
               <div style="font-size:11px; font-weight:800; color:#2563eb; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">EXECUTIVE MEMORANDUM</div>
               <p style="margin:3px 0; font-size:13px;"><strong>TO:</strong> Executive Leadership Team &amp; Engineering Directorate</p>
-              <p style="margin:3px 0; font-size:13px;"><strong>FROM:</strong> Principal Architect // Giri Corporation</p>
+              <p style="margin:3px 0; font-size:13px;"><strong>FROM:</strong> Principal Architect // Abhinav Giri</p>
               <p style="margin:3px 0; font-size:13px;"><strong>DATE:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               <p style="margin:3px 0 12px 0; font-size:13px;"><strong>SUBJECT:</strong> Sovereign Workplace Acceleration &amp; AI Integration</p>
               <hr style="border:none; border-top:1px solid #cbd5e1; margin:12px 0;" />
@@ -9356,7 +9356,7 @@ function calculateMetrics(records) {
             <div style="margin:16px 0; padding:20px 24px; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; font-family:Georgia, serif; color:#0f172a;">
               <h2 style="text-align:center; font-size:16pt; margin:0 0 16px 0; letter-spacing:0.5px; font-family:inherit;">MUTUAL NON-DISCLOSURE &amp; CONFIDENTIALITY AGREEMENT</h2>
               <p style="font-size:10.5pt; line-height:1.6; margin:0 0 12px 0;">
-                This Mutual Non-Disclosure Agreement (the <strong>"Agreement"</strong>) is entered into as of <strong>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</strong>, by and between <strong>Giri Corporation</strong> (the "Disclosing Party") and the undersigned recipient entity (the "Receiving Party").
+                This Mutual Non-Disclosure Agreement (the <strong>"Agreement"</strong>) is entered into as of <strong>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</strong>, by and between <strong>Abhinav Giri</strong> (the "Disclosing Party") and the undersigned recipient entity (the "Receiving Party").
               </p>
               <p style="font-size:10.5pt; line-height:1.6; margin:0 0 12px 0;">
                 <strong>1. Confidential Information:</strong> "Confidential Information" encompasses all proprietary technical data, mathematical matrix algorithms, document blueprints, trade secrets, and sovereign architectural specifications disclosed by either party.
@@ -9367,7 +9367,7 @@ function calculateMetrics(records) {
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px; padding-top:16px; border-top:1px solid #e2e8f0; font-size:10pt;">
                 <div>
                   <p style="margin:0 0 4px 0;"><strong>DISCLOSING PARTY:</strong></p>
-                  <p style="margin:0 0 30px 0; color:#64748b;">Giri Corporation</p>
+                  <p style="margin:0 0 30px 0; color:#64748b;">Abhinav Giri</p>
                   <p style="border-bottom:1px solid #000; padding-bottom:2px; margin:0 0 4px 0;">By: _______________________________</p>
                   <p style="margin:0; font-size:9pt; color:#64748b;">Authorized Signatory</p>
                 </div>
@@ -9390,7 +9390,7 @@ function calculateMetrics(records) {
               </div>
               <p style="font-size:11pt; line-height:1.6; margin:0 0 10px 0;">Dear Candidate,</p>
               <p style="font-size:11pt; line-height:1.6; margin:0 0 10px 0;">
-                We are thrilled to extend an offer of employment for the position of <strong>Principal Sovereign Systems Architect</strong> at Giri Corporation. We were deeply impressed by your engineering leadership and vision.
+                We are thrilled to extend an offer of employment for the position of <strong>Principal Sovereign Systems Architect</strong> at Abhinav Giri. We were deeply impressed by your engineering leadership and vision.
               </p>
               <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px 16px; margin:14px 0; font-size:10.5pt; line-height:1.8;">
                 <div><strong>Starting Salary:</strong> $185,000 / annum (paid semi-monthly)</div>
@@ -9402,7 +9402,7 @@ function calculateMetrics(records) {
                 Please indicate your acceptance of this offer by signing below and returning this letter by Friday at 5:00 PM.
               </p>
               <div style="margin-top:20px; font-size:10.5pt;">
-                <p style="margin:0 0 24px 0;">Sincerely,<br><strong>Director of Talent &amp; Culture</strong><br>Giri Corporation</p>
+                <p style="margin:0 0 24px 0;">Sincerely,<br><strong>Director of Talent &amp; Culture</strong><br>Abhinav Giri</p>
                 <p style="border-bottom:1px solid #000; width:260px; padding-bottom:2px; margin:0 0 4px 0;">Candidate Signature: __________________</p>
                 <p style="margin:0; font-size:9pt; color:#64748b;">Date: ________________________</p>
               </div>

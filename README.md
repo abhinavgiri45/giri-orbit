@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Next-Generation Sovereign Office Suite Engineered for Absolute Privacy and Enterprise Velocity.</strong><br>
-  By <a href="https://giri-corporation.pages.dev/"><strong>Abhinav Giri</strong></a>
+  By <a href="https://github.com/abhinavgiri45/giri-orbit"><strong>Abhinav Giri</strong></a>
 </p>
 
 <p align="center">
@@ -29,14 +29,14 @@ The official production environment is actively deployed on Cloudflare Pages:
 
 > ### ⚠️ COPYRIGHT & USAGE NOTICE: ALL RIGHTS RESERVED
 > 
-> **Copyright © 2025–2026 GIRI Corporation (Giri Group). All Rights Reserved.**
+> **Copyright © 2025–2026 Abhinav Giri (Giri Group). All Rights Reserved.**
 >
-> This repository and all associated software, source code, designs, user interfaces, documentation, graphic marks, algorithms, and intellectual assets are the **exclusive proprietary property of GIRI Corporation**.
+> This repository and all associated software, source code, designs, user interfaces, documentation, graphic marks, algorithms, and intellectual assets are the **exclusive proprietary property of Abhinav Giri**.
 >
 > **Strict Terms & Restrictions:**
 > 1. **No External or Unauthorized Use**: You may NOT copy, reproduce, distribute, publicly display, sublicense, decompile, reverse-engineer, modify, or create derivative works from any part of this software or its source code.
 > 2. **No Commercial or Non-Commercial Exploitation**: External individuals, organizations, or third parties are strictly prohibited from using, hosting, redistributing, or incorporating any component of this platform into other products or services.
-> 3. **Private Sovereign Technology**: Access to this repository is provided solely for internal inspection and authorized development by GIRI Corporation. No license or permission, express or implied, is granted under any patent, copyright, trademark, or trade secret rights of GIRI Corporation.
+> 3. **Private Sovereign Technology**: Access to this repository is provided solely for internal inspection and authorized development by Abhinav Giri. No license or permission, express or implied, is granted under any patent, copyright, trademark, or trade secret rights of Abhinav Giri.
 >
 > *For licensing inquiries or authorized institutional partnerships, contact me at `abhinavgiri370@gmail.com`.*
 
@@ -151,12 +151,12 @@ giri-orbit/
 │       ├── printManager.js      # Universal high-fidelity print manager
 │       ├── localFileDirectSync.js # File System Access API bridge
 │       └── fontPicker.js        # Universal dynamic font selector
-└── assets/                      # Official Giri Corporation logos & marks
+└── assets/                      # Official Abhinav Giri logos & marks
 ```
 
 ---
 
 <p align="center">
-  <strong>© 2025–2026 GIRI Corporation. All rights reserved.</strong><br>
+  <strong>© 2025–2026 Abhinav Giri. All rights reserved.</strong><br>
   Proprietary software — unauthorized distribution or copying is strictly prohibited.
 </p>

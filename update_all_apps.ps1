@@ -1,6 +1,6 @@
 # ============================================================================
 # GIRI ORBIT — MASTER AUTO-UPDATE & MULTI-PLATFORM RELEASE BUILDER
-# By GIRI Corporation (A Subsidiary of Giri Group)
+# Made by Abhinav Giri (GitHub: @abhinavgiri45 | Instagram: @abhinavgiri45)
 # One-click script to package & distribute updates across Web, Windows, & Android
 # ============================================================================
 

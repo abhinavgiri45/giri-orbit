@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT / GIRI OFFICE SUITE — CENTRAL ORCHESTRATOR (app.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * Made by Abhinav Giri (GitHub: @abhinavgiri45 | Instagram: @abhinavgiri45)
  * Design Inspired by Zoho Office Suite / Apple / Linear
  * ============================================================================
  * Features:
@@ -604,7 +604,7 @@ class GiriOrbitPlatform {
         <div class="zoho-hero-left">
           <h1 class="zoho-hero-title">The Sovereign Enterprise Workspace</h1>
           <p class="zoho-hero-subtitle">
-            Giri Orbit by GIRI Corporation delivers unified, zero-latency computing. Unbind your workflows with Drift document architecture, Axis financial modeling, Kinetic cinematic presentations, and Aegis cryptographic document validation — powered by instant in-memory state.
+            Giri Orbit — Made by Abhinav Giri delivers unified, zero-latency sovereign computing. Unbind your workflows with Drift document architecture, Axis financial modeling, Kinetic cinematic presentations, and Aegis cryptographic document validation — powered by instant in-memory state.
           </p>
 
           <!-- Executive Giri Orbit Action Row: Launch Suite & Download Apps -->
@@ -2054,7 +2054,7 @@ class GiriOrbitPlatform {
               layout: 'metrics',
               tag: 'EXECUTIVE VISION 01',
               title: 'Sovereign AI Enterprise Infrastructure',
-              desc: 'Next-generation distributed office architecture engineered by Giri Corporation.',
+              desc: 'Next-generation distributed office architecture created by Abhinav Giri.',
               features: [
                 { num: '0.4 ms', title: 'Compile Latency', desc: 'Local in-memory client rendering' },
                 { num: '100%', title: 'Data Sovereignty', desc: 'Zero outbound telemetry leaks' },
@@ -2201,7 +2201,7 @@ class GiriOrbitPlatform {
         } else if (promptType === 'enhance-tone') {
           const quoteHtml = `
             <p style="margin:14px 0 14px 20px; font-style:italic; color:#334155; font-size:11.5pt; line-height:1.65;">
-              "By orchestrating high-velocity digital assets through in-memory client vectors, GIRI Corporation establishes an unassailable standard for sovereign productivity, decoupled from legacy cloud overhead."
+              "By orchestrating high-velocity digital assets through in-memory client vectors, Giri Orbit establishes an unassailable standard for sovereign productivity, decoupled from legacy cloud overhead."
             </p>
             <p></p>
           `;
@@ -4708,7 +4708,7 @@ class GiriOrbitPlatform {
       </head>
       <body>
         <div class="executive-header-box">
-          <strong style="color:#0f172a;">GIRI CORPORATION &bull; GIRI OFFICE SUITE</strong><br>
+          <strong style="color:#0f172a;">MADE BY ABHINAV GIRI &bull; GIRI ORBIT</strong><br>
           Document: ${title} &bull; Export Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
         </div>
         ${bodyHtml}
@@ -4768,7 +4768,7 @@ class GiriOrbitPlatform {
  xmlns:html="http://www.w3.org/TR/REC-html40">
  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
   <Author>Giri Office Suite</Author>
-  <Company>GIRI Corporation</Company>
+  <Company>Abhinav Giri</Company>
   <Created>${new Date().toISOString()}</Created>
  </DocumentProperties>
  <Styles>
@@ -4835,7 +4835,7 @@ class GiriOrbitPlatform {
         </div>
 
         <div class="slide-footer">
-          <span>GIRI CORPORATION &bull; GIRI OFFICE SUITE</span>
+          <span>MADE BY ABHINAV GIRI &bull; GIRI ORBIT</span>
           <span>${title} &bull; 2026</span>
         </div>
       </section>

@@ -7,7 +7,7 @@ import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
 /**
  * ============================================================================
  * GIRI ORBIT — GIRI AXIS: ADVANCED SPREADSHEET STUDIO (axis.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * Made by Abhinav Giri (GitHub: @abhinavgiri45 | Instagram: @abhinavgiri45)
  * ============================================================================
  * Features:
  * - Full Enterprise Multi-Tab Office Ribbon (Home, Insert, Formulas, Data, View)
@@ -166,13 +166,13 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
             <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label">OFFICIAL PORTAL</span>
-                <a href="https://giri-corporation.pages.dev/" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Giri Corporation Official Website">
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
                   <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                    <img src="assets/giri-logo-symbol.png" alt="Giri Corporation" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
+                    <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
                   </div>
                   <div class="instagram-card-text">
-                    <strong class="instagram-handle" style="color:#ffffff;">Giri Corporation</strong>
-                    <span class="instagram-sub" style="color:#38bdf8;">giri-corporation.pages.dev &rarr;</span>
+                    <strong class="instagram-handle" style="color:#ffffff;">Abhinav Giri</strong>
+                    <span class="instagram-sub" style="color:#38bdf8;">github.com/abhinavgiri45/giri-orbit &rarr;</span>
                   </div>
                 </a>
               </div>
