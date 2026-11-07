@@ -3,6 +3,12 @@
 101 ICON "../../assets/orbit.ico"
 1 24 "../common/app.manifest"
 
+// Embedded Sovereign Native Desktop Binaries Payload
+1001 RCDATA "../../bin/GiriOrbit.exe"
+1002 RCDATA "../../bin/GiriDrift.exe"
+1003 RCDATA "../../bin/GiriAxis.exe"
+1004 RCDATA "../../bin/GiriKinetic.exe"
+
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     11,8,5,0
 PRODUCTVERSION  11,8,5,0

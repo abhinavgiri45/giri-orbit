@@ -157,7 +157,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     std::wstring licenseText =
         L"GIRI ORBIT SOVEREIGN END-USER LICENSE AGREEMENT\r\n"
         L"Author & Copyright Holder: Abhinav Giri\r\n"
-        L"GitHub: https://github.com/abhinavgiri45 | Instagram: @abhinavgiri45\r\n"
+        L"GitHub: https://github.com/abhinavgiri45 | Instagram: @abhinavgiri45 | Email: abhinavgiri370@gmail.com\r\n"
         L"Version: 11.8.5 (Native Win32 C++ Edition)\r\n\r\n"
         L"1. SOVEREIGN GRANT OF LICENSE\r\n"
         L"Abhinav Giri grants you a perpetual, royalty-free, non-exclusive license to install, execute, and utilize the Giri Orbit Suite (including Giri Drift, Giri Axis, Giri Kinetic, and Giri Orbit Hub) on any compatible hardware.\r\n\r\n"
@@ -354,6 +354,11 @@ void CreateShortcut(const std::wstring& targetPath, const std::wstring& shortcut
     if (SUCCEEDED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLinkW, (LPVOID*)&psl))) {
         psl->SetPath(targetPath.c_str());
         psl->SetDescription(description.c_str());
+        // Set working directory to target folder
+        wchar_t szWork[MAX_PATH] = { 0 };
+        wcscpy_s(szWork, targetPath.c_str());
+        PathRemoveFileSpecW(szWork);
+        psl->SetWorkingDirectory(szWork);
         IPersistFile* ppf = NULL;
         if (SUCCEEDED(psl->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf))) {
             ppf->Save(shortcutPath.c_str(), TRUE);
@@ -362,6 +367,36 @@ void CreateShortcut(const std::wstring& targetPath, const std::wstring& shortcut
         psl->Release();
     }
     CoUninitialize();
+}
+
+bool ExtractResourceToFile(int resId, const std::wstring& targetPath) {
+    HRSRC hRes = FindResourceW(g_hInst, MAKEINTRESOURCEW(resId), RT_RCDATA);
+    if (!hRes) return false;
+    HGLOBAL hData = LoadResource(g_hInst, hRes);
+    if (!hData) return false;
+    DWORD size = SizeofResource(g_hInst, hRes);
+    void* pData = LockResource(hData);
+    if (!pData || size == 0) return false;
+
+    HANDLE hFile = CreateFileW(targetPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE) return false;
+    DWORD written = 0;
+    BOOL ok = WriteFile(hFile, pData, size, &written, NULL);
+    CloseHandle(hFile);
+    return (ok && written == size);
+}
+
+void InstallAppFile(int resId, const std::wstring& filename, const std::wstring& binSource) {
+    std::wstring target = g_installDir + L"\\" + filename;
+    if (ExtractResourceToFile(resId, target)) {
+        return;
+    }
+    // Fallback to copying from directory if resource was not found
+    std::wstring src = binSource + L"\\" + filename;
+    if (PathFileExistsW(src.c_str())) {
+        std::error_code ec;
+        std::filesystem::copy_file(src, target, std::filesystem::copy_options::overwrite_existing, ec);
+    }
 }
 
 void PerformInstallation(HWND hwnd) {
@@ -390,22 +425,22 @@ void PerformInstallation(HWND hwnd) {
 
     if (g_installDrift) {
         updateStep(25, L"Installing Giri Drift (Document Composer)...");
-        std::filesystem::copy_file(binSource + L"\\GiriDrift.exe", g_installDir + L"\\GiriDrift.exe", std::filesystem::copy_options::overwrite_existing);
+        InstallAppFile(1002, L"GiriDrift.exe", binSource);
     }
 
     if (g_installAxis) {
         updateStep(45, L"Installing Giri Axis (Financial Matrix)...");
-        std::filesystem::copy_file(binSource + L"\\GiriAxis.exe", g_installDir + L"\\GiriAxis.exe", std::filesystem::copy_options::overwrite_existing);
+        InstallAppFile(1003, L"GiriAxis.exe", binSource);
     }
 
     if (g_installKinetic) {
         updateStep(65, L"Installing Giri Kinetic (Presentation Studio)...");
-        std::filesystem::copy_file(binSource + L"\\GiriKinetic.exe", g_installDir + L"\\GiriKinetic.exe", std::filesystem::copy_options::overwrite_existing);
+        InstallAppFile(1004, L"GiriKinetic.exe", binSource);
     }
 
     if (g_installHub) {
         updateStep(80, L"Installing Giri Orbit Suite Hub...");
-        std::filesystem::copy_file(binSource + L"\\GiriOrbit.exe", g_installDir + L"\\GiriOrbit.exe", std::filesystem::copy_options::overwrite_existing);
+        InstallAppFile(1001, L"GiriOrbit.exe", binSource);
     }
 
     if (g_createShortcut) {
@@ -414,7 +449,10 @@ void PerformInstallation(HWND hwnd) {
         SHGetFolderPathW(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, szDesktop);
         std::wstring desktop = szDesktop;
 
-        if (g_installHub) CreateShortcut(g_installDir + L"\\GiriOrbit.exe", desktop + L"\\Giri Orbit.lnk", L"Giri Orbit Sovereign Suite");
+        if (g_installHub) {
+            CreateShortcut(g_installDir + L"\\GiriOrbit.exe", desktop + L"\\Giri Orbit.lnk", L"Giri Orbit Sovereign Suite");
+            CreateShortcut(g_installDir + L"\\GiriOrbit.exe", desktop + L"\\Giri Orbit — Office Suite.lnk", L"Giri Orbit Sovereign Suite");
+        }
         if (g_installDrift) CreateShortcut(g_installDir + L"\\GiriDrift.exe", desktop + L"\\Giri Drift.lnk", L"Giri Drift Document Composer");
         if (g_installAxis) CreateShortcut(g_installDir + L"\\GiriAxis.exe", desktop + L"\\Giri Axis.lnk", L"Giri Axis Financial Matrix");
         if (g_installKinetic) CreateShortcut(g_installDir + L"\\GiriKinetic.exe", desktop + L"\\Giri Kinetic.lnk", L"Giri Kinetic Presentation Studio");

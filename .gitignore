@@ -23,6 +23,7 @@ venv/
 # Build artifacts
 dist/
 build/
+desktop/bin/
 *.min.js.map
 
 # Temp & scratch
