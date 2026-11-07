@@ -8938,7 +8938,7 @@ function calculateMetrics(records) {
                   </tr>
                 </tbody>
               </table>
-              <p style="font-size:12px; color:#475569;">Please remit payment prior to the due date. For inquiries, contact accounts@giricorporation.com.</p>
+              <p style="font-size:12px; color:#475569;">Please remit payment prior to the due date. For inquiries, contact contact@abhinavgiri.com.</p>
             `;
             paper.innerHTML = invoiceTpl;
             saveDocument();
