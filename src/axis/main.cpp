@@ -40,6 +40,20 @@
 #define IDC_FORMULA_EDIT     3101
 #define IDC_CELL_EDITOR      3102
 #define IDC_SHEET_TABS       3103
+#define IDC_TOOLBAR_PANEL    3110
+#define IDC_BTN_AUTOSUM      3111
+#define IDC_BTN_AVERAGE      3112
+#define IDC_BTN_COUNT        3113
+#define IDC_BTN_MAXMIN       3114
+#define IDC_BTN_CURRENCY     3115
+#define IDC_BTN_PERCENT      3116
+#define IDC_BTN_SORT_ASC     3117
+#define IDC_BTN_SORT_DESC    3118
+#define IDC_BTN_INS_ROW      3119
+#define IDC_BTN_INS_COL      3120
+#define IDC_BTN_CHART        3121
+#define IDC_BTN_TEMPLATES    3122
+
 
 struct CellData {
     std::wstring raw;
@@ -60,6 +74,8 @@ HWND g_hCellEditor = NULL;
 HWND g_hGridWnd = NULL;
 HWND g_hTabCtrl = NULL;
 HWND g_hStatusBar = NULL;
+HWND g_hToolbarPanel = NULL;
+HWND g_hFxLbl = NULL;
 
 std::vector<Sheet> g_sheets;
 int g_activeSheet = 0;
@@ -238,6 +254,11 @@ void RecalculateSheet(Sheet& sheet) {
 LRESULT CALLBACK MainWndProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK GridWndProc(HWND, UINT, WPARAM, LPARAM);
 void CreateMainMenu(HWND);
+void CreateRibbonToolbar(HWND);
+void DoShowChartDialog(HWND);
+void ApplyAxisTemplate(int);
+void DoShowAxisTemplatesMenu(HWND);
+
 void UpdateStatusBar(HWND);
 void CommitCellEditor();
 void StartCellEditor(int r, int c, wchar_t initialChar = 0);
@@ -311,24 +332,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     if (!g_hMainWnd) return 0;
 
     CreateMainMenu(g_hMainWnd);
+    CreateRibbonToolbar(g_hMainWnd);
 
     // Create Formula Bar elements
     g_hCellCoordLbl = CreateWindowExW(
         0, L"STATIC", L"A1",
         WS_CHILD | WS_VISIBLE | SS_CENTER | SS_CENTERIMAGE | WS_BORDER,
-        8, 8, 64, 26, g_hMainWnd, NULL, hInstance, NULL
+        8, 42, 64, 26, g_hMainWnd, NULL, hInstance, NULL
     );
 
-    CreateWindowExW(
+    g_hFxLbl = CreateWindowExW(
         0, L"STATIC", L"fx",
         WS_CHILD | WS_VISIBLE | SS_CENTER | SS_CENTERIMAGE,
-        76, 8, 24, 26, g_hMainWnd, NULL, hInstance, NULL
+        76, 42, 24, 26, g_hMainWnd, NULL, hInstance, NULL
     );
 
     g_hFormulaBar = CreateWindowExW(
         WS_EX_CLIENTEDGE, L"EDIT", L"",
         WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
-        104, 8, 700, 26, g_hMainWnd, (HMENU)IDC_FORMULA_EDIT, hInstance, NULL
+        104, 42, 700, 26, g_hMainWnd, (HMENU)IDC_FORMULA_EDIT, hInstance, NULL
     );
 
     // Create Grid Window
@@ -638,6 +660,272 @@ void DoFileSave(HWND hwnd, bool saveAs) {
     MessageBoxW(hwnd, L"Workbook saved successfully!", L"Giri Axis", MB_OK | MB_ICONINFORMATION);
 }
 
+
+// Visual Analytics Chart Window
+struct ChartPoint {
+    std::wstring label;
+    double val;
+    COLORREF color;
+};
+
+static std::vector<ChartPoint> g_chartPoints;
+
+LRESULT CALLBACK ChartWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+    case WM_PAINT: {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        RECT client;
+        GetClientRect(hwnd, &client);
+
+        HBRUSH hBack = CreateSolidBrush(RGB(248, 250, 252));
+        FillRect(hdc, &client, hBack);
+        DeleteObject(hBack);
+
+        HFONT hFontTitle = CreateFontW(20, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                                      OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+                                      VARIABLE_PITCH, L"Segoe UI");
+        HFONT hFontSub = CreateFontW(13, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                                    OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+                                    VARIABLE_PITCH, L"Segoe UI");
+        HFONT hFontLbl = CreateFontW(12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                                    OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+                                    VARIABLE_PITCH, L"Segoe UI");
+
+        SetBkMode(hdc, TRANSPARENT);
+        HGDIOBJ oldFont = SelectObject(hdc, hFontTitle);
+        SetTextColor(hdc, RGB(15, 23, 42));
+        TextOutW(hdc, 24, 16, L"Executive Visual Analytics — Column Chart", 41);
+
+        SelectObject(hdc, hFontSub);
+        SetTextColor(hdc, RGB(100, 116, 139));
+        TextOutW(hdc, 24, 42, L"Generated directly from active financial matrix • 100% Offline Sovereign", 71);
+
+        if (!g_chartPoints.empty()) {
+            double maxV = 0.0;
+            for (auto& cp : g_chartPoints) if (cp.val > maxV) maxV = cp.val;
+            if (maxV <= 0.0) maxV = 1.0;
+
+            int chartLeft = 50;
+            int chartRight = client.right - 40;
+            int chartTop = 90;
+            int chartBottom = client.bottom - 60;
+            int chartHeight = chartBottom - chartTop;
+
+            HPEN hAxisPen = CreatePen(PS_SOLID, 2, RGB(148, 163, 184));
+            HGDIOBJ oldPen = SelectObject(hdc, hAxisPen);
+            MoveToEx(hdc, chartLeft, chartBottom, NULL);
+            LineTo(hdc, chartRight, chartBottom);
+            SelectObject(hdc, oldPen);
+            DeleteObject(hAxisPen);
+
+            int n = (int)g_chartPoints.size();
+            int totalW = chartRight - chartLeft;
+            int barSlot = totalW / n;
+            int barWidth = (barSlot * 6) / 10;
+            if (barWidth < 20) barWidth = 20;
+
+            SelectObject(hdc, hFontLbl);
+
+            for (int i = 0; i < n; ++i) {
+                int bx = chartLeft + i * barSlot + (barSlot - barWidth) / 2;
+                int bh = (int)((g_chartPoints[i].val / maxV) * (chartHeight - 40));
+                int by = chartBottom - bh;
+
+                HBRUSH hBar = CreateSolidBrush(g_chartPoints[i].color);
+                RECT rBar = { bx, by, bx + barWidth, chartBottom };
+                FillRect(hdc, &rBar, hBar);
+                DeleteObject(hBar);
+
+                wchar_t szVal[32];
+                swprintf_s(szVal, L"%.0f", g_chartPoints[i].val);
+                SetTextColor(hdc, RGB(15, 23, 42));
+                RECT rVal = { bx - 15, by - 20, bx + barWidth + 15, by };
+                DrawTextW(hdc, szVal, -1, &rVal, DT_CENTER | DT_SINGLELINE);
+
+                SetTextColor(hdc, RGB(71, 85, 105));
+                RECT rLbl = { bx - 20, chartBottom + 6, bx + barWidth + 20, chartBottom + 45 };
+                DrawTextW(hdc, g_chartPoints[i].label.c_str(), -1, &rLbl, DT_CENTER | DT_WORDBREAK);
+            }
+        }
+
+        SelectObject(hdc, oldFont);
+        DeleteObject(hFontTitle);
+        DeleteObject(hFontSub);
+        DeleteObject(hFontLbl);
+
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    case WM_CLOSE:
+        DestroyWindow(hwnd);
+        return 0;
+    }
+    return DefWindowProcW(hwnd, msg, wParam, lParam);
+}
+
+void DoShowChartDialog(HWND hwndOwner) {
+    g_chartPoints.clear();
+    const Sheet& s = g_sheets[g_activeSheet];
+    COLORREF palette[] = {
+        RGB(37, 99, 235),  RGB(16, 185, 129), RGB(139, 92, 246), RGB(245, 158, 11),
+        RGB(239, 68, 68),  RGB(6, 182, 212),  RGB(236, 72, 153), RGB(20, 184, 166)
+    };
+
+    int pal = 0;
+    for (int r = 1; r < 20; ++r) {
+        auto itL = s.cells.find({ r, 0 });
+        auto itV = s.cells.find({ r, 1 });
+        if (itL != s.cells.end() && itV != s.cells.end() && !itL->second.display.empty()) {
+            double v = GetCellValueAsNumber(s, r, 1);
+            if (v != 0.0) {
+                g_chartPoints.push_back({ itL->second.display, v, palette[pal % 8] });
+                pal++;
+            }
+        }
+    }
+
+    if (g_chartPoints.empty()) {
+        MessageBoxW(hwndOwner, L"No numerical data found in Columns A and B to plot.\nEnter categories in Column A and numbers in Column B.", L"Chart Generator", MB_OK | MB_ICONINFORMATION);
+        return;
+    }
+
+    static bool reg = false;
+    if (!reg) {
+        WNDCLASSEXW wcex = { sizeof(WNDCLASSEXW) };
+        wcex.style = CS_HREDRAW | CS_VREDRAW;
+        wcex.lpfnWndProc = ChartWndProc;
+        wcex.hInstance = g_hInst;
+        wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wcex.lpszClassName = L"GiriAxisChartWindow";
+        RegisterClassExW(&wcex);
+        reg = true;
+    }
+
+    HWND hChartWnd = CreateWindowExW(
+        WS_EX_DLGMODALFRAME, L"GiriAxisChartWindow",
+        L"Financial Analytics Chart — Giri Axis",
+        WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE,
+        CW_USEDEFAULT, CW_USEDEFAULT, 720, 480,
+        hwndOwner, NULL, g_hInst, NULL
+    );
+}
+
+void CreateRibbonToolbar(HWND hwnd) {
+    g_hToolbarPanel = CreateWindowExW(
+        0, L"STATIC", L"",
+        WS_CHILD | WS_VISIBLE | SS_LEFT | WS_CLIPCHILDREN,
+        0, 0, 1100, 36, hwnd, (HMENU)IDC_TOOLBAR_PANEL, g_hInst, NULL
+    );
+
+    HFONT hFont = CreateFontW(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                              OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+                              VARIABLE_PITCH, L"Segoe UI");
+
+    auto makeBtn = [hFont](const wchar_t* text, int x, int w, int id) {
+        HWND btn = CreateWindowExW(
+            0, L"BUTTON", text,
+            WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+            x, 4, w, 28, g_hToolbarPanel, (HMENU)(INT_PTR)id, g_hInst, NULL
+        );
+        SendMessageW(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
+        return btn;
+    };
+
+    makeBtn(L"Σ AutoSum", 6, 85, IDC_BTN_AUTOSUM);
+    makeBtn(L"Average", 95, 68, IDC_BTN_AVERAGE);
+    makeBtn(L"Count", 167, 56, IDC_BTN_COUNT);
+    makeBtn(L"Max/Min", 227, 68, IDC_BTN_MAXMIN);
+    makeBtn(L"$ Currency", 299, 78, IDC_BTN_CURRENCY);
+    makeBtn(L"% Percent", 381, 72, IDC_BTN_PERCENT);
+    makeBtn(L"Sort A-Z", 457, 68, IDC_BTN_SORT_ASC);
+    makeBtn(L"Sort Z-A", 529, 68, IDC_BTN_SORT_DESC);
+    makeBtn(L"+ Row", 601, 56, IDC_BTN_INS_ROW);
+    makeBtn(L"+ Col", 661, 56, IDC_BTN_INS_COL);
+    makeBtn(L"📊 Chart", 721, 68, IDC_BTN_CHART);
+    makeBtn(L"📂 Templates ▼", 793, 105, IDC_BTN_TEMPLATES);
+}
+
+void ApplyAxisTemplate(int id) {
+    Sheet& s = g_sheets[g_activeSheet];
+    s.cells.clear();
+
+    if (id == 1) { // Annual Budget
+        s.cells[{0, 0}] = { L"Category", L"Category" };
+        s.cells[{0, 1}] = { L"Q1 Actual", L"Q1 Actual" };
+        s.cells[{0, 2}] = { L"Q2 Proj", L"Q2 Proj" };
+        s.cells[{0, 3}] = { L"Q3 Proj", L"Q3 Proj" };
+        s.cells[{0, 4}] = { L"Q4 Proj", L"Q4 Proj" };
+        s.cells[{0, 5}] = { L"Total FY26", L"Total FY26" };
+
+        s.cells[{1, 0}] = { L"R&D Engineering", L"R&D Engineering" };
+        s.cells[{1, 1}] = { L"125000", L"125000" };
+        s.cells[{1, 2}] = { L"135000", L"135000" };
+        s.cells[{1, 3}] = { L"140000", L"140000" };
+        s.cells[{1, 4}] = { L"155000", L"155000" };
+        s.cells[{1, 5}] = { L"=SUM(B2:E2)", L"555000" };
+
+        s.cells[{2, 0}] = { L"Infrastructure", L"Infrastructure" };
+        s.cells[{2, 1}] = { L"45000", L"45000" };
+        s.cells[{2, 2}] = { L"48000", L"48000" };
+        s.cells[{2, 3}] = { L"52000", L"52000" };
+        s.cells[{2, 4}] = { L"55000", L"55000" };
+        s.cells[{2, 5}] = { L"=SUM(B3:E3)", L"200000" };
+
+        s.cells[{3, 0}] = { L"Personnel", L"Personnel" };
+        s.cells[{3, 1}] = { L"210000", L"210000" };
+        s.cells[{3, 2}] = { L"215000", L"215000" };
+        s.cells[{3, 3}] = { L"220000", L"220000" };
+        s.cells[{3, 4}] = { L"230000", L"230000" };
+        s.cells[{3, 5}] = { L"=SUM(B4:E4)", L"875000" };
+
+        s.cells[{4, 0}] = { L"Total Cost", L"Total Cost" };
+        s.cells[{4, 1}] = { L"=SUM(B2:B4)", L"380000" };
+        s.cells[{4, 2}] = { L"=SUM(C2:C4)", L"398000" };
+        s.cells[{4, 3}] = { L"=SUM(D2:D4)", L"412000" };
+        s.cells[{4, 4}] = { L"=SUM(E2:E4)", L"440000" };
+        s.cells[{4, 5}] = { L"=SUM(F2:F4)", L"1630000" };
+    } else if (id == 2) { // Income Statement
+        s.cells[{0, 0}] = { L"Metric", L"Metric" };
+        s.cells[{0, 1}] = { L"Gross Revenue", L"Gross Revenue" };
+        s.cells[{0, 2}] = { L"COGS", L"COGS" };
+        s.cells[{0, 3}] = { L"Operating Income", L"Operating Income" };
+
+        s.cells[{1, 0}] = { L"Software Licenses", L"Software Licenses" };
+        s.cells[{1, 1}] = { L"420000", L"420000" };
+        s.cells[{1, 2}] = { L"84000", L"84000" };
+        s.cells[{1, 3}] = { L"336000", L"336000" };
+
+        s.cells[{2, 0}] = { L"Sovereign Nodes", L"Sovereign Nodes" };
+        s.cells[{2, 1}] = { L"280000", L"280000" };
+        s.cells[{2, 2}] = { L"56000", L"56000" };
+        s.cells[{2, 3}] = { L"224000", L"224000" };
+
+        s.cells[{3, 0}] = { L"Institutional Support", L"Institutional Support" };
+        s.cells[{3, 1}] = { L"190000", L"190000" };
+        s.cells[{3, 2}] = { L"38000", L"38000" };
+        s.cells[{3, 3}] = { L"152000", L"152000" };
+    }
+
+    RecalculateSheet(s);
+    InvalidateRect(g_hGridWnd, NULL, TRUE);
+    UpdateStatusBar(g_hMainWnd);
+}
+
+void DoShowAxisTemplatesMenu(HWND hwnd) {
+    HMENU hPopup = CreatePopupMenu();
+    AppendMenuW(hPopup, MF_STRING, 5001, L"1. Annual Corporate Operating Budget");
+    AppendMenuW(hPopup, MF_STRING, 5002, L"2. Q4 Income Statement & Profit Analysis");
+
+    RECT btnRect;
+    HWND hBtn = GetDlgItem(g_hToolbarPanel, IDC_BTN_TEMPLATES);
+    GetWindowRect(hBtn, &btnRect);
+
+    TrackPopupMenu(hPopup, TPM_LEFTALIGN | TPM_TOPALIGN, btnRect.left, btnRect.bottom, 0, hwnd, NULL);
+    DestroyMenu(hPopup);
+}
+
 // Main Window Procedure
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
@@ -645,15 +933,66 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
         int w = LOWORD(lParam);
         int h = HIWORD(lParam);
 
-        SetWindowPos(g_hFormulaBar, NULL, 104, 8, w - 120, 26, SWP_NOZORDER);
-        SetWindowPos(g_hGridWnd, NULL, 0, 42, w, h - 42 - 58, SWP_NOZORDER);
+        SetWindowPos(g_hToolbarPanel, NULL, 0, 0, w, 36, SWP_NOZORDER);
+        SetWindowPos(g_hCellCoordLbl, NULL, 8, 42, 64, 26, SWP_NOZORDER);
+        SetWindowPos(g_hFxLbl, NULL, 76, 42, 24, 26, SWP_NOZORDER);
+        SetWindowPos(g_hFormulaBar, NULL, 104, 42, w - 120, 26, SWP_NOZORDER);
+        SetWindowPos(g_hGridWnd, NULL, 0, 74, w, h - 74 - 58, SWP_NOZORDER);
         SetWindowPos(g_hTabCtrl, NULL, 0, h - 58, w, 32, SWP_NOZORDER);
         SendMessageW(g_hStatusBar, WM_SIZE, wParam, lParam);
         return 0;
     }
     case WM_COMMAND: {
         WORD id = LOWORD(wParam);
-        if (id == IDM_FILE_NEW) {
+        
+        if (id == IDC_BTN_AUTOSUM || id == IDM_INSERT_SUM) {
+            std::wstring f = L"=SUM(" + ColToLetter(g_selectedCol) + L"1:" + ColToLetter(g_selectedCol) + std::to_wstring(g_selectedRow) + L")";
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].raw = f;
+            RecalculateSheet(g_sheets[g_activeSheet]);
+            InvalidateRect(g_hGridWnd, NULL, TRUE);
+            UpdateStatusBar(hwnd);
+        } else if (id == IDC_BTN_AVERAGE || id == IDM_INSERT_AVG) {
+            std::wstring f = L"=AVERAGE(" + ColToLetter(g_selectedCol) + L"1:" + ColToLetter(g_selectedCol) + std::to_wstring(g_selectedRow) + L")";
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].raw = f;
+            RecalculateSheet(g_sheets[g_activeSheet]);
+            InvalidateRect(g_hGridWnd, NULL, TRUE);
+            UpdateStatusBar(hwnd);
+        } else if (id == IDC_BTN_COUNT || id == IDM_INSERT_COUNT) {
+            std::wstring f = L"=COUNT(" + ColToLetter(g_selectedCol) + L"1:" + ColToLetter(g_selectedCol) + std::to_wstring(g_selectedRow) + L")";
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].raw = f;
+            RecalculateSheet(g_sheets[g_activeSheet]);
+            InvalidateRect(g_hGridWnd, NULL, TRUE);
+            UpdateStatusBar(hwnd);
+        } else if (id == IDC_BTN_MAXMIN) {
+            std::wstring f = L"=MAX(" + ColToLetter(g_selectedCol) + L"1:" + ColToLetter(g_selectedCol) + std::to_wstring(g_selectedRow) + L")";
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].raw = f;
+            RecalculateSheet(g_sheets[g_activeSheet]);
+            InvalidateRect(g_hGridWnd, NULL, TRUE);
+            UpdateStatusBar(hwnd);
+        } else if (id == IDC_BTN_CURRENCY) {
+            double v = GetCellValueAsNumber(g_sheets[g_activeSheet], g_selectedRow, g_selectedCol);
+            wchar_t buf[64];
+            swprintf_s(buf, L"$%.2f", v);
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].raw = buf;
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].display = buf;
+            InvalidateRect(g_hGridWnd, NULL, TRUE);
+        } else if (id == IDC_BTN_PERCENT) {
+            double v = GetCellValueAsNumber(g_sheets[g_activeSheet], g_selectedRow, g_selectedCol);
+            wchar_t buf[64];
+            swprintf_s(buf, L"%.1f%%", v * 100.0);
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].raw = buf;
+            g_sheets[g_activeSheet].cells[{ g_selectedRow, g_selectedCol }].display = buf;
+            InvalidateRect(g_hGridWnd, NULL, TRUE);
+        } else if (id == IDC_BTN_CHART) {
+            DoShowChartDialog(hwnd);
+        } else if (id == IDC_BTN_TEMPLATES) {
+            DoShowAxisTemplatesMenu(hwnd);
+        } else if (id == 5001) {
+            ApplyAxisTemplate(1);
+        } else if (id == 5002) {
+            ApplyAxisTemplate(2);
+        } else 
+if (id == IDM_FILE_NEW) {
             g_sheets.clear();
             Sheet s;
             s.name = L"Sheet 1";

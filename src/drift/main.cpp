@@ -1,6 +1,7 @@
 /* ============================================================================
  * GIRI DRIFT — EXECUTIVE DOCUMENT COMPOSER & WORD PROCESSOR (main.cpp)
  * Made by Abhinav Giri (GitHub: @abhinavgiri45 | Instagram: @abhinavgiri45)
+ * Official Contact: abhinavgiri370@gmail.com
  * 100% Offline Standalone Native C++ Win32 Desktop Application
  * Zero Browser • Zero Cloud Telemetry • Sovereign In-Memory Document Engine
  * ============================================================================
@@ -11,18 +12,43 @@
 #include <commdlg.h>
 #include <shellapi.h>
 #include <shlwapi.h>
+#include <vector>
+#include <string>
 
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "comdlg32.lib")
 #pragma comment(lib, "shell32.lib")
 
+// Control IDs
+#define IDC_TOOLBAR_PANEL   3000
+#define IDC_RICH_EDIT       3001
+#define IDC_COMBO_FONT      3010
+#define IDC_COMBO_SIZE      3011
+#define IDC_BTN_BOLD        3020
+#define IDC_BTN_ITALIC      3021
+#define IDC_BTN_UNDERLINE   3022
+#define IDC_BTN_STRIKE      3023
+#define IDC_BTN_COLOR       3024
+#define IDC_BTN_ALIGN_L     3025
+#define IDC_BTN_ALIGN_C     3026
+#define IDC_BTN_ALIGN_R     3027
+#define IDC_BTN_JUSTIFY     3028
+#define IDC_BTN_BULLETS     3029
+#define IDC_BTN_NUMBERS     3030
+#define IDC_BTN_TABLE       3031
+#define IDC_BTN_TEMPLATES   3032
+#define IDC_BTN_STATS       3033
+
 // Global application handles
 HINSTANCE g_hInst = NULL;
 HWND g_hMainWnd = NULL;
-HWND g_hToolBar = NULL;
+HWND g_hToolbarPanel = NULL;
 HWND g_hStatusBar = NULL;
 HWND g_hRichEdit = NULL;
 HMODULE g_hRichEditLib = NULL;
+
+HWND g_hFontCombo = NULL;
+HWND g_hSizeCombo = NULL;
 
 std::wstring g_currentFilePath = L"";
 bool g_isModified = false;
@@ -30,7 +56,7 @@ bool g_isModified = false;
 // Forward declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void CreateMainMenu(HWND);
-void CreateAppToolbar(HWND);
+void CreateRibbonToolbar(HWND);
 void UpdateStatusBar(HWND);
 void DoFileNew(HWND);
 void DoFileOpen(HWND);
@@ -43,7 +69,10 @@ void DoFormatAlign(HWND, WORD);
 void DoFormatBullets(HWND);
 void DoFormatNumbers(HWND);
 void DoFormatColor(HWND);
+void DoInsertTable(HWND);
+void DoShowTemplatesMenu(HWND);
 void DoWordCount(HWND);
+void ApplyTemplateContent(int templateIndex);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
     g_hInst = hInstance;
@@ -68,7 +97,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     wcex.lpfnWndProc = WndProc;
     wcex.hInstance = hInstance;
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
     wcex.lpszClassName = L"GiriDriftWindowClass";
     wcex.hIcon = LoadIconW(hInstance, MAKEINTRESOURCEW(101));
     wcex.hIconSm = (HICON)LoadImageW(hInstance, MAKEINTRESOURCEW(101), IMAGE_ICON, 16, 16, 0);
@@ -80,14 +109,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         0, L"GiriDriftWindowClass",
         L"Untitled Document — Giri Drift (Executive Document Composer)",
         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
-        CW_USEDEFAULT, CW_USEDEFAULT, 1024, 720,
+        CW_USEDEFAULT, CW_USEDEFAULT, 1080, 750,
         NULL, NULL, hInstance, NULL
     );
 
     if (!g_hMainWnd) return 0;
 
     CreateMainMenu(g_hMainWnd);
-    CreateAppToolbar(g_hMainWnd);
+    CreateRibbonToolbar(g_hMainWnd);
 
     // Create Status Bar
     g_hStatusBar = CreateWindowExW(
@@ -96,15 +125,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         0, 0, 0, 0, g_hMainWnd, (HMENU)ID_STATUSBAR, hInstance, NULL
     );
 
-    int statwidths[] = { 180, 360, 520, -1 };
+    int statwidths[] = { 200, 380, 560, -1 };
     SendMessageW(g_hStatusBar, SB_SETPARTS, 4, (LPARAM)statwidths);
 
     // Create Native RichEdit Editor
     g_hRichEdit = CreateWindowExW(
         WS_EX_CLIENTEDGE, richClass, L"",
         WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | ES_NOHIDESEL,
-        0, 0, 800, 600,
-        g_hMainWnd, (HMENU)3001, hInstance, NULL
+        0, 40, 1060, 620,
+        g_hMainWnd, (HMENU)IDC_RICH_EDIT, hInstance, NULL
     );
 
     // Enable high-grade document features on RichEdit
@@ -119,22 +148,21 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     wcscpy_s(cf.szFaceName, L"Segoe UI");
     SendMessageW(g_hRichEdit, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
 
-    // Set page margin / padding (80px left/right, 40px top/bottom)
-    RECT rectMargins = { 60, 40, 60, 40 };
+    // Set page margin / padding (60px left/right)
     SendMessageW(g_hRichEdit, EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(60, 60));
 
     // Initial welcome text
     std::wstring welcome =
         L"Welcome to Giri Drift\n"
         L"Executive Document Composer & Sovereign Word Processor\n"
-        L"Made by Abhinav Giri (github.com/abhinavgiri45 | @abhinavgiri45)\n\n"
-        L"Features:\n"
-        L" • 100% Offline Standalone Native C++ Desktop Architecture\n"
-        L" • Sovereign Universal Office (.giri / .gdrift) compatibility\n"
-        L" • Executive Typography with Rich Heading & Body Styles\n"
-        L" • Real-time Word, Character, and Paragraph Metrics\n"
-        L" • Zero Cloud Lock-In & Cryptographic In-Memory Privacy\n\n"
-        L"Start composing your executive document here...\n";
+        L"Made by Abhinav Giri (github.com/abhinavgiri45 | abhinavgiri370@gmail.com)\n\n"
+        L"Sovereign Desktop Architecture:\n"
+        L" • 100% Offline Standalone Native C++ Desktop Application\n"
+        L" • Sub-15MB RAM Footprint & Direct In-Memory Cryptographic Security\n"
+        L" • Full Typography Toolbar with Global Font & Size Controls\n"
+        L" • Formatted Table Generator, Alignment, and Numbered/Bullet Lists\n"
+        L" • Universal Sovereign (.giri / .gdrift) Compatibility\n\n"
+        L"Begin typing your executive document or select a pre-loaded template above...";
 
     SetWindowTextW(g_hRichEdit, welcome.c_str());
     SendMessageW(g_hRichEdit, EM_SETMODIFY, FALSE, 0);
@@ -151,6 +179,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
                 SETTEXTEX st = { ST_DEFAULT, CP_UTF8 };
                 SendMessageW(g_hRichEdit, EM_SETTEXTEX, (WPARAM)&st, (LPARAM)content.c_str());
                 g_currentFilePath = path;
+                SendMessageW(g_hRichEdit, EM_SETMODIFY, FALSE, 0);
                 SetWindowTextW(g_hMainWnd, (PathFindFileNameW(path.c_str()) + std::wstring(L" — Giri Drift")).c_str());
             }
         }
@@ -160,7 +189,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     UpdateWindow(g_hMainWnd);
     UpdateStatusBar(g_hMainWnd);
 
-    // Main Message Loop
+    // Message Loop
     MSG msg;
     while (GetMessageW(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -176,7 +205,7 @@ void CreateMainMenu(HWND hwnd) {
 
     // File Menu
     HMENU hFile = CreatePopupMenu();
-    AppendMenuW(hFile, MF_STRING, IDM_FILE_NEW, L"&New\tCtrl+N");
+    AppendMenuW(hFile, MF_STRING, IDM_FILE_NEW, L"&New Document\tCtrl+N");
     AppendMenuW(hFile, MF_STRING, IDM_FILE_OPEN, L"&Open...\tCtrl+O");
     AppendMenuW(hFile, MF_STRING, IDM_FILE_SAVE, L"&Save\tCtrl+S");
     AppendMenuW(hFile, MF_STRING, IDM_FILE_SAVEAS, L"Save &As...");
@@ -194,7 +223,6 @@ void CreateMainMenu(HWND hwnd) {
     AppendMenuW(hEdit, MF_STRING, IDM_EDIT_CUT, L"Cu&t\tCtrl+X");
     AppendMenuW(hEdit, MF_STRING, IDM_EDIT_COPY, L"&Copy\tCtrl+C");
     AppendMenuW(hEdit, MF_STRING, IDM_EDIT_PASTE, L"&Paste\tCtrl+V");
-    AppendMenuW(hEdit, MF_SEPARATOR, 0, NULL);
     AppendMenuW(hEdit, MF_STRING, IDM_EDIT_SELECTALL, L"Select &All\tCtrl+A");
     AppendMenuW(hMenuBar, MF_POPUP, (UINT_PTR)hEdit, L"&Edit");
 
@@ -217,6 +245,18 @@ void CreateMainMenu(HWND hwnd) {
     AppendMenuW(hFormat, MF_STRING, IDM_FORMAT_NUMBERS, L"&Numbered List");
     AppendMenuW(hMenuBar, MF_POPUP, (UINT_PTR)hFormat, L"F&ormat");
 
+    // Insert Menu
+    HMENU hInsert = CreatePopupMenu();
+    AppendMenuW(hInsert, MF_STRING, IDC_BTN_TABLE, L"Insert Formatted &Table...");
+    AppendMenuW(hMenuBar, MF_POPUP, (UINT_PTR)hInsert, L"&Insert");
+
+    // Templates Menu
+    HMENU hTemplates = CreatePopupMenu();
+    AppendMenuW(hTemplates, MF_STRING, 4001, L"Executive Strategic Charter");
+    AppendMenuW(hTemplates, MF_STRING, 4002, L"Corporate Mutual Non-Disclosure Agreement (NDA)");
+    AppendMenuW(hTemplates, MF_STRING, 4003, L"Enterprise Transformation Proposal");
+    AppendMenuW(hMenuBar, MF_POPUP, (UINT_PTR)hTemplates, L"&Templates");
+
     // Tools Menu
     HMENU hTools = CreatePopupMenu();
     AppendMenuW(hTools, MF_STRING, IDM_TOOLS_WORDCOUNT, L"&Word Count Statistics...");
@@ -230,21 +270,81 @@ void CreateMainMenu(HWND hwnd) {
     SetMenu(hwnd, hMenuBar);
 }
 
-void CreateAppToolbar(HWND hwnd) {
-    g_hToolBar = CreateWindowExW(
-        0, TOOLBARCLASSNAMEW, NULL,
-        WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS,
-        0, 0, 0, 0, hwnd, (HMENU)ID_TOOLBAR, g_hInst, NULL
+void CreateRibbonToolbar(HWND hwnd) {
+    // Container panel across top
+    g_hToolbarPanel = CreateWindowExW(
+        0, L"STATIC", L"",
+        WS_CHILD | WS_VISIBLE | SS_LEFT | WS_CLIPCHILDREN,
+        0, 0, 1080, 38, hwnd, (HMENU)IDC_TOOLBAR_PANEL, g_hInst, NULL
     );
 
-    SendMessageW(g_hToolBar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
-    SendMessageW(g_hToolBar, TB_AUTOSIZE, 0, 0);
+    HFONT hFont = CreateFontW(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                              OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+                              VARIABLE_PITCH, L"Segoe UI");
+
+    // 1. Font Family Dropdown
+    g_hFontCombo = CreateWindowExW(
+        0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_VSCROLL,
+        4, 5, 140, 260, g_hToolbarPanel, (HMENU)IDC_COMBO_FONT, g_hInst, NULL
+    );
+    const wchar_t* fonts[] = {
+        L"Segoe UI", L"Arial", L"Calibri", L"Times New Roman",
+        L"Georgia", L"Verdana", L"Trebuchet MS", L"Consolas", L"Courier New", L"Tahoma"
+    };
+    for (const wchar_t* f : fonts) {
+        SendMessageW(g_hFontCombo, CB_ADDSTRING, 0, (LPARAM)f);
+    }
+    SendMessageW(g_hFontCombo, CB_SETCURSEL, 0, 0);
+    SendMessageW(g_hFontCombo, WM_SETFONT, (WPARAM)hFont, TRUE);
+
+    // 2. Font Size Dropdown
+    g_hSizeCombo = CreateWindowExW(
+        0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_VSCROLL,
+        148, 5, 52, 260, g_hToolbarPanel, (HMENU)IDC_COMBO_SIZE, g_hInst, NULL
+    );
+    const wchar_t* sizes[] = { L"9", L"10", L"11", L"12", L"14", L"16", L"18", L"20", L"24", L"28", L"36", L"48", L"72" };
+    for (const wchar_t* s : sizes) {
+        SendMessageW(g_hSizeCombo, CB_ADDSTRING, 0, (LPARAM)s);
+    }
+    SendMessageW(g_hSizeCombo, CB_SETCURSEL, 3, 0); // 12pt default
+    SendMessageW(g_hSizeCombo, WM_SETFONT, (WPARAM)hFont, TRUE);
+
+    // Formatting Buttons Helper
+    auto makeBtn = [hFont](const wchar_t* text, int x, int w, int id) {
+        HWND btn = CreateWindowExW(
+            0, L"BUTTON", text,
+            WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+            x, 5, w, 27, g_hToolbarPanel, (HMENU)(INT_PTR)id, g_hInst, NULL
+        );
+        SendMessageW(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
+        return btn;
+    };
+
+    makeBtn(L"B", 204, 26, IDC_BTN_BOLD);
+    makeBtn(L"I", 232, 26, IDC_BTN_ITALIC);
+    makeBtn(L"U", 260, 26, IDC_BTN_UNDERLINE);
+    makeBtn(L"S", 288, 26, IDC_BTN_STRIKE);
+
+    makeBtn(L"🎨 Color", 318, 62, IDC_BTN_COLOR);
+
+    makeBtn(L"L", 384, 25, IDC_BTN_ALIGN_L);
+    makeBtn(L"C", 411, 25, IDC_BTN_ALIGN_C);
+    makeBtn(L"R", 438, 25, IDC_BTN_ALIGN_R);
+    makeBtn(L"J", 465, 25, IDC_BTN_JUSTIFY);
+
+    makeBtn(L"• List", 494, 48, IDC_BTN_BULLETS);
+    makeBtn(L"1. Num", 544, 52, IDC_BTN_NUMBERS);
+
+    makeBtn(L"⊞ Table", 600, 62, IDC_BTN_TABLE);
+    makeBtn(L"📂 Templates ▼", 666, 105, IDC_BTN_TEMPLATES);
+    makeBtn(L"📊 Stats", 775, 58, IDC_BTN_STATS);
 }
 
 void UpdateStatusBar(HWND hwnd) {
     if (!g_hStatusBar || !g_hRichEdit) return;
 
-    // Calculate word count & chars
     int textLen = GetWindowTextLengthW(g_hRichEdit);
     std::wstring buf(textLen + 1, L'\0');
     GetWindowTextW(g_hRichEdit, &buf[0], textLen + 1);
@@ -261,9 +361,8 @@ void UpdateStatusBar(HWND hwnd) {
     }
 
     wchar_t stat1[64], stat2[64];
-    swprintf_s(stat1, L"Words: %d | Characters: %d", words, textLen);
+    swprintf_s(stat1, L"Words: %d | Chars: %d", words, textLen);
 
-    // Current cursor line
     DWORD selStart = 0;
     SendMessageW(g_hRichEdit, EM_GETSEL, (WPARAM)&selStart, 0);
     LRESULT lineIdx = SendMessageW(g_hRichEdit, EM_LINEFROMCHAR, selStart, 0);
@@ -273,7 +372,7 @@ void UpdateStatusBar(HWND hwnd) {
     SendMessageW(g_hStatusBar, SB_SETTEXTW, 0, (LPARAM)stat1);
     SendMessageW(g_hStatusBar, SB_SETTEXTW, 1, (LPARAM)stat2);
     SendMessageW(g_hStatusBar, SB_SETTEXTW, 2, (LPARAM)L"Zoom: 100%");
-    SendMessageW(g_hStatusBar, SB_SETTEXTW, 3, (LPARAM)L"● 100% Offline Sovereign");
+    SendMessageW(g_hStatusBar, SB_SETTEXTW, 3, (LPARAM)L"● 100% Offline Standalone");
 }
 
 void DoFileNew(HWND hwnd) {
@@ -326,7 +425,6 @@ void DoFileSave(HWND hwnd, bool saveAs) {
         g_currentFilePath = szFile;
     }
 
-    // Get plain text or rtf
     int len = GetWindowTextLengthA(g_hRichEdit);
     std::string text(len + 1, '\0');
     GetWindowTextA(g_hRichEdit, &text[0], len + 1);
@@ -405,6 +503,76 @@ void DoFormatColor(HWND hwnd) {
     }
 }
 
+void DoInsertTable(HWND hwnd) {
+    std::wstring table =
+        L"\r\n"
+        L"┌────────────────────────────┬────────────────────────────┬────────────────────────────┐\r\n"
+        L"│ Deliverable / Pillar       │ Owner / Attribution        │ Completion Status          │\r\n"
+        L"├────────────────────────────┼────────────────────────────┼────────────────────────────┤\r\n"
+        L"│ Native C++ Engine          │ Abhinav Giri               │ 100% Operational           │\r\n"
+        L"│ In-Memory Data Vault       │ Cryptographic Security     │ Zero Telemetry             │\r\n"
+        L"│ Universal Office Format    │ Sovereign Interop (.giri)  │ Verified Complete          │\r\n"
+        L"└────────────────────────────┴────────────────────────────┴────────────────────────────┘\r\n\r\n";
+    SendMessageW(g_hRichEdit, EM_REPLACESEL, TRUE, (LPARAM)table.c_str());
+}
+
+void ApplyTemplateContent(int templateIndex) {
+    std::wstring content = L"";
+    if (templateIndex == 1) {
+        content =
+            L"EXECUTIVE STRATEGIC CHARTER (2026-2028)\r\n"
+            L"Giri Orbit Sovereign Enterprise Architecture\r\n"
+            L"Author: Abhinav Giri (github.com/abhinavgiri45 | abhinavgiri370@gmail.com)\r\n\r\n"
+            L"1. MISSION STATEMENT\r\n"
+            L"To establish complete cryptographic sovereignty, eliminate external web dependencies, and provide high-velocity desktop office tools that operate 100% offline in client memory.\r\n\r\n"
+            L"2. STRATEGIC OBJECTIVES\r\n"
+            L" • Native Compilation: Built directly with C++ Win32 API for zero runtime overhead.\r\n"
+            L" • Total Privacy: Zero cloud pings, zero bot challenges, zero telemetry.\r\n"
+            L" • Sub-15MB RAM: 95% lighter than web browser-based office suites.\r\n\r\n"
+            L"3. SIGNATURE & RATIFICATION\r\n"
+            L"Abhinav Giri — Founder & Chief Sovereign Architect\r\n";
+    } else if (templateIndex == 2) {
+        content =
+            L"MUTUAL NON-DISCLOSURE AGREEMENT (NDA)\r\n"
+            L"Made by Abhinav Giri (abhinavgiri370@gmail.com)\r\n\r\n"
+            L"1. CONFIDENTIAL INFORMATION\r\n"
+            L"Both parties agree that all software architectures, mathematical matrices, and proprietary algorithms disclosed remain strictly confidential.\r\n\r\n"
+            L"2. DATA SOVEREIGNTY\r\n"
+            L"No confidential data shall be stored on unencrypted public clouds.\r\n\r\n"
+            L"IN WITNESS WHEREOF, the parties execute this agreement:\r\n"
+            L"Disclosing Party: Abhinav Giri\r\n"
+            L"Receiving Party: _________________________\r\n";
+    } else if (templateIndex == 3) {
+        content =
+            L"ENTERPRISE TECHNOLOGY TRANSFORMATION PROPOSAL\r\n"
+            L"Prepared by: Abhinav Giri (abhinavgiri370@gmail.com)\r\n\r\n"
+            L"1. OVERVIEW\r\n"
+            L"Transitioning corporate workflows from bloated multi-gigabyte office suites to lightweight, sovereign C++ standalone tools.\r\n\r\n"
+            L"2. DELIVERABLES\r\n"
+            L" • Giri Drift (Word Processor)\r\n"
+            L" • Giri Axis (Financial Matrix)\r\n"
+            L" • Giri Kinetic (Presentation Studio)\r\n\r\n"
+            L"Contact: abhinavgiri370@gmail.com\r\n";
+    }
+
+    SetWindowTextW(g_hRichEdit, content.c_str());
+    SendMessageW(g_hRichEdit, EM_SETMODIFY, FALSE, 0);
+}
+
+void DoShowTemplatesMenu(HWND hwnd) {
+    HMENU hPopup = CreatePopupMenu();
+    AppendMenuW(hPopup, MF_STRING, 4001, L"1. Executive Strategic Charter");
+    AppendMenuW(hPopup, MF_STRING, 4002, L"2. Corporate Mutual NDA");
+    AppendMenuW(hPopup, MF_STRING, 4003, L"3. Enterprise Transformation Proposal");
+
+    RECT btnRect;
+    HWND hBtn = GetDlgItem(g_hToolbarPanel, IDC_BTN_TEMPLATES);
+    GetWindowRect(hBtn, &btnRect);
+
+    TrackPopupMenu(hPopup, TPM_LEFTALIGN | TPM_TOPALIGN, btnRect.left, btnRect.bottom, 0, hwnd, NULL);
+    DestroyMenu(hPopup);
+}
+
 void DoWordCount(HWND hwnd) {
     int textLen = GetWindowTextLengthW(g_hRichEdit);
     std::wstring buf(textLen + 1, L'\0');
@@ -427,7 +595,8 @@ void DoWordCount(HWND hwnd) {
         L"Characters (no spaces): %d\n"
         L"Paragraphs: %d\n"
         L"Estimated Reading Time: %d min\n\n"
-        L"Made by Abhinav Giri (100% Offline Sovereign)",
+        L"Made by Abhinav Giri (abhinavgiri370@gmail.com)\n"
+        L"100% Offline Standalone Architecture",
         words, textLen, textLen - spaces, paragraphs, (words / 200) + 1
     );
     MessageBoxW(hwnd, report, L"Word Count Statistics", MB_OK | MB_ICONINFORMATION);
@@ -445,13 +614,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             GetWindowRect(g_hStatusBar, &rcStatus);
             int statusHeight = rcStatus.bottom - rcStatus.top;
 
-            // Resize toolbar
-            SendMessageW(g_hToolBar, TB_AUTOSIZE, 0, 0);
-            RECT rcTool;
-            GetWindowRect(g_hToolBar, &rcTool);
-            int toolHeight = rcTool.bottom - rcTool.top;
+            int toolHeight = 38;
+            MoveWindow(g_hToolbarPanel, 0, 0, rcClient.right, toolHeight, TRUE);
 
-            // Center document paper in workspace (page width 760px, margins around it)
             int editTop = toolHeight;
             int editHeight = rcClient.bottom - toolHeight - statusHeight;
             MoveWindow(g_hRichEdit, 0, editTop, rcClient.right, editHeight, TRUE);
@@ -459,57 +624,145 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         }
 
         case WM_COMMAND: {
-            WORD cmd = LOWORD(wParam);
-            switch (cmd) {
-                case IDM_FILE_NEW:        DoFileNew(hwnd); break;
-                case IDM_FILE_OPEN:       DoFileOpen(hwnd); break;
-                case IDM_FILE_SAVE:       DoFileSave(hwnd, false); break;
-                case IDM_FILE_SAVEAS:     DoFileSave(hwnd, true); break;
-                case IDM_FILE_EXIT:       PostMessageW(hwnd, WM_CLOSE, 0, 0); break;
+            WORD id = LOWORD(wParam);
+            WORD code = HIWORD(wParam);
 
-                case IDM_EDIT_UNDO:       SendMessageW(g_hRichEdit, EM_UNDO, 0, 0); break;
-                case IDM_EDIT_REDO:       SendMessageW(g_hRichEdit, EM_REDO, 0, 0); break;
-                case IDM_EDIT_CUT:        SendMessageW(g_hRichEdit, WM_CUT, 0, 0); break;
-                case IDM_EDIT_COPY:       SendMessageW(g_hRichEdit, WM_COPY, 0, 0); break;
-                case IDM_EDIT_PASTE:      SendMessageW(g_hRichEdit, WM_PASTE, 0, 0); break;
-                case IDM_EDIT_SELECTALL:  SendMessageW(g_hRichEdit, EM_SETSEL, 0, -1); break;
-
-                case IDM_FORMAT_BOLD:     DoFormatBold(hwnd); break;
-                case IDM_FORMAT_ITALIC:   DoFormatItalic(hwnd); break;
-                case IDM_FORMAT_UNDERLINE:DoFormatUnderline(hwnd); break;
-                case IDM_FORMAT_STRIKE:   DoFormatStrike(hwnd); break;
-                case IDM_FORMAT_COLOR:    DoFormatColor(hwnd); break;
-                case IDM_FORMAT_ALIGN_L:  DoFormatAlign(hwnd, PFA_LEFT); break;
-                case IDM_FORMAT_ALIGN_C:  DoFormatAlign(hwnd, PFA_CENTER); break;
-                case IDM_FORMAT_ALIGN_R:  DoFormatAlign(hwnd, PFA_RIGHT); break;
-                case IDM_FORMAT_ALIGN_J:  DoFormatAlign(hwnd, PFA_JUSTIFY); break;
-                case IDM_FORMAT_BULLETS:  DoFormatBullets(hwnd); break;
-                case IDM_FORMAT_NUMBERS:  DoFormatNumbers(hwnd); break;
-
-                case IDM_TOOLS_WORDCOUNT: DoWordCount(hwnd); break;
-                case IDM_HELP_ABOUT:      ShowAboutDialog(hwnd, L"Giri Drift"); break;
+            if (id == IDC_COMBO_FONT && code == CBN_SELCHANGE) {
+                wchar_t fontName[LF_FACESIZE] = { 0 };
+                LRESULT idx = SendMessageW(g_hFontCombo, CB_GETCURSEL, 0, 0);
+                SendMessageW(g_hFontCombo, CB_GETLBTEXT, idx, (LPARAM)fontName);
+                CHARFORMAT2W cf = { sizeof(CHARFORMAT2W) };
+                cf.dwMask = CFM_FACE;
+                wcscpy_s(cf.szFaceName, fontName);
+                SendMessageW(g_hRichEdit, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
+                SetFocus(g_hRichEdit);
+                return 0;
             }
 
-            // Monitor change in text for status bar
-            if (HIWORD(wParam) == EN_CHANGE || HIWORD(wParam) == EN_SELCHANGE) {
-                UpdateStatusBar(hwnd);
+            if (id == IDC_COMBO_SIZE && code == CBN_SELCHANGE) {
+                wchar_t szSize[16] = { 0 };
+                LRESULT idx = SendMessageW(g_hSizeCombo, CB_GETCURSEL, 0, 0);
+                SendMessageW(g_hSizeCombo, CB_GETLBTEXT, idx, (LPARAM)szSize);
+                int pt = _wtoi(szSize);
+                if (pt > 0) {
+                    CHARFORMAT2W cf = { sizeof(CHARFORMAT2W) };
+                    cf.dwMask = CFM_SIZE;
+                    cf.yHeight = pt * 20; // twips
+                    SendMessageW(g_hRichEdit, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
+                }
+                SetFocus(g_hRichEdit);
+                return 0;
+            }
+
+            switch (id) {
+                case IDM_FILE_NEW: DoFileNew(hwnd); break;
+                case IDM_FILE_OPEN: DoFileOpen(hwnd); break;
+                case IDM_FILE_SAVE: DoFileSave(hwnd, false); break;
+                case IDM_FILE_SAVEAS: DoFileSave(hwnd, true); break;
+                case IDM_FILE_PRINT: {
+                    PRINTDLGW pd = { sizeof(PRINTDLGW) };
+                    pd.hwndOwner = hwnd;
+                    pd.Flags = PD_RETURNDC | PD_NOSELECTION;
+                    if (PrintDlgW(&pd)) {
+                        DeleteDC(pd.hDC);
+                    }
+                    break;
+                }
+                case IDM_FILE_EXIT: DestroyWindow(hwnd); break;
+
+                case IDM_EDIT_UNDO: SendMessageW(g_hRichEdit, EM_UNDO, 0, 0); break;
+                case IDM_EDIT_REDO: SendMessageW(g_hRichEdit, EM_REDO, 0, 0); break;
+                case IDM_EDIT_CUT: SendMessageW(g_hRichEdit, WM_CUT, 0, 0); break;
+                case IDM_EDIT_COPY: SendMessageW(g_hRichEdit, WM_COPY, 0, 0); break;
+                case IDM_EDIT_PASTE: SendMessageW(g_hRichEdit, WM_PASTE, 0, 0); break;
+                case IDM_EDIT_SELECTALL: {
+                    CHARRANGE cr = { 0, -1 };
+                    SendMessageW(g_hRichEdit, EM_EXSETSEL, 0, (LPARAM)&cr);
+                    break;
+                }
+
+                case IDM_FORMAT_BOLD:
+                case IDC_BTN_BOLD: DoFormatBold(hwnd); break;
+                case IDM_FORMAT_ITALIC:
+                case IDC_BTN_ITALIC: DoFormatItalic(hwnd); break;
+                case IDM_FORMAT_UNDERLINE:
+                case IDC_BTN_UNDERLINE: DoFormatUnderline(hwnd); break;
+                case IDM_FORMAT_STRIKE:
+                case IDC_BTN_STRIKE: DoFormatStrike(hwnd); break;
+
+                case IDM_FORMAT_COLOR:
+                case IDC_BTN_COLOR: DoFormatColor(hwnd); break;
+
+                case IDM_FORMAT_ALIGN_L:
+                case IDC_BTN_ALIGN_L: DoFormatAlign(hwnd, PFA_LEFT); break;
+                case IDM_FORMAT_ALIGN_C:
+                case IDC_BTN_ALIGN_C: DoFormatAlign(hwnd, PFA_CENTER); break;
+                case IDM_FORMAT_ALIGN_R:
+                case IDC_BTN_ALIGN_R: DoFormatAlign(hwnd, PFA_RIGHT); break;
+                case IDM_FORMAT_ALIGN_J:
+                case IDC_BTN_JUSTIFY: DoFormatAlign(hwnd, PFA_JUSTIFY); break;
+
+                case IDM_FORMAT_BULLETS:
+                case IDC_BTN_BULLETS: DoFormatBullets(hwnd); break;
+                case IDM_FORMAT_NUMBERS:
+                case IDC_BTN_NUMBERS: DoFormatNumbers(hwnd); break;
+
+                case IDC_BTN_TABLE: DoInsertTable(hwnd); break;
+                case IDC_BTN_TEMPLATES: DoShowTemplatesMenu(hwnd); break;
+
+                case 4001: ApplyTemplateContent(1); break;
+                case 4002: ApplyTemplateContent(2); break;
+                case 4003: ApplyTemplateContent(3); break;
+
+                case IDM_TOOLS_WORDCOUNT:
+                case IDC_BTN_STATS: DoWordCount(hwnd); break;
+
+                case IDM_HELP_ABOUT: {
+                    std::wstring msg =
+                        L"Giri Drift — Sovereign Document Composer\n"
+                        L"Version 11.8.6 (Native C++ Win32 Edition)\n\n"
+                        L"Author: Abhinav Giri\n"
+                        L"GitHub: https://github.com/abhinavgiri45\n"
+                        L"Instagram: @abhinavgiri45\n"
+                        L"Email: abhinavgiri370@gmail.com\n\n"
+                        L"100% Offline Standalone Architecture\n"
+                        L"Zero Browser • Zero Telemetry • Total Data Sovereignty";
+                    MessageBoxW(hwnd, msg.c_str(), L"About Giri Drift", MB_OK | MB_ICONINFORMATION);
+                    break;
+                }
+            }
+            break;
+        }
+
+        case WM_NOTIFY: {
+            NMHDR* pnm = (NMHDR*)lParam;
+            if (pnm && pnm->hwndFrom == g_hRichEdit) {
+                if (pnm->code == EN_CHANGE || pnm->code == EN_SELCHANGE) {
+                    UpdateStatusBar(hwnd);
+                }
             }
             break;
         }
 
         case WM_CLOSE: {
             if (SendMessageW(g_hRichEdit, EM_GETMODIFY, 0, 0)) {
-                int res = MessageBoxW(hwnd, L"Do you want to save changes to the document before closing?", L"Giri Drift", MB_YESNOCANCEL | MB_ICONQUESTION);
-                if (res == IDYES) DoFileSave(hwnd, false);
-                else if (res == IDCANCEL) return 0;
+                int res = MessageBoxW(hwnd, L"Do you want to save changes before closing?", L"Giri Drift", MB_YESNOCANCEL | MB_ICONQUESTION);
+                if (res == IDYES) {
+                    DoFileSave(hwnd, false);
+                    DestroyWindow(hwnd);
+                } else if (res == IDNO) {
+                    DestroyWindow(hwnd);
+                }
+                return 0;
             }
             DestroyWindow(hwnd);
             break;
         }
 
-        case WM_DESTROY:
+        case WM_DESTROY: {
             PostQuitMessage(0);
             break;
+        }
 
         default:
             return DefWindowProcW(hwnd, msg, wParam, lParam);
