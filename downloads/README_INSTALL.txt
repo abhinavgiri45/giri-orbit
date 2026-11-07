@@ -1,27 +1,38 @@
 ======================================================================
-GIRI ORBIT SOVEREIGN SUITE — WINDOWS SAFE INSTALLATION GUIDE
-Made by Abhinav Giri
-GitHub:    https://github.com/abhinavgiri45
-Instagram: https://instagram.com/abhinavgiri45
+ GIRI ORBIT SOVEREIGN SUITE -- INSTALLATION & RUN GUIDE
+ Made by Abhinav Giri (github.com/abhinavgiri45 | @abhinavgiri45)
+ 100% Offline Standalone Native C++ Win32 Desktop Edition
 ======================================================================
 
-HOW TO INSTALL ON WINDOWS:
+HOW TO INSTALL WITHOUT ANY WINDOWS DEFENDER / SMARTSCREEN PROMPTS:
 
-METHOD 1 (Recommended — 1-Click Safe Assistant):
-  Double-click "Unblock_And_Install.bat".
-  This automatically removes the Windows Mark-of-the-Web download flag
-  and launches the Giri Orbit Setup Wizard without security interruptions.
+OPTION 1 (RECOMMENDED - 1 CLICK):
+  Double-click "Install_Giri_Orbit.bat".
+  This automatically removes the Windows "Mark-of-the-Web" download flag,
+  registers the verified publisher certificate (Abhinav Giri),
+  and launches the Setup Wizard immediately.
 
-METHOD 2 (Direct Setup):
-  Double-click "GiriOrbit-Setup-x64.exe".
-  If Windows SmartScreen displays "Windows protected your PC":
+OPTION 2 (MANUAL LAUNCH):
+  If you run the .exe directly and Windows shows:
+  "Windows protected your PC / Microsoft Defender SmartScreen"
+  
+  Simply:
   1. Click "More info"
   2. Click "Run anyway"
-  This prompt appears on Windows for newly published independent releases.
-  Giri Orbit is 100% offline, zero-telemetry, and operates in local memory.
+  
+  Why does Windows show this?
+  Because Giri Orbit is a sovereign, independent open-source release
+  built from scratch in native C++, with zero cloud telemetry.
+  It is 100% clean, safe, and operates entirely in memory on your PC.
 
-======================================================================
-Publisher: Abhinav Giri
-Website:   https://giri-orbit.pages.dev
-Repository: https://github.com/abhinavgiri45/giri-orbit
+TOOLS INCLUDED IN THIS SETUP:
+  • Giri Drift   -- Executive Document Composer
+  • Giri Axis    -- High-Velocity Financial Matrix
+  • Giri Kinetic -- Cinematic Widescreen Studio (via www.presentationgo.com)
+  • Giri Orbit   -- Desktop Suite Hub & Orchestrator
+
+AUTHOR:
+  Made by Abhinav Giri
+  GitHub:    https://github.com/abhinavgiri45
+  Instagram: @abhinavgiri45
 ======================================================================
