@@ -64,7 +64,39 @@ class GiriOrbitPlatform {
     }
   }
 
+  purgeLegacyMockDocuments() {
+    try {
+      const saved = localStorage.getItem('giri_orbit_recent_docs');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const legacyKeywords = [
+          'annual strategic corporate charter',
+          'corporate charter',
+          'q4 financial matrix',
+          'financial matrix & projections',
+          'executive keynote pitch deck',
+          'keynote pitch deck',
+          'mutual enterprise nda',
+          'nda agreement',
+          'saas unit economics & cap table',
+          'cap table',
+          'हिन्दी दस्तावेज़',
+          'google devanagari',
+          'corporate legal seal',
+          'legal seal & identity'
+        ];
+        const cleaned = parsed.filter(d => {
+          if (!d || !d.title) return false;
+          const t = d.title.toLowerCase();
+          return !legacyKeywords.some(k => t.includes(k));
+        });
+        localStorage.setItem('giri_orbit_recent_docs', JSON.stringify(cleaned));
+      }
+    } catch (e) {}
+  }
+
   init() {
+    this.purgeLegacyMockDocuments();
     this.bindHeaderNavigation();
     this.bindGlobalActions();
     this.initSyncSystem();
@@ -151,6 +183,7 @@ class GiriOrbitPlatform {
     const rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
 
     const target = rawHash || rawParam || rawPath;
+    if (['hub', 'launcher', 'home', ''].includes(target)) return 'launcher';
     if (['drift', 'doc', 'docs', 'word', 'writer'].includes(target)) return 'drift';
     if (['axis', 'sheet', 'sheets', 'excel', 'matrix'].includes(target)) return 'axis';
     if (['kinetic', 'presentation', 'presentations', 'show', 'deck', 'decks', 'ppt', 'powerpoint'].includes(target)) return 'kinetic';
@@ -505,6 +538,7 @@ class GiriOrbitPlatform {
    * Main View Routing & State Transitions with URL Synchronization
    */
   navigateTo(view, docTitle = null, updateHistory = true, forceEditor = false) {
+    if (view === 'hub' || view === 'home') view = 'launcher';
     if (this.currentView === view && this.workspace.children.length > 0 && !docTitle && !forceEditor) {
       return;
     }
@@ -539,7 +573,7 @@ class GiriOrbitPlatform {
     // Toggle compact header mode when in any tool
     const suiteHeader = document.querySelector('.tier2-suite-header');
     const pillBar = document.querySelector('.suite-switcher-pill-bar');
-    if (view === 'launcher') {
+    if (view === 'launcher' || view === 'hub' || view === 'home') {
       document.body.classList.remove('in-tool');
       suiteHeader?.classList.remove('in-tool');
       if (pillBar) { pillBar.style.display = 'flex'; pillBar.style.opacity = '1'; }
@@ -550,7 +584,7 @@ class GiriOrbitPlatform {
     }
 
     const startEditor = forceEditor || !!docTitle;
-    if (view === 'launcher') {
+    if (view === 'launcher' || view === 'hub' || view === 'home') {
       this.mountZohoLandingHub();
     } else if (view === 'drift') {
       renderDriftApp(this.workspace, null, docTitle, startEditor);
@@ -1059,6 +1093,17 @@ class GiriOrbitPlatform {
    */
   bindM365HubEvents(container) {
     // 1. Left Rail Navigation
+    container.querySelector('#rail-btn-home')?.addEventListener('click', () => {
+      this.navigateTo('launcher');
+    });
+
+    container.querySelectorAll('#m365-see-more-link, .m365-see-more').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.openCreateTemplatesModal();
+      });
+    });
+
     container.querySelectorAll('.m365-rail-btn[data-launch]').forEach(btn => {
       btn.addEventListener('click', () => {
         const tool = btn.dataset.launch;
@@ -1877,6 +1922,17 @@ class GiriOrbitPlatform {
         this.showToast(val === '0' ? 'Continuous instant autosave enabled' : `Autosave interval set to ${val}s`, 'green');
       });
     }
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#btn-close-settings-modal')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    document.addEventListener('keydown', function escSettingsHandler(e) {
+      if (e.key === 'Escape') {
+        overlay.remove();
+        document.removeEventListener('keydown', escSettingsHandler);
+      }
+    });
   }
 
   /**
