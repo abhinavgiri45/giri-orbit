@@ -7290,32 +7290,39 @@ if (document.readyState === 'loading') {
 
     // Google Drive 4GB Suite Link Handler
     const setupDrive4GBHandlers = () => {
+      const OFFICIAL_DRIVE_SHARE_URL = 'https://drive.google.com/file/d/1s9lvU-nlTpe0extQIvtv7XKjcDurkSrQ/view?usp=sharing';
+      const OFFICIAL_DRIVE_DIRECT_URL = 'https://drive.google.com/uc?export=download&id=1s9lvU-nlTpe0extQIvtv7XKjcDurkSrQ';
+
       const getDriveUrl = () => {
         try {
-          return localStorage.getItem('giri_orbit_4gb_drive_url') || 'https://drive.google.com/drive/u/0/my-drive';
+          const stored = localStorage.getItem('giri_orbit_4gb_drive_url');
+          if (stored && stored.includes('my-drive')) {
+            localStorage.setItem('giri_orbit_4gb_drive_url', OFFICIAL_DRIVE_SHARE_URL);
+            return OFFICIAL_DRIVE_SHARE_URL;
+          }
+          return stored || OFFICIAL_DRIVE_SHARE_URL;
         } catch (_) {
-          return 'https://drive.google.com/drive/u/0/my-drive';
+          return OFFICIAL_DRIVE_SHARE_URL;
         }
       };
 
       const setDriveUrlPrompt = () => {
         const current = getDriveUrl();
         const input = prompt(
-          'Enter Public Google Drive Share URL or File ID for the 4.00 GB Suite (giricorporation.pvt@gmail.com):\n\nExample: https://drive.google.com/file/d/1AbC.../view?usp=sharing',
+          'Official Public Google Drive URL for Giri Orbit 4.00 GB Suite (giricorporation.pvt@gmail.com):\n\nPress OK to keep default or enter updated link/ID:',
           current
         );
         if (input && input.trim()) {
           let url = input.trim();
-          // Extract file ID if full share link provided
           const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
           if (match && match[1]) {
-            url = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+            url = `https://drive.google.com/file/d/${match[1]}/view?usp=sharing`;
           }
           localStorage.setItem('giri_orbit_4gb_drive_url', url);
           if (window.orbitPlatform?.showToast) {
-            window.orbitPlatform.showToast('Google Drive 4GB Suite URL saved successfully!', 'blue');
+            window.orbitPlatform.showToast('Giri Orbit 4GB Suite Drive link updated!', 'blue');
           } else {
-            alert('Google Drive 4GB Suite URL saved successfully!');
+            alert('Giri Orbit 4GB Suite Drive link updated!');
           }
           updateButtons();
         }
@@ -7326,6 +7333,7 @@ if (document.readyState === 'loading') {
         document.querySelectorAll('#btn-download-4gb-drive, #modal-btn-4gb-drive').forEach(btn => {
           btn.href = url;
           btn.target = '_blank';
+          btn.rel = 'noopener noreferrer';
         });
       };
 
