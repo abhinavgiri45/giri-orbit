@@ -37,7 +37,7 @@ class GiriOrbitPlatform {
     this.fileInput = document.getElementById('universal-file-input');
 
     this.physicsEngine = null;
-    this.currentView = 'launcher';
+    this.currentView = null; // null so startup routing always cleanly mounts view
     window.orbitPlatform = this;
     window.orbitDriveSync = driveSyncManager;
     this.printManager = new PrintStudioManager(this);
@@ -550,7 +550,6 @@ class GiriOrbitPlatform {
     }
 
     this.currentView = view;
-    this.workspace.innerHTML = '';
 
     // Update active tab highlight in header
     this.suiteNavPills = document.querySelectorAll('.suite-nav-pill');
@@ -584,35 +583,43 @@ class GiriOrbitPlatform {
     }
 
     const startEditor = forceEditor || !!docTitle;
-    if (view === 'launcher' || view === 'hub' || view === 'home') {
+    try {
+      if (view === 'launcher' || view === 'hub' || view === 'home') {
+        this.mountZohoLandingHub();
+      } else {
+        if (this.workspace) this.workspace.innerHTML = '';
+        if (view === 'drift') {
+          renderDriftApp(this.workspace, null, docTitle, startEditor);
+          this.showToast('Giri Drift Workspace Ready', 'blue');
+        } else if (view === 'axis') {
+          renderAxisApp(this.workspace, null, startEditor);
+          this.showToast('Giri Axis Spreadsheet Ready', 'green');
+        } else if (view === 'kinetic') {
+          renderKineticApp(this.workspace, null, startEditor);
+          this.showToast('Giri Kinetic Presentation Studio Ready', 'red');
+        } else if (view === 'pdf') {
+          renderPdfStudioApp(this.workspace, null, startEditor);
+          this.showToast('Giri Aegis PDF Studio Ready', 'orange');
+        } else if (view === 'forms') {
+          renderFormsApp(this.workspace, null, startEditor);
+          this.showToast('Giri Forms & Survey Studio Ready', 'teal');
+        } else if (view === 'quiz') {
+          renderQuizApp(this.workspace, null, startEditor);
+          this.showToast('Giri Quiz Assessment Studio Ready', 'cyan');
+        } else if (view === 'lists') {
+          renderListsApp(this.workspace, null, startEditor);
+          this.showToast('Giri Lists & Task Matrix Ready', 'purple');
+        } else if (view === 'designer') {
+          renderDesignerApp(this.workspace, null, startEditor);
+          this.showToast('Giri Designer Creative Studio Ready', 'pink');
+        } else if (view === 'girionix') {
+          this.mountGirionixAiStudio();
+          this.showToast('Girionix AI Polymath Studio Connected', 'blue');
+        }
+      }
+    } catch (routeErr) {
+      console.error('[Giri Orbit] Routing error, recovering to hub:', routeErr);
       this.mountZohoLandingHub();
-    } else if (view === 'drift') {
-      renderDriftApp(this.workspace, null, docTitle, startEditor);
-      this.showToast('Giri Drift Workspace Ready', 'blue');
-    } else if (view === 'axis') {
-      renderAxisApp(this.workspace, null, startEditor);
-      this.showToast('Giri Axis Spreadsheet Ready', 'green');
-    } else if (view === 'kinetic') {
-      renderKineticApp(this.workspace, null, startEditor);
-      this.showToast('Giri Kinetic Presentation Studio Ready', 'red');
-    } else if (view === 'pdf') {
-      renderPdfStudioApp(this.workspace, null, startEditor);
-      this.showToast('Giri Aegis PDF Studio Ready', 'orange');
-    } else if (view === 'forms') {
-      renderFormsApp(this.workspace, null, startEditor);
-      this.showToast('Giri Forms & Survey Studio Ready', 'teal');
-    } else if (view === 'quiz') {
-      renderQuizApp(this.workspace, null, startEditor);
-      this.showToast('Giri Quiz Assessment Studio Ready', 'cyan');
-    } else if (view === 'lists') {
-      renderListsApp(this.workspace, null, startEditor);
-      this.showToast('Giri Lists & Task Matrix Ready', 'purple');
-    } else if (view === 'designer') {
-      renderDesignerApp(this.workspace, null, startEditor);
-      this.showToast('Giri Designer Creative Studio Ready', 'pink');
-    } else if (view === 'girionix') {
-      this.mountGirionixAiStudio();
-      this.showToast('Girionix AI Polymath Studio Connected', 'blue');
     }
 
     this.updateAllAutoSaveBadges();
@@ -649,9 +656,10 @@ class GiriOrbitPlatform {
    * Mount the Zoho-Style Office Suite Landing Hub
    */
   mountZohoLandingHub() {
-    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
-    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
-    const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
+    try {
+      const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+      const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
+      const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
 
     let landingContainer = this.workspace.querySelector('.m365-hub-root');
     if (!landingContainer) {
@@ -1086,6 +1094,9 @@ class GiriOrbitPlatform {
     // Bind Event Listeners
     this.bindM365HubEvents(landingContainer);
     this.renderM365RecentDocuments(landingContainer);
+    } catch (hubErr) {
+      console.error('[Giri Orbit] Error in mountZohoLandingHub:', hubErr);
+    }
   }
 
   /**
@@ -1373,38 +1384,46 @@ class GiriOrbitPlatform {
     if (existingEmpty) existingEmpty.style.display = 'none';
 
     tbody.innerHTML = '';
+    const badgeMap = {
+      drift: { letter: 'D', bg: '#2563eb', name: 'Drift' },
+      axis: { letter: 'A', bg: '#16a34a', name: 'Axis' },
+      kinetic: { letter: 'K', bg: '#ea580c', name: 'Kinetic' },
+      pdf: { letter: 'P', bg: '#dc2626', name: 'Aegis PDF' },
+      forms: { letter: 'F', bg: '#0d9488', name: 'Forms' },
+      quiz: { letter: 'Q', bg: '#0284c7', name: 'Quiz' },
+      lists: { letter: 'L', bg: '#7c3aed', name: 'Lists' },
+      designer: { letter: 'G', bg: '#db2777', name: 'Designer' }
+    };
+
     realDocs.forEach(doc => {
       const tr = document.createElement('tr');
-      const isDrift = doc.type === 'drift';
-      const isAxis = doc.type === 'axis';
-      const isKinetic = doc.type === 'kinetic';
-      const isPdf = doc.type === 'pdf';
-
-      const iconBg = isDrift ? '#eff6ff' : isAxis ? '#f0fdf4' : isKinetic ? '#fff7ed' : '#fef2f2';
-      const iconColor = isDrift ? '#2563eb' : isAxis ? '#16a34a' : isKinetic ? '#ea580c' : '#dc2626';
+      const docType = (doc && (doc.type || doc.tool)) ? String(doc.type || doc.tool).toLowerCase() : 'drift';
+      const docTitle = (doc && (doc.title || doc.name)) ? String(doc.title || doc.name) : 'Untitled Document';
+      const docDate = (doc && doc.date) ? doc.date : (doc && doc.timestamp ? new Date(doc.timestamp).toLocaleDateString() : 'Today');
+      const docSharing = (doc && doc.sharing) ? doc.sharing : 'This PC';
+      const docActivity = (doc && doc.activity) ? doc.activity : 'Opened by you';
+      const badge = badgeMap[docType] || badgeMap.drift;
 
       tr.innerHTML = `
         <td>
-          <div class="m365-doc-title-cell">
-            <div class="m365-doc-icon" style="background:${iconBg}; color:${iconColor};">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              </svg>
+          <div class="m365-doc-title-cell" style="display:flex; align-items:center; gap:12px;">
+            <div class="m365-doc-badge-sq" style="width:24px; height:24px; border-radius:6px; background:${badge.bg}; color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0;">
+              ${badge.letter}
             </div>
             <div>
-              <div style="font-size:13px; font-weight:600; color:#0f172a;">${doc.title}</div>
-              <div class="m365-doc-subtext">${doc.appName} &bull; Sovereign In-Memory</div>
+              <div style="font-size:13.5px; font-weight:600; color:#0f172a;">${this.escapeHtml(docTitle)}</div>
+              <div class="m365-doc-subtext" style="font-size:11px; color:#64748b;">${badge.name} &bull; Sovereign In-Memory</div>
             </div>
           </div>
         </td>
-        <td style="color:#64748b; font-size:12px;">${doc.date || 'Today'}</td>
-        <td style="color:#64748b; font-size:12px;">${doc.sharing || 'Only you'}</td>
-        <td style="color:#64748b; font-size:12px;">${doc.activity || 'You edited'}</td>
+        <td style="color:#64748b; font-size:12.5px;">${this.escapeHtml(docDate)}</td>
+        <td style="color:#64748b; font-size:12.5px;">${this.escapeHtml(docSharing)}</td>
+        <td style="color:#64748b; font-size:12.5px;">${this.escapeHtml(docActivity)}</td>
       `;
 
       tr.style.cursor = 'pointer';
       tr.addEventListener('click', () => {
-        this.navigateTo(doc.type, doc.title.replace(/\.[^.]+$/, ''));
+        this.navigateTo(docType, docTitle.replace(/\.[^.]+$/, ''));
       });
 
       tbody.appendChild(tr);
@@ -1436,7 +1455,9 @@ class GiriOrbitPlatform {
       let bytes = 0;
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        bytes += (k.length + (localStorage.getItem(k) || '').length) * 2;
+        if (!k) continue;
+        const val = localStorage.getItem(k) || '';
+        bytes += (k.length + val.length) * 2;
       }
       let res = '';
       if (bytes < 1024) res = bytes + ' Bytes';
@@ -3175,6 +3196,80 @@ class GiriOrbitPlatform {
       this.openKeyboardShortcutsModal();
     });
 
+    // Suite Top Header Settings & Profile Buttons
+    document.getElementById('btn-suite-settings')?.addEventListener('click', () => {
+      this.openSettingsModal();
+    });
+
+    document.getElementById('btn-suite-profile')?.addEventListener('click', () => {
+      this.openUserProfileModal();
+    });
+
+    // Universal Delegated Handler for Core Suite Controls
+    document.addEventListener('click', (e) => {
+      // 1. Settings triggers
+      const settingsTarget = e.target.closest('#rail-btn-settings, #btn-suite-settings, #btn-drift-settings, #btn-axis-settings, #btn-kinetic-settings, [data-action="open-settings"]');
+      if (settingsTarget) {
+        e.preventDefault();
+        this.openSettingsModal();
+        return;
+      }
+
+      // 2. Profile triggers
+      const profileTarget = e.target.closest('#rail-avatar-btn, #btn-suite-profile, #btn-drift-profile, #btn-axis-profile, #btn-kinetic-profile, [data-action="open-profile"]');
+      if (profileTarget) {
+        e.preventDefault();
+        this.openUserProfileModal();
+        return;
+      }
+
+      // 3. See more in Create & New Document triggers
+      const createTarget = e.target.closest('#m365-see-more-link, .m365-see-more, #rail-btn-create, [data-action="open-templates"]');
+      if (createTarget) {
+        e.preventDefault();
+        this.openCreateTemplatesModal();
+        return;
+      }
+
+      // 4. Download Suite triggers
+      const dlTarget = e.target.closest('#rail-btn-download, #hero-btn-download-suite, #btn-open-downloads-corner');
+      if (dlTarget && !dlTarget.hasAttribute('download')) {
+        e.preventDefault();
+        this.openDownloadSuiteModal();
+        return;
+      }
+
+      // 5. Create Cards
+      const cardTarget = e.target.closest('.m365-create-card[data-create]');
+      if (cardTarget) {
+        e.preventDefault();
+        const type = cardTarget.dataset.create;
+        if (type === 'drift') {
+          this.recordRecentDocument('Untitled Document', 'drift', 'Drift');
+          this.navigateTo('drift', 'Untitled Document', true, true);
+        } else if (type === 'kinetic') {
+          this.recordRecentDocument('Untitled Presentation', 'kinetic', 'Kinetic');
+          this.navigateTo('kinetic', null, true, true);
+        } else if (type === 'axis') {
+          this.recordRecentDocument('Untitled Spreadsheet', 'axis', 'Axis');
+          this.navigateTo('axis', null, true, true);
+        } else if (type === 'form') {
+          this.recordRecentDocument('Customer Feedback Survey', 'forms', 'Forms');
+          this.navigateTo('forms', 'Customer Feedback Survey', true, true);
+        } else if (type === 'quiz') {
+          this.recordRecentDocument('Certification Assessment Quiz', 'quiz', 'Quiz');
+          this.navigateTo('quiz', 'Certification Assessment Quiz', true, true);
+        } else if (type === 'list') {
+          this.recordRecentDocument('Enterprise Task Matrix', 'lists', 'Lists');
+          this.navigateTo('lists', 'Enterprise Task Matrix', true, true);
+        } else if (type === 'designer') {
+          this.recordRecentDocument('Keynote Social Banner', 'designer', 'Designer');
+          this.navigateTo('designer', 'Keynote Social Banner', true, true);
+        }
+        return;
+      }
+    });
+
     document.getElementById('btn-open-girionix-agent')?.addEventListener('click', () => {
       if (this.agent) {
         this.agent.toggleAgent();
@@ -3714,7 +3809,19 @@ class GiriOrbitPlatform {
 
     if (!drawer) return;
 
+    // Ensure completely hidden and closed on startup
+    drawer.classList.remove('open', 'minimized');
+    drawer.setAttribute('aria-hidden', 'true');
     this.isGirionixDrawerOpen = false;
+    if (floatingBtn) {
+      floatingBtn.style.setProperty('display', 'none', 'important');
+      floatingBtn.classList.remove('active');
+    }
+    const startupDockPill = document.getElementById('girionix-dock-minimized-pill');
+    if (startupDockPill) {
+      startupDockPill.style.setProperty('display', 'none', 'important');
+      startupDockPill.classList.remove('active');
+    }
     let activeCopilotTool = 'drift';
     let attachedFileData = null;
     let isGenerating = false;
@@ -4427,15 +4534,19 @@ class GiriOrbitPlatform {
       drawer.setAttribute('aria-hidden', 'true');
       this.isGirionixDrawerOpen = false;
       if (dockPill) {
-        dockPill.style.display = 'flex';
+        dockPill.style.setProperty('display', 'flex', 'important');
+        dockPill.classList.add('active');
         const meta = toolMeta[activeCopilotTool] || { name: 'Girionix AI' };
-        if (dockLabel) dockLabel.textContent = `${meta.name} Copilot (Minimized)`;
+        if (dockLabel) dockLabel.textContent = `${meta.name} Assistant (Minimized)`;
       }
     };
 
     this.restoreGirionixAiDrawer = () => {
       drawer.classList.remove('minimized');
-      if (dockPill) dockPill.style.display = 'none';
+      if (dockPill) {
+        dockPill.style.setProperty('display', 'none', 'important');
+        dockPill.classList.remove('active');
+      }
       this.openGirionixAiDrawer(activeCopilotTool);
     };
 
@@ -4455,13 +4566,19 @@ class GiriOrbitPlatform {
     dockCloseBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
       drawer.classList.remove('minimized');
-      if (dockPill) dockPill.style.display = 'none';
+      if (dockPill) {
+        dockPill.style.setProperty('display', 'none', 'important');
+        dockPill.classList.remove('active');
+      }
       this.closeGirionixAiDrawer();
     });
 
     this.openGirionixAiDrawer = (initialTool = null) => {
       drawer.classList.remove('minimized');
-      if (dockPill) dockPill.style.display = 'none';
+      if (dockPill) {
+        dockPill.style.setProperty('display', 'none', 'important');
+        dockPill.classList.remove('active');
+      }
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
       this.isGirionixDrawerOpen = true;
@@ -4474,7 +4591,10 @@ class GiriOrbitPlatform {
     this.closeGirionixAiDrawer = () => {
       drawer.classList.remove('open');
       drawer.classList.remove('minimized');
-      if (dockPill) dockPill.style.display = 'none';
+      if (dockPill) {
+        dockPill.style.setProperty('display', 'none', 'important');
+        dockPill.classList.remove('active');
+      }
       drawer.setAttribute('aria-hidden', 'true');
       this.isGirionixDrawerOpen = false;
     };

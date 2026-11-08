@@ -41,10 +41,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/giri-logo-symbol.png">
   <link rel="apple-touch-icon" href="assets/giri-logo-symbol.png">
-  <link rel="stylesheet" href="css/styles.css?v=13.4">
+  <link rel="stylesheet" href="css/styles.css?v=13.6">
   <link rel="stylesheet" href="css/orbitDesktop.css?v=1.0">
   <link rel="stylesheet" href="css/hub.css?v=10.2">
-  <link rel="stylesheet" href="css/m365-copilot.css?v=13.4">
+  <link rel="stylesheet" href="css/m365-copilot.css?v=13.6">
   <link rel="stylesheet" href="css/fontsAndSelection.css?v=10.2">
   <link rel="stylesheet" href="css/sync.css?v=10.9">
   <link rel="stylesheet" href="css/mobile.css?v=10.2">
@@ -211,6 +211,12 @@
         <button class="tier1-icon-pill" id="btn-open-girionix-ai" style="background:linear-gradient(135deg, rgba(6,182,212,0.18), rgba(59,130,246,0.22)); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;" title="Open Girionix AI Assistant (Ctrl+J)">
           <span style="font-size:13px;">⚡</span>
           <span>Girionix AI</span>
+        </button>
+        <button class="tier1-icon-pill" id="btn-suite-settings" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#94a3b8; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px;" title="Settings & Personalization">
+          ⚙️
+        </button>
+        <button class="tier1-icon-pill" id="btn-suite-profile" style="background:#2563eb; border:1px solid rgba(255,255,255,0.2); color:#ffffff; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:11px; font-weight:700;" title="User Profile & Sovereignty Hub">
+          <span id="btn-suite-profile-text">AG</span>
         </button>
         <button class="tier1-icon-pill" id="btn-suite-shortcuts" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#64748b; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px;" title="Keyboard Shortcuts (Ctrl+/)">
           ⌨
@@ -771,7 +777,7 @@
   </div>
 
   <!-- Floating Girionix AI Quick Assistant Pill -->
-  <div class="girionix-floating-trigger" id="btn-floating-girionix-trigger" role="button" tabindex="0" title="Ask Girionix AI (Ctrl+J)">
+  <div class="girionix-floating-trigger" id="btn-floating-girionix-trigger" role="button" tabindex="0" title="Ask Girionix AI (Ctrl+J)" style="display:none !important;">
     <div class="girionix-floating-aura"></div>
     <div class="girionix-floating-inner">
       <span class="girionix-floating-icon" style="display:inline-flex; align-items:center; justify-content:center;">
@@ -886,7 +892,7 @@
   </aside>
 
   <!-- Minimized Floating Dock Pill for Girionix AI Drawer -->
-  <div id="girionix-dock-minimized-pill" class="girionix-dock-pill" style="display:none;" title="Click to restore Girionix AI Assistant">
+  <div id="girionix-dock-minimized-pill" class="girionix-dock-pill" style="display:none !important;" title="Click to restore Girionix AI Assistant">
     <div class="dock-pill-indicator"></div>
     <span class="dock-pill-icon">✨</span>
     <span class="dock-pill-label" id="girionix-dock-pill-label">Girionix AI (Minimized)</span>
@@ -1147,7 +1153,7 @@
   <div class="orbit-toast-wrap" id="orbit-toast-wrap" aria-live="polite"></div>
 
   <!-- Main Orchestrator -->
-  <script type="module" src="js/app.js?v=13.5"></script>
+  <script type="module" src="js/app.js?v=13.6"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

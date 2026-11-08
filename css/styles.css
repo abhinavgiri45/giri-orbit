@@ -4376,7 +4376,11 @@ body.dark .drift-merge-field-chip {
   z-index: 9990;
   cursor: pointer;
   user-select: none;
+  display: none !important;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+.girionix-floating-trigger.active {
+  display: block !important;
 }
 .girionix-floating-trigger:hover {
   transform: translateY(-2px) scale(1.03);
@@ -4464,7 +4468,7 @@ body.dark .drift-merge-field-chip {
   bottom: 20px;
   right: 22px;
   z-index: 10020;
-  display: flex;
+  display: none !important;
   align-items: center;
   gap: 10px;
   background: linear-gradient(135deg, #090d16, #111a2e);
@@ -4477,6 +4481,7 @@ body.dark .drift-merge-field-chip {
   user-select: none;
   backdrop-filter: blur(8px);
 }
+.girionix-dock-pill.active { display: flex !important; }
 .girionix-dock-pill:hover {
   transform: translateY(-2px);
   border-color: #38bdf8;
