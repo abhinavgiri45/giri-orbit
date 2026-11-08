@@ -3,25 +3,56 @@
  * Sovereign Visual Design Studio & Social Asset Generator
  * Competing directly with Microsoft Designer & Canva
  * Part of the Giri Orbit Sovereign Office Suite
- * 
- * Features:
- * - Canvas Presets: Square Post (1080x1080), Widescreen Banner (1920x1080), Story (1080x1920), Landscape (1200x630)
- * - Pro Ready-Made Templates: Product Launch, Big Sale, Executive Quote, Tech Summit
- * - Geometry & Shape Library: Rectangles, Circles, Stars, Triangles, Badges, Dividers
- * - Typography Engine: Headings, Subheadings, Body Text, Custom Font Family, Sizes & Colors
- * - Vibrant Gradient & Custom Image Backgrounds
- * - Layer Management: Bring Forward, Send Backward, Duplicate, Delete
- * - High-Resolution PNG & SVG Vector Export
- * - 100% Offline Local Storage Persistence
+ * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderDesignerApp(container, onUpdate = null, startInEditor = true) {
+export function renderDesignerApp(container, onUpdate = null, startInEditor = false) {
   let designData = loadDesignData();
   let selectedElementId = null;
   let activeSidebarTab = 'templates'; // 'templates', 'shapes', 'text', 'background'
   let canvasScale = 0.5; // Display scale factor for large preset dimensions
 
-  renderShell();
+  const DESIGN_TEMPLATES = [
+    {
+      id: 'keynote-banner',
+      name: 'Executive Keynote Announcement',
+      category: 'social',
+      preset: 'landscape',
+      width: 1200,
+      height: 630,
+      background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31104b 100%)',
+      desc: 'High-impact 1200x630 banner for keynote presentations and social broadcasts.',
+      elements: [
+        { id: 'el_1', type: 'shape_rect', x: 80, y: 60, width: 1040, height: 510, fill: 'rgba(255, 255, 255, 0.03)', stroke: 'rgba(255, 255, 255, 0.1)', strokeWidth: 2, rx: 16 },
+        { id: 'el_2', type: 'text', x: 120, y: 150, text: 'GIRI ORBIT SOVEREIGN SUITE', fontSize: 20, fill: '#38bdf8', fontFamily: 'Segoe UI', fontWeight: 'bold', letterSpacing: '0.15em' },
+        { id: 'el_3', type: 'text', x: 120, y: 220, text: 'The Zero-Gravity Enterprise Office', fontSize: 48, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '800' },
+        { id: 'el_4', type: 'text', x: 120, y: 310, text: '100% Offline Standalone Performance with Native C++ & In-Memory Speed', fontSize: 22, fill: '#94a3b8', fontFamily: 'Segoe UI', fontWeight: 'normal' },
+        { id: 'el_5', type: 'shape_circle', x: 950, y: 180, width: 180, height: 180, fill: 'radial-gradient(circle, #db2777 0%, #7c3aed 100%)', opacity: 0.7 }
+      ]
+    },
+    {
+      id: 'tech-summit',
+      name: 'Global Tech Summit Poster',
+      category: 'poster',
+      preset: 'square',
+      width: 1080,
+      height: 1080,
+      background: 'linear-gradient(180deg, #020617 0%, #0f172a 100%)',
+      desc: 'Square 1080x1080 modern tech event graphic with glowing geometric typography.',
+      elements: [
+        { id: 'el_1', type: 'shape_rect', x: 60, y: 60, width: 960, height: 960, fill: 'transparent', stroke: '#38bdf8', strokeWidth: 3, rx: 20 },
+        { id: 'el_2', type: 'text', x: 120, y: 200, text: 'SUMMIT 2026', fontSize: 32, fill: '#a855f7', fontFamily: 'Segoe UI', fontWeight: 'bold' },
+        { id: 'el_3', type: 'text', x: 120, y: 300, text: 'Sovereign Digital Infrastructure', fontSize: 56, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '900' },
+        { id: 'el_4', type: 'text', x: 120, y: 460, text: 'Keynote Speaker: Abhinav Giri (@abhinavgiri45)', fontSize: 26, fill: '#38bdf8', fontFamily: 'Segoe UI', fontWeight: '600' }
+      ]
+    }
+  ];
+
+  if (startInEditor) {
+    mountEditor();
+  } else {
+    mountHub();
+  }
 
   function loadDesignData() {
     try {
@@ -33,77 +64,16 @@ export function renderDesignerApp(container, onUpdate = null, startInEditor = tr
     return {
       id: 'design_' + Date.now(),
       title: 'Executive Keynote Announcement Banner',
-      preset: 'landscape', // 'square', 'banner', 'story', 'landscape'
+      preset: 'landscape',
       width: 1200,
       height: 630,
       background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31104b 100%)',
       elements: [
-        {
-          id: 'el_1',
-          type: 'shape_rect',
-          x: 100,
-          y: 80,
-          width: 1000,
-          height: 470,
-          fill: 'rgba(255, 255, 255, 0.03)',
-          stroke: 'rgba(255, 255, 255, 0.1)',
-          strokeWidth: 2,
-          borderRadius: 20
-        },
-        {
-          id: 'el_2',
-          type: 'badge',
-          x: 140,
-          y: 130,
-          width: 220,
-          height: 38,
-          text: 'GIRI ORBIT SOVEREIGN 2026',
-          fill: '#db2777',
-          color: '#ffffff',
-          fontSize: 12,
-          fontWeight: '800',
-          borderRadius: 19
-        },
-        {
-          id: 'el_3',
-          type: 'text',
-          x: 140,
-          y: 190,
-          width: 800,
-          height: 120,
-          text: 'The Sovereign Future of\nOffice Productivity.',
-          fontSize: 48,
-          fontWeight: '900',
-          fontFamily: 'Segoe UI',
-          color: '#ffffff',
-          lineHeight: 1.15
-        },
-        {
-          id: 'el_4',
-          type: 'text',
-          x: 140,
-          y: 330,
-          width: 750,
-          height: 60,
-          text: 'Zero mandatory cloud telemetry • 100% Offline execution • Word, Excel, PowerPoint, Forms, Quiz, Lists & Designer.',
-          fontSize: 18,
-          fontWeight: '400',
-          fontFamily: 'Segoe UI',
-          color: '#cbd5e1',
-          lineHeight: 1.4
-        },
-        {
-          id: 'el_5',
-          type: 'shape_circle',
-          x: 950,
-          y: 360,
-          width: 140,
-          height: 140,
-          fill: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
-          stroke: 'transparent',
-          strokeWidth: 0,
-          opacity: 0.8
-        }
+        { id: 'el_1', type: 'shape_rect', x: 100, y: 80, width: 1000, height: 470, fill: 'rgba(255, 255, 255, 0.03)', stroke: 'rgba(255, 255, 255, 0.1)', strokeWidth: 2, rx: 16 },
+        { id: 'el_2', type: 'text', x: 140, y: 160, text: 'SOVEREIGN PRODUCTIVITY', fontSize: 18, fill: '#db2777', fontFamily: 'Segoe UI', fontWeight: 'bold', letterSpacing: '0.12em' },
+        { id: 'el_3', type: 'text', x: 140, y: 230, text: 'Giri Orbit Studio Suite v14.4', fontSize: 44, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '800' },
+        { id: 'el_4', type: 'text', x: 140, y: 310, text: 'Complete Offline Enterprise Suite • Author: Abhinav Giri (@abhinavgiri45)', fontSize: 20, fill: '#94a3b8', fontFamily: 'Segoe UI', fontWeight: 'normal' },
+        { id: 'el_5', type: 'shape_circle', x: 920, y: 200, width: 160, height: 160, fill: '#ec4899', opacity: 0.6 }
       ]
     };
   }
@@ -111,10 +81,218 @@ export function renderDesignerApp(container, onUpdate = null, startInEditor = tr
   function saveDesignData() {
     try {
       localStorage.setItem('orbit_designer_active_doc', JSON.stringify(designData));
-      if (typeof onUpdate === 'function') onUpdate(designData);
+      if (onUpdate) onUpdate(designData);
     } catch (e) {
-      console.warn('Failed to save designer data:', e);
+      console.warn('Failed to save design data:', e);
     }
+  }
+
+  // =========================================================================
+  // VIEW 1: START INTERFACE / DESIGNER HUB
+  // =========================================================================
+  function mountHub() {
+    container.innerHTML = `
+      <div class="drift-hub-shell" id="designer-hub-shell" style="min-height:100vh; background:#0f172a; color:#f8fafc; font-family:'Segoe UI',system-ui,sans-serif; overflow-y:auto;">
+        <!-- Top App Brand Bar in Hub Mode -->
+        <div class="drift-hub-top-bar" style="height:54px; background:#1e293b; border-bottom:1px solid #334155; display:flex; align-items:center; justify-content:space-between; padding:0 24px;">
+          <div class="drift-hub-brand-left" style="display:flex; align-items:center; gap:12px;">
+            <img src="assets/designer-logo.png" alt="Giri Designer" style="width:28px; height:28px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 6px rgba(219,39,119,0.5));">
+            <div class="tool-hub-brand-dropdown-wrap">
+              <button class="tool-hub-brand-btn" style="display:flex; align-items:center; gap:6px; background:transparent; border:none; cursor:pointer; padding:4px 6px; border-radius:4px;" title="Switch Suite Tool">
+                <span style="color:#ffffff; font-weight:700; font-size:14.5px;">Giri Designer</span>
+                <span style="color:#94a3b8; font-size:11px;">▾</span>
+              </button>
+            </div>
+            <nav class="drift-hub-nav-links" style="display:flex; gap:18px; margin-left:14px; font-size:12.5px; color:#cbd5e1;">
+              <span class="drift-hub-nav-link" id="designer-nav-blank" style="cursor:pointer; font-weight:600;">Create Blank Canvas</span>
+              <span class="drift-hub-nav-link" id="designer-nav-templates" style="cursor:pointer;">Presets</span>
+              <span class="drift-hub-nav-link" id="designer-nav-hub" style="cursor:pointer; color:#38bdf8;">← Suite Hub</span>
+            </nav>
+          </div>
+
+          <div class="tool-hub-top-right" style="display:flex; align-items:center; gap:12px;">
+            <div class="tool-hub-suite-links" style="display:flex; gap:14px; font-size:12px; color:#94a3b8;">
+              <a href="#hub" style="color:#94a3b8; text-decoration:none;">Hub</a>
+              <a href="#drift" style="color:#94a3b8; text-decoration:none;">Drift</a>
+              <a href="#axis" style="color:#94a3b8; text-decoration:none;">Axis</a>
+              <a href="#kinetic" style="color:#94a3b8; text-decoration:none;">Kinetic</a>
+              <a href="#forms" style="color:#94a3b8; text-decoration:none;">Forms</a>
+              <a href="#quiz" style="color:#94a3b8; text-decoration:none;">Quiz</a>
+              <a href="#lists" style="color:#94a3b8; text-decoration:none;">Lists</a>
+              <a href="#designer" style="color:#f472b6; text-decoration:none; font-weight:700;">Designer</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleek Dark Hero Banner -->
+        <section class="drift-hub-hero" style="max-width:1300px; margin:0 auto; padding:40px 32px 32px; display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center;">
+          <div class="drift-hero-left">
+            <div style="margin-bottom:14px;">
+              <img src="assets/designer-logo.png" alt="Designer" style="height:42px; object-fit:contain; display:block; filter:drop-shadow(0 4px 12px rgba(219,39,119,0.6));">
+            </div>
+            <h1 class="drift-hero-title" style="font-size:32px; font-weight:800; color:#ffffff; margin:0 0 10px 0; letter-spacing:-0.02em;">Welcome to Giri Designer</h1>
+            <p class="drift-hero-subtitle" style="font-size:14px; color:#94a3b8; line-height:1.6; margin:0 0 22px 0;">
+              Sovereign vector graphic studio, social keynote banner composer, and creative canvas. Zero database tracking, instant local persistence.
+            </p>
+
+            <div class="follow-journey-wrap" style="margin-bottom:24px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">OFFICIAL PORTAL</span>
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:26px; height:26px; border-radius:50%;">
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">Abhinav Giri</strong>
+                    <span style="font-size:10.5px; color:#38bdf8;">github.com/abhinavgiri45/giri-orbit →</span>
+                  </div>
+                </a>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">FOLLOW THE JOURNEY</span>
+                <a href="https://www.instagram.com/abhinavgiri45/" target="_blank" rel="noopener" class="giri-instagram-card giri-instagram-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <div style="width:26px; height:26px; border-radius:6px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:13px;">📸</div>
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">@abhinavgiri45</strong>
+                    <span style="font-size:10.5px; color:#94a3b8;">Connect on Instagram →</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="drift-hero-actions" style="display:flex; flex-wrap:wrap; gap:12px;">
+              <button class="btn-drift-create-blank" id="btn-designer-create-blank" style="background:#db2777; color:#ffffff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 4px 14px rgba(219,39,119,0.4);">
+                <span>+ Create blank canvas</span>
+              </button>
+              <button class="btn-drift-upload-file" id="btn-designer-quick-keynote" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>🎨 Use Keynote Banner Preset</span>
+              </button>
+              <button class="btn-drift-new-template-cta" id="btn-designer-quick-png" style="background:#1e293b; color:#f472b6; border:1px solid #831843; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>🖼️ High-Res PNG Export</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3D Modern Designer Illustration -->
+          <div class="drift-hero-visual" style="display:flex; justify-content:center;">
+            <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:280px; filter:drop-shadow(0 10px 25px rgba(0,0,0,0.5));">
+              <rect x="25" y="20" width="230" height="145" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+              <!-- Canvas Artboard inside -->
+              <rect x="45" y="35" width="190" height="115" rx="6" fill="#0f172a" stroke="#db2777" stroke-width="1.5"/>
+              <rect x="60" y="50" width="80" height="50" rx="4" fill="#ec4899" fill-opacity="0.2" stroke="#ec4899"/>
+              <circle cx="180" cy="75" r="24" fill="#a855f7" fill-opacity="0.3" stroke="#a855f7"/>
+              <rect x="60" y="115" width="110" height="8" rx="2" fill="#ffffff"/>
+              <rect x="60" y="128" width="60" height="5" rx="2" fill="#38bdf8"/>
+              <!-- Pen tool cursor -->
+              <polygon points="195,115 210,135 200,140 188,125" fill="#f59e0b"/>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Bottom Pick up Where You Left Off Bar -->
+        <div style="max-width:1300px; margin:0 auto 36px; padding:0 32px;">
+          <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.25);">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:36px; height:36px; border-radius:8px; background:rgba(219,39,119,0.2); border:1px solid #db2777; display:flex; align-items:center; justify-content:center; color:#f472b6; font-weight:800; font-size:16px;">D</div>
+              <div>
+                <strong style="color:#ffffff; font-size:13.5px; display:block;">Pick up where you left off in Designer</strong>
+                <span style="color:#94a3b8; font-size:12px;">• ${escapeHtml(designData.title)} — ${designData.width} × ${designData.height} px • ${designData.elements.length} layer elements</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button id="btn-designer-reset-draft" style="background:#334155; color:#cbd5e1; border:none; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">
+                🗑 Delete Draft
+              </button>
+              <button id="btn-designer-resume-work" style="background:#db2777; color:#ffffff; border:none; padding:8px 18px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                <span>▶ Resume Work →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Gallery Carousel -->
+        <section style="max-width:1300px; margin:0 auto; padding:0 32px 48px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+            <h2 style="font-size:18px; font-weight:700; color:#ffffff; margin:0;">Creative Vector Canvas Presets</h2>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:18px;">
+            ${DESIGN_TEMPLATES.map(tpl => `
+              <div class="designer-tpl-card" data-id="${tpl.id}" style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:18px; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.borderColor='#db2777'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#334155'; this.style.transform='none';">
+                <div>
+                  <div style="width:36px; height:36px; border-radius:8px; background:rgba(219,39,119,0.2); color:#f472b6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-bottom:12px;">D</div>
+                  <strong style="color:#ffffff; font-size:14.5px; display:block; margin-bottom:6px;">${escapeHtml(tpl.name)}</strong>
+                  <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.5;">${escapeHtml(tpl.desc)}</p>
+                </div>
+                <div style="font-size:11px; color:#f472b6; font-weight:600;">
+                  ${tpl.width} × ${tpl.height} px • Use Preset →
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      </div>
+    `;
+
+    // Bind Hub Events
+    container.querySelector('#btn-designer-create-blank')?.addEventListener('click', () => {
+      designData = {
+        id: 'design_' + Date.now(),
+        title: 'Untitled Design Canvas',
+        preset: 'landscape',
+        width: 1200,
+        height: 630,
+        background: '#0f172a',
+        elements: [
+          { id: 'el_1', type: 'text', x: 200, y: 250, text: 'Click to Edit Headline', fontSize: 36, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: 'bold' }
+        ]
+      };
+      saveDesignData();
+      mountEditor();
+    });
+
+    container.querySelector('#designer-nav-blank')?.addEventListener('click', () => { mountEditor(); });
+    container.querySelector('#designer-nav-hub')?.addEventListener('click', () => {
+      if (window.orbitPlatform) window.orbitPlatform.navigateTo('launcher');
+    });
+    container.querySelector('#btn-designer-resume-work')?.addEventListener('click', () => { mountEditor(); });
+    container.querySelector('#btn-designer-quick-keynote')?.addEventListener('click', () => { applyTemplate(DESIGN_TEMPLATES[0]); });
+    container.querySelector('#btn-designer-quick-png')?.addEventListener('click', () => { exportCanvasToPng(); });
+
+    container.querySelector('#btn-designer-reset-draft')?.addEventListener('click', () => {
+      if (confirm('Reset designer draft to clean blank canvas?')) {
+        localStorage.removeItem('orbit_designer_active_doc');
+        designData = loadDesignData();
+        mountHub();
+      }
+    });
+
+    container.querySelectorAll('.designer-tpl-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const tpl = DESIGN_TEMPLATES.find(t => t.id === id);
+        if (tpl) applyTemplate(tpl);
+      });
+    });
+
+    function applyTemplate(tpl) {
+      designData = {
+        id: 'design_' + Date.now(),
+        title: tpl.name,
+        preset: tpl.preset,
+        width: tpl.width,
+        height: tpl.height,
+        background: tpl.background,
+        elements: JSON.parse(JSON.stringify(tpl.elements))
+      };
+      saveDesignData();
+      mountEditor();
+    }
+  }
+
+  // =========================================================================
+  // VIEW 2: FULL-FEATURED CANVAS & VECTOR EDITOR
+  // =========================================================================
+  function mountEditor() {
+    renderShell();
   }
 
   function renderShell() {

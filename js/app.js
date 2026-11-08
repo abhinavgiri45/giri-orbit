@@ -97,6 +97,16 @@ class GiriOrbitPlatform {
 
   init() {
     this.purgeLegacyMockDocuments();
+    const isDesktopEnv = window.location.protocol === 'file:' || 
+                         window.location.search.includes('desktop=1') ||
+                         window.location.hash.includes('desktop=1');
+    if (isDesktopEnv) {
+      document.body.classList.add('is-desktop-app');
+      const dlBtn = document.getElementById('btn-open-downloads-corner');
+      if (dlBtn) dlBtn.style.setProperty('display', 'none', 'important');
+      const railDl = document.getElementById('rail-btn-download');
+      if (railDl) railDl.style.setProperty('display', 'none', 'important');
+    }
     this.bindHeaderNavigation();
     this.bindGlobalActions();
     this.initSyncSystem();
@@ -768,7 +778,39 @@ class GiriOrbitPlatform {
             <span class="m365-rail-label">Aegis</span>
           </button>
 
-          <!-- 5. More Tools (...) -->
+          <!-- 5. Forms (Survey & Data Matrix) -->
+          <button class="m365-rail-btn" id="rail-btn-forms" data-launch="forms" title="Giri Forms (Executive Survey Studio)">
+            <div class="m365-rail-icon-wrap" style="background:#f0fdfa;">
+              <img src="assets/forms-logo.png" alt="Forms" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
+            </div>
+            <span class="m365-rail-label">Forms</span>
+          </button>
+
+          <!-- 6. Quiz (Assessment & Exam Studio) -->
+          <button class="m365-rail-btn" id="rail-btn-quiz" data-launch="quiz" title="Giri Quiz (Assessment & Certification Studio)">
+            <div class="m365-rail-icon-wrap" style="background:#f0f9ff;">
+              <img src="assets/quiz-logo.png" alt="Quiz" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
+            </div>
+            <span class="m365-rail-label">Quiz</span>
+          </button>
+
+          <!-- 7. Lists (Agile Matrix & Kanban Board) -->
+          <button class="m365-rail-btn" id="rail-btn-lists" data-launch="lists" title="Giri Lists (Agile Task Matrix & Kanban)">
+            <div class="m365-rail-icon-wrap" style="background:#f5f3ff;">
+              <img src="assets/lists-logo.png" alt="Lists" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
+            </div>
+            <span class="m365-rail-label">Lists</span>
+          </button>
+
+          <!-- 8. Designer (Creative Graphic & Vector Canvas) -->
+          <button class="m365-rail-btn" id="rail-btn-designer" data-launch="designer" title="Giri Designer (Creative Graphic & Vector Studio)">
+            <div class="m365-rail-icon-wrap" style="background:#fdf2f8;">
+              <img src="assets/designer-logo.png" alt="Designer" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
+            </div>
+            <span class="m365-rail-label">Designer</span>
+          </button>
+
+          <!-- 9. More Tools (...) -->
           <button class="m365-rail-btn" id="rail-btn-more" title="File Converter & More Tools">
             <div class="m365-rail-icon-wrap">
               <span style="font-weight:900; font-size:16px; color:#94a3b8; line-height:1;">&bull;&bull;&bull;</span>

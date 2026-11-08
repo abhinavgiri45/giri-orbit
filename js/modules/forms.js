@@ -3,102 +3,115 @@
  * Sovereign Interactive Form Builder & Analytics Engine
  * Competing directly with Microsoft Forms & Google Forms
  * Part of the Giri Orbit Sovereign Office Suite
- * 
- * Features:
- * - Visual Form Builder with rich question types (Choice, Checkboxes, Short Text, Long Text, Rating, Date, Dropdown)
- * - Questions Tab & Live Responses Analytics Dashboard
- * - Interactive Preview / Respondent Submission Mode (submit real answers, instant update)
- * - Response Charts, Averages, and Data Matrix
- * - Export to Giri Axis (.gaxis / CSV / Excel)
- * - 100% Offline Local Storage Persistence
+ * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderFormsApp(container, onUpdate = null, startInEditor = true) {
-  // Load saved form data or initialize default executive template
+export function renderFormsApp(container, onUpdate = null, startInEditor = false) {
   let formData = loadFormData();
-
-  // Active tab: 'questions' or 'responses'
-  let activeTab = 'questions';
-  // Mode: 'editor' or 'preview' (respondent mode)
+  let activeTab = 'questions'; // 'questions' or 'responses'
   let isPreviewMode = false;
-  // Currently selected question ID for active editing
   let selectedQuestionId = formData.questions.length > 0 ? formData.questions[0].id : null;
 
-  renderShell();
+  const FORMS_TEMPLATES = [
+    {
+      id: 'cust-feedback',
+      name: 'Customer Feedback & NPS',
+      category: 'customer',
+      desc: 'Measure customer sentiment, net promoter score, and feature recommendations.',
+      themeColor: '#0d9488',
+      previewBg: '#f0fdfa',
+      accent: '#0d9488',
+      questions: [
+        { id: 'q_1', type: 'rating', title: 'Overall, how satisfied are you with our sovereign platform?', required: true, scale: 5, ratingIcon: 'star' },
+        { id: 'q_2', type: 'choice', title: 'How likely are you to recommend Giri Orbit to an industry peer?', required: true, options: ['Extremely Likely (10/10)', 'Very Likely (8-9)', 'Somewhat Likely (6-7)', 'Not Likely'] },
+        { id: 'q_3', type: 'text_short', title: 'Your Name & Organization', required: false, placeholder: 'e.g. Abhinav Giri - Sovereign Systems' },
+        { id: 'q_4', type: 'text_long', title: 'What is the single most valuable feature you use daily?', required: false, placeholder: 'Share your feedback...' }
+      ]
+    },
+    {
+      id: 'event-rsvp',
+      name: 'Executive Keynote RSVP',
+      category: 'events',
+      desc: 'Guest attendee confirmation, keynote session preferences, and dietary requirements.',
+      themeColor: '#2563eb',
+      previewBg: '#eff6ff',
+      accent: '#2563eb',
+      questions: [
+        { id: 'q_1', type: 'text_short', title: 'Full Legal Name', required: true, placeholder: 'e.g. Dr. Eleanor Vance' },
+        { id: 'q_2', type: 'choice', title: 'Will you attend in-person or via secure sovereign feed?', required: true, options: ['In-Person (San Francisco Executive Hall)', 'Virtual Sovereign Stream', 'Unable to Attend'] },
+        { id: 'q_3', type: 'checkbox', title: 'Which keynote breakout tracks will you attend?', required: false, options: ['Native C++ Win32 & GDI+ Performance', 'Cryptographic Data Sovereignty', 'Zero-Database In-Memory Vector Models'] },
+        { id: 'q_4', type: 'choice', title: 'Catering & Dietary Requirements', required: false, options: ['No Restrictions', 'Vegetarian', 'Vegan', 'Gluten-Free'] }
+      ]
+    },
+    {
+      id: 'employee-pulse',
+      name: 'Employee Team Pulse',
+      category: 'hr',
+      desc: 'Anonymous quarterly workplace velocity, tooling satisfaction, and cultural sentiment.',
+      themeColor: '#7c3aed',
+      previewBg: '#f5f3ff',
+      accent: '#7c3aed',
+      questions: [
+        { id: 'q_1', type: 'rating', title: 'I feel equipped with sovereign high-velocity tools to do my best work.', required: true, scale: 5, ratingIcon: 'star' },
+        { id: 'q_2', type: 'rating', title: 'Team communication and alignment across projects is clear.', required: true, scale: 5, ratingIcon: 'star' },
+        { id: 'q_3', type: 'choice', title: 'Which operating discipline needs greater executive focus?', required: true, options: ['Engineering Velocity', 'Product Design & Polish', 'Enterprise Documentation', 'Cross-Team Collaboration'] },
+        { id: 'q_4', type: 'text_long', title: 'Open Executive Comments or Constructive Feedback', required: false, placeholder: 'Your thoughts are completely anonymous...' }
+      ]
+    },
+    {
+      id: 'product-intake',
+      name: 'Feature Request & Intake',
+      category: 'customer',
+      desc: 'Structured product intake for enterprise requirements and capability requests.',
+      themeColor: '#ea580c',
+      previewBg: '#fff7ed',
+      accent: '#ea580c',
+      questions: [
+        { id: 'q_1', type: 'text_short', title: 'Feature Title or Capability Summary', required: true, placeholder: 'e.g. Native Parquet & BigQuery Codec' },
+        { id: 'q_2', type: 'choice', title: 'Target Suite Application', required: true, options: ['Giri Drift (Word Processor)', 'Giri Axis (Spreadsheet & Matrix)', 'Giri Kinetic (Presentation)', 'Giri Aegis PDF Studio', 'Giri Lists & Tasks'] },
+        { id: 'q_3', type: 'choice', title: 'Business Urgency / Priority Level', required: true, options: ['🔴 Mission Critical (Blocker)', '🟡 High Priority (Roadmap)', '🔵 Quality of Life (Nice to Have)'] },
+        { id: 'q_4', type: 'text_long', title: 'Detailed Use Case & Expected Workflow', required: true, placeholder: 'Describe the user scenario and expected outcome...' }
+      ]
+    }
+  ];
+
+  // Routing: Start in Editor or Start in Hub
+  if (startInEditor) {
+    mountEditor();
+  } else {
+    mountHub();
+  }
 
   function loadFormData() {
     try {
       const saved = localStorage.getItem('orbit_form_active_doc');
       if (saved) return JSON.parse(saved);
     } catch (e) {
-      console.warn('Failed to load form data from storage:', e);
+      console.warn('Failed to load form data:', e);
     }
     return {
       id: 'form_' + Date.now(),
       title: 'Customer Satisfaction & Executive Feedback Survey',
       description: 'Please take a minute to provide your feedback on our sovereign office suite. Your honest ratings guide our roadmap.',
-      themeColor: '#0d9488', // Teal
+      themeColor: '#0d9488',
       createdAt: new Date().toISOString(),
       questions: [
-        {
-          id: 'q_1',
-          type: 'rating',
-          title: 'How satisfied are you with the performance and responsiveness of Giri Orbit?',
-          required: true,
-          scale: 5,
-          ratingIcon: 'star'
-        },
-        {
-          id: 'q_2',
-          type: 'choice',
-          title: 'Which sovereign tool do you utilize most frequently?',
-          required: true,
-          options: ['Giri Drift (Word Processor)', 'Giri Axis (Spreadsheet & Matrix)', 'Giri Kinetic (Presentation Studio)', 'Giri Aegis (PDF Studio)', 'Giri Lists & Forms']
-        },
-        {
-          id: 'q_3',
-          type: 'checkbox',
-          title: 'What features would you like to see expanded in upcoming releases?',
-          required: false,
-          options: ['Advanced Formula Calculation Engines', 'Rich Typography & Hindi Devanagari Fonts', 'Interactive Visual Charts & Graph Export', 'Real-Time Offline Peer Collaboration']
-        },
-        {
-          id: 'q_4',
-          type: 'text_short',
-          title: 'Your Name or Department (Optional)',
-          required: false,
-          placeholder: 'e.g. Strategic Operations / Enterprise Architecture'
-        },
-        {
-          id: 'q_5',
-          type: 'text_long',
-          title: 'Any additional recommendations, suggestions, or bug reports?',
-          required: false,
-          placeholder: 'Share your executive thoughts here...'
-        }
+        { id: 'q_1', type: 'rating', title: 'How satisfied are you with the performance and responsiveness of Giri Orbit?', required: true, scale: 5, ratingIcon: 'star' },
+        { id: 'q_2', type: 'choice', title: 'Which sovereign tool do you utilize most frequently?', required: true, options: ['Giri Drift (Word Processor)', 'Giri Axis (Spreadsheet & Matrix)', 'Giri Kinetic (Presentation Studio)', 'Giri Aegis (PDF Studio)', 'Giri Lists & Forms'] },
+        { id: 'q_3', type: 'checkbox', title: 'What features would you like to see expanded in upcoming releases?', required: false, options: ['Advanced Formula Calculation Engines', 'Rich Typography & Hindi Devanagari Fonts', 'Interactive Visual Charts & Graph Export', 'Real-Time Offline Peer Collaboration'] },
+        { id: 'q_4', type: 'text_short', title: 'Your Name or Department (Optional)', required: false, placeholder: 'e.g. Strategic Operations' },
+        { id: 'q_5', type: 'text_long', title: 'Any additional recommendations, suggestions, or bug reports?', required: false, placeholder: 'Share your executive thoughts here...' }
       ],
       responses: [
         {
           id: 'resp_1',
           submittedAt: new Date(Date.now() - 3600000 * 4).toISOString(),
-          answers: {
-            q_1: 5,
-            q_2: 'Giri Axis (Spreadsheet & Matrix)',
-            q_3: ['Advanced Formula Calculation Engines', 'Interactive Visual Charts & Graph Export'],
-            q_4: 'Abhinav Giri',
-            q_5: 'Exceptional 60fps performance and zero mandatory cloud telemetry.'
-          }
+          answers: { q_1: 5, q_2: 'Giri Axis (Spreadsheet & Matrix)', q_3: ['Advanced Formula Calculation Engines', 'Interactive Visual Charts & Graph Export'], q_4: 'Abhinav Giri', q_5: 'Exceptional 60fps performance and zero mandatory cloud telemetry.' }
         },
         {
           id: 'resp_2',
           submittedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-          answers: {
-            q_1: 5,
-            q_2: 'Giri Drift (Word Processor)',
-            q_3: ['Rich Typography & Hindi Devanagari Fonts'],
-            q_4: 'DevOps Lead',
-            q_5: 'Completely offline-ready. Truly sovereign.'
-          }
+          answers: { q_1: 5, q_2: 'Giri Drift (Word Processor)', q_3: ['Rich Typography & Hindi Devanagari Fonts'], q_4: 'Lead Architect', q_5: 'Completely offline-ready. Truly sovereign.' }
         }
       ]
     };
@@ -107,10 +120,268 @@ export function renderFormsApp(container, onUpdate = null, startInEditor = true)
   function saveFormData() {
     try {
       localStorage.setItem('orbit_form_active_doc', JSON.stringify(formData));
-      if (typeof onUpdate === 'function') onUpdate(formData);
+      if (onUpdate) onUpdate(formData);
     } catch (e) {
       console.warn('Failed to save form data:', e);
     }
+  }
+
+  // =========================================================================
+  // VIEW 1: START INTERFACE / TEMPLATE HUB
+  // =========================================================================
+  function mountHub() {
+    container.innerHTML = `
+      <div class="drift-hub-shell" id="forms-hub-shell" style="min-height:100vh; background:#0f172a; color:#f8fafc; font-family:'Segoe UI',system-ui,sans-serif; overflow-y:auto;">
+        <!-- Top App Brand Bar in Hub Mode -->
+        <div class="drift-hub-top-bar" style="height:54px; background:#1e293b; border-bottom:1px solid #334155; display:flex; align-items:center; justify-content:space-between; padding:0 24px;">
+          <div class="drift-hub-brand-left" style="display:flex; align-items:center; gap:12px;">
+            <img src="assets/forms-logo.png" alt="Giri Forms" style="width:28px; height:28px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 6px rgba(13,148,136,0.5));">
+            <div class="tool-hub-brand-dropdown-wrap">
+              <button class="tool-hub-brand-btn" style="display:flex; align-items:center; gap:6px; background:transparent; border:none; cursor:pointer; padding:4px 6px; border-radius:4px;" title="Switch Suite Tool">
+                <span style="color:#ffffff; font-weight:700; font-size:14.5px;">Giri Forms</span>
+                <span style="color:#94a3b8; font-size:11px;">▾</span>
+              </button>
+            </div>
+            <nav class="drift-hub-nav-links" style="display:flex; gap:18px; margin-left:14px; font-size:12.5px; color:#cbd5e1;">
+              <span class="drift-hub-nav-link" id="forms-nav-blank" style="cursor:pointer; font-weight:600;">Create Blank</span>
+              <span class="drift-hub-nav-link" id="forms-nav-templates" style="cursor:pointer;">Templates</span>
+              <span class="drift-hub-nav-link" id="forms-nav-hub" style="cursor:pointer; color:#38bdf8;">← Suite Hub</span>
+            </nav>
+          </div>
+
+          <div class="tool-hub-top-right" style="display:flex; align-items:center; gap:12px;">
+            <div class="tool-hub-suite-links" style="display:flex; gap:14px; font-size:12px; color:#94a3b8;">
+              <a href="#hub" style="color:#94a3b8; text-decoration:none;">Hub</a>
+              <a href="#drift" style="color:#94a3b8; text-decoration:none;">Drift</a>
+              <a href="#axis" style="color:#94a3b8; text-decoration:none;">Axis</a>
+              <a href="#kinetic" style="color:#94a3b8; text-decoration:none;">Kinetic</a>
+              <a href="#forms" style="color:#2dd4bf; text-decoration:none; font-weight:700;">Forms</a>
+              <a href="#quiz" style="color:#94a3b8; text-decoration:none;">Quiz</a>
+              <a href="#lists" style="color:#94a3b8; text-decoration:none;">Lists</a>
+              <a href="#designer" style="color:#94a3b8; text-decoration:none;">Designer</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleek Dark Hero Banner -->
+        <section class="drift-hub-hero" style="max-width:1300px; margin:0 auto; padding:40px 32px 32px; display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center;">
+          <div class="drift-hero-left">
+            <div style="margin-bottom:14px;">
+              <img src="assets/forms-logo.png" alt="Forms" style="height:42px; object-fit:contain; display:block; filter:drop-shadow(0 4px 12px rgba(13,148,136,0.6));">
+            </div>
+            <h1 class="drift-hero-title" style="font-size:32px; font-weight:800; color:#ffffff; margin:0 0 10px 0; letter-spacing:-0.02em;">Welcome to Giri Forms</h1>
+            <p class="drift-hero-subtitle" style="font-size:14px; color:#94a3b8; line-height:1.6; margin:0 0 22px 0;">
+              Sovereign in-memory survey composer and feedback analytics. Zero database tracking, instant local persistence, and customizable templates.
+            </p>
+
+            <div class="follow-journey-wrap" style="margin-bottom:24px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">OFFICIAL PORTAL</span>
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:26px; height:26px; border-radius:50%;">
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">Abhinav Giri</strong>
+                    <span style="font-size:10.5px; color:#38bdf8;">github.com/abhinavgiri45/giri-orbit →</span>
+                  </div>
+                </a>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">FOLLOW THE JOURNEY</span>
+                <a href="https://www.instagram.com/abhinavgiri45/" target="_blank" rel="noopener" class="giri-instagram-card giri-instagram-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <div style="width:26px; height:26px; border-radius:6px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:13px;">📸</div>
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">@abhinavgiri45</strong>
+                    <span style="font-size:10.5px; color:#94a3b8;">Connect on Instagram →</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="drift-hero-actions" style="display:flex; flex-wrap:wrap; gap:12px;">
+              <button class="btn-drift-create-blank" id="btn-forms-create-blank" style="background:#0d9488; color:#ffffff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 4px 14px rgba(13,148,136,0.4);">
+                <span>+ Create blank form</span>
+              </button>
+              <button class="btn-drift-upload-file" id="btn-forms-quick-template" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>✨ Use NPS Template</span>
+              </button>
+              <button class="btn-drift-new-template-cta" id="btn-forms-export-axis" style="background:#1e293b; color:#2dd4bf; border:1px solid #134e4a; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>📊 Export to Axis Matrix</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3D Modern Form Illustration -->
+          <div class="drift-hero-visual" style="display:flex; justify-content:center;">
+            <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:280px; filter:drop-shadow(0 10px 25px rgba(0,0,0,0.5));">
+              <rect x="25" y="20" width="230" height="145" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+              <rect x="45" y="38" width="120" height="10" rx="3" fill="#0d9488"/>
+              <rect x="45" y="56" width="190" height="6" rx="2" fill="#475569"/>
+              <rect x="45" y="68" width="160" height="6" rx="2" fill="#334155"/>
+              <!-- Question 1: Stars -->
+              <rect x="45" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+              <rect x="65" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+              <rect x="85" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+              <rect x="105" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+              <rect x="125" y="88" width="14" height="14" rx="3" fill="#334155"/>
+              <!-- Analytics chart on side -->
+              <rect x="195" y="80" width="10" height="45" rx="2" fill="#0d9488"/>
+              <rect x="210" y="95" width="10" height="30" rx="2" fill="#2dd4bf"/>
+              <rect x="225" y="105" width="10" height="20" rx="2" fill="#14b8a6"/>
+              <!-- Submit button -->
+              <rect x="45" y="122" width="75" height="22" rx="5" fill="#0d9488"/>
+              <rect x="55" y="130" width="55" height="6" rx="2" fill="#ffffff"/>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Bottom Pick up Where You Left Off Bar -->
+        <div style="max-width:1300px; margin:0 auto 36px; padding:0 32px;">
+          <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.25);">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:36px; height:36px; border-radius:8px; background:rgba(13,148,136,0.2); border:1px solid #0d9488; display:flex; align-items:center; justify-content:center; color:#2dd4bf; font-weight:800; font-size:16px;">F</div>
+              <div>
+                <strong style="color:#ffffff; font-size:13.5px; display:block;">Pick up where you left off in Forms</strong>
+                <span style="color:#94a3b8; font-size:12px;">• ${escapeHtml(formData.title)} — ${formData.questions.length} questions • ${formData.responses.length} responses</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button id="btn-forms-reset-draft" style="background:#334155; color:#cbd5e1; border:none; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">
+                🗑 Delete Draft
+              </button>
+              <button id="btn-forms-resume-work" style="background:#0d9488; color:#ffffff; border:none; padding:8px 18px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                <span>▶ Resume Work →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Gallery Carousel -->
+        <section style="max-width:1300px; margin:0 auto; padding:0 32px 48px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+            <h2 style="font-size:18px; font-weight:700; color:#ffffff; margin:0;">Create with Form Templates</h2>
+            <div style="display:flex; gap:8px;">
+              <span class="forms-cat-pill active" data-cat="all" style="background:#0d9488; color:#ffffff; padding:4px 12px; border-radius:16px; font-size:12px; font-weight:600; cursor:pointer;">All</span>
+              <span class="forms-cat-pill" data-cat="customer" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:4px 12px; border-radius:16px; font-size:12px; font-weight:600; cursor:pointer;">Customer & NPS</span>
+              <span class="forms-cat-pill" data-cat="events" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:4px 12px; border-radius:16px; font-size:12px; font-weight:600; cursor:pointer;">Events & RSVPs</span>
+              <span class="forms-cat-pill" data-cat="hr" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:4px 12px; border-radius:16px; font-size:12px; font-weight:600; cursor:pointer;">Employee & HR</span>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:18px;" id="forms-template-cards-grid">
+            ${FORMS_TEMPLATES.map(tpl => `
+              <div class="forms-tpl-card" data-cat="${tpl.category}" data-id="${tpl.id}" style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:18px; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.borderColor='${tpl.accent}'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#334155'; this.style.transform='none';">
+                <div>
+                  <div style="width:36px; height:36px; border-radius:8px; background:${tpl.previewBg}; color:${tpl.accent}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-bottom:12px;">F</div>
+                  <strong style="color:#ffffff; font-size:14.5px; display:block; margin-bottom:6px;">${escapeHtml(tpl.name)}</strong>
+                  <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.5;">${escapeHtml(tpl.desc)}</p>
+                </div>
+                <div style="font-size:11px; color:#2dd4bf; font-weight:600;">
+                  ${tpl.questions.length} Questions • Use Template →
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      </div>
+    `;
+
+    // Bind Hub Events
+    container.querySelector('#btn-forms-create-blank')?.addEventListener('click', () => {
+      formData = {
+        id: 'form_' + Date.now(),
+        title: 'Untitled Survey',
+        description: 'Provide an executive description for your respondents.',
+        themeColor: '#0d9488',
+        createdAt: new Date().toISOString(),
+        questions: [
+          { id: 'q_1', type: 'rating', title: 'How would you rate this service?', required: true, scale: 5, ratingIcon: 'star' }
+        ],
+        responses: []
+      };
+      saveFormData();
+      mountEditor();
+    });
+
+    container.querySelector('#forms-nav-blank')?.addEventListener('click', () => {
+      mountEditor();
+    });
+
+    container.querySelector('#forms-nav-hub')?.addEventListener('click', () => {
+      if (window.orbitPlatform) window.orbitPlatform.navigateTo('launcher');
+    });
+
+    container.querySelector('#btn-forms-resume-work')?.addEventListener('click', () => {
+      mountEditor();
+    });
+
+    container.querySelector('#btn-forms-quick-template')?.addEventListener('click', () => {
+      applyTemplate(FORMS_TEMPLATES[0]);
+    });
+
+    container.querySelector('#btn-forms-export-axis')?.addEventListener('click', () => {
+      exportResponsesToAxis();
+    });
+
+    container.querySelector('#btn-forms-reset-draft')?.addEventListener('click', () => {
+      if (confirm('Reset form draft to clean blank survey?')) {
+        localStorage.removeItem('orbit_form_active_doc');
+        formData = loadFormData();
+        mountHub();
+      }
+    });
+
+    // Category filter pills
+    container.querySelectorAll('.forms-cat-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        container.querySelectorAll('.forms-cat-pill').forEach(p => {
+          p.style.background = '#1e293b';
+          p.style.color = '#94a3b8';
+          p.style.border = '1px solid #334155';
+        });
+        pill.style.background = '#0d9488';
+        pill.style.color = '#ffffff';
+        pill.style.border = 'none';
+
+        const cat = pill.dataset.cat;
+        container.querySelectorAll('.forms-tpl-card').forEach(card => {
+          if (cat === 'all' || card.dataset.cat === cat) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Template click
+    container.querySelectorAll('.forms-tpl-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const tpl = FORMS_TEMPLATES.find(t => t.id === id);
+        if (tpl) applyTemplate(tpl);
+      });
+    });
+
+    function applyTemplate(tpl) {
+      formData = {
+        id: 'form_' + Date.now(),
+        title: tpl.name,
+        description: tpl.desc,
+        themeColor: tpl.themeColor || '#0d9488',
+        createdAt: new Date().toISOString(),
+        questions: JSON.parse(JSON.stringify(tpl.questions)),
+        responses: []
+      };
+      saveFormData();
+      mountEditor();
+    }
+  }
+
+  // =========================================================================
+  // VIEW 2: FULL-FEATURED FORM BUILDER & ANALYTICS EDITOR
+  // =========================================================================
+  function mountEditor() {
+    renderShell();
   }
 
   function renderShell() {
@@ -119,7 +390,7 @@ export function renderFormsApp(container, onUpdate = null, startInEditor = true)
         <!-- Top Application Bar -->
         <header class="forms-app-header" style="height:56px; background:#ffffff; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0; box-shadow:0 1px 3px rgba(0,0,0,0.02); z-index:10;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <div style="width:34px; height:34px; border-radius:6px; background:${formData.themeColor}; display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:800; font-size:17px; box-shadow:0 2px 5px rgba(13,148,136,0.3);">F</div>
+            <button id="forms-btn-back-hub" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Back to Forms Start Hub"><span>← Start</span></button><img src="assets/forms-logo.png" alt="Forms" style="width:32px; height:32px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 5px rgba(13,148,136,0.4));">
             <div>
               <input type="text" id="forms-doc-title-input" value="${escapeHtml(formData.title)}" style="font-weight:700; font-size:15px; color:#0f172a; border:1px solid transparent; border-radius:4px; padding:3px 8px; width:340px; background:transparent; transition:all 0.15s;" onfocus="this.style.borderColor='#0d9488'; this.style.background='#ffffff';" onblur="this.style.borderColor='transparent'; this.style.background='transparent';" title="Click to rename form">
               <div style="font-size:11px; color:#64748b; padding-left:8px;">Giri Forms • Sovereign Survey & Data Matrix</div>
@@ -146,6 +417,7 @@ export function renderFormsApp(container, onUpdate = null, startInEditor = true)
               `).join('')}
             </div>
 
+            <div style="font-size:11.5px; font-weight:700; color:#10b981; background:#ecfdf5; border:1px solid #a7f3d0; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px; margin-right:6px;"><span style="width:6px; height:6px; border-radius:50%; background:#10b981; display:inline-block;"></span> Auto-Save: ON</div>
             <!-- Preview Toggle Button -->
             <button id="forms-btn-preview" style="background:#ffffff; border:1px solid #cbd5e1; color:#334155; font-size:13px; font-weight:600; padding:6px 14px; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.15s;">
               <span>👁️</span> <span>${isPreviewMode ? 'Back to Editor' : 'Preview / Fill'}</span>

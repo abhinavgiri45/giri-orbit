@@ -3,25 +3,50 @@
  * Sovereign Structured Information Manager & Agile Board
  * Competing directly with Microsoft Lists, Airtable, & Notion Database
  * Part of the Giri Orbit Sovereign Office Suite
- * 
- * Features:
- * - Dual View Switcher: Table / Matrix View vs. Agile Kanban Board View
- * - Rich Custom Attributes: Status Pills, Priority Badges, Assignees, Due Dates, Category Chips, Progress Sliders
- * - Real-Time Search, Multi-Filter (Status, Priority), and Sorting
- * - Kanban Drag & 1-Click State Transitions
- * - Ready-Made Professional Templates (Project Tracker, Sprint Board, Content Pipeline)
- * - One-Click Export to Giri Axis (.gaxis / CSV / Excel)
- * - 100% Offline Local Storage Persistence
+ * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderListsApp(container, onUpdate = null, startInEditor = true) {
+export function renderListsApp(container, onUpdate = null, startInEditor = false) {
   let listData = loadListData();
   let currentView = 'grid'; // 'grid' (table) or 'board' (kanban)
   let searchQuery = '';
   let filterStatus = 'all';
   let filterPriority = 'all';
 
-  renderShell();
+  const LISTS_TEMPLATES = [
+    {
+      id: 'sprint-board',
+      name: 'Agile Sprint Matrix & Roadmap',
+      category: 'agile',
+      desc: 'Complete sprint board with backlog, active engineering tasks, code review, and delivered milestones.',
+      themeColor: '#7c3aed',
+      items: [
+        { id: 'item_1', title: 'Compile Native C++ Win32 & GDI+ Sovereign Suite', status: 'Completed', priority: 'Urgent', assignee: 'Abhinav Giri', dueDate: '2026-11-08', tag: 'Core Engineering', progress: 100 },
+        { id: 'item_2', title: 'Synchronize 4.00 GB Enterprise Offline Matrix with Google Drive', status: 'Completed', priority: 'Urgent', assignee: 'DevOps Lead', dueDate: '2026-11-08', tag: 'Infrastructure', progress: 100 },
+        { id: 'item_3', title: 'Enhance Ribbon Toolbar Controls across Drift, Axis, and Kinetic', status: 'In Progress', priority: 'High', assignee: 'Frontend Architect', dueDate: '2026-11-12', tag: 'User Interface', progress: 85 },
+        { id: 'item_4', title: 'Authenticode Code Signing Timestamp Verification via DigiCert', status: 'Completed', priority: 'High', assignee: 'Security Lead', dueDate: '2026-11-07', tag: 'Security', progress: 100 },
+        { id: 'item_5', title: 'Implement Full Offline Devanagari Hindi Font Rendering', status: 'Completed', priority: 'Normal', assignee: 'Typography Specialist', dueDate: '2026-11-06', tag: 'Typography', progress: 100 }
+      ]
+    },
+    {
+      id: 'it-inventory',
+      name: 'Enterprise IT Asset Tracker',
+      category: 'operations',
+      desc: 'Hardware device allocations, serial numbers, warranty expirations, and department assignees.',
+      themeColor: '#2563eb',
+      items: [
+        { id: 'item_1', title: 'Workstation ThinkPad P1 Gen 7 (RTX 4080)', status: 'In Progress', priority: 'High', assignee: 'Principal Engineer', dueDate: '2026-12-01', tag: 'Workstation', progress: 60 },
+        { id: 'item_2', title: 'Dell UltraSharp 32 4K Thunderbolt Hub', status: 'Completed', priority: 'Normal', assignee: 'Lead Designer', dueDate: '2026-11-01', tag: 'Peripherals', progress: 100 },
+        { id: 'item_3', title: 'YubiKey 5C NFC Enterprise Cryptographic Keys', status: 'Completed', priority: 'Urgent', assignee: 'Security Team', dueDate: '2026-10-15', tag: 'Security', progress: 100 }
+      ]
+    }
+  ];
+
+  if (startInEditor) {
+    mountEditor();
+  } else {
+    mountHub();
+  }
 
   function loadListData() {
     try {
@@ -33,7 +58,7 @@ export function renderListsApp(container, onUpdate = null, startInEditor = true)
     return {
       id: 'list_' + Date.now(),
       title: 'Enterprise Q4 Product Roadmap & Sprint Matrix',
-      themeColor: '#7c3aed', // Purple / Violet
+      themeColor: '#7c3aed',
       columns: [
         { id: 'col_status', name: 'Status', type: 'status' },
         { id: 'col_priority', name: 'Priority', type: 'priority' },
@@ -43,56 +68,10 @@ export function renderListsApp(container, onUpdate = null, startInEditor = true)
         { id: 'col_progress', name: 'Progress', type: 'progress' }
       ],
       items: [
-        {
-          id: 'item_1',
-          title: 'Deploy High-Velocity C++ Win32 & GDI+ Sovereign Suite',
-          status: 'Completed',
-          priority: 'Urgent',
-          assignee: 'Abhinav Giri',
-          dueDate: '2026-11-08',
-          tag: 'Core Platform',
-          progress: 100
-        },
-        {
-          id: 'item_2',
-          title: 'Ship Dedicated Forms, Quiz, Lists, and Designer Sovereign Studios',
-          status: 'In Progress',
-          priority: 'Urgent',
-          assignee: 'Abhinav Giri',
-          dueDate: '2026-11-09',
-          tag: 'Web & Desktop',
-          progress: 90
-        },
-        {
-          id: 'item_3',
-          title: 'Audit Zero Telemetry Privacy & In-Memory Offline Security',
-          status: 'Under Review',
-          priority: 'High',
-          assignee: 'Security Auditor',
-          dueDate: '2026-11-12',
-          tag: 'Security',
-          progress: 75
-        },
-        {
-          id: 'item_4',
-          title: 'Implement Interactive Charting & Donut Visualization in Axis',
-          status: 'Completed',
-          priority: 'High',
-          assignee: 'Data Lead',
-          dueDate: '2026-11-10',
-          tag: 'Axis Sheets',
-          progress: 100
-        },
-        {
-          id: 'item_5',
-          title: 'Prepare Worldwide Open Source Sovereign Deployment Mirror',
-          status: 'Not Started',
-          priority: 'Medium',
-          assignee: 'DevOps Ops',
-          dueDate: '2026-11-20',
-          tag: 'Infrastructure',
-          progress: 0
-        }
+        { id: 'item_1', title: 'Deploy High-Velocity C++ Win32 & GDI+ Sovereign Suite', status: 'Completed', priority: 'Urgent', assignee: 'Abhinav Giri', dueDate: '2026-11-08', tag: 'Core Architecture', progress: 100 },
+        { id: 'item_2', title: 'Integrate 4.00 GB Enterprise Offline Suite on Google Drive', status: 'Completed', priority: 'Urgent', assignee: 'Abhinav Giri', dueDate: '2026-11-08', tag: 'Cloud Delivery', progress: 100 },
+        { id: 'item_3', title: 'Overhaul PC Version Start Interfaces with High-Res Tool Icons', status: 'In Progress', priority: 'High', assignee: 'Lead UI Architect', dueDate: '2026-11-09', tag: 'UI/UX', progress: 90 },
+        { id: 'item_4', title: 'Implement Full LibreOffice / MS Office Ribbon Switcher Parity', status: 'In Progress', priority: 'High', assignee: 'Desktop Specialist', dueDate: '2026-11-10', tag: 'Suite Parity', progress: 85 }
       ]
     };
   }
@@ -100,10 +79,237 @@ export function renderListsApp(container, onUpdate = null, startInEditor = true)
   function saveListData() {
     try {
       localStorage.setItem('orbit_list_active_doc', JSON.stringify(listData));
-      if (typeof onUpdate === 'function') onUpdate(listData);
+      if (onUpdate) onUpdate(listData);
     } catch (e) {
       console.warn('Failed to save list data:', e);
     }
+  }
+
+  // =========================================================================
+  // VIEW 1: START INTERFACE / LISTS HUB
+  // =========================================================================
+  function mountHub() {
+    container.innerHTML = `
+      <div class="drift-hub-shell" id="lists-hub-shell" style="min-height:100vh; background:#0f172a; color:#f8fafc; font-family:'Segoe UI',system-ui,sans-serif; overflow-y:auto;">
+        <!-- Top App Brand Bar in Hub Mode -->
+        <div class="drift-hub-top-bar" style="height:54px; background:#1e293b; border-bottom:1px solid #334155; display:flex; align-items:center; justify-content:space-between; padding:0 24px;">
+          <div class="drift-hub-brand-left" style="display:flex; align-items:center; gap:12px;">
+            <img src="assets/lists-logo.png" alt="Giri Lists" style="width:28px; height:28px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 6px rgba(124,58,237,0.5));">
+            <div class="tool-hub-brand-dropdown-wrap">
+              <button class="tool-hub-brand-btn" style="display:flex; align-items:center; gap:6px; background:transparent; border:none; cursor:pointer; padding:4px 6px; border-radius:4px;" title="Switch Suite Tool">
+                <span style="color:#ffffff; font-weight:700; font-size:14.5px;">Giri Lists</span>
+                <span style="color:#94a3b8; font-size:11px;">▾</span>
+              </button>
+            </div>
+            <nav class="drift-hub-nav-links" style="display:flex; gap:18px; margin-left:14px; font-size:12.5px; color:#cbd5e1;">
+              <span class="drift-hub-nav-link" id="lists-nav-blank" style="cursor:pointer; font-weight:600;">Create Blank Board</span>
+              <span class="drift-hub-nav-link" id="lists-nav-templates" style="cursor:pointer;">Roadmaps</span>
+              <span class="drift-hub-nav-link" id="lists-nav-hub" style="cursor:pointer; color:#38bdf8;">← Suite Hub</span>
+            </nav>
+          </div>
+
+          <div class="tool-hub-top-right" style="display:flex; align-items:center; gap:12px;">
+            <div class="tool-hub-suite-links" style="display:flex; gap:14px; font-size:12px; color:#94a3b8;">
+              <a href="#hub" style="color:#94a3b8; text-decoration:none;">Hub</a>
+              <a href="#drift" style="color:#94a3b8; text-decoration:none;">Drift</a>
+              <a href="#axis" style="color:#94a3b8; text-decoration:none;">Axis</a>
+              <a href="#kinetic" style="color:#94a3b8; text-decoration:none;">Kinetic</a>
+              <a href="#forms" style="color:#94a3b8; text-decoration:none;">Forms</a>
+              <a href="#quiz" style="color:#94a3b8; text-decoration:none;">Quiz</a>
+              <a href="#lists" style="color:#a855f7; text-decoration:none; font-weight:700;">Lists</a>
+              <a href="#designer" style="color:#94a3b8; text-decoration:none;">Designer</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleek Dark Hero Banner -->
+        <section class="drift-hub-hero" style="max-width:1300px; margin:0 auto; padding:40px 32px 32px; display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center;">
+          <div class="drift-hero-left">
+            <div style="margin-bottom:14px;">
+              <img src="assets/lists-logo.png" alt="Lists" style="height:42px; object-fit:contain; display:block; filter:drop-shadow(0 4px 12px rgba(124,58,237,0.6));">
+            </div>
+            <h1 class="drift-hero-title" style="font-size:32px; font-weight:800; color:#ffffff; margin:0 0 10px 0; letter-spacing:-0.02em;">Welcome to Giri Lists</h1>
+            <p class="drift-hero-subtitle" style="font-size:14px; color:#94a3b8; line-height:1.6; margin:0 0 22px 0;">
+              Sovereign agile task matrix, kanban workflow orchestrator, and milestone tracker. Zero database tracking, instant local persistence.
+            </p>
+
+            <div class="follow-journey-wrap" style="margin-bottom:24px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">OFFICIAL PORTAL</span>
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:26px; height:26px; border-radius:50%;">
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">Abhinav Giri</strong>
+                    <span style="font-size:10.5px; color:#38bdf8;">github.com/abhinavgiri45/giri-orbit →</span>
+                  </div>
+                </a>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">FOLLOW THE JOURNEY</span>
+                <a href="https://www.instagram.com/abhinavgiri45/" target="_blank" rel="noopener" class="giri-instagram-card giri-instagram-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <div style="width:26px; height:26px; border-radius:6px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:13px;">📸</div>
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">@abhinavgiri45</strong>
+                    <span style="font-size:10.5px; color:#94a3b8;">Connect on Instagram →</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="drift-hero-actions" style="display:flex; flex-wrap:wrap; gap:12px;">
+              <button class="btn-drift-create-blank" id="btn-lists-create-blank" style="background:#7c3aed; color:#ffffff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 4px 14px rgba(124,58,237,0.4);">
+                <span>+ Create blank board</span>
+              </button>
+              <button class="btn-drift-upload-file" id="btn-lists-quick-sprint" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>📋 Use Sprint Board</span>
+              </button>
+              <button class="btn-drift-new-template-cta" id="btn-lists-export-axis" style="background:#1e293b; color:#c084fc; border:1px solid #581c87; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>📊 Export to Axis Matrix</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3D Modern Kanban Illustration -->
+          <div class="drift-hero-visual" style="display:flex; justify-content:center;">
+            <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:280px; filter:drop-shadow(0 10px 25px rgba(0,0,0,0.5));">
+              <rect x="20" y="20" width="240" height="145" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+              <!-- Column 1: Backlog -->
+              <rect x="30" y="32" width="65" height="120" rx="6" fill="#0f172a"/>
+              <rect x="36" y="40" width="40" height="6" rx="2" fill="#64748b"/>
+              <rect x="36" y="52" width="53" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+              <rect x="40" y="58" width="45" height="4" rx="1.5" fill="#e2e8f0"/>
+              <rect x="40" y="66" width="22" height="4" rx="1.5" fill="#f59e0b"/>
+              <!-- Column 2: In Progress -->
+              <rect x="107" y="32" width="65" height="120" rx="6" fill="#0f172a"/>
+              <rect x="113" y="40" width="45" height="6" rx="2" fill="#7c3aed"/>
+              <rect x="113" y="52" width="53" height="34" rx="4" fill="#1e293b" stroke="#7c3aed"/>
+              <rect x="117" y="58" width="45" height="4" rx="1.5" fill="#ffffff"/>
+              <rect x="117" y="66" width="30" height="4" rx="1.5" fill="#ef4444"/>
+              <rect x="117" y="74" width="40" height="3" rx="1.5" fill="#a855f7"/>
+              <!-- Column 3: Done -->
+              <rect x="184" y="32" width="65" height="120" rx="6" fill="#0f172a"/>
+              <rect x="190" y="40" width="35" height="6" rx="2" fill="#10b981"/>
+              <rect x="190" y="52" width="53" height="26" rx="4" fill="#1e293b" stroke="#059669"/>
+              <rect x="194" y="58" width="45" height="4" rx="1.5" fill="#cbd5e1"/>
+              <rect x="194" y="66" width="20" height="4" rx="1.5" fill="#10b981"/>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Bottom Pick up Where You Left Off Bar -->
+        <div style="max-width:1300px; margin:0 auto 36px; padding:0 32px;">
+          <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.25);">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:36px; height:36px; border-radius:8px; background:rgba(124,58,237,0.2); border:1px solid #7c3aed; display:flex; align-items:center; justify-content:center; color:#c084fc; font-weight:800; font-size:16px;">L</div>
+              <div>
+                <strong style="color:#ffffff; font-size:13.5px; display:block;">Pick up where you left off in Lists</strong>
+                <span style="color:#94a3b8; font-size:12px;">• ${escapeHtml(listData.title)} — ${listData.items.length} items • ${listData.columns.length} matrix columns</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button id="btn-lists-reset-draft" style="background:#334155; color:#cbd5e1; border:none; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">
+                🗑 Delete Draft
+              </button>
+              <button id="btn-lists-resume-work" style="background:#7c3aed; color:#ffffff; border:none; padding:8px 18px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                <span>▶ Resume Work →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Gallery Carousel -->
+        <section style="max-width:1300px; margin:0 auto; padding:0 32px 48px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+            <h2 style="font-size:18px; font-weight:700; color:#ffffff; margin:0;">Enterprise List & Kanban Templates</h2>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:18px;">
+            ${LISTS_TEMPLATES.map(tpl => `
+              <div class="lists-tpl-card" data-id="${tpl.id}" style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:18px; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.borderColor='${tpl.themeColor}'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#334155'; this.style.transform='none';">
+                <div>
+                  <div style="width:36px; height:36px; border-radius:8px; background:rgba(124,58,237,0.2); color:#c084fc; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-bottom:12px;">L</div>
+                  <strong style="color:#ffffff; font-size:14.5px; display:block; margin-bottom:6px;">${escapeHtml(tpl.name)}</strong>
+                  <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.5;">${escapeHtml(tpl.desc)}</p>
+                </div>
+                <div style="font-size:11px; color:#c084fc; font-weight:600;">
+                  ${tpl.items.length} Pre-configured Items • Use Template →
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      </div>
+    `;
+
+    // Bind Hub Events
+    container.querySelector('#btn-lists-create-blank')?.addEventListener('click', () => {
+      listData = {
+        id: 'list_' + Date.now(),
+        title: 'Untitled Task Matrix',
+        themeColor: '#7c3aed',
+        columns: [
+          { id: 'col_status', name: 'Status', type: 'status' },
+          { id: 'col_priority', name: 'Priority', type: 'priority' },
+          { id: 'col_assignee', name: 'Assignee', type: 'text' },
+          { id: 'col_due', name: 'Due Date', type: 'date' }
+        ],
+        items: [
+          { id: 'item_1', title: 'Example Task 1', status: 'To Do', priority: 'High', assignee: 'Me', dueDate: '2026-11-15', tag: 'Project', progress: 0 }
+        ]
+      };
+      saveListData();
+      mountEditor();
+    });
+
+    container.querySelector('#lists-nav-blank')?.addEventListener('click', () => { mountEditor(); });
+    container.querySelector('#lists-nav-hub')?.addEventListener('click', () => {
+      if (window.orbitPlatform) window.orbitPlatform.navigateTo('launcher');
+    });
+    container.querySelector('#btn-lists-resume-work')?.addEventListener('click', () => { mountEditor(); });
+    container.querySelector('#btn-lists-quick-sprint')?.addEventListener('click', () => { applyTemplate(LISTS_TEMPLATES[0]); });
+    container.querySelector('#btn-lists-export-axis')?.addEventListener('click', () => { exportListToAxis(); });
+
+    container.querySelector('#btn-lists-reset-draft')?.addEventListener('click', () => {
+      if (confirm('Reset lists draft to clean sprint matrix?')) {
+        localStorage.removeItem('orbit_list_active_doc');
+        listData = loadListData();
+        mountHub();
+      }
+    });
+
+    container.querySelectorAll('.lists-tpl-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const tpl = LISTS_TEMPLATES.find(t => t.id === id);
+        if (tpl) applyTemplate(tpl);
+      });
+    });
+
+    function applyTemplate(tpl) {
+      listData = {
+        id: 'list_' + Date.now(),
+        title: tpl.name,
+        themeColor: tpl.themeColor || '#7c3aed',
+        columns: [
+          { id: 'col_status', name: 'Status', type: 'status' },
+          { id: 'col_priority', name: 'Priority', type: 'priority' },
+          { id: 'col_assignee', name: 'Assignee', type: 'text' },
+          { id: 'col_due', name: 'Due Date', type: 'date' },
+          { id: 'col_tag', name: 'Domain', type: 'tag' },
+          { id: 'col_progress', name: 'Progress', type: 'progress' }
+        ],
+        items: JSON.parse(JSON.stringify(tpl.items))
+      };
+      saveListData();
+      mountEditor();
+    }
+  }
+
+  // =========================================================================
+  // VIEW 2: FULL-FEATURED LIST & KANBAN EDITOR
+  // =========================================================================
+  function mountEditor() {
+    renderShell();
   }
 
   function renderShell() {
@@ -112,7 +318,7 @@ export function renderListsApp(container, onUpdate = null, startInEditor = true)
         <!-- Top Application Header Bar -->
         <header class="lists-app-header" style="height:56px; background:#ffffff; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0; box-shadow:0 1px 3px rgba(0,0,0,0.02); z-index:10;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <div style="width:34px; height:34px; border-radius:6px; background:${listData.themeColor}; display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:800; font-size:17px; box-shadow:0 2px 5px rgba(124,58,237,0.3);">L</div>
+            <button id="lists-btn-back-hub" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Back to Lists Start Hub"><span>← Start</span></button><img src="assets/lists-logo.png" alt="Lists" style="width:32px; height:32px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 5px rgba(124,58,237,0.4));">
             <div>
               <input type="text" id="lists-doc-title-input" value="${escapeHtml(listData.title)}" style="font-weight:700; font-size:15px; color:#0f172a; border:1px solid transparent; border-radius:4px; padding:3px 8px; width:340px; background:transparent; transition:all 0.15s;" onfocus="this.style.borderColor='#7c3aed'; this.style.background='#ffffff';" onblur="this.style.borderColor='transparent'; this.style.background='transparent';" title="Click to rename list">
               <div style="font-size:11px; color:#64748b; padding-left:8px;">Giri Lists • Sovereign Data Matrix & Agile Tracker</div>

@@ -1696,7 +1696,7 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
 
         <section class="tool-hub-hero">
           <div class="tool-hero-left">
-            <h1 class="tool-hero-title">Welcome to Kinetic for free on the web</h1>
+            <h1 class="tool-hero-title">Welcome to Giri Kinetic</h1>
             <p class="tool-hero-subtitle">
               Sovereign in-memory presentation show & widescreen stage. Zero database tracking, 16:9 vector layouts, and customizable presentations.
             </p>

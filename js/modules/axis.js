@@ -158,7 +158,7 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
 
         <section class="tool-hub-hero">
           <div class="tool-hero-left">
-            <h1 class="tool-hero-title">Welcome to Axis for free on the web</h1>
+            <h1 class="tool-hero-title">Welcome to Giri Axis</h1>
             <p class="tool-hero-subtitle">
               Sovereign in-memory spreadsheet and financial modeling matrix. Zero database tracking, instant local calculation engine, and customizable financial templates.
             </p>

@@ -227,9 +227,9 @@
         <button class="tier1-icon-pill" id="btn-suite-fullscreen" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#64748b; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;" title="Toggle Immersive Fullscreen">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
         </button>
-        <a href="https://github.com/abhinavgiri45" target="_blank" rel="noopener" class="tier1-corp-pill" title="Visit Abhinav Giri Official Website">
+        <a href="https://github.com/abhinavgiri45" target="_blank" rel="noopener" class="tier1-corp-pill" title="Author: Abhinav Giri (@abhinavgiri45)">
           <img src="assets/giri-logo-symbol.png" alt="Giri Orbit" style="width:14px; height:14px; border-radius:50%; display:block;">
-          <span>Giri Corp</span>
+          <span>Abhinav Giri</span>
         </a>
         <a href="https://www.instagram.com/abhinavgiri45/" target="_blank" rel="noopener" class="tier1-instagram-pill" title="Follow @abhinavgiri45 on Instagram">
           <div class="tier1-instagram-pill-icon">
@@ -1250,5 +1250,23 @@
       }
     }
   </script>
+<script>
+    // Detect desktop / standalone executable execution
+    const isDesktop = window.location.protocol === 'file:' || 
+                      window.location.search.includes('desktop=1') ||
+                      window.location.hash.includes('desktop=1') ||
+                      window.matchMedia('(display-mode: standalone)').matches;
+    if (isDesktop) {
+      document.body.classList.add('is-desktop-app');
+      const dlBtn = document.getElementById('btn-open-downloads-corner');
+      if (dlBtn) {
+        dlBtn.style.display = 'none';
+      }
+      const railDl = document.getElementById('rail-btn-download');
+      if (railDl) {
+        railDl.style.display = 'none';
+      }
+    }
+</script>
 </body>
 </html>

@@ -113,7 +113,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
 
         <section class="tool-hub-hero">
           <div class="tool-hero-left">
-            <h1 class="tool-hero-title">Welcome to Aegis Studio for free on the web</h1>
+            <h1 class="tool-hero-title">Welcome to Giri Aegis PDF Studio</h1>
             <p class="tool-hero-subtitle">
               Sovereign in-memory PDF cryptographic seal and document studio. Zero database tracking, digital signature pad, and customizable formal memorandums.
             </p>

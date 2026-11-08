@@ -3,18 +3,10 @@
  * Sovereign Scored Assessment Studio with Live Timer & Automated Grading
  * Competing directly with Microsoft Forms Quiz & Google Forms Quiz
  * Part of the Giri Orbit Sovereign Office Suite
- * 
- * Features:
- * - Scored Question Builder with point values & correct answer flags
- * - Answer explanations & feedback rationales
- * - Interactive "Take Quiz" Mode with live ticking countdown timer
- * - Automated Grading Engine with instant scorecard & celebration animation
- * - Detailed Answer Review (user answers vs correct answers)
- * - Gradebook Dashboard & Export to Giri Axis (CSV / Excel)
- * - 100% Offline Local Storage Persistence
+ * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderQuizApp(container, onUpdate = null, startInEditor = true) {
+export function renderQuizApp(container, onUpdate = null, startInEditor = false) {
   let quizData = loadQuizData();
   let activeTab = 'questions'; // 'questions', 'gradebook'
   let isTakeQuizMode = false;
@@ -23,7 +15,45 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = true) 
   let userExamAnswers = {};
   let examResult = null;
 
-  renderShell();
+  const QUIZ_TEMPLATES = [
+    {
+      id: 'arch-cert',
+      name: 'Enterprise Architecture Certification',
+      category: 'certification',
+      desc: 'Rigorous 5-question test on sovereign in-memory structures and native offline performance.',
+      themeColor: '#0284c7',
+      passingScorePercent: 70,
+      timeLimitMinutes: 10,
+      questions: [
+        { id: 'qz_1', type: 'single_choice', title: 'What is the primary benefit of Giri Orbit's sovereign local architecture?', points: 20, options: ['Requires constant high-bandwidth internet connectivity', '100% offline execution with zero forced telemetry and zero data leaks', 'Uploads user documents to external marketing servers', 'Requires monthly subscription license verification'], correctIndex: 1, explanation: 'Giri Orbit operates 100% in-memory and local NVMe storage with zero forced telemetry.' },
+        { id: 'qz_2', type: 'single_choice', title: 'Which file format enables true universal independence across Word, Excel, and Presentation suites?', points: 20, options: ['.proprietary-lockin', 'Open standard .docx, .xlsx, .pptx and .giri sovereign codecs', '.bin blob only', 'Raw print spooler'], correctIndex: 1, explanation: 'Universal open standards and .giri sovereign formats preserve complete user ownership.' },
+        { id: 'qz_3', type: 'single_choice', title: 'What is the maximum recommended RAM for large financial matrix calculations in Giri Axis?', points: 20, options: ['128 MB', '4 GB minimum (8 GB for multi-million cell enterprise matrices)', '64 KB', '1 MB'], correctIndex: 1, explanation: 'Axis utilizes modern NVMe vector paging to calculate formulas at native 60fps speeds.' },
+        { id: 'qz_4', type: 'single_choice', title: 'In a sovereign security posture, where should sensitive cryptographic keys remain?', points: 20, options: ['Public Pastebin', 'Exclusively on user device hardware keystore / local TPM', 'Shared in marketing analytics cookies', 'Emailed to third parties'], correctIndex: 1, explanation: 'Zero-knowledge sovereignty guarantees cryptographic keys never depart local silicon.' },
+        { id: 'qz_5', type: 'single_choice', title: 'Who is the author and creator of the Giri Orbit Sovereign Suite?', points: 20, options: ['Anonymous open proxy', 'Abhinav Giri (@abhinavgiri45)', 'External advertising conglomerate', 'Cloud telemetry bot'], correctIndex: 1, explanation: 'Giri Orbit is engineered and created by Abhinav Giri (@abhinavgiri45).' }
+      ]
+    },
+    {
+      id: 'sec-compliance',
+      name: 'Data Privacy & Security Compliance',
+      category: 'compliance',
+      desc: 'Corporate security standards, zero-trust data protection, and digital signature compliance.',
+      themeColor: '#2563eb',
+      passingScorePercent: 80,
+      timeLimitMinutes: 8,
+      questions: [
+        { id: 'qz_1', type: 'single_choice', title: 'When should an employee transmit company confidential matrices to unsecured cloud services?', points: 25, options: ['Whenever convenient', 'Never — always use sovereign encrypted offline tools', 'Every Friday', 'When working remotely'], correctIndex: 1, explanation: 'Enterprise policy strictly forbids unencrypted transmission of confidential assets.' },
+        { id: 'qz_2', type: 'single_choice', title: 'What does a digital Authenticode cryptographic signature verify?', points: 25, options: ['Executable has zero bytes', 'Software origin is certified and code has not been tampered with', 'Computer needs more storage', 'Screen brightness level'], correctIndex: 1, explanation: 'Authenticode signatures cryptographically prove publisher identity and binary integrity.' },
+        { id: 'qz_3', type: 'single_choice', title: 'What is the fastest way to verify offline data safety?', points: 25, options: ['Disconnect network interface and verify full suite operation', 'Click marketing banners', 'Download third-party extensions', 'Leave computer unlocked'], correctIndex: 25, options: ['Disconnect network interface and verify 100% full suite operation', 'Click banners', 'Install toolbars', 'None'], correctIndex: 0, explanation: 'Giri Orbit runs seamlessly with zero network connectivity.' },
+        { id: 'qz_4', type: 'single_choice', title: 'What is the penalty for violating enterprise data sovereignty?', points: 25, options: ['No penalty', 'Immediate regulatory compliance audit and security escalation', 'A bonus', 'Free coffee'], correctIndex: 1, explanation: 'Non-compliance exposes organizations to severe governance penalties.' }
+      ]
+    }
+  ];
+
+  if (startInEditor) {
+    mountEditor();
+  } else {
+    mountHub();
+  }
 
   function loadQuizData() {
     try {
@@ -38,78 +68,69 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = true) 
       description: 'Test your understanding of high-velocity native offline architectures, sovereign in-memory data structures, and mathematical matrix engines.',
       timeLimitMinutes: 10,
       passingScorePercent: 70,
-      themeColor: '#0284c7', // Cyan / Azure
+      themeColor: '#0284c7',
       questions: [
         {
           id: 'qz_1',
           type: 'single_choice',
-          title: 'What is the primary benefit of Giri Orbit\'s sovereign local architecture?',
+          title: 'What is the primary benefit of Giri Orbit's sovereign local architecture?',
           points: 5,
           options: [
             'Requires constant high-bandwidth internet connectivity',
             '100% offline execution with zero forced telemetry and zero data leaks',
-            'Requires third-party advertising tracking',
-            'Limits user document storage to 500 KB'
+            'Uploads documents to third-party ad networks',
+            'Cannot operate without a cloud account'
           ],
-          correctAnswer: 1, // index of option
-          explanation: 'Giri Orbit operates completely in-memory and on-device, ensuring absolute data privacy and zero mandatory cloud telemetry.'
+          correctIndex: 1,
+          explanation: 'Giri Orbit operates in local device memory with zero telemetry, ensuring total confidentiality.'
         },
         {
           id: 'qz_2',
           type: 'single_choice',
-          title: 'Which native C++ rendering pipeline enables 60+ FPS zero-flicker double-buffered desktop execution?',
+          title: 'Which cryptographic standard is used for offline Authenticode signing of Giri Orbit desktop executables?',
           points: 5,
           options: [
-            'Direct GDI+ Memory Bitmaps & CS_HREDRAW / CS_VREDRAW double-buffered paint cycles',
-            'Heavyweight embedded Electron chromium webviews',
-            'Interpreted Python UI loops',
-            'Remote server-rendered HTML streams'
+            'ROT13 cipher',
+            'SHA-256 with RSA-4096 Authenticode Code Signing Certificate',
+            'Plain text MD5 hash',
+            'No cryptographic signature'
           ],
-          correctAnswer: 0,
-          explanation: 'Native Win32 & GDI+ with memory device contexts eliminates redraw tearing and achieves 60+ FPS smooth rendering.'
+          correctIndex: 1,
+          explanation: 'All Windows desktop binaries are signed with an authentic DigiCert timestamped certificate.'
         },
         {
           id: 'qz_3',
-          type: 'true_false',
-          title: 'In Giri Axis, formulas such as =SUM, =AVERAGE, =COUNT, and =MAX can calculate across rectangular cell ranges like A1:C10.',
-          points: 5,
-          options: ['True', 'False'],
-          correctAnswer: 0,
-          explanation: 'Giri Axis features a robust recursive range parser supporting coordinates across 1,000 rows and 52 columns.'
-        },
-        {
-          id: 'qz_4',
           type: 'single_choice',
-          title: 'What keystroke shortcut launches the Girionix AI Executive Assistant in Giri Orbit?',
+          title: 'In Giri Axis, what is the key advantage of the in-memory financial calculation matrix?',
           points: 5,
           options: [
-            'Ctrl + Shift + Esc',
-            'Ctrl + J (or floating Girionix Polymath trigger)',
-            'Alt + F4',
-            'Ctrl + Alt + Delete'
+            'Formula calculations occur in microsecond cycles with zero round-trip API delays',
+            'Limits workbooks to 10 rows',
+            'Deletes data when you save',
+            'Only supports basic addition'
           ],
-          correctAnswer: 1,
-          explanation: 'Ctrl+J activates the sovereign Girionix AI Copilot and directive assistant instantly across all suite tools.'
+          correctIndex: 0,
+          explanation: 'In-memory execution executes complex mathematical models and lookups at 60 FPS.'
         }
       ],
-      submissions: [
+      results: [
         {
-          id: 'sub_1',
-          studentName: 'Enterprise Architect Alpha',
-          submittedAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-          score: 20,
-          totalPoints: 20,
-          percentage: 100,
+          id: 'res_1',
+          studentName: 'Alex Morgan',
+          completedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+          scorePercent: 100,
+          pointsEarned: 15,
+          totalPoints: 15,
           passed: true
         },
         {
-          id: 'sub_2',
-          studentName: 'Systems Engineer Beta',
-          submittedAt: new Date(Date.now() - 3600000 * 1).toISOString(),
-          score: 15,
-          totalPoints: 20,
-          percentage: 75,
-          passed: true
+          id: 'res_2',
+          studentName: 'Jordan Vance',
+          completedAt: new Date(Date.now() - 3600000 * 3).toISOString(),
+          scorePercent: 67,
+          pointsEarned: 10,
+          totalPoints: 15,
+          passed: false
         }
       ]
     };
@@ -118,14 +139,226 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = true) 
   function saveQuizData() {
     try {
       localStorage.setItem('orbit_quiz_active_doc', JSON.stringify(quizData));
-      if (typeof onUpdate === 'function') onUpdate(quizData);
+      if (onUpdate) onUpdate(quizData);
     } catch (e) {
       console.warn('Failed to save quiz data:', e);
     }
   }
 
-  function getTotalPoints() {
-    return quizData.questions.reduce((sum, q) => sum + (Number(q.points) || 0), 0);
+  // =========================================================================
+  // VIEW 1: START INTERFACE / QUIZ HUB
+  // =========================================================================
+  function mountHub() {
+    container.innerHTML = `
+      <div class="drift-hub-shell" id="quiz-hub-shell" style="min-height:100vh; background:#0f172a; color:#f8fafc; font-family:'Segoe UI',system-ui,sans-serif; overflow-y:auto;">
+        <!-- Top App Brand Bar in Hub Mode -->
+        <div class="drift-hub-top-bar" style="height:54px; background:#1e293b; border-bottom:1px solid #334155; display:flex; align-items:center; justify-content:space-between; padding:0 24px;">
+          <div class="drift-hub-brand-left" style="display:flex; align-items:center; gap:12px;">
+            <img src="assets/quiz-logo.png" alt="Giri Quiz" style="width:28px; height:28px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 6px rgba(2,132,199,0.5));">
+            <div class="tool-hub-brand-dropdown-wrap">
+              <button class="tool-hub-brand-btn" style="display:flex; align-items:center; gap:6px; background:transparent; border:none; cursor:pointer; padding:4px 6px; border-radius:4px;" title="Switch Suite Tool">
+                <span style="color:#ffffff; font-weight:700; font-size:14.5px;">Giri Quiz</span>
+                <span style="color:#94a3b8; font-size:11px;">▾</span>
+              </button>
+            </div>
+            <nav class="drift-hub-nav-links" style="display:flex; gap:18px; margin-left:14px; font-size:12.5px; color:#cbd5e1;">
+              <span class="drift-hub-nav-link" id="quiz-nav-blank" style="cursor:pointer; font-weight:600;">Create Blank</span>
+              <span class="drift-hub-nav-link" id="quiz-nav-templates" style="cursor:pointer;">Certifications</span>
+              <span class="drift-hub-nav-link" id="quiz-nav-hub" style="cursor:pointer; color:#38bdf8;">← Suite Hub</span>
+            </nav>
+          </div>
+
+          <div class="tool-hub-top-right" style="display:flex; align-items:center; gap:12px;">
+            <div class="tool-hub-suite-links" style="display:flex; gap:14px; font-size:12px; color:#94a3b8;">
+              <a href="#hub" style="color:#94a3b8; text-decoration:none;">Hub</a>
+              <a href="#drift" style="color:#94a3b8; text-decoration:none;">Drift</a>
+              <a href="#axis" style="color:#94a3b8; text-decoration:none;">Axis</a>
+              <a href="#kinetic" style="color:#94a3b8; text-decoration:none;">Kinetic</a>
+              <a href="#forms" style="color:#94a3b8; text-decoration:none;">Forms</a>
+              <a href="#quiz" style="color:#38bdf8; text-decoration:none; font-weight:700;">Quiz</a>
+              <a href="#lists" style="color:#94a3b8; text-decoration:none;">Lists</a>
+              <a href="#designer" style="color:#94a3b8; text-decoration:none;">Designer</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleek Dark Hero Banner -->
+        <section class="drift-hub-hero" style="max-width:1300px; margin:0 auto; padding:40px 32px 32px; display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center;">
+          <div class="drift-hero-left">
+            <div style="margin-bottom:14px;">
+              <img src="assets/quiz-logo.png" alt="Quiz" style="height:42px; object-fit:contain; display:block; filter:drop-shadow(0 4px 12px rgba(2,132,199,0.6));">
+            </div>
+            <h1 class="drift-hero-title" style="font-size:32px; font-weight:800; color:#ffffff; margin:0 0 10px 0; letter-spacing:-0.02em;">Welcome to Giri Quiz</h1>
+            <p class="drift-hero-subtitle" style="font-size:14px; color:#94a3b8; line-height:1.6; margin:0 0 22px 0;">
+              Sovereign interactive exam studio, automated grading matrix, and instant certification. Zero database tracking, instant local persistence.
+            </p>
+
+            <div class="follow-journey-wrap" style="margin-bottom:24px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">OFFICIAL PORTAL</span>
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:26px; height:26px; border-radius:50%;">
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">Abhinav Giri</strong>
+                    <span style="font-size:10.5px; color:#38bdf8;">github.com/abhinavgiri45/giri-orbit →</span>
+                  </div>
+                </a>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">FOLLOW THE JOURNEY</span>
+                <a href="https://www.instagram.com/abhinavgiri45/" target="_blank" rel="noopener" class="giri-instagram-card giri-instagram-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
+                  <div style="width:26px; height:26px; border-radius:6px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:13px;">📸</div>
+                  <div>
+                    <strong style="font-size:12px; color:#ffffff; display:block;">@abhinavgiri45</strong>
+                    <span style="font-size:10.5px; color:#94a3b8;">Connect on Instagram →</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="drift-hero-actions" style="display:flex; flex-wrap:wrap; gap:12px;">
+              <button class="btn-drift-create-blank" id="btn-quiz-create-blank" style="background:#0284c7; color:#ffffff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.4);">
+                <span>+ Create blank quiz</span>
+              </button>
+              <button class="btn-drift-upload-file" id="btn-quiz-quick-cert" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>🎓 Use Architecture Certification</span>
+              </button>
+              <button class="btn-drift-new-template-cta" id="btn-quiz-export-axis" style="background:#1e293b; color:#38bdf8; border:1px solid #0369a1; padding:10px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;">
+                <span>📊 Export Gradebook to Axis</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3D Modern Quiz Illustration -->
+          <div class="drift-hero-visual" style="display:flex; justify-content:center;">
+            <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:280px; filter:drop-shadow(0 10px 25px rgba(0,0,0,0.5));">
+              <rect x="25" y="20" width="230" height="145" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+              <rect x="45" y="38" width="130" height="10" rx="3" fill="#0284c7"/>
+              <rect x="45" y="56" width="180" height="6" rx="2" fill="#475569"/>
+              <!-- Question options -->
+              <circle cx="52" cy="76" r="6" stroke="#0284c7" stroke-width="2" fill="none"/>
+              <rect x="66" y="73" width="100" height="6" rx="2" fill="#94a3b8"/>
+              <circle cx="52" cy="96" r="6" stroke="#10b981" stroke-width="2" fill="#10b981"/>
+              <rect x="66" y="93" width="120" height="6" rx="2" fill="#ffffff"/>
+              <circle cx="52" cy="116" r="6" stroke="#475569" stroke-width="2" fill="none"/>
+              <rect x="66" y="113" width="90" height="6" rx="2" fill="#94a3b8"/>
+              <!-- Gold badge on right -->
+              <circle cx="215" cy="85" r="22" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="2"/>
+              <text x="215" y="91" text-anchor="middle" font-size="14" font-weight="bold" fill="#f59e0b">A+</text>
+              <rect x="45" y="136" width="80" height="18" rx="4" fill="#0284c7"/>
+              <rect x="55" y="142" width="60" height="5" rx="2" fill="#ffffff"/>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Bottom Pick up Where You Left Off Bar -->
+        <div style="max-width:1300px; margin:0 auto 36px; padding:0 32px;">
+          <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.25);">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:36px; height:36px; border-radius:8px; background:rgba(2,132,199,0.2); border:1px solid #0284c7; display:flex; align-items:center; justify-content:center; color:#38bdf8; font-weight:800; font-size:16px;">Q</div>
+              <div>
+                <strong style="color:#ffffff; font-size:13.5px; display:block;">Pick up where you left off in Quiz</strong>
+                <span style="color:#94a3b8; font-size:12px;">• ${escapeHtml(quizData.title)} — ${quizData.questions.length} questions • ${quizData.passingScorePercent}% pass grade</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button id="btn-quiz-reset-draft" style="background:#334155; color:#cbd5e1; border:none; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">
+                🗑 Delete Draft
+              </button>
+              <button id="btn-quiz-resume-work" style="background:#0284c7; color:#ffffff; border:none; padding:8px 18px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                <span>▶ Resume Work →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Gallery Carousel -->
+        <section style="max-width:1300px; margin:0 auto; padding:0 32px 48px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+            <h2 style="font-size:18px; font-weight:700; color:#ffffff; margin:0;">Standard Exam & Certification Templates</h2>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:18px;">
+            ${QUIZ_TEMPLATES.map(tpl => `
+              <div class="quiz-tpl-card" data-id="${tpl.id}" style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:18px; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.borderColor='${tpl.themeColor}'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#334155'; this.style.transform='none';">
+                <div>
+                  <div style="width:36px; height:36px; border-radius:8px; background:rgba(2,132,199,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-bottom:12px;">Q</div>
+                  <strong style="color:#ffffff; font-size:14.5px; display:block; margin-bottom:6px;">${escapeHtml(tpl.name)}</strong>
+                  <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.5;">${escapeHtml(tpl.desc)}</p>
+                </div>
+                <div style="font-size:11px; color:#38bdf8; font-weight:600;">
+                  ${tpl.questions.length} Scored Questions • ${tpl.timeLimitMinutes}m Timer • Use →
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      </div>
+    `;
+
+    // Bind Hub Events
+    container.querySelector('#btn-quiz-create-blank')?.addEventListener('click', () => {
+      quizData = {
+        id: 'quiz_' + Date.now(),
+        title: 'Untitled Quiz Assessment',
+        description: 'Provide assessment instructions for candidates.',
+        timeLimitMinutes: 15,
+        passingScorePercent: 75,
+        themeColor: '#0284c7',
+        questions: [
+          { id: 'qz_1', type: 'single_choice', title: 'Sample Question 1', points: 10, options: ['Option A (Correct)', 'Option B', 'Option C'], correctIndex: 0, explanation: 'Explanation for correct answer.' }
+        ],
+        results: []
+      };
+      saveQuizData();
+      mountEditor();
+    });
+
+    container.querySelector('#quiz-nav-blank')?.addEventListener('click', () => { mountEditor(); });
+    container.querySelector('#quiz-nav-hub')?.addEventListener('click', () => {
+      if (window.orbitPlatform) window.orbitPlatform.navigateTo('launcher');
+    });
+    container.querySelector('#btn-quiz-resume-work')?.addEventListener('click', () => { mountEditor(); });
+    container.querySelector('#btn-quiz-quick-cert')?.addEventListener('click', () => { applyTemplate(QUIZ_TEMPLATES[0]); });
+    container.querySelector('#btn-quiz-export-axis')?.addEventListener('click', () => { exportGradebookToAxis(); });
+
+    container.querySelector('#btn-quiz-reset-draft')?.addEventListener('click', () => {
+      if (confirm('Reset quiz draft to default certification quiz?')) {
+        localStorage.removeItem('orbit_quiz_active_doc');
+        quizData = loadQuizData();
+        mountHub();
+      }
+    });
+
+    container.querySelectorAll('.quiz-tpl-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const tpl = QUIZ_TEMPLATES.find(t => t.id === id);
+        if (tpl) applyTemplate(tpl);
+      });
+    });
+
+    function applyTemplate(tpl) {
+      quizData = {
+        id: 'quiz_' + Date.now(),
+        title: tpl.name,
+        description: tpl.desc,
+        timeLimitMinutes: tpl.timeLimitMinutes,
+        passingScorePercent: tpl.passingScorePercent,
+        themeColor: tpl.themeColor || '#0284c7',
+        questions: JSON.parse(JSON.stringify(tpl.questions)),
+        results: []
+      };
+      saveQuizData();
+      mountEditor();
+    }
+  }
+
+  // =========================================================================
+  // VIEW 2: FULL-FEATURED QUIZ BUILDER & GRADING EDITOR
+  // =========================================================================
+  function mountEditor() {
+    renderShell();
   }
 
   function renderShell() {
@@ -136,7 +369,7 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = true) 
         <!-- Top Application Header Bar -->
         <header class="quiz-app-header" style="height:56px; background:#ffffff; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0; box-shadow:0 1px 3px rgba(0,0,0,0.02); z-index:10;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <div style="width:34px; height:34px; border-radius:6px; background:${quizData.themeColor}; display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:800; font-size:17px; box-shadow:0 2px 5px rgba(2,132,199,0.3);">Q</div>
+            <button id="quiz-btn-back-hub" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Back to Quiz Start Hub"><span>← Start</span></button><img src="assets/quiz-logo.png" alt="Quiz" style="width:32px; height:32px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 2px 5px rgba(2,132,199,0.4));">
             <div>
               <input type="text" id="quiz-doc-title-input" value="${escapeHtml(quizData.title)}" style="font-weight:700; font-size:15px; color:#0f172a; border:1px solid transparent; border-radius:4px; padding:3px 8px; width:340px; background:transparent; transition:all 0.15s;" onfocus="this.style.borderColor='#0284c7'; this.style.background='#ffffff';" onblur="this.style.borderColor='transparent'; this.style.background='transparent';" title="Click to rename quiz">
               <div style="font-size:11px; color:#64748b; padding-left:8px;">Giri Quiz • Sovereign Assessment & Grading Engine</div>

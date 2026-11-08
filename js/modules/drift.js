@@ -627,7 +627,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
         <section class="drift-hub-hero">
           <div class="drift-hero-left">
             <div style="margin-bottom:14px;"><img src="assets/drift-logo-white.png" alt="Drift" style="height:36px; object-fit:contain; display:block;"></div>
-            <h1 class="drift-hero-title">Welcome to Drift for free on the web</h1>
+            <h1 class="drift-hero-title">Welcome to Giri Drift</h1>
             <p class="drift-hero-subtitle">
               Sovereign in-memory document composer for high-velocity teams. Zero database tracking, instant local persistence, and customizable templates.
             </p>
