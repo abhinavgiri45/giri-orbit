@@ -29,7 +29,7 @@ The official production environment is actively deployed on Cloudflare Pages:
 
 > ### ⚠️ COPYRIGHT & USAGE NOTICE: ALL RIGHTS RESERVED
 > 
-> **Copyright © 2025–2026 Abhinav Giri (Giri Group). All Rights Reserved.**
+> **Copyright © 2025–2026 Abhinav Giri (@abhinavgiri45). All Rights Reserved.**
 >
 > This repository and all associated software, source code, designs, user interfaces, documentation, graphic marks, algorithms, and intellectual assets are the **exclusive proprietary property of Abhinav Giri**.
 >

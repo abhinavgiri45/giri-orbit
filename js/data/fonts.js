@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — COMPREHENSIVE WORLD FONTS CATALOG (fonts.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Contains 175+ of the world's most widely used typography families across:
  * 1. Standard Office Classics (Calibri, Aptos, Arial, Times New Roman, etc.)

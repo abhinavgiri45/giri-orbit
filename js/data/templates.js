@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — GLOBAL ENTERPRISE TEMPLATES REPOSITORY (templates.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Vast catalog of world-class, executive-designed templates for:
  * 1. Giri Axis (Spreadsheets & Financial Modeling)
@@ -1043,7 +1043,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
         htmlContent: `
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
             <div style="display:flex; align-items:center; gap:14px;">
-              <img src="assets/giri-logo-symbol.png" alt="Giri Group" style="height:38px; width:auto; display:block;">
+              <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="height:38px; width:auto; display:block;">
               <div>
                 <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0; letter-spacing:-0.01em;">GIRI ENTERPRISE MEMORANDUM</h1>
                 <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X01 // SOVEREIGN COMPUTING DIVISION</span>

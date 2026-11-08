@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — HIGH-CONCURRENCY PWA SERVICE WORKER (sw.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Auto-updating sovereign offline cache with zero-telemetry client data sovereignty.
  * Implements Network-First for code/documents with instant Stale-While-Revalidate fallback.

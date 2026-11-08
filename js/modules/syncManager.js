@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — SOVEREIGN BROWSER SYNC & STORAGE SYSTEM (syncManager.js)
- * By GIRI Corporation
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Features:
  * - 100% In-Memory & Browser LocalStorage Sovereign Persistence

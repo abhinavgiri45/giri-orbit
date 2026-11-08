@@ -364,7 +364,7 @@ export class GirionixAgentManager {
             <div style="background:linear-gradient(135deg, rgba(6,182,212,0.12), rgba(37,99,235,0.12)); border:1px solid rgba(56,189,248,0.3); border-radius:12px; padding:16px; margin-bottom:16px;">
               <strong style="color:#38bdf8; font-size:14px; display:block; margin-bottom:6px;">Sovereignty Meets Autonomous Polymath Intelligence</strong>
               <p style="margin:0; font-size:12px; color:#94a3b8;">
-                Giri Orbit by GIRI Corporation has forged an official sovereign alliance with Girionix AI (https://girionix-ai.pages.dev) to deliver instantaneous, zero-telemetry autonomous agent execution for global enterprises, students, and researchers.
+                Giri Orbit by Abhinav Giri has forged an official sovereign alliance with Girionix AI (https://girionix-ai.pages.dev) to deliver instantaneous, zero-telemetry autonomous agent execution for global enterprises, students, and researchers.
               </p>
             </div>
             <h4 style="margin:14px 0 8px 0; color:#f1f5f9; font-size:13px;">Joint Capabilities &amp; Architecture:</h4>

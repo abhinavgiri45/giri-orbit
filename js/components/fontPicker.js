@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — SEARCHABLE FLUENT FONT PICKER (fontPicker.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Provides an authentic Fluent Office style Font Family Picker:
  * - Trigger button displaying active font name in its own typeface (defaulting to Calibri)

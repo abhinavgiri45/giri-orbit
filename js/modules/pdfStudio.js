@@ -728,7 +728,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
       htmlContent: `
         <div class="pdf-doc-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <img src="assets/giri-group-symbol-dark.png" alt="Giri Group" style="height:32px; width:auto; display:block;">
+            <img src="assets/giri-group-symbol-dark.png" alt="Abhinav Giri" style="height:32px; width:auto; display:block;">
             <div>
               <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0; letter-spacing:-0.01em;">GIRI ENTERPRISE MEMORANDUM</h1>
               <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X01 // SOVEREIGN COMPUTING DIVISION</span>
@@ -818,7 +818,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
       htmlContent: `
         <div class="pdf-doc-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <img src="assets/giri-group-symbol-dark.png" alt="Giri Group" style="height:32px; width:auto; display:block;">
+            <img src="assets/giri-group-symbol-dark.png" alt="Abhinav Giri" style="height:32px; width:auto; display:block;">
             <div>
               <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0;">APPENDIX B // SOVEREIGN PRIVACY COMPLIANCE</h1>
               <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X02 // GIRI GROUP</span>
@@ -844,7 +844,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
           </div>
           <div>
             <label style="display:block; font-size:11px; font-weight:600; color:#475569; margin-bottom:4px;">Operating Entity</label>
-            <input type="text" class="pdf-fillable-input" value="Abhinav Giri / Giri Group" style="width:100%;">
+            <input type="text" class="pdf-fillable-input" value="Abhinav Giri" style="width:100%;">
           </div>
           <div>
             <label style="display:block; font-size:11px; font-weight:600; color:#475569; margin-bottom:4px;">Approval Timestamp</label>
@@ -1449,7 +1449,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
             <!-- Executive Seals Group -->
             <div class="fluent-ribbon-group">
               <div class="fluent-group-controls">
-                <button class="fluent-btn-large" id="btn-pdf-exec-seal" title="Affix Giri Group Sovereign Certified Seal">
+                <button class="fluent-btn-large" id="btn-pdf-exec-seal" title="Affix Abhinav Giri Sovereign Certified Seal">
                   <span style="font-size:16px;">🛡️</span>
                   <span>Executive Seal</span>
                 </button>
@@ -3618,14 +3618,14 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
     seal.innerHTML = `
       <img src="assets/giri-group-symbol-blue.png" alt="Seal" style="height:32px; width:auto;">
       <div>
-        <strong style="font-size:11px; color:#1e3a8a; display:block; letter-spacing:0.04em;">GIRI GROUP CERTIFIED SEAL</strong>
+        <strong style="font-size:11px; color:#1e3a8a; display:block; letter-spacing:0.04em;">ABHINAV GIRI CERTIFIED SEAL</strong>
         <span style="font-size:9.5px; font-family:var(--font-mono); color:#64748b;">SOVEREIGN ENCRYPTION APPROVED</span>
       </div>
     `;
     seal.addEventListener('dblclick', () => seal.remove());
     annotationsLayer.appendChild(seal);
     auditLog.push({ action: 'Affixed Giri Certified Seal', time: new Date().toLocaleTimeString() });
-    if (window.orbitPlatform) window.orbitPlatform.triggerToast('Giri Group Certified Seal affixed');
+    if (window.orbitPlatform) window.orbitPlatform.triggerToast('Abhinav Giri Certified Seal affixed');
   });
 
   // SHA-256 PKI Verification & Audit Certificate
@@ -3674,7 +3674,7 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
       htmlContent: `
         <div class="pdf-doc-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <img src="assets/giri-group-symbol-dark.png" alt="Giri Group" style="height:32px; width:auto; display:block;">
+            <img src="assets/giri-group-symbol-dark.png" alt="Abhinav Giri" style="height:32px; width:auto; display:block;">
             <div>
               <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0;">GIRI EXECUTIVE MEMORANDUM // SUPPLEMENT</h1>
               <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X0${pages.length + 1} // GIRI GROUP</span>

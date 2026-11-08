@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — SOVEREIGN PRINT STUDIO & ENGINE (printManager.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Provides an authentic Office Print Experience:
  * - Interactive WYSIWYG Print Studio Dialog with live paper page preview

@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — SOVEREIGN CORE DESKTOP ENGINE (js/components/orbitDesktopSuite.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * Pixel-Accurate Desktop Sovereign Architecture:
  * - Giri Drift Writer
  * - Giri Axis Spreadsheet
@@ -1974,7 +1974,7 @@ export class OrbitDesktopSuite {
             sovereign client memory encryption, and full offline autonomy.
           </p>
           <div style="font-size:11px; color:var(--lo-text-subtle); margin-top:12px;">
-            Build ID: 2026.11.06-ORBIT-LO-PARITY • Copyright © GIRI Corporation
+            Build ID: 2026.11.06-ORBIT-LO-PARITY • Copyright © Abhinav Giri
           </div>
         </div>
         <div class="lo-dialog-footer" style="justify-content:center;">

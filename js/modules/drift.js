@@ -469,7 +469,7 @@ const DEFAULT_CUSTOM_TEMPLATES = [
         "Spatial computing and zero-gravity document orchestration form the executive cornerstone of modern cognitive efficiency." — Abhinav Giri Directorate
       </blockquote>
       <p>
-        This document serves as the operational architecture standard for <strong>Giri Orbit</strong>, developed as a sovereign productivity layer by <em>Abhinav Giri (Giri Group)</em>.
+        This document serves as the operational architecture standard for <strong>Giri Orbit</strong>, developed as a sovereign productivity layer by <em>Abhinav Giri (@abhinavgiri45)</em>.
       </p>
       <h2>1. Strategic Objectives</h2>
       <p>
@@ -1842,7 +1842,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
                       </div>
                     </div>
                   </div>
-                  <button class="fluent-btn-large" id="btn-drift-exec-seal" title="Affix Giri Group Executive Seal">
+                  <button class="fluent-btn-large" id="btn-drift-exec-seal" title="Affix Abhinav Giri Executive Seal">
                     <span style="font-size:16px;">🛡️</span>
                     <span>Executive Seal</span>
                   </button>
@@ -6685,7 +6685,7 @@ function calculateMetrics(records) {
           <div class="drift-executive-seal-badge" contenteditable="false" style="display:inline-flex; align-items:center; gap:12px; padding:10px 18px; background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:2px solid #1e3a8a; border-radius:8px; box-shadow:0 4px 14px rgba(30,58,138,0.12); margin:12px 0; user-select:none; max-width:420px;">
             <img src="assets/giri-group-symbol-blue.png" alt="Giri Seal" style="height:36px; width:auto; flex-shrink:0;">
             <div style="display:flex; flex-direction:column;">
-              <strong style="font-size:11.5px; color:#1e3a8a; letter-spacing:0.04em; text-transform:uppercase;">Giri Group Certified Seal</strong>
+              <strong style="font-size:11.5px; color:#1e3a8a; letter-spacing:0.04em; text-transform:uppercase;">Abhinav Giri Certified Seal</strong>
               <span style="font-size:9.5px; font-family:var(--font-mono, monospace); color:#64748b;">SOVEREIGN ENCRYPTION &bull; ${new Date().toISOString().slice(0, 10)}</span>
               <span style="font-size:8.5px; font-family:var(--font-mono, monospace); color:#059669; font-weight:700;">HASH: 0x${Math.random().toString(16).slice(2, 10).toUpperCase()} [VERIFIED]</span>
             </div>
@@ -6693,7 +6693,7 @@ function calculateMetrics(records) {
           <p></p>
         `;
         insertIntoPaperAtCursor(sealHtml);
-        if (window.orbitPlatform) window.orbitPlatform.triggerToast('Giri Group Certified Seal affixed to document');
+        if (window.orbitPlatform) window.orbitPlatform.triggerToast('Abhinav Giri Certified Seal affixed to document');
       });
 
       // 7. Direct Local Disk Save & Sync

@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — LAUNCHER ZERO-GRAVITY PHYSICS (physics.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Features:
  * - Manages the weightless floating state of document cards on the Launcher Hub

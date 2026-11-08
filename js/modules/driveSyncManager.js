@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — GOOGLE DRIVE & SOVEREIGN CLOUD SYNC ENGINE (driveSyncManager.js)
- * By GIRI Corporation
+ * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Provides deep Google Drive integration, direct editing, live auto-saving,
  * local File System Access API disk sync, and Drive file management across:

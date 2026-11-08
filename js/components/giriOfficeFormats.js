@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — UNIVERSAL OFFICE SUITE COMPATIBILITY ENGINE (js/components/giriOfficeFormats.js)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * By Abhinav Giri (@abhinavgiri45)
  * 
  * Provides two-way, 100% interoperable serialization and deserialization for:
  * - .gdrift  -> Native Giri Drift / Microsoft Word / OpenDocument Writer / WPS Writer
@@ -339,7 +339,7 @@ ${utf8ToBase64(manifestJson)}
   <Title>${escapeXml(title)}</Title>
   <Author>${escapeXml(author)}</Author>
   <Created>${exportDate}</Created>
-  <Company>Giri Corporation</Company>
+  <Company>Abhinav Giri</Company>
   <Version>12.2</Version>
  </DocumentProperties>
  <CustomDocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
@@ -881,7 +881,7 @@ ${slidesHtml}
   /Title (${cleanTitle})
   /Author (${author})
   /Creator (Giri Orbit Aegis PDF Studio 12.2)
-  /Producer (Giri Corporation Sovereign Suite)
+  /Producer (Abhinav Giri Sovereign Suite)
   /CreationDate (D:${exportDate.replace(/[-:TZ]/g, '').slice(0, 14)})
   /GiriOrbitMetadata (${manifestBase64})
 >>
