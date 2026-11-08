@@ -7259,7 +7259,6 @@ body.light-theme .export-filename-input {
 .m365-hub-root,
 .m365-canvas,
 .fluent-ribbon-bar,
-.girionix-ai-drawer,
 .giri-modal-dialog,
 .office-a4-paper,
 .axis-grid-viewport {
@@ -7267,6 +7266,21 @@ body.light-theme .export-filename-input {
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+/* Girionix AI Drawer Isolation & Safe State */
+.girionix-ai-drawer:not(.open) {
+  display: none !important;
+  transform: translateX(100%) !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+#girionix-dock-minimized-pill:not(.active),
+.girionix-dock-pill:not(.active) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* Modals & Drawers: 120fps Smooth Transitions */
