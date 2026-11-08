@@ -151,6 +151,12 @@ export class OrbitDesktopSuite {
           <button class="lo-header-btn" id="lo-btn-save-device" title="Save directly to device">
             <span>💾 Save</span>
           </button>
+          <button class="lo-header-btn" id="lo-btn-suite-settings" title="Settings & Personalization">
+            <span>⚙️ Settings</span>
+          </button>
+          <button class="lo-header-btn" id="lo-btn-suite-profile" title="User Profile & Sovereignty Hub" style="background:#2563eb; color:#ffffff; font-weight:700; border-radius:50%; width:26px; height:26px; padding:0; display:inline-flex; align-items:center; justify-content:center;">
+            <span>AG</span>
+          </button>
         </div>
       </div>
     `;
@@ -540,7 +546,11 @@ export class OrbitDesktopSuite {
       { label: 'Print...', icon: I.print, cmd: 'print', shortcut: 'Ctrl+P' },
       { label: 'Print Preview', icon: I.printPreview, cmd: 'print-preview', shortcut: 'Ctrl+Shift+O' },
       { separator: true },
-      { label: 'Properties...', icon: I.properties, cmd: 'doc-properties' }
+      { label: 'Properties...', icon: I.properties, cmd: 'doc-properties' },
+      { separator: true },
+      { label: 'Settings & Personalization...', icon: '⚙️', cmd: 'open-settings' },
+      { label: 'User Profile & Sovereignty Hub...', icon: '👤', cmd: 'open-profile' },
+      { label: 'Templates & Document Gallery...', icon: '📁', cmd: 'open-templates' }
     ];
 
     const commonEdit = [
@@ -891,6 +901,14 @@ export class OrbitDesktopSuite {
       if (callbacks.onSaveDevice) callbacks.onSaveDevice();
     });
 
+    // 6b. Settings & Profile
+    container.querySelector('#lo-btn-suite-settings')?.addEventListener('click', () => {
+      window.orbitPlatform?.openSettingsModal();
+    });
+    container.querySelector('#lo-btn-suite-profile')?.addEventListener('click', () => {
+      window.orbitPlatform?.openUserProfileModal();
+    });
+
     // 7. Sidebar Deck Tabs
     container.querySelectorAll('.lo-sidebar-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1044,6 +1062,15 @@ export class OrbitDesktopSuite {
       case 'print-preview':
         if (window.orbitPlatform?.printManager) window.orbitPlatform.printManager.openPrintStudio(tool);
         else window.print();
+        break;
+      case 'open-settings':
+        if (window.orbitPlatform) window.orbitPlatform.openSettingsModal();
+        break;
+      case 'open-profile':
+        if (window.orbitPlatform) window.orbitPlatform.openUserProfileModal();
+        break;
+      case 'open-templates':
+        if (window.orbitPlatform) window.orbitPlatform.openCreateTemplatesModal();
         break;
       case 'undo':
         document.execCommand('undo');

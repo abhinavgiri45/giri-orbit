@@ -1252,3 +1252,346 @@ body:not(.in-tool) .orbit-workspace {
 .giri-content-table tr:hover td {
   background: #f8fafc;
 }
+
+
+/* ==========================================================================
+   IMPROVED LOGOS & HIGH-FIDELITY PREVIEWS: FORMS, QUIZ, LISTS, DESIGNER
+   ========================================================================== */
+
+/* 4. Form Preview (Teal & Emerald) */
+.preview-form {
+  background: #f0fdfa !important;
+}
+.sheet-form {
+  width: 60px !important;
+  height: 74px !important;
+  background: #ffffff !important;
+  border: 1px solid #ccfbf1 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.12) !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+.form-top-clip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 5px;
+  background: #cbd5e1;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  z-index: 2;
+}
+.form-header-bar {
+  height: 12px;
+  background: #0d9488;
+  width: 100%;
+}
+.form-body {
+  padding: 6px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.form-chk-checked {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 7px;
+  line-height: 8px;
+  text-align: center;
+  font-weight: 900;
+  display: inline-block;
+}
+.form-chk-empty {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  border: 1px solid #94a3b8;
+  background: #f8fafc;
+  display: inline-block;
+}
+.form-line {
+  flex: 1;
+  height: 4px;
+  background: #334155;
+  border-radius: 2px;
+}
+.form-line.muted {
+  background: #94a3b8;
+}
+.form-line.short {
+  flex: 0 0 65%;
+}
+.form-stars {
+  display: flex;
+  gap: 2px;
+  color: #f59e0b;
+  font-size: 7px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* 5. Quiz Preview (Electric Azure) */
+.preview-quiz {
+  background: #f0f9ff !important;
+}
+.sheet-quiz {
+  width: 60px !important;
+  height: 74px !important;
+  background: #ffffff !important;
+  border: 1px solid #bae6fd !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12) !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+.quiz-medal-seal {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  background: #f59e0b;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+.quiz-header-bar {
+  height: 12px;
+  background: #0284c7;
+  width: 100%;
+}
+.quiz-body {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.quiz-stem {
+  width: 90%;
+  height: 4px;
+  background: #0f172a;
+  border-radius: 2px;
+  margin-bottom: 2px;
+}
+.quiz-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.quiz-radio-selected {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid #0284c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quiz-radio-selected::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #0284c7;
+}
+.quiz-radio-empty {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #94a3b8;
+  background: #ffffff;
+}
+.quiz-score-pill {
+  margin-top: 3px;
+  align-self: flex-start;
+  font-size: 7px;
+  font-weight: 800;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+/* 6. List Preview (Agile Kanban Purple) */
+.preview-list {
+  background: #faf5ff !important;
+}
+.sheet-list {
+  width: 68px !important;
+  height: 74px !important;
+  background: #ffffff !important;
+  border: 1px solid #e9d5ff !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12) !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+.list-header-bar {
+  height: 11px;
+  background: #7c3aed;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  gap: 2px;
+}
+.list-header-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ddd6fe;
+}
+.list-body {
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.list-task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 3px;
+  border-radius: 3px;
+  background: #f8fafc;
+  border: 0.5px solid #e2e8f0;
+}
+.list-task-item.done {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.list-task-left {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.list-task-ck {
+  width: 6px;
+  height: 6px;
+  border-radius: 1.5px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 5px;
+  line-height: 6px;
+  text-align: center;
+  font-weight: 900;
+}
+.list-task-bullet {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+.list-task-bullet.purple {
+  background: #7c3aed;
+}
+.list-task-text {
+  width: 24px;
+  height: 3px;
+  background: #334155;
+  border-radius: 1px;
+}
+.list-tag-pill {
+  font-size: 6px;
+  font-weight: 800;
+  padding: 0 3px;
+  border-radius: 2px;
+  line-height: 8px;
+}
+.list-tag-pill.done {
+  color: #15803d;
+  background: #dcfce7;
+}
+.list-tag-pill.active {
+  color: #b45309;
+  background: #fef3c7;
+}
+.list-tag-pill.queue {
+  color: #6b21a8;
+  background: #f3e8ff;
+}
+
+/* 7. Design Preview (Creative Vector Studio) */
+.preview-designer {
+  background: #18181b !important;
+}
+.sheet-designer {
+  width: 68px !important;
+  height: 74px !important;
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.designer-poly-cyan {
+  position: absolute;
+  top: 8px;
+  left: 6px;
+  width: 26px;
+  height: 22px;
+  background: rgba(14, 165, 233, 0.75);
+  clip-path: polygon(10% 0%, 90% 15%, 80% 90%, 0% 80%);
+}
+.designer-poly-gold {
+  position: absolute;
+  top: 14px;
+  right: 6px;
+  width: 26px;
+  height: 24px;
+  background: rgba(245, 158, 11, 0.75);
+  clip-path: polygon(15% 10%, 100% 0%, 85% 100%, 0% 85%);
+}
+.designer-cir-rose {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(244, 63, 94, 0.85);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+}
+.designer-bezier-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.designer-pen-nib {
+  position: absolute;
+  top: 24px;
+  left: 36px;
+  width: 10px;
+  height: 10px;
+  background: #fbbf24;
+  clip-path: polygon(0% 0%, 100% 30%, 30% 100%);
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}

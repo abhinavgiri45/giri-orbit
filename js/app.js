@@ -790,7 +790,7 @@ class GiriOrbitPlatform {
 
         <div class="m365-rail-bottom">
           <!-- Settings -->
-          <button class="m365-rail-btn" id="rail-btn-settings" title="Settings & Personalization">
+          <button class="m365-rail-btn" id="rail-btn-settings" onclick="window.orbitPlatform?.openSettingsModal(); return false;" title="Settings & Personalization">
             <div class="m365-rail-icon-wrap">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
                 <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -800,7 +800,7 @@ class GiriOrbitPlatform {
           </button>
 
           <!-- User Account / Sovereign Avatar -->
-          <div class="m365-rail-avatar" id="rail-avatar-btn" style="${isGoogleConnected ? 'background:#16a34a;' : 'background:#475569;'}" title="${isGoogleConnected ? ('Google Drive Connected (' + this.escapeHtml(googleUser.email) + ')') : 'Sovereign Local Mode (No Account Required • Click to Connect Google Drive)'}">
+          <div class="m365-rail-avatar" id="rail-avatar-btn" onclick="window.orbitPlatform?.openUserProfileModal(); return false;" style="${isGoogleConnected ? 'background:#16a34a;' : 'background:#475569;'}" title="${isGoogleConnected ? ('Google Drive Connected (' + this.escapeHtml(googleUser.email) + ')') : 'Sovereign Local Mode (No Account Required • Click to Connect Google Drive)'}">
             <span>${isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : 'SO'}</span>
           </div>
         </div>
@@ -866,11 +866,7 @@ class GiriOrbitPlatform {
                     <div class="line-blue" style="width:80%; opacity:0.5;"></div>
                     <div class="line-blue" style="width:65%; opacity:0.5;"></div>
                   </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#2563eb">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    </svg>
-                  </div>
+                  <div class="badge-corner badge-drift">D</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">Document</strong>
@@ -888,11 +884,7 @@ class GiriOrbitPlatform {
                       <div class="ppt-body-col"></div>
                     </div>
                   </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#ea580c">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    </svg>
-                  </div>
+                  <div class="badge-corner badge-kinetic">K</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">Presentation</strong>
@@ -908,11 +900,7 @@ class GiriOrbitPlatform {
                     <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
                     <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
                   </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#16a34a">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    </svg>
-                  </div>
+                  <div class="badge-corner badge-axis">A</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">Workbook</strong>
@@ -920,19 +908,19 @@ class GiriOrbitPlatform {
                 </div>
               </div>
 
-              <!-- 4. Form (Forms) -->
+                            <!-- 4. Form (Forms) -->
               <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form">
                 <div class="m365-card-preview preview-form">
                   <div class="sheet-form">
-                    <div class="form-bar"></div>
-                    <div class="form-box"></div>
-                    <div class="form-box"></div>
+                    <div class="form-top-clip"></div>
+                    <div class="form-header-bar"></div>
+                    <div class="form-body">
+                      <div class="form-row"><span class="form-chk-checked">&#10003;</span><span class="form-line"></span></div>
+                      <div class="form-row"><span class="form-chk-empty"></span><span class="form-line short"></span></div>
+                      <div class="form-stars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span></div>
+                    </div>
                   </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#0d9488">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    </svg>
-                  </div>
+                  <div class="badge-corner badge-forms">F</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">Form</strong>
@@ -944,15 +932,16 @@ class GiriOrbitPlatform {
               <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz">
                 <div class="m365-card-preview preview-quiz">
                   <div class="sheet-quiz">
-                    <div class="form-bar" style="background:#6ee7b7;"></div>
-                    <div class="quiz-option"><div class="quiz-dot"></div><div class="quiz-line"></div></div>
-                    <div class="quiz-option"><div class="quiz-dot"></div><div class="quiz-line"></div></div>
+                    <div class="quiz-medal-seal">&#9733;</div>
+                    <div class="quiz-header-bar"></div>
+                    <div class="quiz-body">
+                      <div class="quiz-stem"></div>
+                      <div class="quiz-row"><span class="quiz-radio-selected"></span><span class="form-line short"></span></div>
+                      <div class="quiz-row"><span class="quiz-radio-empty"></span><span class="form-line muted"></span></div>
+                      <div class="quiz-score-pill">A+ 100%</div>
+                    </div>
                   </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    </svg>
-                  </div>
+                  <div class="badge-corner badge-quiz">Q</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">Quiz</strong>
@@ -964,15 +953,27 @@ class GiriOrbitPlatform {
               <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix">
                 <div class="m365-card-preview preview-list">
                   <div class="sheet-list">
-                    <div class="list-row" style="background:#d8b4fe;"></div>
-                    <div class="list-row"></div>
-                    <div class="list-row"></div>
+                    <div class="list-header-bar">
+                      <div class="list-header-dot"></div>
+                      <div class="list-header-dot"></div>
+                      <div class="list-header-dot"></div>
+                    </div>
+                    <div class="list-body">
+                      <div class="list-task-item done">
+                        <div class="list-task-left"><span class="list-task-ck">&#10003;</span><span class="list-task-text"></span></div>
+                        <span class="list-tag-pill done">Done</span>
+                      </div>
+                      <div class="list-task-item">
+                        <div class="list-task-left"><span class="list-task-bullet"></span><span class="list-task-text" style="width:18px;"></span></div>
+                        <span class="list-tag-pill active">Active</span>
+                      </div>
+                      <div class="list-task-item">
+                        <div class="list-task-left"><span class="list-task-bullet purple"></span><span class="list-task-text" style="width:22px;"></span></div>
+                        <span class="list-tag-pill queue">Queue</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#7c3aed">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    </svg>
-                  </div>
+                  <div class="badge-corner badge-lists">L</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">List</strong>
@@ -984,24 +985,28 @@ class GiriOrbitPlatform {
               <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase">
                 <div class="m365-card-preview preview-designer">
                   <div class="sheet-designer">
-                    <div class="designer-circ"></div>
-                    <div class="designer-rect"></div>
-                  </div>
-                  <div class="badge-corner">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#db2777">
-                      <circle cx="12" cy="12" r="8"/>
+                    <div class="designer-poly-cyan"></div>
+                    <div class="designer-poly-gold"></div>
+                    <div class="designer-cir-rose"></div>
+                    <svg class="designer-bezier-svg" viewBox="0 0 68 74">
+                      <path d="M 10 55 C 20 20, 48 58, 58 24" fill="none" stroke="#ffffff" stroke-width="2" />
+                      <line x1="22" y1="32" x2="36" y2="18" stroke="#38bdf8" stroke-width="1.5" />
+                      <circle cx="22" cy="32" r="2.5" fill="#38bdf8" />
+                      <circle cx="36" cy="18" r="2.5" fill="#38bdf8" />
+                      <rect x="27" y="23" width="4" height="4" fill="#ffffff" stroke="#0ea5e9" stroke-width="1" />
                     </svg>
+                    <div class="designer-pen-nib"></div>
                   </div>
+                  <div class="badge-corner badge-designer">D</div>
                 </div>
                 <div class="m365-card-meta">
                   <strong class="m365-card-title">Design</strong>
                   <span class="m365-card-sub">Designer</span>
                 </div>
               </div>
-            </div>
 
             <div style="display:flex; justify-content:flex-end; margin-top:2px;">
-              <a href="#" class="m365-see-more" id="m365-see-more-link">See more in Create &rarr;</a>
+              <a href="#" class="m365-see-more" id="m365-see-more-link" onclick="window.orbitPlatform?.openCreateTemplatesModal(); return false;">See more in Create &rarr;</a>
             </div>
           </section>
 
@@ -2291,8 +2296,8 @@ class GiriOrbitPlatform {
       { id: 'lists-assets', tool: 'lists', category: 'lists', badge: 'L', badgeBg: '#7c3aed', title: 'IT Asset Inventory Tracker', desc: 'Hardware inventory, license assignments, purchase dates, and status tracking.' },
 
       // Designer
-      { id: 'designer-banner', tool: 'designer', category: 'designer', badge: 'G', badgeBg: '#db2777', title: 'Corporate Marketing Banner', desc: 'High-resolution vector canvas for digital announcements and marketing cards.' },
-      { id: 'designer-social', tool: 'designer', category: 'designer', badge: 'G', badgeBg: '#db2777', title: 'Social Media Keynote Asset', desc: 'Optimized visual layouts for announcements, releases, and executive quotes.' }
+      { id: 'designer-banner', tool: 'designer', category: 'designer', badge: 'D', badgeBg: '#db2777', title: 'Corporate Marketing Banner', desc: 'High-resolution vector canvas for digital announcements and marketing cards.' },
+      { id: 'designer-social', tool: 'designer', category: 'designer', badge: 'D', badgeBg: '#db2777', title: 'Social Media Keynote Asset', desc: 'Optimized visual layouts for announcements, releases, and executive quotes.' }
     ];
 
     overlay.innerHTML = `
@@ -2401,7 +2406,7 @@ class GiriOrbitPlatform {
       { id: 'forms', name: 'Giri Forms', type: 'Survey & Data Collection', desc: 'Build interactive web forms and surveys with instant local and cloud response aggregation.', icon: 'F', iconBg: '#0d9488' },
       { id: 'quiz', name: 'Giri Quiz', type: 'Assessment & Test Engine', desc: 'Create scored quizzes, multiple-choice tests, timed exams, and automated score certificates.', icon: 'Q', iconBg: '#0284c7' },
       { id: 'lists', name: 'Giri Lists', type: 'Agile & Project Tracking', desc: 'Track tasks, manage agile sprints, view Kanban boards, and organize structured data lists.', icon: 'L', iconBg: '#7c3aed' },
-      { id: 'designer', name: 'Giri Designer', type: 'Graphics & Vector Studio', desc: 'Design graphics, promotional banners, vector illustrations, and visual social media assets.', icon: 'G', iconBg: '#db2777' },
+      { id: 'designer', name: 'Giri Designer', type: 'Graphics & Vector Studio', desc: 'Design graphics, promotional banners, vector illustrations, and visual social media assets.', icon: 'D', iconBg: '#db2777' },
       { id: 'pdf', name: 'Giri Aegis PDF Studio', type: 'PDF Reader & Signer', desc: 'Read, annotate, highlight, and cryptographically sign PDF documents with zero external dependencies.', icon: 'PDF', iconBg: '#dc2626' },
       { id: 'converter', name: 'Giri File Converter', type: 'Universal Converter', desc: 'Offline conversion between DOCX, XLSX, PPTX, PDF, CSV, JSON, and plain text formats.', icon: '⇄', iconBg: '#475569' },
       { id: 'girionix', name: 'Girionix AI', type: 'Sovereign AI Assistant', desc: 'Private document analysis, intelligent drafting, translation, and summarization assistant.', icon: 'AI', iconBg: '#7c3aed' }
@@ -2433,8 +2438,8 @@ class GiriOrbitPlatform {
           <div class="giri-apps-grid" id="all-apps-container">
             ${apps.map(app => `
               <div class="giri-app-card" data-app-id="${app.id}" data-app-name="${this.escapeHtml(app.name)}" data-app-desc="${this.escapeHtml(app.desc)}">
-                <div class="giri-app-card-icon" style="background:${app.iconBg};">
-                  ${app.icon}
+                <div class="giri-app-card-icon" style="background:${app.iconBg}; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                  <img src="assets/${app.id}-logo.png" alt="${this.escapeHtml(app.name)}" style="width:34px; height:34px; object-fit:contain; border-radius:6px;" onerror="this.outerHTML='<span style=\'font-weight:800; font-size:15px; color:#fff;\'>${app.icon}</span>'" />
                 </div>
                 <div style="flex:1; min-width:0;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">

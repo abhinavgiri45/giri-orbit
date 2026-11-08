@@ -2556,6 +2556,16 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             <span class="file-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg></span>
             <span>Move File</span>
           </div>
+          <div class="file-menu-item" data-action="suite-settings" id="file-menu-kinetic-settings">
+            <span class="file-menu-icon">⚙️</span>
+            <span>Settings & Personalization</span>
+            <span class="file-menu-arrow">›</span>
+          </div>
+          <div class="file-menu-item" data-action="suite-profile" id="file-menu-kinetic-profile">
+            <span class="file-menu-icon">👤</span>
+            <span>Account & User Profile</span>
+            <span class="file-menu-arrow">›</span>
+          </div>
           <div class="file-menu-item" data-action="history">
             <span class="file-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
             <span>Version history</span>
@@ -3815,6 +3825,14 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
             renderActiveSlide();
             saveDeck();
           }
+          break;
+        }
+        case 'suite-settings': {
+          window.orbitPlatform?.openSettingsModal();
+          break;
+        }
+        case 'suite-profile': {
+          window.orbitPlatform?.openUserProfileModal();
           break;
         }
         case 'history':
