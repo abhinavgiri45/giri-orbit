@@ -1768,6 +1768,32 @@ class GiriOrbitPlatform {
           <!-- Tab 3: Download Suite -->
           <div class="giri-settings-content" id="tab-pane-download" style="display:none;">
             <div class="giri-dl-grid">
+            <!-- 0. Windows 4.00 GB Enterprise Suite (Google Drive) -->
+            <div class="giri-dl-card" style="grid-column:1 / -1; background:linear-gradient(135deg, #eff6ff, #f0fdf4); border:2px solid #3b82f6; padding:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+                <div style="flex:1; min-width:260px;">
+                  <div class="giri-dl-card-header" style="margin-bottom:6px;">
+                    <div class="giri-dl-card-icon" style="background:#2563eb; color:#ffffff;">&#9733;</div>
+                    <div>
+                      <strong style="font-size:16px; color:#1e3a8a;">4.00 GB Full Enterprise Suite (Windows x64)</strong>
+                      <div style="font-size:12px; color:#2563eb; font-weight:600;">Hosted on Google Drive (giricorporation.pvt@gmail.com)</div>
+                    </div>
+                  </div>
+                  <div style="font-size:12.5px; color:#334155; line-height:1.5;">
+                    Complete sovereign Microsoft Office alternative (Word/Drift, Excel/Axis, PowerPoint/Kinetic, PDF/Aegis, Forms, Quiz, Lists, Designer), 100+ Multilingual Satellite DLLs, International Fonts &amp; Sovereign Data Vault.
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px; min-width:200px;">
+                  <a href="#" id="modal-btn-4gb-drive" class="giri-dl-btn" style="background:#2563eb; color:#ffffff; font-weight:700; text-align:center; padding:10px 14px; text-decoration:none; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download 4 GB Suite
+                  </a>
+                  <button type="button" id="modal-btn-set-drive" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; padding:5px 10px; border-radius:5px; font-size:11px; cursor:pointer;">
+                    Set Drive File ID / Link
+                  </button>
+                </div>
+              </div>
+            </div>
               <!-- Windows x64 -->
               <div class="giri-dl-card">
                 <div class="giri-dl-card-header">
@@ -7256,3 +7282,60 @@ if (document.readyState === 'loading') {
   bootGiriOrbit();
 }
 
+
+    // Google Drive 4GB Suite Link Handler
+    const setupDrive4GBHandlers = () => {
+      const getDriveUrl = () => {
+        try {
+          return localStorage.getItem('giri_orbit_4gb_drive_url') || 'https://drive.google.com/drive/u/0/my-drive';
+        } catch (_) {
+          return 'https://drive.google.com/drive/u/0/my-drive';
+        }
+      };
+
+      const setDriveUrlPrompt = () => {
+        const current = getDriveUrl();
+        const input = prompt(
+          'Enter Public Google Drive Share URL or File ID for the 4.00 GB Suite (giricorporation.pvt@gmail.com):\n\nExample: https://drive.google.com/file/d/1AbC.../view?usp=sharing',
+          current
+        );
+        if (input && input.trim()) {
+          let url = input.trim();
+          // Extract file ID if full share link provided
+          const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+          if (match && match[1]) {
+            url = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+          }
+          localStorage.setItem('giri_orbit_4gb_drive_url', url);
+          if (window.orbitPlatform?.showToast) {
+            window.orbitPlatform.showToast('Google Drive 4GB Suite URL saved successfully!', 'blue');
+          } else {
+            alert('Google Drive 4GB Suite URL saved successfully!');
+          }
+          updateButtons();
+        }
+      };
+
+      const updateButtons = () => {
+        const url = getDriveUrl();
+        document.querySelectorAll('#btn-download-4gb-drive, #modal-btn-4gb-drive').forEach(btn => {
+          btn.href = url;
+          btn.target = '_blank';
+        });
+      };
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('#btn-set-drive-link, #modal-btn-set-drive')) {
+          e.preventDefault();
+          setDriveUrlPrompt();
+        }
+      });
+
+      updateButtons();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupDrive4GBHandlers);
+    } else {
+      setupDrive4GBHandlers();
+    }
