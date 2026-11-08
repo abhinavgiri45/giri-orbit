@@ -140,7 +140,7 @@ export class OrbitDesktopSuite {
         </div>
         <div class="lo-window-header-actions">
           <button class="lo-ui-switcher-pill" id="lo-btn-toggle-ui" title="Toggle User Interface Layout (Standard Toolbar vs Notebookbar)">
-            <span>🎨 Layout: ${this.uiMode === 'standard' ? 'LibreOffice (Classic)' : 'MS Office (Ribbon)'} ▾</span>
+            <span>🎨 Layout: ${this.uiMode === 'standard' ? 'Giri-Orbit Classic' : 'Giri-Orbit Ribbon'} ▾</span>
           </button>
           <button class="lo-header-btn" id="lo-btn-return-hub" title="Return to Suite Hub">
             <span>🪐 Hub</span>
@@ -879,9 +879,9 @@ export class OrbitDesktopSuite {
       container.classList.remove('orbit-ui-standard', 'orbit-ui-notebookbar');
       container.classList.add(`orbit-ui-${this.uiMode}`);
       const btn = container.querySelector('#lo-btn-toggle-ui span');
-      if (btn) btn.textContent = `🎨 Layout: ${this.uiMode === 'standard' ? 'LibreOffice (Classic)' : 'MS Office (Ribbon)'} ▾`;
+      if (btn) btn.textContent = `🎨 Layout: ${this.uiMode === 'standard' ? 'Giri-Orbit Classic' : 'Giri-Orbit Ribbon'} ▾`;
       if (window.orbitPlatform) {
-        window.orbitPlatform.showToast(`Switched interface to ${this.uiMode === 'standard' ? 'LibreOffice Classic Toolbars' : 'MS Office Fluent Ribbon'}!`, 'blue');
+        window.orbitPlatform.showToast(`Switched interface to ${this.uiMode === 'standard' ? 'Giri-Orbit Classic Toolbars' : 'Giri-Orbit Sovereign Ribbon'}!`, 'blue');
       }
       if (callbacks.onUiToggle) callbacks.onUiToggle(this.uiMode);
     });
