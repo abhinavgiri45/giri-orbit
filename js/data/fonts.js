@@ -3,13 +3,17 @@
  * GIRI ORBIT — COMPREHENSIVE WORLD FONTS CATALOG (fonts.js)
  * By Abhinav Giri (@abhinavgiri45)
  * ============================================================================
- * Contains 175+ of the world's most widely used typography families across:
+ * Contains 250+ of the world's most widely used typography families across:
  * 1. Standard Office Classics (Calibri, Aptos, Arial, Times New Roman, etc.)
  * 2. Modern Sans-Serif & Web Standards (Inter, Roboto, Montserrat, Poppins, etc.)
  * 3. Editorial & Classic Serif (Merriweather, Playfair, Lora, Garamond, etc.)
- * 4. Monospace & Code (Consolas, JetBrains Mono, Fira Code, Courier New, etc.)
+ * 4. Monospace & Code (Consolas, JetBrains Mono, Fira Code, Cascadia, etc.)
  * 5. Script, Handwriting & Display (Brush Script, Dancing Script, Caveat, etc.)
- * 6. World & Multi-Lingual Scripts (Devanagari/Hindi, Arabic, Japanese, Korean, Chinese, Bengali, Tamil, etc.)
+ * 6. Devanagari & Indic (Hindi, Sanskrit, Marathi, Bengali, Tamil, Telugu, etc.)
+ * 7. Arabic, Urdu & Persian (Amiri, Cairo, Scheherazade New, etc.)
+ * 8. East Asian CJK (Chinese Simplified/Traditional, Japanese, Korean)
+ * 9. Cyrillic & Greek (PT Serif, EB Garamond, Jura, Didact Gothic, etc.)
+ * 10. Global & Regional (Hebrew, Thai, Khmer, Burmese, Georgian, Armenian, Ethiopic, Sinhala)
  *
  * Every entry provides:
  * - Bulletproof cross-platform fallback stack (Windows, macOS, Linux, iOS, Android)
@@ -20,6 +24,20 @@
 export const DEFAULT_FONT_FAMILY = "Calibri, 'Segoe UI', Arial, sans-serif";
 export const DEFAULT_FONT_NAME = "Calibri";
 
+export const FONT_CATEGORIES = [
+  'All',
+  'Standard Office Classics',
+  'Modern Sans-Serif',
+  'Editorial & Classic Serif',
+  'Monospace & Code',
+  'Script & Display',
+  'Devanagari & Indic',
+  'Arabic & Middle Eastern',
+  'East Asian (CJK)',
+  'Cyrillic & Greek',
+  'Global & Regional'
+];
+
 export const WORLD_FONTS_CATALOG = [
   // ==========================================================================
   // 1. STANDARD OFFICE CLASSICS (Calibri is the Universal Default)
@@ -29,6 +47,7 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'Aptos', family: "Aptos, 'Segoe UI', Calibri, Arial, sans-serif", category: 'Standard Office Classics' },
   { name: 'Aptos Display', family: "'Aptos Display', Aptos, 'Segoe UI', sans-serif", category: 'Standard Office Classics' },
   { name: 'Aptos Serif', family: "'Aptos Serif', Aptos, Georgia, 'Times New Roman', serif", category: 'Standard Office Classics' },
+  { name: 'Aptos Mono', family: "'Aptos Mono', Aptos, Consolas, monospace", category: 'Standard Office Classics' },
   { name: 'Segoe UI', family: "'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif", category: 'Standard Office Classics' },
   { name: 'Segoe UI Variable', family: "'Segoe UI Variable', 'Segoe UI', sans-serif", category: 'Standard Office Classics' },
   { name: 'Segoe UI Semibold', family: "'Segoe UI Semibold', 'Segoe UI', sans-serif", category: 'Standard Office Classics' },
@@ -80,8 +99,10 @@ export const WORLD_FONTS_CATALOG = [
   // 2. MODERN SANS-SERIF & WEB STANDARDS (Enterprise Typography)
   // ==========================================================================
   { name: 'Inter', family: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Inter' },
+  { name: 'Inter Tight', family: "'Inter Tight', Inter, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Inter Tight' },
   { name: 'Roboto', family: "Roboto, 'Segoe UI', Arial, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Roboto' },
   { name: 'Roboto Condensed', family: "'Roboto Condensed', Roboto, Arial, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Roboto Condensed' },
+  { name: 'Roboto Flex', family: "'Roboto Flex', Roboto, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Roboto Flex' },
   { name: 'Open Sans', family: "'Open Sans', -apple-system, 'Segoe UI', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Open Sans' },
   { name: 'Lato', family: "Lato, 'Segoe UI', Arial, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Lato' },
   { name: 'Montserrat', family: "Montserrat, 'Segoe UI', Arial, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Montserrat' },
@@ -103,10 +124,11 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'Quicksand', family: "Quicksand, 'Segoe UI', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Quicksand' },
   { name: 'Cabin', family: "Cabin, 'Segoe UI', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Cabin' },
   { name: 'Barlow', family: "Barlow, 'Segoe UI', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Barlow' },
+  { name: 'Barlow Condensed', family: "'Barlow Condensed', Barlow, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Barlow Condensed' },
   { name: 'Outfit', family: "Outfit, 'Segoe UI', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Outfit' },
   { name: 'Syne', family: "Syne, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Syne' },
   { name: 'Public Sans', family: "'Public Sans', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Public Sans' },
-  { name: 'Inter Tight', family: "'Inter Tight', Inter, sans-serif", category: 'Modern Sans-Serif', googleFont: 'Inter Tight' },
+  { name: 'Be Vietnam Pro', family: "'Be Vietnam Pro', sans-serif", category: 'Modern Sans-Serif', googleFont: 'Be Vietnam Pro' },
   { name: 'Avenir', family: "Avenir, 'Avenir Next', 'Segoe UI', sans-serif", category: 'Modern Sans-Serif' },
   { name: 'Avenir Next', family: "'Avenir Next', Avenir, 'Segoe UI', sans-serif", category: 'Modern Sans-Serif' },
   { name: 'Futura', family: "Futura, 'Century Gothic', Arial, sans-serif", category: 'Modern Sans-Serif' },
@@ -132,6 +154,7 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'Cormorant Garamond', family: "'Cormorant Garamond', Garamond, serif", category: 'Editorial & Classic Serif', googleFont: 'Cormorant Garamond' },
   { name: 'EB Garamond', family: "'EB Garamond', Garamond, serif", category: 'Editorial & Classic Serif', googleFont: 'EB Garamond' },
   { name: 'DM Serif Display', family: "'DM Serif Display', Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'DM Serif Display' },
+  { name: 'DM Serif Text', family: "'DM Serif Text', Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'DM Serif Text' },
   { name: 'Didot', family: "Didot, 'Bodoni MT', Georgia, serif", category: 'Editorial & Classic Serif' },
   { name: 'Charter', family: "Charter, Georgia, serif", category: 'Editorial & Classic Serif' },
   { name: 'Hoefler Text', family: "'Hoefler Text', Georgia, serif", category: 'Editorial & Classic Serif' },
@@ -141,17 +164,19 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'Vollkorn', family: "Vollkorn, Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'Vollkorn' },
   { name: 'Prata', family: "Prata, Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'Prata' },
   { name: 'Marcellus', family: "Marcellus, Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'Marcellus' },
+  { name: 'Spectral', family: "Spectral, Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'Spectral' },
+  { name: 'Besley', family: "Besley, Georgia, serif", category: 'Editorial & Classic Serif', googleFont: 'Besley' },
 
   // ==========================================================================
   // 4. MONOSPACE & CODE (Financial Matrices, Technical Docs, Code)
   // ==========================================================================
   { name: 'Consolas', family: "Consolas, 'Courier New', monospace", category: 'Monospace & Code' },
-  { name: 'Courier New', family: "'Courier New', Courier, 'Lucida Console', monospace", category: 'Monospace & Code' },
+  { name: 'Cascadia Code', family: "'Cascadia Code', Consolas, monospace", category: 'Monospace & Code' },
+  { name: 'Cascadia Mono', family: "'Cascadia Mono', Consolas, monospace", category: 'Monospace & Code' },
   { name: 'JetBrains Mono', family: "'JetBrains Mono', Consolas, monospace", category: 'Monospace & Code', googleFont: 'JetBrains Mono' },
   { name: 'Fira Code', family: "'Fira Code', Consolas, monospace", category: 'Monospace & Code', googleFont: 'Fira Code' },
   { name: 'Source Code Pro', family: "'Source Code Pro', Consolas, monospace", category: 'Monospace & Code', googleFont: 'Source Code Pro' },
-  { name: 'Cascadia Code', family: "'Cascadia Code', Consolas, monospace", category: 'Monospace & Code' },
-  { name: 'Cascadia Mono', family: "'Cascadia Mono', Consolas, monospace", category: 'Monospace & Code' },
+  { name: 'Courier New', family: "'Courier New', Courier, 'Lucida Console', monospace", category: 'Monospace & Code' },
   { name: 'Inconsolata', family: "Inconsolata, Consolas, monospace", category: 'Monospace & Code', googleFont: 'Inconsolata' },
   { name: 'Space Mono', family: "'Space Mono', monospace", category: 'Monospace & Code', googleFont: 'Space Mono' },
   { name: 'Ubuntu Mono', family: "'Ubuntu Mono', monospace", category: 'Monospace & Code', googleFont: 'Ubuntu Mono' },
@@ -163,6 +188,8 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'PT Mono', family: "'PT Mono', monospace", category: 'Monospace & Code', googleFont: 'PT Mono' },
   { name: 'Cousine', family: "Cousine, 'Courier New', monospace", category: 'Monospace & Code', googleFont: 'Cousine' },
   { name: 'Liberation Mono', family: "'Liberation Mono', monospace", category: 'Monospace & Code' },
+  { name: 'Anonymous Pro', family: "'Anonymous Pro', monospace", category: 'Monospace & Code', googleFont: 'Anonymous Pro' },
+  { name: 'Overpass Mono', family: "'Overpass Mono', monospace", category: 'Monospace & Code', googleFont: 'Overpass Mono' },
 
   // ==========================================================================
   // 5. SCRIPT, HANDWRITING, SIGNATURE & DISPLAY
@@ -182,6 +209,9 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'Allura', family: "Allura, cursive", category: 'Script & Display', googleFont: 'Allura' },
   { name: 'Kaushan Script', family: "'Kaushan Script', cursive", category: 'Script & Display', googleFont: 'Kaushan Script' },
   { name: 'Yellowtail', family: "Yellowtail, cursive", category: 'Script & Display', googleFont: 'Yellowtail' },
+  { name: 'Marck Script', family: "'Marck Script', cursive", category: 'Script & Display', googleFont: 'Marck Script' },
+  { name: 'Parisienne', family: "Parisienne, cursive", category: 'Script & Display', googleFont: 'Parisienne' },
+  { name: 'Cookie', family: "Cookie, cursive", category: 'Script & Display', googleFont: 'Cookie' },
   { name: 'Lucida Handwriting', family: "'Lucida Handwriting', cursive", category: 'Script & Display' },
   { name: 'Lucida Calligraphy', family: "'Lucida Calligraphy', cursive", category: 'Script & Display' },
   { name: 'Monotype Corsiva', family: "'Monotype Corsiva', cursive", category: 'Script & Display' },
@@ -196,69 +226,152 @@ export const WORLD_FONTS_CATALOG = [
   { name: 'Papyrus', family: "Papyrus, fantasy", category: 'Script & Display' },
 
   // ==========================================================================
-  // 6. WORLD & MULTI-LINGUAL SCRIPTS (Global Language Coverage)
+  // 6. DEVANAGARI & INDIC (Hindi, Sanskrit, Marathi, Bengali, Tamil, Telugu, etc.)
   // ==========================================================================
-  { name: 'Noto Sans', family: "'Noto Sans', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans' },
-  { name: 'Noto Serif', family: "'Noto Serif', serif", category: 'World & Multi-Lingual', googleFont: 'Noto Serif' },
-  { name: 'Noto Sans Devanagari', family: "'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', 'Aparajita', 'Noto Sans', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Devanagari' },
-  { name: 'Noto Serif Devanagari', family: "'Noto Serif Devanagari', 'Noto Serif', serif", category: 'World & Multi-Lingual', googleFont: 'Noto Serif Devanagari' },
-  { name: 'Mangal', family: "Mangal, 'Noto Sans Devanagari', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Nirmala UI', family: "'Nirmala UI', 'Noto Sans Devanagari', 'Noto Sans', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Aparajita', family: "Aparajita, 'Mangal', 'Noto Sans Devanagari', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Arabic', family: "'Noto Sans Arabic', 'Traditional Arabic', 'Simplified Arabic', 'Segoe UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Arabic' },
-  { name: 'Traditional Arabic', family: "'Traditional Arabic', 'Simplified Arabic', 'Noto Sans Arabic', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Simplified Arabic', family: "'Simplified Arabic', 'Traditional Arabic', 'Noto Sans Arabic', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Hebrew', family: "'Noto Sans Hebrew', 'David', 'Segoe UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Hebrew' },
-  { name: 'David', family: "David, 'Noto Sans Hebrew', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans JP', family: "'Noto Sans JP', 'Hiragino Sans', 'Meiryo', 'Yu Gothic', 'MS PGothic', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans JP' },
-  { name: 'Meiryo', family: "Meiryo, 'Yu Gothic', 'MS PGothic', 'Noto Sans JP', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Yu Gothic', family: "'Yu Gothic', Meiryo, 'Noto Sans JP', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'MS Gothic', family: "'MS Gothic', 'MS PGothic', Meiryo, monospace", category: 'World & Multi-Lingual' },
-  { name: 'MS Mincho', family: "'MS Mincho', 'MS PMincho', serif", category: 'World & Multi-Lingual' },
-  { name: 'Hiragino Sans', family: "'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans KR', family: "'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Dotum', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans KR' },
-  { name: 'Malgun Gothic', family: "'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Batang', family: "Batang, 'Noto Serif KR', serif", category: 'World & Multi-Lingual' },
-  { name: 'Dotum', family: "Dotum, 'Malgun Gothic', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Apple SD Gothic Neo', family: "'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans SC', family: "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'SimSun', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans SC' },
-  { name: 'Microsoft YaHei', family: "'Microsoft YaHei', 'PingFang SC', 'SimSun', 'Noto Sans SC', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'SimSun', family: "SimSun, 'Songti SC', serif", category: 'World & Multi-Lingual' },
-  { name: 'SimHei', family: "SimHei, 'PingFang SC', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'PingFang SC', family: "'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans TC', family: "'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', 'MingLiU', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans TC' },
-  { name: 'Microsoft JhengHei', family: "'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'MingLiU', family: "MingLiU, 'PMingLiU', serif", category: 'World & Multi-Lingual' },
-  { name: 'PingFang TC', family: "'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Bengali', family: "'Noto Sans Bengali', 'Vrinda', 'Shonar Bangla', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Bengali' },
-  { name: 'Vrinda', family: "Vrinda, 'Noto Sans Bengali', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Shonar Bangla', family: "'Shonar Bangla', 'Noto Sans Bengali', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Tamil', family: "'Noto Sans Tamil', 'Latha', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Tamil' },
-  { name: 'Latha', family: "Latha, 'Noto Sans Tamil', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Telugu', family: "'Noto Sans Telugu', 'Gautami', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Telugu' },
-  { name: 'Gautami', family: "Gautami, 'Noto Sans Telugu', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Malayalam', family: "'Noto Sans Malayalam', 'Kartika', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Malayalam' },
-  { name: 'Kartika', family: "Kartika, 'Noto Sans Malayalam', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Kannada', family: "'Noto Sans Kannada', 'Tunga', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Kannada' },
-  { name: 'Tunga', family: "Tunga, 'Noto Sans Kannada', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Gujarati', family: "'Noto Sans Gujarati', 'Shruti', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Gujarati' },
-  { name: 'Shruti', family: "Shruti, 'Noto Sans Gujarati', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Gurmukhi', family: "'Noto Sans Gurmukhi', 'Raavi', 'Nirmala UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Gurmukhi' },
-  { name: 'Raavi', family: "Raavi, 'Noto Sans Gurmukhi', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Thai', family: "'Noto Sans Thai', 'Leelawadee UI', 'Angsana New', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Thai' },
-  { name: 'Leelawadee UI', family: "'Leelawadee UI', 'Noto Sans Thai', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Angsana New', family: "'Angsana New', 'Leelawadee UI', serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Sinhala', family: "'Noto Sans Sinhala', 'Iskoola Pota', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Sinhala' },
-  { name: 'Iskoola Pota', family: "'Iskoola Pota', 'Noto Sans Sinhala', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Myanmar', family: "'Noto Sans Myanmar', 'Myanmar Text', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Myanmar' },
-  { name: 'Myanmar Text', family: "'Myanmar Text', 'Noto Sans Myanmar', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Khmer', family: "'Noto Sans Khmer', 'Khmer UI', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Khmer' },
-  { name: 'Khmer UI', family: "'Khmer UI', 'Noto Sans Khmer', sans-serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Georgian', family: "'Noto Sans Georgian', 'Sylfaen', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Georgian' },
-  { name: 'Sylfaen', family: "Sylfaen, 'Noto Sans Georgian', 'Noto Sans Armenian', serif", category: 'World & Multi-Lingual' },
-  { name: 'Noto Sans Armenian', family: "'Noto Sans Armenian', 'Sylfaen', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Armenian' },
-  { name: 'Noto Sans Ethiopic', family: "'Noto Sans Ethiopic', 'Nyala', sans-serif", category: 'World & Multi-Lingual', googleFont: 'Noto Sans Ethiopic' },
-  { name: 'Nyala', family: "Nyala, 'Noto Sans Ethiopic', sans-serif", category: 'World & Multi-Lingual' }
+  { name: 'Noto Sans Devanagari', family: "'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', 'Aparajita', 'Noto Sans', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Devanagari' },
+  { name: 'Noto Serif Devanagari', family: "'Noto Serif Devanagari', 'Noto Serif', serif", category: 'Devanagari & Indic', googleFont: 'Noto Serif Devanagari' },
+  { name: 'Mangal', family: "Mangal, 'Noto Sans Devanagari', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Nirmala UI', family: "'Nirmala UI', 'Noto Sans Devanagari', 'Noto Sans', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Aparajita', family: "Aparajita, 'Mangal', 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Utsaah', family: "Utsaah, 'Mangal', 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Mukta', family: "Mukta, 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic', googleFont: 'Mukta' },
+  { name: 'Rozha One', family: "'Rozha One', 'Noto Serif Devanagari', serif", category: 'Devanagari & Indic', googleFont: 'Rozha One' },
+  { name: 'Kalam', family: "Kalam, cursive, 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic', googleFont: 'Kalam' },
+  { name: 'Hind', family: "Hind, 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic', googleFont: 'Hind' },
+  { name: 'Rajdhani', family: "Rajdhani, 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic', googleFont: 'Rajdhani' },
+  { name: 'Gotu', family: "Gotu, 'Noto Sans Devanagari', sans-serif", category: 'Devanagari & Indic', googleFont: 'Gotu' },
+  { name: 'Yatra One', family: "'Yatra One', 'Noto Sans Devanagari', cursive", category: 'Devanagari & Indic', googleFont: 'Yatra One' },
+  { name: 'Tiro Devanagari Hindi', family: "'Tiro Devanagari Hindi', 'Noto Serif Devanagari', serif", category: 'Devanagari & Indic', googleFont: 'Tiro Devanagari Hindi' },
+  { name: 'Shobhika', family: "Shobhika, 'Noto Serif Devanagari', serif", category: 'Devanagari & Indic', googleFont: 'Shobhika' },
+  { name: 'Sahitya', family: "Sahitya, 'Noto Serif Devanagari', serif", category: 'Devanagari & Indic', googleFont: 'Sahitya' },
+  { name: 'Amita', family: "Amita, 'Noto Sans Devanagari', cursive", category: 'Devanagari & Indic', googleFont: 'Amita' },
+  { name: 'Eczar', family: "Eczar, 'Noto Serif Devanagari', serif", category: 'Devanagari & Indic', googleFont: 'Eczar' },
+  { name: 'Karma', family: "Karma, 'Noto Serif Devanagari', serif", category: 'Devanagari & Indic', googleFont: 'Karma' },
+  { name: 'Modak', family: "Modak, 'Noto Sans Devanagari', cursive", category: 'Devanagari & Indic', googleFont: 'Modak' },
+  { name: 'Noto Sans Bengali', family: "'Noto Sans Bengali', 'Vrinda', 'Shonar Bangla', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Bengali' },
+  { name: 'Hind Siliguri', family: "'Hind Siliguri', 'Noto Sans Bengali', sans-serif", category: 'Devanagari & Indic', googleFont: 'Hind Siliguri' },
+  { name: 'Tiro Bangla', family: "'Tiro Bangla', 'Noto Serif Bengali', serif", category: 'Devanagari & Indic', googleFont: 'Tiro Bangla' },
+  { name: 'Vrinda', family: "Vrinda, 'Noto Sans Bengali', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Shonar Bangla', family: "'Shonar Bangla', 'Noto Sans Bengali', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Noto Sans Tamil', family: "'Noto Sans Tamil', 'Latha', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Tamil' },
+  { name: 'Mukta Malar', family: "'Mukta Malar', 'Noto Sans Tamil', sans-serif", category: 'Devanagari & Indic', googleFont: 'Mukta Malar' },
+  { name: 'Tiro Tamil', family: "'Tiro Tamil', 'Noto Serif Tamil', serif", category: 'Devanagari & Indic', googleFont: 'Tiro Tamil' },
+  { name: 'Latha', family: "Latha, 'Noto Sans Tamil', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Noto Sans Telugu', family: "'Noto Sans Telugu', 'Gautami', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Telugu' },
+  { name: 'Mandali', family: "Mandali, 'Noto Sans Telugu', sans-serif", category: 'Devanagari & Indic', googleFont: 'Mandali' },
+  { name: 'Ramabhadra', family: "Ramabhadra, 'Noto Sans Telugu', sans-serif", category: 'Devanagari & Indic', googleFont: 'Ramabhadra' },
+  { name: 'Gautami', family: "Gautami, 'Noto Sans Telugu', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Noto Sans Kannada', family: "'Noto Sans Kannada', 'Tunga', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Kannada' },
+  { name: 'Baloo Tamma 2', family: "'Baloo Tamma 2', 'Noto Sans Kannada', sans-serif", category: 'Devanagari & Indic', googleFont: 'Baloo Tamma 2' },
+  { name: 'Tunga', family: "Tunga, 'Noto Sans Kannada', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Noto Sans Malayalam', family: "'Noto Sans Malayalam', 'Kartika', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Malayalam' },
+  { name: 'Gayathri', family: "Gayathri, 'Noto Sans Malayalam', sans-serif", category: 'Devanagari & Indic', googleFont: 'Gayathri' },
+  { name: 'Manjari', family: "Manjari, 'Noto Sans Malayalam', sans-serif", category: 'Devanagari & Indic', googleFont: 'Manjari' },
+  { name: 'Kartika', family: "Kartika, 'Noto Sans Malayalam', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Noto Sans Gujarati', family: "'Noto Sans Gujarati', 'Shruti', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Gujarati' },
+  { name: 'Rasa', family: "Rasa, 'Noto Serif Gujarati', serif", category: 'Devanagari & Indic', googleFont: 'Rasa' },
+  { name: 'Mogra', family: "Mogra, cursive, 'Noto Sans Gujarati', sans-serif", category: 'Devanagari & Indic', googleFont: 'Mogra' },
+  { name: 'Shruti', family: "Shruti, 'Noto Sans Gujarati', sans-serif", category: 'Devanagari & Indic' },
+  { name: 'Noto Sans Gurmukhi', family: "'Noto Sans Gurmukhi', 'Raavi', 'Nirmala UI', sans-serif", category: 'Devanagari & Indic', googleFont: 'Noto Sans Gurmukhi' },
+  { name: 'Mukta Mahee', family: "'Mukta Mahee', 'Noto Sans Gurmukhi', sans-serif", category: 'Devanagari & Indic', googleFont: 'Mukta Mahee' },
+  { name: 'Raavi', family: "Raavi, 'Noto Sans Gurmukhi', sans-serif", category: 'Devanagari & Indic' },
+
+  // ==========================================================================
+  // 7. ARABIC, URDU & PERSIAN
+  // ==========================================================================
+  { name: 'Amiri', family: "Amiri, 'Traditional Arabic', serif", category: 'Arabic & Middle Eastern', googleFont: 'Amiri' },
+  { name: 'Cairo', family: "Cairo, 'Segoe UI', sans-serif", category: 'Arabic & Middle Eastern', googleFont: 'Cairo' },
+  { name: 'Scheherazade New', family: "'Scheherazade New', 'Traditional Arabic', serif", category: 'Arabic & Middle Eastern', googleFont: 'Scheherazade New' },
+  { name: 'Almarai', family: "Almarai, 'Segoe UI', sans-serif", category: 'Arabic & Middle Eastern', googleFont: 'Almarai' },
+  { name: 'Tajawal', family: "Tajawal, 'Segoe UI', sans-serif", category: 'Arabic & Middle Eastern', googleFont: 'Tajawal' },
+  { name: 'Lateef', family: "Lateef, 'Traditional Arabic', cursive", category: 'Arabic & Middle Eastern', googleFont: 'Lateef' },
+  { name: 'El Messiri', family: "'El Messiri', 'Segoe UI', sans-serif", category: 'Arabic & Middle Eastern', googleFont: 'El Messiri' },
+  { name: 'Noto Naskh Arabic', family: "'Noto Naskh Arabic', 'Traditional Arabic', serif", category: 'Arabic & Middle Eastern', googleFont: 'Noto Naskh Arabic' },
+  { name: 'Noto Sans Arabic', family: "'Noto Sans Arabic', 'Traditional Arabic', 'Simplified Arabic', 'Segoe UI', sans-serif", category: 'Arabic & Middle Eastern', googleFont: 'Noto Sans Arabic' },
+  { name: 'Noto Nastaliq Urdu', family: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Nafees', serif", category: 'Arabic & Middle Eastern', googleFont: 'Noto Nastaliq Urdu' },
+  { name: 'Traditional Arabic', family: "'Traditional Arabic', 'Simplified Arabic', 'Noto Sans Arabic', sans-serif", category: 'Arabic & Middle Eastern' },
+  { name: 'Simplified Arabic', family: "'Simplified Arabic', 'Traditional Arabic', 'Noto Sans Arabic', sans-serif", category: 'Arabic & Middle Eastern' },
+  { name: 'Segoe UI Arabic', family: "'Segoe UI Arabic', 'Segoe UI', sans-serif", category: 'Arabic & Middle Eastern' },
+
+  // ==========================================================================
+  // 8. EAST ASIAN (CJK: Chinese, Japanese, Korean)
+  // ==========================================================================
+  { name: 'Noto Sans SC', family: "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'SimSun', sans-serif", category: 'East Asian (CJK)', googleFont: 'Noto Sans SC' },
+  { name: 'Noto Serif SC', family: "'Noto Serif SC', 'Songti SC', 'SimSun', serif", category: 'East Asian (CJK)', googleFont: 'Noto Serif SC' },
+  { name: 'ZCOOL XiaoWei', family: "'ZCOOL XiaoWei', 'Noto Serif SC', serif", category: 'East Asian (CJK)', googleFont: 'ZCOOL XiaoWei' },
+  { name: 'Ma Shan Zheng', family: "'Ma Shan Zheng', cursive, 'Noto Sans SC', sans-serif", category: 'East Asian (CJK)', googleFont: 'Ma Shan Zheng' },
+  { name: 'Microsoft YaHei', family: "'Microsoft YaHei', 'PingFang SC', 'SimSun', 'Noto Sans SC', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'SimSun', family: "SimSun, 'Songti SC', serif", category: 'East Asian (CJK)' },
+  { name: 'SimHei', family: "SimHei, 'PingFang SC', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'PingFang SC', family: "'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'Noto Sans TC', family: "'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', 'MingLiU', sans-serif", category: 'East Asian (CJK)', googleFont: 'Noto Sans TC' },
+  { name: 'Noto Serif TC', family: "'Noto Serif TC', 'MingLiU', serif", category: 'East Asian (CJK)', googleFont: 'Noto Serif TC' },
+  { name: 'Microsoft JhengHei', family: "'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'MingLiU', family: "MingLiU, 'PMingLiU', serif", category: 'East Asian (CJK)' },
+  { name: 'PingFang TC', family: "'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'Noto Sans JP', family: "'Noto Sans JP', 'Hiragino Sans', 'Meiryo', 'Yu Gothic', 'MS PGothic', sans-serif", category: 'East Asian (CJK)', googleFont: 'Noto Sans JP' },
+  { name: 'Noto Serif JP', family: "'Noto Serif JP', 'Hiragino Mincho ProN', 'MS Mincho', serif", category: 'East Asian (CJK)', googleFont: 'Noto Serif JP' },
+  { name: 'Shippori Mincho', family: "'Shippori Mincho', 'Noto Serif JP', serif", category: 'East Asian (CJK)', googleFont: 'Shippori Mincho' },
+  { name: 'Zen Kaku Gothic New', family: "'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif", category: 'East Asian (CJK)', googleFont: 'Zen Kaku Gothic New' },
+  { name: 'Dela Gothic One', family: "'Dela Gothic One', 'Noto Sans JP', sans-serif", category: 'East Asian (CJK)', googleFont: 'Dela Gothic One' },
+  { name: 'M PLUS 1p', family: "'M PLUS 1p', 'Noto Sans JP', sans-serif", category: 'East Asian (CJK)', googleFont: 'M PLUS 1p' },
+  { name: 'Sawarabi Mincho', family: "'Sawarabi Mincho', 'Noto Serif JP', serif", category: 'East Asian (CJK)', googleFont: 'Sawarabi Mincho' },
+  { name: 'Meiryo', family: "Meiryo, 'Yu Gothic', 'MS PGothic', 'Noto Sans JP', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'Yu Gothic', family: "'Yu Gothic', Meiryo, 'Noto Sans JP', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'MS Gothic', family: "'MS Gothic', 'MS PGothic', Meiryo, monospace", category: 'East Asian (CJK)' },
+  { name: 'MS Mincho', family: "'MS Mincho', 'MS PMincho', serif", category: 'East Asian (CJK)' },
+  { name: 'Hiragino Sans', family: "'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif", category: 'East Asian (CJK)' },
+  { name: 'Noto Sans KR', family: "'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Dotum', sans-serif", category: 'East Asian (CJK)', googleFont: 'Noto Sans KR' },
+  { name: 'Noto Serif KR', family: "'Noto Serif KR', 'Batang', serif", category: 'East Asian (CJK)', googleFont: 'Noto Serif KR' },
+  { name: 'Gowun Batang', family: "'Gowun Batang', 'Noto Serif KR', serif", category: 'East Asian (CJK)', googleFont: 'Gowun Batang' },
+  { name: 'Gowun Dodum', family: "'Gowun Dodum', 'Noto Sans KR', sans-serif", category: 'East Asian (CJK)', googleFont: 'Gowun Dodum' },
+  { name: 'Nanum Gothic', family: "'Nanum Gothic', 'Noto Sans KR', sans-serif", category: 'East Asian (CJK)', googleFont: 'Nanum Gothic' },
+  { name: 'Nanum Myeongjo', family: "'Nanum Myeongjo', 'Noto Serif KR', serif", category: 'East Asian (CJK)', googleFont: 'Nanum Myeongjo' },
+  { name: 'Black Han Sans', family: "'Black Han Sans', 'Noto Sans KR', sans-serif", category: 'East Asian (CJK)', googleFont: 'Black Han Sans' },
+  { name: 'Malgun Gothic', family: "'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'Batang', family: "Batang, 'Noto Serif KR', serif", category: 'East Asian (CJK)' },
+  { name: 'Dotum', family: "Dotum, 'Malgun Gothic', sans-serif", category: 'East Asian (CJK)' },
+  { name: 'Apple SD Gothic Neo', family: "'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif", category: 'East Asian (CJK)' },
+
+  // ==========================================================================
+  // 9. CYRILLIC & GREEK
+  // ==========================================================================
+  { name: 'PT Root UI', family: "'PT Root UI', 'PT Sans', 'Segoe UI', sans-serif", category: 'Cyrillic & Greek' },
+  { name: 'PT Sans', family: "'PT Sans', Arial, sans-serif", category: 'Cyrillic & Greek', googleFont: 'PT Sans' },
+  { name: 'Didact Gothic', family: "'Didact Gothic', 'Segoe UI', sans-serif", category: 'Cyrillic & Greek', googleFont: 'Didact Gothic' },
+  { name: 'Jura', family: "Jura, sans-serif", category: 'Cyrillic & Greek', googleFont: 'Jura' },
+  { name: 'GFS Didot', family: "'GFS Didot', serif", category: 'Cyrillic & Greek', googleFont: 'GFS Didot' },
+
+  // ==========================================================================
+  // 10. GLOBAL & REGIONAL (Hebrew, Thai, Khmer, Burmese, Georgian, etc.)
+  // ==========================================================================
+  { name: 'Assistant', family: "Assistant, 'Noto Sans Hebrew', 'Segoe UI', sans-serif", category: 'Global & Regional', googleFont: 'Assistant' },
+  { name: 'Heebo', family: "Heebo, 'Noto Sans Hebrew', sans-serif", category: 'Global & Regional', googleFont: 'Heebo' },
+  { name: 'Frank Ruhl Libre', family: "'Frank Ruhl Libre', 'David', serif", category: 'Global & Regional', googleFont: 'Frank Ruhl Libre' },
+  { name: 'Varela Round', family: "'Varela Round', sans-serif", category: 'Global & Regional', googleFont: 'Varela Round' },
+  { name: 'Secular One', family: "'Secular One', sans-serif", category: 'Global & Regional', googleFont: 'Secular One' },
+  { name: 'David', family: "David, 'Noto Sans Hebrew', sans-serif", category: 'Global & Regional' },
+  { name: 'Noto Sans Hebrew', family: "'Noto Sans Hebrew', 'David', 'Segoe UI', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Hebrew' },
+  { name: 'Sarabun', family: "Sarabun, 'Leelawadee UI', sans-serif", category: 'Global & Regional', googleFont: 'Sarabun' },
+  { name: 'Prompt', family: "Prompt, 'Leelawadee UI', sans-serif", category: 'Global & Regional', googleFont: 'Prompt' },
+  { name: 'Kanit', family: "Kanit, 'Leelawadee UI', sans-serif", category: 'Global & Regional', googleFont: 'Kanit' },
+  { name: 'Mitr', family: "Mitr, 'Leelawadee UI', sans-serif", category: 'Global & Regional', googleFont: 'Mitr' },
+  { name: 'Chakra Petch', family: "'Chakra Petch', sans-serif", category: 'Global & Regional', googleFont: 'Chakra Petch' },
+  { name: 'Noto Sans Thai', family: "'Noto Sans Thai', 'Leelawadee UI', 'Angsana New', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Thai' },
+  { name: 'Leelawadee UI', family: "'Leelawadee UI', 'Noto Sans Thai', sans-serif", category: 'Global & Regional' },
+  { name: 'Angsana New', family: "'Angsana New', 'Leelawadee UI', serif", category: 'Global & Regional' },
+  { name: 'Noto Sans Sinhala', family: "'Noto Sans Sinhala', 'Iskoola Pota', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Sinhala' },
+  { name: 'Iskoola Pota', family: "'Iskoola Pota', 'Noto Sans Sinhala', sans-serif", category: 'Global & Regional' },
+  { name: 'Noto Sans Myanmar', family: "'Noto Sans Myanmar', 'Myanmar Text', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Myanmar' },
+  { name: 'Padauk', family: "Padauk, 'Myanmar Text', sans-serif", category: 'Global & Regional', googleFont: 'Padauk' },
+  { name: 'Myanmar Text', family: "'Myanmar Text', 'Noto Sans Myanmar', sans-serif", category: 'Global & Regional' },
+  { name: 'Noto Sans Khmer', family: "'Noto Sans Khmer', 'Khmer UI', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Khmer' },
+  { name: 'Khmer UI', family: "'Khmer UI', 'Noto Sans Khmer', sans-serif", category: 'Global & Regional' },
+  { name: 'Noto Sans Georgian', family: "'Noto Sans Georgian', 'Sylfaen', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Georgian' },
+  { name: 'Sylfaen', family: "Sylfaen, 'Noto Sans Georgian', 'Noto Sans Armenian', serif", category: 'Global & Regional' },
+  { name: 'Noto Sans Armenian', family: "'Noto Sans Armenian', 'Sylfaen', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Armenian' },
+  { name: 'Noto Sans Ethiopic', family: "'Noto Sans Ethiopic', 'Nyala', sans-serif", category: 'Global & Regional', googleFont: 'Noto Sans Ethiopic' },
+  { name: 'Nyala', family: "Nyala, 'Noto Sans Ethiopic', sans-serif", category: 'Global & Regional' }
 ];
 
 // In-memory cache of dynamically loaded Google Fonts

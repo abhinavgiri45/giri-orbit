@@ -168,7 +168,7 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
                 <span class="follow-journey-label">OFFICIAL PORTAL</span>
                 <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
                   <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                    <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
+                    <img src="assets/orbit-master-512.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
                   </div>
                   <div class="instagram-card-text">
                     <strong class="instagram-handle" style="color:#ffffff;">Abhinav Giri</strong>

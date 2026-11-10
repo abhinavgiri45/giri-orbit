@@ -7,7 +7,7 @@
  * Implements Network-First for code/documents with instant Stale-While-Revalidate fallback.
  */
 
-const CACHE_NAME = 'giri-orbit-sovereign-v14.5';
+const CACHE_NAME = 'giri-orbit-sovereign-v14.6';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -49,9 +49,10 @@ const STATIC_ASSETS = [
   './js/data/fonts.js',
   './js/data/templates.js',
   './js/data/presentationGoCatalog.js',
-  './assets/giri-corp-logo-transparent.png',
-  './assets/giri-corp-logo.png',
-  './assets/giri-group-symbol-dark.png',
+  './js/modules/storageOptimizer.js',
+  './assets/orbit-master-512.png',
+  './assets/orbit.ico',
+  './assets/orbit-app-icon.png',
   './assets/girionix-logo.png',
   './assets/forms-logo.png',
   './assets/quiz-logo.png',

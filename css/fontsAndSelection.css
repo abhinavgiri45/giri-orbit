@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT — SEARCHABLE FONT PICKER & ADVANCED SELECTION STYLES (fontsAndSelection.css)
- * By GIRI Corporation (A Subsidiary of Giri Group)
+ * Made by Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  */
 
@@ -99,6 +99,44 @@
   gap: 8px;
   position: relative;
   flex-shrink: 0;
+}
+
+.font-picker-category-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px;
+  overflow-x: auto;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.font-picker-category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.font-cat-tab {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: #e2e8f0;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.font-cat-tab:hover {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+
+.font-cat-tab.active {
+  background: #2563eb;
+  color: #ffffff;
 }
 
 .font-search-icon {

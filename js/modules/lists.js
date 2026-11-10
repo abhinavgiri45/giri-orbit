@@ -137,7 +137,7 @@ export function renderListsApp(container, onUpdate = null, startInEditor = false
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label" style="font-size:10px; font-weight:700; color:#64748b; letter-spacing:0.06em;">OFFICIAL PORTAL</span>
                 <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" style="display:flex; align-items:center; gap:10px; background:#1e293b; border:1px solid #334155; padding:6px 14px; border-radius:10px; text-decoration:none;">
-                  <img src="assets/giri-logo-symbol.png" alt="Abhinav Giri" style="width:26px; height:26px; border-radius:50%;">
+                  <img src="assets/orbit-master-512.png" alt="Abhinav Giri" style="width:26px; height:26px; border-radius:50%;">
                   <div>
                     <strong style="font-size:12px; color:#ffffff; display:block;">Abhinav Giri</strong>
                     <span style="font-size:10.5px; color:#38bdf8;">github.com/abhinavgiri45/giri-orbit →</span>

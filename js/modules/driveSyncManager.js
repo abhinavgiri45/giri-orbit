@@ -1432,7 +1432,7 @@ export class GiriDriveSyncManager {
           <!-- App Logo Badge at Top Center -->
           <div style="display:flex; justify-content:center; margin-bottom:18px;">
             <div style="width:48px; height:48px; border-radius:50%; background:#2563eb; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(37,99,235,0.3); overflow:hidden;">
-              <img src="assets/giri-logo-symbol.png" alt="Giri Orbit" style="width:34px; height:34px; object-fit:contain;">
+              <img src="assets/orbit-master-512.png" alt="Giri Orbit" style="width:34px; height:34px; object-fit:contain;">
             </div>
           </div>
 

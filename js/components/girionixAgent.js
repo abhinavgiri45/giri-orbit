@@ -353,7 +353,7 @@ export class GirionixAgentManager {
         <div class="girionix-agent-modal" style="max-width:540px;">
           <div class="girionix-agent-header">
             <div style="display:flex; align-items:center; gap:10px;">
-              <img src="assets/giri-logo-symbol.png" style="width:24px; height:24px; border-radius:50%; object-fit:cover;" alt="Giri Orbit">
+              <img src="assets/orbit-master-512.png" style="width:24px; height:24px; border-radius:50%; object-fit:cover;" alt="Giri Orbit">
               <span style="color:#64748b; font-weight:700;">×</span>
               <img src="assets/girionix-logo.png" style="width:24px; height:24px; border-radius:4px; object-fit:contain;" alt="Girionix AI">
               <h2 style="margin:0; font-size:15px; font-weight:800; color:#f8fafc;">Official Strategic AI Alliance</h2>

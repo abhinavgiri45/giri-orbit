@@ -28,6 +28,7 @@ import { driveSyncManager } from './modules/driveSyncManager.js?v=11.6';
 import { GirionixAgentManager } from './components/girionixAgent.js?v=11.6';
 import girionixEngine from './modules/girionixEngine.js?v=11.6';
 import { GiriOfficeFormats } from './components/giriOfficeFormats.js?v=12.2';
+import { storageOptimizer } from './modules/storageOptimizer.js?v=14.6';
 
 class GiriOrbitPlatform {
   constructor() {
@@ -40,6 +41,8 @@ class GiriOrbitPlatform {
     this.currentView = null; // null so startup routing always cleanly mounts view
     window.orbitPlatform = this;
     window.orbitDriveSync = driveSyncManager;
+    this.storageOptimizer = storageOptimizer;
+    window.storageOptimizer = storageOptimizer;
     this.printManager = new PrintStudioManager(this);
     this.agent = new GirionixAgentManager(this);
     window.orbitAgent = this.agent;
@@ -202,6 +205,7 @@ class GiriOrbitPlatform {
     if (['quiz', 'quizs', 'quizzes', 'exam', 'test', 'assessment'].includes(target)) return 'quiz';
     if (['lists', 'list', 'tasks', 'tracker', 'kanban', 'board'].includes(target)) return 'lists';
     if (['designer', 'design', 'canva', 'graphics', 'banner'].includes(target)) return 'designer';
+    if (['storage', 'optimizer', 'spacesaver'].includes(target)) return 'storage';
     if (['girionix', 'ai', 'copilot', 'assistant', 'chat', 'polymath'].includes(target)) return 'girionix';
     return 'launcher';
   }
@@ -548,6 +552,10 @@ class GiriOrbitPlatform {
    * Main View Routing & State Transitions with URL Synchronization
    */
   navigateTo(view, docTitle = null, updateHistory = true, forceEditor = false) {
+    if (view === 'storage') {
+      this.storageOptimizer?.openModal();
+      return;
+    }
     if (view === 'hub' || view === 'home') view = 'launcher';
     if (this.currentView === view && this.workspace.children.length > 0 && !docTitle && !forceEditor) {
       return;
@@ -810,11 +818,28 @@ class GiriOrbitPlatform {
             <span class="m365-rail-label">Designer</span>
           </button>
 
-          <!-- 9. More Tools (...) -->
-          <button class="m365-rail-btn" id="rail-btn-more" title="File Converter & More Tools">
+          <!-- 9. Universal File Converter -->
+          <button class="m365-rail-btn" id="rail-btn-converter" title="Universal File Converter (Word, Excel, PDF, CSV, JSON)">
+            <div class="m365-rail-icon-wrap" style="background:#f3e8ff;">
+              <span style="font-size:14px; line-height:1;">🔄</span>
+            </div>
+            <span class="m365-rail-label">Converter</span>
+          </button>
+
+          <!-- 10. Storage Optimizer -->
+          <button class="m365-rail-btn" id="rail-btn-storage" title="Storage Optimizer & Space Saver">
+            <div class="m365-rail-icon-wrap" style="background:#ecfdf5; color:#059669;">
+              <span style="font-size:14px; line-height:1;">⚡</span>
+            </div>
+            <span class="m365-rail-label">Storage</span>
+          </button>
+
+          <!-- 11. More Tools (...) -->
+          <button class="m365-rail-btn" id="rail-btn-more" title="All Applications & Suite Tools">
             <div class="m365-rail-icon-wrap">
               <span style="font-weight:900; font-size:16px; color:#94a3b8; line-height:1;">&bull;&bull;&bull;</span>
             </div>
+            <span class="m365-rail-label">More</span>
           </button>
 
           <div class="m365-rail-divider"></div>
@@ -1207,7 +1232,15 @@ class GiriOrbitPlatform {
     });
 
     container.querySelector('#rail-btn-more')?.addEventListener('click', () => {
+      this.openAllAppsModal();
+    });
+
+    container.querySelector('#rail-btn-converter')?.addEventListener('click', () => {
       this.openFileConverterTool();
+    });
+
+    container.querySelector('#rail-btn-storage')?.addEventListener('click', () => {
+      this.storageOptimizer?.openModal();
     });
 
     // 2. Create New Cards
@@ -1713,6 +1746,7 @@ class GiriOrbitPlatform {
           <div class="giri-settings-tabs">
             <button class="giri-settings-tab-btn active" data-tab="general">General</button>
             <button class="giri-settings-tab-btn" data-tab="gdrive">Google Drive</button>
+            <button class="giri-settings-tab-btn" data-tab="storage">Storage Optimizer</button>
             <button class="giri-settings-tab-btn" data-tab="download">Download Suite</button>
             <button class="giri-settings-tab-btn" data-tab="indic">Indic & Hindi</button>
             <button class="giri-settings-tab-btn" data-tab="privacy">Zero Telemetry</button>
@@ -1808,6 +1842,32 @@ class GiriOrbitPlatform {
               <div class="giri-setting-desc">Clear local temporary in-memory cached files without touching saved documents.</div>
               <button class="giri-dl-btn secondary" id="btn-settings-clear-cache" style="margin-top:0;">
                 Purge Temporary Local Cache
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab: Storage Optimizer -->
+          <div class="giri-settings-content" id="tab-pane-storage" style="display:none;">
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:14px; margin-bottom:16px;">
+              <div style="font-size:13px; font-weight:700; color:#166534; margin-bottom:4px;">⚡ Active Storage Footprint Optimization</div>
+              <p style="font-size:12px; color:#15803d; margin:0; line-height:1.5;">
+                Giri Orbit uses hybrid web asset streaming and a shared DataVault profile. Large font libraries (~250+ typefaces) and slide templates stream on demand from the web CDN, keeping your disk usage minimal (~20 MB instead of 4 GB).
+              </p>
+            </div>
+
+            <div class="giri-setting-group">
+              <label class="giri-setting-label">Storage Dashboard & Live Bridge</label>
+              <div class="giri-setting-desc">Inspect exact storage usage, toggle web streaming, or synchronize state between desktop and browser tabs.</div>
+              <button class="giri-dl-btn primary" id="btn-settings-open-storage-modal" style="margin-top:8px;">
+                ⚡ Open Storage Optimizer
+              </button>
+            </div>
+
+            <div class="giri-setting-group" style="margin-top:16px;">
+              <label class="giri-setting-label">Compact &amp; Deduplicate Storage</label>
+              <div class="giri-setting-desc">Prunes obsolete undo snapshots, cleans base64 thumbnail bloat, and removes orphaned drafts.</div>
+              <button class="giri-dl-btn secondary" id="btn-settings-compact-now" style="margin-top:8px;">
+                🧹 Compact Local Storage Now
               </button>
             </div>
           </div>
@@ -1980,6 +2040,20 @@ class GiriOrbitPlatform {
     overlay.querySelector('#btn-settings-clear-cache')?.addEventListener('click', () => {
       localStorage.removeItem('giri_orbit_cache');
       this.showToast('Local temporary in-memory cache purged successfully!', 'green');
+    });
+
+    overlay.querySelector('#btn-settings-open-storage-modal')?.addEventListener('click', () => {
+      overlay.remove();
+      this.storageOptimizer?.openModal();
+    });
+
+    overlay.querySelector('#btn-settings-compact-now')?.addEventListener('click', async () => {
+      if (this.storageOptimizer) {
+        const res = await this.storageOptimizer.compactStorage();
+        if (res.success) {
+          this.showToast(`✓ Local Storage Compacted! Reclaimed ${this.storageOptimizer.formatBytes(res.reclaimedBytes)}`, 'green');
+        }
+      }
     });
 
     // Theme selector
@@ -2451,6 +2525,7 @@ class GiriOrbitPlatform {
       { id: 'designer', name: 'Giri Designer', type: 'Graphics & Vector Studio', desc: 'Design graphics, promotional banners, vector illustrations, and visual social media assets.', icon: 'D', iconBg: '#db2777' },
       { id: 'pdf', name: 'Giri Aegis PDF Studio', type: 'PDF Reader & Signer', desc: 'Read, annotate, highlight, and cryptographically sign PDF documents with zero external dependencies.', icon: 'PDF', iconBg: '#dc2626' },
       { id: 'converter', name: 'Giri File Converter', type: 'Universal Converter', desc: 'Offline conversion between DOCX, XLSX, PPTX, PDF, CSV, JSON, and plain text formats.', icon: '⇄', iconBg: '#475569' },
+      { id: 'storage', name: 'Storage Optimizer & Bridge', type: 'Storage Minimizer', desc: 'Hybrid web asset streaming, shared DataVault, and 1-click compaction to keep storage minimal.', icon: '⚡', iconBg: '#10b981' },
       { id: 'girionix', name: 'Girionix AI', type: 'Sovereign AI Assistant', desc: 'Private document analysis, intelligent drafting, translation, and summarization assistant.', icon: 'AI', iconBg: '#7c3aed' }
     ];
 
@@ -2524,6 +2599,8 @@ class GiriOrbitPlatform {
         overlay.remove();
         if (appId === 'converter') {
           this.openFileConverterTool();
+        } else if (appId === 'storage') {
+          this.storageOptimizer?.openModal();
         } else {
           this.navigateTo(appId);
         }
@@ -4172,7 +4249,7 @@ class GiriOrbitPlatform {
         <div class="girionix-msg-ai" data-msg-idx="${idx}">
           <div class="girionix-ai-header">
             <div class="girionix-ai-author" style="display:flex; align-items:center; gap:6px;">
-              <img src="assets/giri-logo-symbol.png" alt="Logo" style="width:16px; height:16px; object-fit:contain;">
+              <img src="assets/girionix-logo.png" alt="Logo" style="width:16px; height:16px; object-fit:contain; border-radius:3px;">
               <span>Girionix Pro • ${meta.name}</span>
               ${badgeHtml}
             </div>

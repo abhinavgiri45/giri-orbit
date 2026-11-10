@@ -1,13 +1,14 @@
 /**
  * ============================================================================
  * GIRI ORBIT — SEARCHABLE FLUENT FONT PICKER (fontPicker.js)
- * By Abhinav Giri (@abhinavgiri45)
+ * Made by Abhinav Giri (@abhinavgiri45)
  * ============================================================================
  * Provides an authentic Fluent Office style Font Family Picker:
  * - Trigger button displaying active font name in its own typeface (defaulting to Calibri)
  * - Fixed position portal dropdown that NEVER clips on ribbon boundaries
  * - Search bar with instant real-time live filtering and clear button
- * - 175+ world fonts organized into categorized groups
+ * - World Script & Category tabs (All, Office, Sans, Serif, Code, Script, Devanagari/Indic, Arabic, CJK, etc.)
+ * - 250+ world fonts with instant cross-platform fallback stack
  * - Real typeface preview for each row with checkmark indicator and web font loader
  * - Full keyboard navigation (Up, Down, Enter, Escape)
  */
@@ -28,7 +29,8 @@ export class FluentFontPicker {
     this.currentFontFamily = this.getFamilyByName(this.currentFontName);
     this.onSelect = options.onSelect || (() => {});
     this.isOpen = false;
-    this.recentFonts = ['Calibri', 'Aptos', 'Times New Roman', 'Arial', 'Segoe UI', 'Inter'];
+    this.activeCategory = 'All';
+    this.recentFonts = ['Calibri', 'Aptos', 'Times New Roman', 'Arial', 'Segoe UI', 'Inter', 'Noto Sans Devanagari'];
 
     this.render();
     this.bindEvents();
@@ -70,8 +72,23 @@ export class FluentFontPicker {
         <svg class="font-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" class="font-picker-search-input" id="font-picker-search-input" placeholder="Search fonts (e.g. Calibri, Aptos, Poppins)..." spellcheck="false" autocomplete="off">
+        <input type="text" class="font-picker-search-input" id="font-picker-search-input" placeholder="Search world fonts (e.g. Calibri, Devanagari, Cairo, Meiryo)..." spellcheck="false" autocomplete="off">
         <button type="button" class="font-picker-search-clear" id="btn-clear-font-search" style="display:none;" title="Clear">✕</button>
+      </div>
+
+      <!-- Script & Category Filter Tabs -->
+      <div class="font-picker-category-tabs" id="font-picker-category-tabs">
+        <button type="button" class="font-cat-tab active" data-cat="All">All</button>
+        <button type="button" class="font-cat-tab" data-cat="Standard Office Classics">Office</button>
+        <button type="button" class="font-cat-tab" data-cat="Modern Sans-Serif">Sans</button>
+        <button type="button" class="font-cat-tab" data-cat="Editorial & Classic Serif">Serif</button>
+        <button type="button" class="font-cat-tab" data-cat="Monospace & Code">Code</button>
+        <button type="button" class="font-cat-tab" data-cat="Script & Display">Script</button>
+        <button type="button" class="font-cat-tab" data-cat="Devanagari & Indic">हिन्दी / Indic</button>
+        <button type="button" class="font-cat-tab" data-cat="Arabic & Middle Eastern">عربي / Arabic</button>
+        <button type="button" class="font-cat-tab" data-cat="East Asian (CJK)">CJK / 日本語</button>
+        <button type="button" class="font-cat-tab" data-cat="Cyrillic & Greek">Cyrillic</button>
+        <button type="button" class="font-cat-tab" data-cat="Global & Regional">World</button>
       </div>
 
       <!-- Font List Items Container -->
@@ -86,6 +103,7 @@ export class FluentFontPicker {
     this.clearBtn = this.dropdown.querySelector('.font-picker-search-clear');
     this.listContainer = this.dropdown.querySelector('.font-picker-list');
     this.activeLabel = this.mountContainer.querySelector('.font-picker-active-name');
+    this.categoryTabsContainer = this.dropdown.querySelector('#font-picker-category-tabs');
 
     this.renderFontList('');
   }
@@ -93,8 +111,8 @@ export class FluentFontPicker {
   positionDropdown() {
     if (!this.dropdown || !this.triggerBtn) return;
     const rect = this.triggerBtn.getBoundingClientRect();
-    const dropdownWidth = 320;
-    const dropdownHeight = 400;
+    const dropdownWidth = 340;
+    const dropdownHeight = 420;
 
     let left = rect.left;
     if (left + dropdownWidth > window.innerWidth - 12) {
@@ -111,7 +129,7 @@ export class FluentFontPicker {
         this.dropdown.style.maxHeight = `${availableHeight}px`;
       }
     } else {
-      this.dropdown.style.maxHeight = '400px';
+      this.dropdown.style.maxHeight = '420px';
     }
 
     this.dropdown.style.position = 'fixed';
@@ -126,16 +144,23 @@ export class FluentFontPicker {
     this.listContainer.innerHTML = '';
 
     let matchedFonts = WORLD_FONTS_CATALOG;
+
+    // Filter by active category tab if not 'All'
+    if (this.activeCategory && this.activeCategory !== 'All') {
+      matchedFonts = matchedFonts.filter(f => f.category === this.activeCategory);
+    }
+
+    // Filter by text search query
     if (q) {
-      matchedFonts = WORLD_FONTS_CATALOG.filter(f => 
+      matchedFonts = matchedFonts.filter(f => 
         f.name.toLowerCase().includes(q) || f.category.toLowerCase().includes(q)
       );
     }
 
     if (matchedFonts.length === 0) {
       this.listContainer.innerHTML = `
-        <div class="font-picker-no-results" style="padding:24px 16px; text-align:center; color:#64748b; font-size:12px;">
-          <span>No fonts matching "<strong>${query}</strong>"</span>
+        <div class="font-picker-no-results" style="padding:28px 16px; text-align:center; color:#64748b; font-size:12px;">
+          <span>No fonts found matching "<strong>${query}</strong>" in <em>${this.activeCategory}</em></span>
         </div>
       `;
       return;
@@ -150,8 +175,8 @@ export class FluentFontPicker {
       categories[font.category].push(font);
     });
 
-    // If no search query, show Recently Used at top
-    if (!q && this.recentFonts.length > 0) {
+    // If no search query and 'All' category, show Recently Used at top
+    if (!q && this.activeCategory === 'All' && this.recentFonts.length > 0) {
       const recentHeader = document.createElement('div');
       recentHeader.className = 'font-picker-group-heading';
       recentHeader.textContent = 'RECENTLY USED';
@@ -178,6 +203,19 @@ export class FluentFontPicker {
     });
   }
 
+  getSampleGlyph(font) {
+    if (font.category === 'Devanagari & Indic') return 'नमस्ते भारत';
+    if (font.category === 'Arabic & Middle Eastern') return 'مرحباً بالعالم';
+    if (font.category === 'East Asian (CJK)') return '你好 • こんにちは';
+    if (font.category === 'Cyrillic & Greek') return 'Привет • Γειά';
+    if (font.category === 'Global & Regional') {
+      if (font.name.includes('Hebrew')) return 'שלום';
+      if (font.name.includes('Thai')) return 'สวัสดี';
+      return 'Abc';
+    }
+    return 'Quick brown fox';
+  }
+
   appendFontRow(font, isRecent = false) {
     const isSelected = font.name.toLowerCase() === this.currentFontName.toLowerCase();
     const row = document.createElement('div');
@@ -186,12 +224,19 @@ export class FluentFontPicker {
     row.dataset.fontFamily = font.family;
     row.title = `${font.name} (${font.category})`;
 
+    const sample = this.getSampleGlyph(font);
+
     row.innerHTML = `
-      <div class="font-item-preview" style="font-family: ${font.family}; font-size: 13.5px;">
-        ${font.name}
+      <div style="flex:1; min-width:0;">
+        <div class="font-item-preview" style="font-family: ${font.family}; font-size: 13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+          ${font.name}
+        </div>
+        <div style="font-family: ${font.family}; font-size: 11px; color:#64748b; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+          ${sample}
+        </div>
       </div>
-      <div class="font-item-meta" style="display:flex; align-items:center; gap:6px;">
-        <span class="font-item-tag" style="font-size:9.5px; opacity:0.75;">${font.category}</span>
+      <div class="font-item-meta" style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+        <span class="font-item-tag" style="font-size:9.5px; opacity:0.75;">${font.category.split(' ')[0]}</span>
         ${isSelected ? '<span class="font-item-check" style="color:#2563eb; font-weight:bold;">✓</span>' : ''}
       </div>
     `;
@@ -272,26 +317,29 @@ export class FluentFontPicker {
   }
 
   open() {
+    if (this.isOpen) return;
     this.isOpen = true;
     this.dropdown.style.display = 'flex';
-    this.triggerBtn.classList.add('active');
-    this.searchInput.value = '';
-    this.clearBtn.style.display = 'none';
-    this.renderFontList('');
     this.positionDropdown();
-    setTimeout(() => this.searchInput.focus(), 40);
+    this.triggerBtn.classList.add('active');
 
-    // Scroll active into view
-    const activeItem = this.dropdown.querySelector('.font-picker-item.active');
-    if (activeItem) {
-      activeItem.scrollIntoView({ block: 'nearest' });
+    if (this.searchInput) {
+      this.searchInput.value = '';
+      this.clearBtn.style.display = 'none';
+      setTimeout(() => this.searchInput.focus(), 50);
     }
+
+    this.renderFontList('');
+
+    // Preload top fonts
+    ['Calibri', 'Aptos', 'Noto Sans Devanagari', 'Inter', 'Amiri', 'Cairo'].forEach(f => loadGoogleFont(f));
   }
 
   close() {
+    if (!this.isOpen) return;
     this.isOpen = false;
-    if (this.dropdown) this.dropdown.style.display = 'none';
-    if (this.triggerBtn) this.triggerBtn.classList.remove('active');
+    this.dropdown.style.display = 'none';
+    this.triggerBtn.classList.remove('active');
   }
 
   toggle() {
@@ -308,62 +356,71 @@ export class FluentFontPicker {
       this.toggle();
     });
 
-    this.searchInput.addEventListener('input', (e) => {
+    // Category Tabs click
+    this.categoryTabsContainer?.addEventListener('click', (e) => {
+      const tab = e.target.closest('.font-cat-tab');
+      if (!tab) return;
+      this.categoryTabsContainer.querySelectorAll('.font-cat-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      this.activeCategory = tab.dataset.cat || 'All';
+      this.renderFontList(this.searchInput.value);
+    });
+
+    // Search input
+    this.searchInput?.addEventListener('input', (e) => {
       const val = e.target.value;
       this.clearBtn.style.display = val ? 'block' : 'none';
       this.renderFontList(val);
     });
 
-    this.clearBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+    // Clear search button
+    this.clearBtn?.addEventListener('click', () => {
       this.searchInput.value = '';
       this.clearBtn.style.display = 'none';
       this.renderFontList('');
       this.searchInput.focus();
     });
 
-    // Keyboard navigation
-    this.dropdown.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        this.close();
-        this.triggerBtn.focus();
-      } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        const items = Array.from(this.listContainer.querySelectorAll('.font-picker-item'));
-        if (items.length === 0) return;
-        const currentIdx = items.findIndex(el => el.classList.contains('highlighted') || el.classList.contains('active'));
-        let nextIdx = 0;
-        if (e.key === 'ArrowDown') {
-          nextIdx = (currentIdx + 1) % items.length;
-        } else {
-          nextIdx = (currentIdx - 1 + items.length) % items.length;
-        }
-        items.forEach(el => el.classList.remove('highlighted'));
-        items[nextIdx].classList.add('highlighted');
-        items[nextIdx].scrollIntoView({ block: 'nearest' });
-      } else if (e.key === 'Enter') {
-        const highlighted = this.listContainer.querySelector('.font-picker-item.highlighted');
-        if (highlighted) {
-          e.preventDefault();
-          highlighted.click();
-        }
-      }
-    });
-
-    // Close on mousedown outside dropdown and trigger
-    document.addEventListener('mousedown', (e) => {
-      if (this.isOpen && !this.dropdown.contains(e.target) && !this.triggerBtn.contains(e.target)) {
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+      if (this.isOpen && !this.dropdown.contains(e.target) && !this.mountContainer.contains(e.target)) {
         this.close();
       }
     });
 
-    // Reposition on window resize or scroll
+    // Resize / scroll repositions dropdown
     window.addEventListener('resize', () => {
       if (this.isOpen) this.positionDropdown();
     });
+
     window.addEventListener('scroll', () => {
       if (this.isOpen) this.positionDropdown();
     }, true);
+
+    // Keyboard navigation
+    this.dropdown.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.close();
+        this.triggerBtn.focus();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const items = Array.from(this.dropdown.querySelectorAll('.font-picker-item'));
+        const activeIdx = items.findIndex(it => it.classList.contains('active'));
+        const next = items[activeIdx + 1] || items[0];
+        if (next) {
+          next.click();
+          next.scrollIntoView({ block: 'nearest' });
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const items = Array.from(this.dropdown.querySelectorAll('.font-picker-item'));
+        const activeIdx = items.findIndex(it => it.classList.contains('active'));
+        const prev = items[activeIdx - 1] || items[items.length - 1];
+        if (prev) {
+          prev.click();
+          prev.scrollIntoView({ block: 'nearest' });
+        }
+      }
+    });
   }
 }
