@@ -320,7 +320,16 @@ export function renderDesignerApp(container, onUpdate = null, startInEditor = fa
           </div>
 
           <!-- Action Buttons -->
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="fluent-top-action-pill" id="designer-btn-universal-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Multi-Cloud (Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.18); border:1px solid rgba(2,132,199,0.4); color:#38bdf8; font-weight:700; font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer;">
+              <span>🌐 Cloud</span>
+            </button>
+            <button class="fluent-top-action-pill giri-hindi-toggle-pill" id="btn-designer-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.18); border:1px solid rgba(22,163,74,0.4); color:#4ade80; font-weight:700; font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer;">
+              <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+            </button>
+            <button class="fluent-top-action-pill" id="btn-designer-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Devanagari InScript Virtual Keyboard" style="background:#334155; border:1px solid #475569; color:#f8fafc; padding:6px 10px; border-radius:6px; cursor:pointer;">
+              <span>⌨️</span>
+            </button>
             <button id="designer-btn-export-png" style="background:#db2777; color:#ffffff; font-weight:700; font-size:13px; padding:6px 18px; border-radius:6px; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 2px 4px rgba(219,39,119,0.3); transition:all 0.15s;">
               <span>💾</span> <span>Export PNG</span>
             </button>

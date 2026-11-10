@@ -1375,7 +1375,7 @@ export class GiriDriveSyncManager {
         email: this.googleUser.email,
         picture: this.googleUser.picture || ''
       } : {
-        name: 'Giri Corporation Account',
+        name: 'Abhinav Giri Account',
         email: 'giri.corporation.pvt@gmail.com'
       }
     );

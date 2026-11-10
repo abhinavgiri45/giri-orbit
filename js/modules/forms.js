@@ -417,6 +417,17 @@ export function renderFormsApp(container, onUpdate = null, startInEditor = false
               `).join('')}
             </div>
 
+            <!-- Universal Cloud & Hindi Controls -->
+            <button class="fluent-top-action-pill" id="forms-btn-universal-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Multi-Cloud (Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.12); border:1px solid #bae6fd; color:#0284c7; font-weight:700; font-size:12px; padding:5px 10px; border-radius:6px; cursor:pointer;">
+              <span>🌐 Cloud</span>
+            </button>
+            <button class="fluent-top-action-pill giri-hindi-toggle-pill" id="btn-forms-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.12); border:1px solid #bbf7d0; color:#16a34a; font-weight:700; font-size:12px; padding:5px 10px; border-radius:6px; cursor:pointer;">
+              <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+            </button>
+            <button class="fluent-top-action-pill" id="btn-forms-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Devanagari InScript Virtual Keyboard" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:5px 8px; border-radius:6px; cursor:pointer;">
+              <span>⌨️</span>
+            </button>
+
             <div style="font-size:11.5px; font-weight:700; color:#10b981; background:#ecfdf5; border:1px solid #a7f3d0; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px; margin-right:6px;"><span style="width:6px; height:6px; border-radius:50%; background:#10b981; display:inline-block;"></span> Auto-Save: ON</div>
             <!-- Preview Toggle Button -->
             <button id="forms-btn-preview" style="background:#ffffff; border:1px solid #cbd5e1; color:#334155; font-size:13px; font-weight:600; padding:6px 14px; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.15s;">

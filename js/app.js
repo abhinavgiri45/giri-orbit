@@ -29,6 +29,8 @@ import { GirionixAgentManager } from './components/girionixAgent.js?v=11.6';
 import girionixEngine from './modules/girionixEngine.js?v=11.6';
 import { GiriOfficeFormats } from './components/giriOfficeFormats.js?v=12.2';
 import { storageOptimizer } from './modules/storageOptimizer.js?v=14.6';
+import { hindiInputTools } from './components/hindiInputTools.js?v=1.0';
+import { universalCloudManager } from './modules/universalCloudManager.js?v=1.0';
 
 class GiriOrbitPlatform {
   constructor() {
@@ -43,6 +45,10 @@ class GiriOrbitPlatform {
     window.orbitDriveSync = driveSyncManager;
     this.storageOptimizer = storageOptimizer;
     window.storageOptimizer = storageOptimizer;
+    this.hindiInputTools = hindiInputTools;
+    window.hindiInputTools = hindiInputTools;
+    this.universalCloudManager = universalCloudManager;
+    window.universalCloudManager = universalCloudManager;
     this.printManager = new PrintStudioManager(this);
     this.agent = new GirionixAgentManager(this);
     window.orbitAgent = this.agent;
@@ -3370,6 +3376,36 @@ class GiriOrbitPlatform {
       if (profileTarget) {
         e.preventDefault();
         this.openUserProfileModal();
+        return;
+      }
+
+      // 2b. Universal Cloud Compatibility triggers
+      const cloudOpenTarget = e.target.closest('#btn-global-cloud-sync, #rail-btn-cloud, #btn-drift-universal-cloud, #btn-axis-universal-cloud, #btn-kinetic-universal-cloud, [data-action="universal-cloud"]');
+      if (cloudOpenTarget) {
+        e.preventDefault();
+        this.universalCloudManager?.openCloudOpenerDialog();
+        return;
+      }
+
+      const cloudSaveTarget = e.target.closest('[data-action="universal-cloud-save"]');
+      if (cloudSaveTarget) {
+        e.preventDefault();
+        this.universalCloudManager?.openCloudSaveDialog();
+        return;
+      }
+
+      // 2c. Hindi IME and Devanagari Keyboard triggers
+      const hindiTarget = e.target.closest('#btn-header-hindi-ime, #rail-btn-hindi, #btn-toggle-hindi-ime, [data-action="toggle-hindi"]');
+      if (hindiTarget) {
+        e.preventDefault();
+        this.hindiInputTools?.toggleHindiIME();
+        return;
+      }
+
+      const kbdTarget = e.target.closest('#btn-toggle-devanagari-keyboard, [data-action="toggle-devanagari-kbd"]');
+      if (kbdTarget) {
+        e.preventDefault();
+        this.hindiInputTools?.toggleVirtualKeyboard();
         return;
       }
 

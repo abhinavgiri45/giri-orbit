@@ -30,7 +30,7 @@ export const AXIS_BUILTIN_TEMPLATES = [
     desc: 'Full fiscal year operating expense model with quarterly projections and automated totals',
     previewAccent: '#107c41',
     data: {
-      'A1': 'GIRI CORPORATION // ANNUAL OPERATING BUDGET 2026',
+      'A1': 'ABHINAV GIRI // ANNUAL OPERATING BUDGET 2026',
       'A3': 'Category', 'B3': 'Q1 Actual', 'C3': 'Q2 Proj', 'D3': 'Q3 Proj', 'E3': 'Q4 Proj', 'F3': 'Total FY26',
       'A4': 'R&D Engineering', 'B4': '125000', 'C4': '135000', 'D4': '140000', 'E4': '155000', 'F4': '=SUM(B4:E4)',
       'A5': 'Cloud Infrastructure', 'B5': '45000', 'C5': '48000', 'D5': '52000', 'E5': '55000', 'F5': '=SUM(B5:E5)',
@@ -84,7 +84,7 @@ export const AXIS_BUILTIN_TEMPLATES = [
     desc: 'Founding equity, ESOP pool, and Pre/Post-Money valuation with dilution analysis',
     previewAccent: '#8b5cf6',
     data: {
-      'A1': 'GIRI CORPORATION // MASTER CAPITALIZATION TABLE',
+      'A1': 'ABHINAV GIRI // MASTER CAPITALIZATION TABLE',
       'A3': 'Shareholder / Class', 'B3': 'Shares Owned', 'C3': 'Ownership %', 'D3': 'Invested Capital', 'E3': 'Implied Value',
       'A4': 'Abhinav Giri (Founder)', 'B4': '5500000', 'C4': '=B4/B8', 'D4': '150000', 'E4': '=C4*25000000',
       'A5': 'Co-Founding Executives', 'B5': '2000000', 'C5': '=B5/B8', 'D5': '50000', 'E5': '=C5*25000000',
@@ -116,7 +116,7 @@ export const AXIS_BUILTIN_TEMPLATES = [
     desc: 'Multi-client invoice ledger with automated aging, payment reconciliation and tax sum',
     previewAccent: '#7c3aed',
     data: {
-      'A1': 'GIRI CORPORATION // RECEIVABLES REGISTER',
+      'A1': 'ABHINAV GIRI // RECEIVABLES REGISTER',
       'A3': 'Inv #', 'B3': 'Corporate Client', 'C3': 'Billing Date', 'D3': 'Base Amount', 'E3': 'Tax (10%)', 'F3': 'Total Due', 'G3': 'Status',
       'A4': 'INV-801', 'B4': 'Apex Logistics Ltd', 'C4': '2026-08-28', 'D4': '14500', 'E4': '=D4*0.1', 'F4': '=D4+E4', 'G4': 'Paid',
       'A5': 'INV-802', 'B5': 'Nordic Sovereign Bank', 'C5': '2026-09-02', 'D5': '48200', 'E5': '=D5*0.1', 'F5': '=D5+E5', 'G5': 'Pending',
@@ -306,7 +306,7 @@ export const KINETIC_BUILTIN_TEMPLATES = [
       {
         id: 1, layout: 'title', bg: 'linear-gradient(135deg, #07192f 0%, #0f2c59 55%, #1e40af 100%)', accent: '#b91c1c', tag: 'STRATEGY 2026',
         title: 'Q3 Executive Business Review',
-        desc: 'Consolidated performance overview and Strategic Priorities for Giri Corporation subsidiary units.',
+        desc: 'Consolidated performance overview and Strategic Priorities for Giri Orbit sovereign modules.',
         features: [
           { num: '99.9%', title: 'SLA Uptime', desc: 'Uninterrupted local edge execution' },
           { num: '$14.2M', title: 'Recognized ARR', desc: '38% YoY revenue acceleration' },
@@ -509,7 +509,7 @@ export const KINETIC_BUILTIN_TEMPLATES = [
       {
         id: 1, layout: 'title', bg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', accent: '#2563eb', tag: 'COMMERCIAL PROPOSAL',
         title: 'Sovereign Productivity for Global Enterprises',
-        desc: 'Prepared exclusively for Enterprise Decision Makers by GIRI Corporation.',
+        desc: 'Prepared exclusively for Enterprise Decision Makers by Abhinav Giri.',
         features: [
           { num: 'Cost', title: '70% Savings', desc: 'Fraction of legacy per-seat licensing fees' },
           { num: 'Speed', title: 'Instant Load', desc: 'Zero installation, zero IT rollout friction' },
@@ -562,7 +562,7 @@ export const KINETIC_BUILTIN_TEMPLATES = [
       {
         id: 1, layout: 'title', bg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', accent: '#dc2626', tag: 'ALL-HANDS 2026',
         title: 'Building the Future of Knowledge Work',
-        desc: 'Giri Corporation Company Town Hall // Celebrating our collective velocity and vision.',
+        desc: 'Abhinav Giri Company Town Hall // Celebrating our collective velocity and vision.',
         features: [
           { num: '1M+', title: 'Monthly Users', desc: 'Empowering knowledge workers globally' },
           { num: '99.8%', title: 'User Delight', desc: 'Fastest software suite ever built' },
@@ -572,7 +572,7 @@ export const KINETIC_BUILTIN_TEMPLATES = [
       },
       {
         id: 2, layout: 'metrics', bg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', accent: '#dc2626', tag: 'CORE VALUES',
-        title: 'The Giri Corporation Principles',
+        title: 'The Abhinav Giri Principles',
         desc: 'Guiding how we design, build, and deliver software that honors human intelligence.',
         features: [
           { num: 'Speed', title: 'Sub-Millisecond', desc: 'Lag is an insult to human cognition' },
@@ -992,7 +992,7 @@ export const DRIFT_BUILTIN_TEMPLATES = [
     previewAccent: '#2563eb',
     content: `
       <h1 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:4px;">EXECUTIVE DECISION MEMORANDUM</h1>
-      <p style="font-size:11px; font-family:monospace; color:#64748b; margin-bottom:20px;">CONFIDENTIAL // GIRI CORPORATION EXECUTIVE COMMITTEE</p>
+      <p style="font-size:11px; font-family:monospace; color:#64748b; margin-bottom:20px;">CONFIDENTIAL // ABHINAV GIRI EXECUTIVE COMMITTEE</p>
       <hr style="border:none; border-top:1px solid #e2e8f0; margin:16px 0;">
       <p><strong>TO:</strong> Executive Board & Chief Executive Officer</p>
       <p><strong>FROM:</strong> Abhinav Giri, Chief Technology Architect</p>
@@ -1012,13 +1012,13 @@ export const DRIFT_BUILTIN_TEMPLATES = [
     previewAccent: '#dc2626',
     content: `
       <h1 style="font-size:22px; font-weight:800; text-align:center; color:#0f172a;">MUTUAL NON-DISCLOSURE AGREEMENT</h1>
-      <p style="text-align:center; font-size:11px; color:#64748b; margin-bottom:24px;">STANDARD COMMERCIAL TERMS // GIRI CORPORATION</p>
-      <p>This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of the date executed below between <strong>Giri Corporation</strong> and the Counterparty.</p>
+      <p style="text-align:center; font-size:11px; color:#64748b; margin-bottom:24px;">STANDARD COMMERCIAL TERMS // ABHINAV GIRI</p>
+      <p>This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of the date executed below between <strong>Abhinav Giri</strong> and the Counterparty.</p>
       <h2 style="font-size:15px; font-weight:700; color:#0f172a; margin-top:20px;">1. Confidential Information</h2>
       <p>Each party agrees to hold all technical architectures, proprietary algorithms, financial models, and strategic documentation in strict confidence.</p>
       <h2 style="font-size:15px; font-weight:700; color:#0f172a; margin-top:20px;">2. Signatures & Execution</h2>
       <div style="margin-top:36px; display:flex; justify-content:space-between;">
-        <div><strong>For Giri Corporation:</strong><br><span style="font-family:'Brush Script MT', cursive; font-size:22px; color:#2563eb;">Abhinav Giri</span></div>
+        <div><strong>For Abhinav Giri:</strong><br><span style="font-family:'Brush Script MT', cursive; font-size:22px; color:#2563eb;">Abhinav Giri</span></div>
         <div><strong>For Counterparty:</strong><br><span style="font-family:monospace; color:#64748b;">[Digital Signature]</span></div>
       </div>
     `
@@ -1105,7 +1105,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
           </div>
           <div style="height:1px; background:#e2e8f0; margin:16px 0;"></div>
           <p style="font-size:12px; line-height:1.7; color:#334155; margin-bottom:12px;">
-            This Mutual Non-Disclosure Agreement ("Agreement") is entered into by and between <strong>GIRI CORPORATION</strong> ("Disclosing Party") and the undersigned corporate counterparty ("Recipient").
+            This Mutual Non-Disclosure Agreement ("Agreement") is entered into by and between <strong>ABHINAV GIRI</strong> ("Disclosing Party") and the undersigned corporate counterparty ("Recipient").
           </p>
           <h3 style="font-size:12.5px; font-weight:700; color:#0f172a; margin:14px 0 6px 0;">1. Definition of Confidential Information</h3>
           <p style="font-size:11.5px; line-height:1.6; color:#475569; margin-bottom:10px;">
@@ -1117,7 +1117,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
           </p>
           <div style="margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:24px; padding-top:16px; border-top:1px solid #e2e8f0;">
             <div>
-              <span style="font-size:10.5px; font-weight:700; color:#0f172a; display:block; margin-bottom:16px;">FOR: GIRI CORPORATION</span>
+              <span style="font-size:10.5px; font-weight:700; color:#0f172a; display:block; margin-bottom:16px;">FOR: ABHINAV GIRI</span>
               <div style="font-family:'Brush Script MT', cursive, sans-serif; font-size:24px; color:#1e40af; border-bottom:1px solid #cbd5e1; padding-bottom:4px;">Abhinav Giri</div>
               <span style="font-size:10px; color:#64748b; display:block; margin-top:4px;">Signature / Authorized Representative</span>
             </div>
@@ -1242,12 +1242,12 @@ export const AEGIS_BUILTIN_TEMPLATES = [
         ref: 'GIRI-BOD-2026-RES',
         htmlContent: `
           <div style="text-align:center; margin-bottom:20px;">
-            <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0 0 4px 0;">GIRI CORPORATION</h1>
+            <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0 0 4px 0;">ABHINAV GIRI</h1>
             <span style="font-size:11px; font-weight:700; color:#64748b; letter-spacing:0.05em;">ACTION BY UNANIMOUS WRITTEN CONSENT OF THE BOARD OF DIRECTORS</span>
           </div>
           <div style="height:1px; background:#e2e8f0; margin:14px 0;"></div>
           <p style="font-size:12px; line-height:1.7; color:#334155; margin-bottom:12px;">
-            The undersigned, constituting all of the members of the Board of Directors of <strong>Giri Corporation</strong>, hereby adopt the following resolutions pursuant to Section 141 of the General Corporation Law:
+            The undersigned, constituting all of the members of the Board of Directors of <strong>Abhinav Giri</strong>, hereby adopt the following resolutions pursuant to Section 141 of the General Corporation Law:
           </p>
           <h3 style="font-size:12.5px; font-weight:700; color:#0f172a; margin:14px 0 6px 0;">ADOPTION OF SOVEREIGN PLATFORM ARCHITECTURE</h3>
           <p style="font-size:11.5px; line-height:1.6; color:#475569; margin-bottom:10px;">
@@ -1290,7 +1290,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
               <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">INVOICE #: GIRI-INV-2026-904</span>
             </div>
             <div style="text-align:right;">
-              <strong style="font-size:14px; color:#0f172a; display:block;">GIRI CORPORATION</strong>
+              <strong style="font-size:14px; color:#0f172a; display:block;">ABHINAV GIRI</strong>
               <span style="font-size:11px; color:#64748b;">Sovereign Computing Technologies Division</span>
             </div>
           </div>
@@ -1368,7 +1368,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
           </div>
           <div style="height:1px; background:#e2e8f0; margin:14px 0;"></div>
           <p style="font-size:12px; line-height:1.7; color:#334155; margin-bottom:12px;">
-            This Consulting Services Agreement is entered into by <strong>Giri Corporation</strong> ("Company") and the undersigned independent engineering consultant ("Consultant").
+            This Consulting Services Agreement is entered into by <strong>Abhinav Giri</strong> ("Company") and the undersigned independent engineering consultant ("Consultant").
           </p>
           <h3 style="font-size:12.5px; font-weight:700; color:#0f172a; margin:14px 0 6px 0;">1. Scope of Deliverables</h3>
           <p style="font-size:11.5px; line-height:1.6; color:#475569; margin-bottom:12px;">
@@ -1415,7 +1415,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
           </div>
           <div style="height:1px; background:#e2e8f0; margin:12px 0 16px 0;"></div>
           <p style="font-size:12px; line-height:1.7; color:#334155; margin-bottom:12px;">
-            This Change Order modifies the Scope of Work under the Master Architecture Agreement between <strong>Giri Corporation</strong> and Client.
+            This Change Order modifies the Scope of Work under the Master Architecture Agreement between <strong>Abhinav Giri</strong> and Client.
           </p>
           <div style="margin:16px 0; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px;">
             <strong style="font-size:12px; color:#0f172a; display:block; margin-bottom:6px;">Description of Changes:</strong>

@@ -418,7 +418,7 @@ const BUILTIN_TEMPLATES = [
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:12px; margin-bottom:20px;">
           <div>
             <h1 style="font-size:22px; font-weight:800; margin:0;">EXECUTIVE STRATEGIC COUNCIL MINUTES</h1>
-            <span style="font-size:11px; font-family:var(--font-mono); color:#64748b;">GIRI CORPORATION // SOVEREIGN COMPUTING DIVISION</span>
+            <span style="font-size:11px; font-family:var(--font-mono); color:#64748b;">ABHINAV GIRI // SOVEREIGN COMPUTING DIVISION</span>
           </div>
           <div style="text-align:right; font-size:11.5px; color:#64748b;">
             Date: 2026-09-11<br>Location: Executive Boardroom Alpha & Hybrid Mesh
@@ -1245,6 +1245,19 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
               <button class="fluent-top-action-pill" id="btn-drift-special-link" title="Special Document Link: Share & open instantly on any Phone or PC" style="background:linear-gradient(135deg,rgba(14,165,233,0.18),rgba(37,99,235,0.18));color:#38bdf8;border:1px solid rgba(56,189,248,0.4);font-weight:600;">
                 <span style="font-size:12px;">📱</span>
                 <span>Phone/PC Link</span>
+              </button>
+
+              <button class="fluent-top-action-pill" id="btn-drift-universal-cloud" title="Universal Multi-Cloud Compatibility (Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.18); border:1px solid rgba(2,132,199,0.4); color:#38bdf8; font-weight:600;">
+                <span style="font-size:12px;">🌐</span>
+                <span>Cloud</span>
+              </button>
+
+              <button class="fluent-top-action-pill giri-hindi-toggle-pill" id="btn-drift-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.18); border:1px solid rgba(22,163,74,0.4); color:#4ade80; font-weight:700;">
+                <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+              </button>
+
+              <button class="fluent-top-action-pill" id="btn-drift-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Devanagari InScript Virtual Keyboard">
+                <span>⌨️</span>
               </button>
 
               <button class="fluent-drive-action-pill" id="btn-drift-drive-sync" title="Google Drive Sync: Direct editing & cloud auto-save">
@@ -9418,7 +9431,7 @@ function calculateMetrics(records) {
           outHtml = `
             <div style="margin:16px 0; padding:20px 24px; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; font-family:var(--font-sans, sans-serif); color:#0f172a;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #2563eb; padding-bottom:10px; margin-bottom:14px;">
-                <strong style="font-size:14pt; color:#1e40af;">GIRI CORPORATION</strong>
+                <strong style="font-size:14pt; color:#1e40af;">ABHINAV GIRI</strong>
                 <span style="font-size:11px; color:#64748b;">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
               </div>
               <p style="font-size:11pt; line-height:1.6; margin:0 0 10px 0;">Dear Candidate,</p>

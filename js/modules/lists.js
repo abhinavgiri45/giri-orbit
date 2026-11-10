@@ -336,7 +336,16 @@ export function renderListsApp(container, onUpdate = null, startInEditor = false
           </div>
 
           <!-- Right Action Bar -->
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="fluent-top-action-pill" id="lists-btn-universal-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Multi-Cloud (Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.12); border:1px solid #bae6fd; color:#0284c7; font-weight:700; font-size:12px; padding:5px 10px; border-radius:6px; cursor:pointer;">
+              <span>🌐 Cloud</span>
+            </button>
+            <button class="fluent-top-action-pill giri-hindi-toggle-pill" id="btn-lists-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.12); border:1px solid #bbf7d0; color:#16a34a; font-weight:700; font-size:12px; padding:5px 10px; border-radius:6px; cursor:pointer;">
+              <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+            </button>
+            <button class="fluent-top-action-pill" id="btn-lists-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Devanagari InScript Virtual Keyboard" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:5px 8px; border-radius:6px; cursor:pointer;">
+              <span>⌨️</span>
+            </button>
             <button id="lists-btn-new-item" style="background:${listData.themeColor}; color:#ffffff; font-weight:700; font-size:13px; padding:6px 16px; border-radius:6px; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 2px 4px rgba(124,58,237,0.3); transition:all 0.15s;">
               <span>➕</span> <span>New Item</span>
             </button>

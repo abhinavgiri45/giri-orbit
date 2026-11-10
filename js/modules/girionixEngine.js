@@ -6,7 +6,7 @@
  * 2. Deep Sovereign Knowledge Engine: Topic-aware, factually grounded, multi-disciplinary synthesis
  *    for Essays, Biographies, Formulas, Datasets, Keynote Decks, Letters, Speeches, and Audits.
  * 
- * Copyright (c) 2026 Giri Orbit / Girionix Corporation
+ * Copyright (c) 2026 Giri Orbit / Abhinav Giri
  */
 
 class GirionixEngine {

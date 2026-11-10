@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * GIRI ORBIT - MOBILE RESPONSIVE & PRODUCTION CSS (mobile.css)
- * By GIRI Corporation - Version 1.0.0 Production
+ * By Abhinav Giri - Version 1.0.0 Production
  * ============================================================================
  */
 
@@ -672,4 +672,144 @@ html {
 .kinetic-mobile-toolbar,
 .pdf-mobile-toolbar {
   display: none;
+}
+
+
+/* ============================================================================
+   MOBILE & TOUCHSCREEN ADVANCED ADAPTATIONS (Giri Orbit Sovereign Suite)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  html, body {
+    height: 100%;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
+  }
+
+  #orbit-workspace {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Touch Target Minimum Dimensions */
+  button, 
+  .suite-nav-pill, 
+  .fluent-tab-btn, 
+  .lo-tool-btn, 
+  .lo-menu-btn,
+  .fluent-top-action-pill,
+  .gdk-key {
+    min-height: 38px;
+    touch-action: manipulation;
+  }
+
+  /* Universal Multi-Cloud Dialog on Mobile */
+  .universal-cloud-card {
+    width: 96% !important;
+    max-width: 96% !important;
+    margin: 10px auto !important;
+    max-height: 90vh !important;
+  }
+
+  .universal-cloud-card .lo-dialog-body {
+    padding: 12px 14px !important;
+  }
+
+  /* Candidate Popup on Mobile */
+  .giri-hindi-candidate-box {
+    max-width: 92vw !important;
+    left: 4vw !important;
+    font-size: 14px !important;
+  }
+
+  /* Virtual Devanagari Keyboard on Mobile */
+  .giri-devanagari-keyboard {
+    max-height: 52vh !important;
+    padding: 6px 4px calc(10px + env(safe-area-inset-bottom, 0px)) 4px !important;
+  }
+
+  .gdk-key {
+    min-width: 28px !important;
+    height: 38px !important;
+    font-size: 14px !important;
+    padding: 2px 4px !important;
+  }
+
+  .gdk-key.action.space {
+    min-width: 140px !important;
+  }
+
+  .gdk-key.action.backspace,
+  .gdk-key.action.enter {
+    min-width: 60px !important;
+    font-size: 11px !important;
+  }
+
+  /* Mobile Bottom Dock */
+  .orbit-mobile-bottom-dock {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(52px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: #0f172a;
+    border-top: 1px solid #334155;
+    z-index: 9998;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobile-dock-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    gap: 2px;
+    cursor: pointer;
+    flex: 1;
+    height: 100%;
+    transition: color 0.12s ease;
+  }
+
+  .mobile-dock-btn.active,
+  .mobile-dock-btn:active {
+    color: #38bdf8;
+  }
+
+  .mobile-dock-btn span:first-child {
+    font-size: 17px;
+  }
+
+  /* Scrollable Ribbon Tabs on Mobile */
+  .fluent-ribbon-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .fluent-ribbon-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fluent-ribbon-panes {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .fluent-ribbon-pane {
+    flex-wrap: nowrap !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .orbit-mobile-bottom-dock {
+    display: none !important;
+  }
 }

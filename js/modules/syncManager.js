@@ -21,7 +21,7 @@ const TOOL_DEFAULTS = {
     badgeBg: '#eff6ff',
     badgeText: 'D',
     defaultTitle: 'Enterprise Strategic Charter',
-    defaultSnippet: 'Comprehensive sovereign document orchestration standard developed by GIRI Corporation.',
+    defaultSnippet: 'Comprehensive sovereign document orchestration standard developed by Abhinav Giri.',
     defaultStats: '1,420 words • 8,940 chars',
     dataKey: 'giri_orbit_drift_doc',
     titleKey: 'giri_orbit_drift_title',

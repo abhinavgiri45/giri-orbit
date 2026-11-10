@@ -388,7 +388,17 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = false)
           </div>
 
           <!-- Right Action Bar -->
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="fluent-top-action-pill" id="quiz-btn-universal-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Multi-Cloud (Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.12); border:1px solid #bae6fd; color:#0284c7; font-weight:700; font-size:12px; padding:5px 10px; border-radius:6px; cursor:pointer;">
+              <span>🌐 Cloud</span>
+            </button>
+            <button class="fluent-top-action-pill giri-hindi-toggle-pill" id="btn-quiz-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.12); border:1px solid #bbf7d0; color:#16a34a; font-weight:700; font-size:12px; padding:5px 10px; border-radius:6px; cursor:pointer;">
+              <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+            </button>
+            <button class="fluent-top-action-pill" id="btn-quiz-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Devanagari InScript Virtual Keyboard" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:5px 8px; border-radius:6px; cursor:pointer;">
+              <span>⌨️</span>
+            </button>
+
             <div style="background:#f0f9ff; border:1px solid #bae6fd; color:#0369a1; font-size:12px; font-weight:700; padding:5px 12px; border-radius:20px; display:flex; align-items:center; gap:6px;">
               <span>🏆 Total:</span>
               <span id="quiz-header-total-points">${totalPts} Points</span>

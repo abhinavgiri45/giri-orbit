@@ -908,6 +908,16 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = fa
               <span style="font-size:12px;">📱</span>
               <span>Phone/PC Link</span>
             </button>
+            <button class="fluent-top-action-pill" id="btn-axis-universal-cloud" title="Universal Multi-Cloud (Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.18); border:1px solid rgba(2,132,199,0.4); color:#38bdf8; font-weight:600;">
+              <span style="font-size:12px;">🌐</span>
+              <span>Cloud</span>
+            </button>
+            <button class="fluent-top-action-pill giri-hindi-toggle-pill" id="btn-axis-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.18); border:1px solid rgba(22,163,74,0.4); color:#4ade80; font-weight:700;">
+              <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+            </button>
+            <button class="fluent-top-action-pill" id="btn-axis-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Devanagari InScript Virtual Keyboard">
+              <span>⌨️</span>
+            </button>
             <button class="fluent-drive-action-pill" id="btn-axis-drive-sync" title="Google Drive Sync: Direct editing & cloud auto-save">
               <span class="drive-dot-live"></span>
               <span id="txt-axis-drive-status">☁️ Drive</span>

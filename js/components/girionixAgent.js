@@ -16,7 +16,7 @@
  * - Single-prompt document drafting, financial modeling, slide deck creation,
  *   and Polymath Suite (Doc + Sheet + Slides in 1-click)
  * 
- * Copyright (c) 2026 Giri Orbit / Girionix Corporation
+ * Copyright (c) 2026 Giri Orbit / Abhinav Giri
  */
 
 import girionixEngine from '../modules/girionixEngine.js?v=11.3';
@@ -39,7 +39,7 @@ export class GirionixAgentManager {
         icon: '📄',
         title: 'Mutual NDA Agreement',
         desc: 'Standard sovereign bilateral non-disclosure agreement with confidentiality covenants.',
-        prompt: 'Draft a comprehensive Mutual Non-Disclosure Agreement between Giri Corporation and a partner organization, including definition of confidential information, 3-year term, exclusions, and remedies for breach.'
+        prompt: 'Draft a comprehensive Mutual Non-Disclosure Agreement between Abhinav Giri and a partner organization, including definition of confidential information, 3-year term, exclusions, and remedies for breach.'
       },
       {
         id: 'financial_model',

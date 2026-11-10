@@ -49,6 +49,7 @@
   <link rel="stylesheet" href="css/fontsAndSelection.css?v=10.2">
   <link rel="stylesheet" href="css/sync.css?v=10.9">
   <link rel="stylesheet" href="css/mobile.css?v=10.2">
+  <link rel="stylesheet" href="css/hindiInputTools.css?v=1.0">
   <link rel="manifest" href="manifest.json">
   <meta name="google-signin-client_id" content="340226227470-np4m4o749r8t12nkpb2lgqru8rftju3r.apps.googleusercontent.com">
   <!-- Official Google Identity Services SDK & Google API Client (GAPI) -->
@@ -254,6 +255,14 @@
 
       <!-- 3. Right: Utility Controls & Actions -->
       <div class="tier2-right">
+        <button class="tier1-cloud-pill" id="btn-global-cloud-sync" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Cloud Compatibility (Open from Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.18); border:1px solid rgba(2,132,199,0.4); color:#38bdf8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+          <span style="font-size:12px;">🌐</span>
+          <span>Cloud</span>
+        </button>
+        <button class="tier1-hindi-pill giri-hindi-toggle-pill" id="btn-header-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.15); border:1px solid rgba(22,163,74,0.35); color:#4ade80; padding:3px 8px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+          <span class="gh-flag">🇮🇳</span>
+          <span class="gh-label">हिन्दी</span>
+        </button>
         <button class="tier1-sync-pill" id="btn-global-sync" title="Browser Sync Status & Storage Manager">
           <span class="sync-dot-live"></span>
           <span id="txt-global-sync">Synced</span>
@@ -368,6 +377,22 @@
               </svg>
             </div>
             <span class="m365-rail-label">Apps</span>
+          </button>
+
+          <!-- 6. Universal Cloud -->
+          <button class="m365-rail-btn" id="rail-btn-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Cloud Compatibility (Open from Drive, OneDrive, Dropbox, Nextcloud)">
+            <div class="m365-rail-icon-wrap" style="background:#e0f2fe; color:#0284c7;">
+              <span style="font-size:16px;">🌐</span>
+            </div>
+            <span class="m365-rail-label">Cloud</span>
+          </button>
+
+          <!-- 7. Hindi Input Tools Toggle -->
+          <button class="m365-rail-btn giri-hindi-toggle-pill" id="rail-btn-hindi" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)">
+            <div class="m365-rail-icon-wrap" style="background:#f0fdf4; color:#16a34a; font-weight:bold;">
+              <span style="font-size:14px;">अ</span>
+            </div>
+            <span class="m365-rail-label">हिन्दी</span>
           </button>
 
           <div class="m365-rail-divider"></div>
@@ -1292,6 +1317,34 @@
 
     </div>
   </div>
+
+  <!-- Mobile Phone Bottom Dock (<= 768px) -->
+  <nav class="orbit-mobile-bottom-dock" aria-label="Mobile Navigation Dock">
+    <button class="mobile-dock-btn active" data-view="launcher" onclick="window.orbitPlatform?.navigateTo('launcher'); return false;">
+      <span>🏠</span>
+      <span>Hub</span>
+    </button>
+    <button class="mobile-dock-btn" data-view="drift" onclick="window.orbitPlatform?.navigateTo('drift'); return false;">
+      <span>📄</span>
+      <span>Drift</span>
+    </button>
+    <button class="mobile-dock-btn" data-view="axis" onclick="window.orbitPlatform?.navigateTo('axis'); return false;">
+      <span>📊</span>
+      <span>Axis</span>
+    </button>
+    <button class="mobile-dock-btn" data-view="kinetic" onclick="window.orbitPlatform?.navigateTo('kinetic'); return false;">
+      <span>📽️</span>
+      <span>Kinetic</span>
+    </button>
+    <button class="mobile-dock-btn" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;">
+      <span>🌐</span>
+      <span>Cloud</span>
+    </button>
+    <button class="mobile-dock-btn giri-hindi-toggle-pill" onclick="window.hindiInputTools?.toggleHindiIME(); return false;">
+      <span>🇮🇳</span>
+      <span class="gh-label">हिन्दी</span>
+    </button>
+  </nav>
 
   <!-- Notification Toast Container -->
   <div class="orbit-toast-wrap" id="orbit-toast-wrap" aria-live="polite"></div>

@@ -139,6 +139,15 @@ export class OrbitDesktopSuite {
           <span class="lo-window-doc-name" id="lo-doc-title-display">[${docTitle}]</span>
         </div>
         <div class="lo-window-header-actions">
+          <button class="lo-header-btn giri-hindi-toggle-pill" id="lo-btn-hindi-ime" onclick="window.hindiInputTools?.toggleHindiIME(); return false;" title="Google Input Tools Hindi Transliteration (Ctrl+G)" style="background:rgba(22,163,74,0.12); color:#16a34a; font-weight:700;">
+            <span class="gh-flag">🇮🇳</span> <span class="gh-label">हिन्दी</span>
+          </button>
+          <button class="lo-header-btn" id="lo-btn-devanagari-kbd" onclick="window.hindiInputTools?.toggleVirtualKeyboard(); return false;" title="Virtual Devanagari Keyboard Drawer">
+            <span>⌨️</span>
+          </button>
+          <button class="lo-header-btn" id="lo-btn-universal-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Multi-Cloud (Open from Google Drive, OneDrive, Dropbox, Nextcloud)">
+            <span>🌐 Cloud</span>
+          </button>
           <button class="lo-ui-switcher-pill" id="lo-btn-toggle-ui" title="Toggle User Interface Layout (Standard Toolbar vs Notebookbar)">
             <span>🎨 Layout: ${this.uiMode === 'standard' ? 'Giri-Orbit Classic' : 'Giri-Orbit Ribbon'} ▾</span>
           </button>
@@ -532,13 +541,18 @@ export class OrbitDesktopSuite {
     const commonFile = [
       { label: 'New', icon: I.newDoc, cmd: 'new', shortcut: 'Ctrl+N' },
       { label: 'Open...', icon: I.open, cmd: 'open', shortcut: 'Ctrl+O' },
+      { label: 'Open from Any Cloud Link (Drive, OneDrive, Dropbox)...', icon: '🌐', cmd: 'universal-cloud-open', shortcut: 'Ctrl+Shift+O' },
       { label: 'Open Remote (Google Drive)...', icon: '☁️', cmd: 'open-remote' },
       { label: 'Recent Documents', icon: '🕒', cmd: 'recent-docs' },
       { separator: true },
       { label: 'Save', icon: I.save, cmd: 'save', shortcut: 'Ctrl+S' },
       { label: 'Save As...', icon: I.saveAs, cmd: 'save-as', shortcut: 'Ctrl+Shift+S' },
+      { label: 'Save to Universal Cloud...', icon: '☁️', cmd: 'universal-cloud-save' },
       { label: 'Save Remote (Google Drive)...', icon: '☁️', cmd: 'save-remote' },
       { label: 'Save a Copy...', icon: I.copy, cmd: 'save-copy' },
+      { separator: true },
+      { label: 'Toggle Google Hindi IME', icon: '🇮🇳', cmd: 'toggle-hindi', shortcut: 'Ctrl+G' },
+      { label: 'Devanagari Virtual Keyboard', icon: '⌨️', cmd: 'toggle-devanagari-kbd' },
       { separator: true },
       { label: 'Export Directly as PDF', icon: I.exportPdf, cmd: 'export-pdf' },
       { label: 'Export...', icon: '📤', cmd: 'export-modal' },
@@ -896,6 +910,19 @@ export class OrbitDesktopSuite {
       if (window.orbitDriveSync) window.orbitDriveSync.openDriveModal('browser', tool);
     });
 
+    // 5b. Universal Multi-Cloud Opener
+    container.querySelector('#lo-btn-universal-cloud')?.addEventListener('click', () => {
+      window.universalCloudManager?.openCloudOpenerDialog();
+    });
+
+    // 5c. Hindi IME and Devanagari Virtual Keyboard
+    container.querySelector('#lo-btn-hindi-ime')?.addEventListener('click', () => {
+      window.hindiInputTools?.toggleHindiIME();
+    });
+    container.querySelector('#lo-btn-devanagari-kbd')?.addEventListener('click', () => {
+      window.hindiInputTools?.toggleVirtualKeyboard();
+    });
+
     // 6. Save to Device
     container.querySelector('#lo-btn-save-device')?.addEventListener('click', () => {
       if (callbacks.onSaveDevice) callbacks.onSaveDevice();
@@ -1044,6 +1071,18 @@ export class OrbitDesktopSuite {
         break;
       case 'open-remote':
         if (window.orbitDriveSync) window.orbitDriveSync.openDriveModal('browser', tool);
+        break;
+      case 'universal-cloud-open':
+        if (window.universalCloudManager) window.universalCloudManager.openCloudOpenerDialog();
+        break;
+      case 'universal-cloud-save':
+        if (window.universalCloudManager) window.universalCloudManager.openCloudSaveDialog();
+        break;
+      case 'toggle-hindi':
+        if (window.hindiInputTools) window.hindiInputTools.toggleHindiIME();
+        break;
+      case 'toggle-devanagari-kbd':
+        if (window.hindiInputTools) window.hindiInputTools.toggleVirtualKeyboard();
         break;
       case 'save':
       case 'save-as':
