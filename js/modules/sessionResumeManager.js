@@ -58,7 +58,7 @@ export class SessionResumeManager {
       os: osName,
       formFactor: formFactor,
       registeredAt: new Date().toISOString(),
-      author: 'Abhinav Giri'
+      author: (typeof localStorage !== 'undefined' && localStorage.getItem('giri_user_name')) || (window.driveSyncManager?.googleUser?.name) || `${osName} User`
     };
 
     try {

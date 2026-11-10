@@ -25,21 +25,18 @@ The official production environment is actively deployed on Cloudflare Pages:
 
 ---
 
-## 🔒 Strict Proprietary License & Commercial Terms (LICENSABLE ONLY — NO MODIFICATIONS PERMITTED)
+## 🔒 Proprietary Freeware License (FREE TO USE FOR EVERYONE — STRICTLY NO MODIFICATIONS)
 
-> ### ⚠️ STRICT PROPRIETARY SOFTWARE NOTICE: ALL RIGHTS RESERVED
+> ### ⚠️ END-USER LICENSE AGREEMENT: ALL RIGHTS RESERVED
 > 
 > **Copyright © 2025–2026 Abhinav Giri (@abhinavgiri45). All Rights Reserved.**
 >
-> This repository, along with all associated software, source code, designs, user interfaces, documentation, graphic marks, algorithms, and intellectual assets, is the **exclusive proprietary property of Abhinav Giri**.
+> 1. **Free for Everyone to Use**: Any person, student, business, or organization worldwide is granted a free license to install, run, and **USE** Giri Orbit on any personal computer or mobile device for any personal, commercial, or enterprise productivity purpose.
+> 2. **Strict Prohibition on Modifications**: **NO ONE may modify, alter, edit, patch, decompile, or create derivative works** from this software or its source code. The software must remain intact as authored by Abhinav Giri.
+> 3. **No Unauthorized Rebranding or Reselling**: You may NOT repackage, rebrand, resell, or distribute modified builds of this software under any other name.
+> 4. **100% Data Sovereignty**: All documents, sheets, and presentations created by users are 100% their own sovereign private property.
 >
-> **Strict Legal Terms & Prohibitions:**
-> 1. **No Modifications or Derivative Works**: NO user, organization, or third party is permitted to modify, edit, alter, patch, customize, decompile, reverse-engineer, or create derivative works from this software or its source code in any manner whatsoever.
-> 2. **No Unlicensed Use or Execution**: This software is **NOT open source** and is **NOT free software**. No one may execute, deploy, run, test, host, or use this software without an explicit, formal written commercial license executed directly by Abhinav Giri.
-> 3. **No Copying, Sublicensing, or Redistribution**: You may NOT copy, duplicate, distribute, sell, rent, lease, sublicense, mirror, or publish this software or any part thereof on any public or private server, mirror, or repository.
-> 4. **Fully Licensable Exclusively via the Author**: Commercial licenses, enterprise deployment permits, and institutional evaluation rights are granted exclusively through formal written agreements directly with Abhinav Giri.
->
-> 📩 *For formal commercial licensing agreements or enterprise rights, contact:* **`abhinavgiri370@gmail.com`**
+> 📩 *For enterprise inquiries or specialized deployment arrangements:* **`abhinavgiri370@gmail.com`**
 
 ---
 

@@ -1173,7 +1173,7 @@ class GiriOrbitPlatform {
                     <div class="designer-poly-gold"></div>
                     <div class="designer-cir-rose"></div>
                     <svg class="designer-bezier-svg" viewBox="0 0 68 74">
-                      <path d="M 10 55 C 20 20, 48 58, 58 24" fill="none" stroke="#ffffff" stroke-width="2" />
+                      <path d="M 10 55 C 20 20, 48 58, 58 24" fill="none" stroke="#db2777" stroke-width="2" />
                       <line x1="22" y1="32" x2="36" y2="18" stroke="#38bdf8" stroke-width="1.5" />
                       <circle cx="22" cy="32" r="2.5" fill="#38bdf8" />
                       <circle cx="36" cy="18" r="2.5" fill="#38bdf8" />
@@ -2330,8 +2330,8 @@ class GiriOrbitPlatform {
 
     const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
     const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
-    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Abhinav Giri');
-    const initials = (currentName || 'AG').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Sovereign User');
+    const initials = (currentName || 'SU').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
     const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
 
     const overlay = document.createElement('div');

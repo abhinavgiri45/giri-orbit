@@ -79,7 +79,7 @@ export class SmartDifferenceEngine {
       timestamp,
       isoTime: new Date(timestamp).toISOString(),
       formattedTime: new Date(timestamp).toLocaleString(),
-      author: 'Abhinav Giri',
+      author: (typeof localStorage !== 'undefined' && localStorage.getItem('giri_user_name')) || (window.driveSyncManager?.googleUser?.name) || `${device.name} User`,
       device: {
         id: device.id,
         name: device.name,
@@ -302,7 +302,7 @@ export class SmartDifferenceEngine {
           <div class="footer-left">
             <span>🛡️ 100% Cryptographic In-Memory Audit Trail</span>
             <span>•</span>
-            <span>Author: Abhinav Giri</span>
+            <span>Created by Abhinav Giri | Active Machine: ${this.escapeHtml(device.name || 'Local')}</span>
           </div>
           <div class="footer-right">
             <button class="giri-diff-btn-export" id="btn-export-diff-report">
@@ -369,6 +369,7 @@ export class SmartDifferenceEngine {
       exportedAt: new Date().toISOString(),
       documentTitle: docTitle,
       author: 'Abhinav Giri (@abhinavgiri45)',
+      modifiedBy: (typeof localStorage !== 'undefined' && localStorage.getItem('giri_user_name')) || 'Local User',
       suite: 'Giri Orbit Sovereign Suite v14.8.0',
       totalCheckpoints: ledger.length,
       checkpoints: ledger

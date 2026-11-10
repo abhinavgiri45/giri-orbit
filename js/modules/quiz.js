@@ -25,7 +25,7 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = true) 
       passingScorePercent: 70,
       timeLimitMinutes: 10,
       questions: [
-        { id: 'qz_1', type: 'single_choice', title: 'What is the primary benefit of Giri Orbit's sovereign local architecture?', points: 20, options: ['Requires constant high-bandwidth internet connectivity', '100% offline execution with zero forced telemetry and zero data leaks', 'Uploads user documents to external marketing servers', 'Requires monthly subscription license verification'], correctIndex: 1, explanation: 'Giri Orbit operates 100% in-memory and local NVMe storage with zero forced telemetry.' },
+        { id: 'qz_1', type: 'single_choice', title: 'What is the primary benefit of Giri Orbit\\\'s sovereign local architecture?', points: 20, options: ['Requires constant high-bandwidth internet connectivity', '100% offline execution with zero forced telemetry and zero data leaks', 'Uploads user documents to external marketing servers', 'Requires monthly subscription license verification'], correctIndex: 1, explanation: 'Giri Orbit operates 100% in-memory and local NVMe storage with zero forced telemetry.' },
         { id: 'qz_2', type: 'single_choice', title: 'Which file format enables true universal independence across Word, Excel, and Presentation suites?', points: 20, options: ['.proprietary-lockin', 'Open standard .docx, .xlsx, .pptx and .giri sovereign codecs', '.bin blob only', 'Raw print spooler'], correctIndex: 1, explanation: 'Universal open standards and .giri sovereign formats preserve complete user ownership.' },
         { id: 'qz_3', type: 'single_choice', title: 'What is the maximum recommended RAM for large financial matrix calculations in Giri Axis?', points: 20, options: ['128 MB', '4 GB minimum (8 GB for multi-million cell enterprise matrices)', '64 KB', '1 MB'], correctIndex: 1, explanation: 'Axis utilizes modern NVMe vector paging to calculate formulas at native 60fps speeds.' },
         { id: 'qz_4', type: 'single_choice', title: 'In a sovereign security posture, where should sensitive cryptographic keys remain?', points: 20, options: ['Public Pastebin', 'Exclusively on user device hardware keystore / local TPM', 'Shared in marketing analytics cookies', 'Emailed to third parties'], correctIndex: 1, explanation: 'Zero-knowledge sovereignty guarantees cryptographic keys never depart local silicon.' },
@@ -104,7 +104,7 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = true) 
         {
           id: 'qz_1',
           type: 'single_choice',
-          title: 'What is the primary benefit of Giri Orbit's sovereign local architecture?',
+          title: 'What is the primary benefit of Giri Orbit\'s sovereign local architecture?',
           points: 5,
           options: [
             'Requires constant high-bandwidth internet connectivity',
