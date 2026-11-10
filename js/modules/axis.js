@@ -2779,7 +2779,7 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
 
   function getSecondarySeedData() {
     return [
-      { cell: 'A1', val: 'GIRI GROUP // 5-YEAR PROJECTION MODEL', bold: true },
+      { cell: 'A1', val: 'GIRI ORBIT // 5-YEAR PROJECTION MODEL', bold: true },
       { cell: 'A3', val: 'Division', bold: true },
       { cell: 'B3', val: 'FY2026', bold: true },
       { cell: 'C3', val: 'FY2027', bold: true },

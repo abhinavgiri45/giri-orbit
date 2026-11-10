@@ -1,0 +1,66 @@
+/**
+ * ============================================================================
+ * GIRI ORBIT — CRYPTO VAULT & STRESS TESTER STYLING
+ * ============================================================================
+ */
+
+/* Crypto Vault Pill in Header */
+.crypto-vault-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.crypto-vault-pill:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #10b981;
+}
+
+/* Stress Tester Pill in Header */
+.stress-tester-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.stress-tester-pill:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
+}
+
+/* Modal Animations & Responsiveness */
+.crypto-vault-card,
+.stress-tester-card {
+  animation: vaultScaleIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes vaultScaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .crypto-vault-card,
+  .stress-tester-card {
+    width: 96% !important;
+    margin: 8px auto !important;
+  }
+}

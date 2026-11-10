@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="css/sync.css?v=10.9">
   <link rel="stylesheet" href="css/mobile.css?v=10.2">
   <link rel="stylesheet" href="css/hindiInputTools.css?v=1.0">
+  <link rel="stylesheet" href="css/vaultAndStress.css?v=1.0">
   <link rel="manifest" href="manifest.json">
   <meta name="google-signin-client_id" content="340226227470-np4m4o749r8t12nkpb2lgqru8rftju3r.apps.googleusercontent.com">
   <!-- Official Google Identity Services SDK & Google API Client (GAPI) -->
@@ -250,11 +251,34 @@
             <span class="pill-name">AI Agent</span>
             <span class="pill-sub" style="color:#8b5cf6; background:rgba(139,92,246,0.1);">Auto</span>
           </a>
+
+          <!-- 14. Stress Testing & 1T Concurrency Studio -->
+          <button type="button" class="suite-nav-pill" id="tab-nav-stress" onclick="window.stressTester?.openModal(); return false;" title="Hyperscale Stress Testing: Verify 1 Trillion User Infinite Scaling & Event Loop Resilience">
+            <span class="pill-icon" style="color:#ef4444;">🔥</span>
+            <span class="pill-name">Stress</span>
+            <span class="pill-sub" style="color:#ef4444; background:rgba(239,68,68,0.1);">1T Load</span>
+          </button>
+
+          <!-- 15. Zero-Knowledge Cryptographic Vault -->
+          <button type="button" class="suite-nav-pill" id="tab-nav-vault" onclick="window.cryptoVault?.openModal(); return false;" title="Zero-Knowledge Cryptographic Vault: Military-Grade AES-256-GCM Hardware Encryption">
+            <span class="pill-icon" style="color:#10b981;">🔒</span>
+            <span class="pill-name">Vault</span>
+            <span class="pill-sub" style="color:#10b981; background:rgba(16,185,129,0.1);">AES-256</span>
+          </button>
         </nav>
       </div>
 
       <!-- 3. Right: Utility Controls & Actions -->
       <div class="tier2-right">
+        <!-- Cryptographic Vault Status Pill -->
+        <button class="tier1-icon-pill crypto-vault-pill" id="btn-header-crypto-vault" onclick="window.cryptoVault?.openModal(); return false;" title="AES-256 Military Encryption Active: Click to manage keys or lock vault">
+          <span>🔒 AES-256 Active</span>
+        </button>
+
+        <!-- Stress Testing Studio Pill -->
+        <button class="tier1-icon-pill stress-tester-pill" id="btn-header-stress-tester" onclick="window.stressTester?.openModal(); return false;" title="Hyperscale 1T Concurrency Studio & Stress Benchmark">
+          <span>🔥 1T Stress</span>
+        </button>
         <button class="tier1-cloud-pill" id="btn-global-cloud-sync" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Cloud Compatibility (Open from Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.18); border:1px solid rgba(2,132,199,0.4); color:#38bdf8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
           <span style="font-size:12px;">🌐</span>
           <span>Cloud</span>
@@ -488,6 +512,22 @@
               <span style="font-size:14px; line-height:1;">⚡</span>
             </div>
             <span class="m365-rail-label">Storage</span>
+          </button>
+
+          <!-- 11. Zero-Knowledge Crypto Vault -->
+          <button class="m365-rail-btn" id="rail-btn-vault" onclick="window.cryptoVault?.openModal(); return false;" title="Zero-Knowledge AES-256 Cryptographic Vault">
+            <div class="m365-rail-icon-wrap" style="background:rgba(16,185,129,0.15); color:#10b981;">
+              <span style="font-size:14px; line-height:1;">🔒</span>
+            </div>
+            <span class="m365-rail-label">Vault</span>
+          </button>
+
+          <!-- 12. Hyperscale Stress Testing Studio -->
+          <button class="m365-rail-btn" id="rail-btn-stress" onclick="window.stressTester?.openModal(); return false;" title="Hyperscale 1T Concurrency & Stress Studio">
+            <div class="m365-rail-icon-wrap" style="background:rgba(239,68,68,0.15); color:#ef4444;">
+              <span style="font-size:14px; line-height:1;">🔥</span>
+            </div>
+            <span class="m365-rail-label">Stress</span>
           </button>
 
           <!-- 11. More Tools (...) -->

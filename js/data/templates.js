@@ -48,7 +48,7 @@ export const AXIS_BUILTIN_TEMPLATES = [
     desc: 'Executive GAAP income statement tracking Gross Margin, EBIT, and Net Income',
     previewAccent: '#059669',
     data: {
-      'A1': 'GIRI GROUP // STATEMENT OF REVENUE & OPERATIONS',
+      'A1': 'GIRI ORBIT // STATEMENT OF REVENUE & OPERATIONS',
       'A3': 'Metric', 'B3': 'October', 'C3': 'November', 'D3': 'December', 'E3': 'Q4 Total',
       'A4': 'Gross Client Billings', 'B4': '420000', 'C4': '485000', 'D4': '590000', 'E4': '=SUM(B4:D4)',
       'A5': 'Cost of Goods Sold (COGS)', 'B5': '84000', 'C5': '97000', 'D5': '118000', 'E5': '=SUM(B5:D5)',

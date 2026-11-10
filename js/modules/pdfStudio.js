@@ -744,7 +744,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
 
         <h2 style="font-size:15px; font-weight:700; color:#0f172a; margin-bottom:8px;">Executive Summary & Formal Certification</h2>
         <p style="font-size:12.5px; line-height:1.7; color:#334155; margin-bottom:14px;">
-          This document certifies the commercial deployment of <strong>Giri Orbit Zero-Gravity Suite</strong> across all subsidiary divisions of <em>Giri Group</em>. Operating entirely within browser memory, the suite bypasses central database storage latency and enforces total cryptographic data sovereignty.
+          This document certifies the commercial deployment of <strong>Giri Orbit Zero-Gravity Suite</strong> across enterprise clients worldwide. Operating entirely within browser memory, the suite bypasses central database storage latency and enforces total cryptographic data sovereignty.
         </p>
 
         <table style="width:100%; border-collapse:collapse; margin:14px 0; border:1px solid #cbd5e1; font-size:12px;">
@@ -821,7 +821,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
             <img src="assets/giri-group-symbol-dark.png" alt="Abhinav Giri" style="height:32px; width:auto; display:block;">
             <div>
               <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0;">APPENDIX B // SOVEREIGN PRIVACY COMPLIANCE</h1>
-              <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X02 // GIRI GROUP</span>
+              <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X02 // GIRI ORBIT</span>
             </div>
           </div>
         </div>
@@ -889,7 +889,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
     pages = JSON.parse(JSON.stringify(initialPages));
   }
   let activePageIndex = -1;
-  let watermarkText = 'CONFIDENTIAL // GIRI GROUP';
+  let watermarkText = 'CONFIDENTIAL // GIRI ORBIT';
   let isWatermarkActive = true;
   let currentZoom = 100;
 
@@ -1576,7 +1576,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
                 </button>
                 <div class="fluent-group-col" style="justify-content:center;">
                   <select class="fluent-select-dark" id="pdf-watermark-text-select" style="width:140px;">
-                    <option value="CONFIDENTIAL // GIRI GROUP" selected>CONFIDENTIAL</option>
+                    <option value="CONFIDENTIAL // GIRI ORBIT" selected>CONFIDENTIAL</option>
                     <option value="EXECUTIVE REVIEW ONLY">RESTRICTED</option>
                     <option value="DRAFT // UNRELEASED">DRAFT</option>
                     <option value="OFFICIALLY CERTIFIED">CERTIFIED</option>
@@ -3677,7 +3677,7 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
             <img src="assets/giri-group-symbol-dark.png" alt="Abhinav Giri" style="height:32px; width:auto; display:block;">
             <div>
               <h1 style="font-size:18px; font-weight:800; color:#0f172a; margin:0;">GIRI EXECUTIVE MEMORANDUM // SUPPLEMENT</h1>
-              <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X0${pages.length + 1} // GIRI GROUP</span>
+              <span style="font-size:10px; font-family:var(--font-mono); color:#64748b;">REF: GIRI-AEGIS-2026-X0${pages.length + 1} // GIRI ORBIT</span>
             </div>
           </div>
         </div>

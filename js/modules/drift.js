@@ -111,7 +111,7 @@ const BUILTIN_TEMPLATES = [
         </p>
         <h3 style="text-align:center; font-size:14px; font-weight:bold; margin-top:32px;">Works Cited</h3>
         <p style="margin-left:36px; text-indent:-36px; font-size:12.5px;">
-          Giri, Abhinav. <em>Sovereign In-Memory Vector Architectures: Operational Paradigms for Enterprise Workspace Parity</em>. Giri Group Press, 2026.
+          Giri, Abhinav. <em>Sovereign In-Memory Vector Architectures: Operational Paradigms for Enterprise Workspace Parity</em>. Abhinav Giri Sovereign Press, 2026.
         </p>
       </div>
       <p></p>

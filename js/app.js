@@ -31,6 +31,8 @@ import { GiriOfficeFormats } from './components/giriOfficeFormats.js?v=12.2';
 import { storageOptimizer } from './modules/storageOptimizer.js?v=14.6';
 import { hindiInputTools } from './components/hindiInputTools.js?v=1.0';
 import { universalCloudManager } from './modules/universalCloudManager.js?v=1.0';
+import { cryptoVault } from './modules/cryptoVault.js?v=1.0';
+import { stressTester } from './modules/stressTester.js?v=1.0';
 
 class GiriOrbitPlatform {
   constructor() {
@@ -49,6 +51,10 @@ class GiriOrbitPlatform {
     window.hindiInputTools = hindiInputTools;
     this.universalCloudManager = universalCloudManager;
     window.universalCloudManager = universalCloudManager;
+    this.cryptoVault = cryptoVault;
+    window.cryptoVault = cryptoVault;
+    this.stressTester = stressTester;
+    window.stressTester = stressTester;
     this.printManager = new PrintStudioManager(this);
     this.agent = new GirionixAgentManager(this);
     window.orbitAgent = this.agent;
@@ -3409,6 +3415,21 @@ class GiriOrbitPlatform {
         return;
       }
 
+      // 2d. Cryptographic Vault & Stress Testing triggers
+      const vaultTarget = e.target.closest('#btn-header-crypto-vault, #rail-btn-vault, #tab-nav-vault, [data-action="open-crypto-vault"]');
+      if (vaultTarget) {
+        e.preventDefault();
+        this.cryptoVault?.openModal();
+        return;
+      }
+
+      const stressTarget = e.target.closest('#btn-header-stress-tester, #rail-btn-stress, #tab-nav-stress, [data-action="open-stress-tester"]');
+      if (stressTarget) {
+        e.preventDefault();
+        this.stressTester?.openModal();
+        return;
+      }
+
       // 3. See more in Create & New Document triggers
       const createTarget = e.target.closest('#m365-see-more-link, .m365-see-more, #rail-btn-create, [data-action="open-templates"]');
       if (createTarget) {
@@ -3709,7 +3730,7 @@ class GiriOrbitPlatform {
 
         } else if (promptType === 'data-clean') {
           const cleanMarkdown = `| Raw Company Text | Cleaned Text Formula | Validation Status |
-|    giri corporation pvt ltd    | =TRIM(CLEAN(PROPER(A2))) | Normalized |
+|    abhinav giri orbit labs     | =TRIM(CLEAN(PROPER(A2))) | Normalized |
 |   ENTERPRISE SOVEREIGN NODE    | =TRIM(CLEAN(PROPER(A3))) | Normalized |
 |  zero   latency   client physics | =TRIM(CLEAN(PROPER(A4))) | Normalized |
 |    cloud telemetry sealed    | =TRIM(CLEAN(PROPER(A5))) | Normalized |`;
@@ -3843,7 +3864,7 @@ class GiriOrbitPlatform {
           this.showToast('✅ Injected Cryptographic Seal into Aegis PDF!', 'orange');
 
         } else if (promptType === 'compliance-note') {
-          const complianceText = `**Enterprise Regulatory & Governance Compliance Sign-Off**\n\nThis document has been reviewed in accordance with Giri Corporation Sovereign Security Standards.\n- Privacy Enforcement: Zero-Cloud Client-Side Isolation\n- Data Retention: Local Ephemeral In-Memory Storage Only\n- Status: Authorized for Executive Board Review and Formal Archival.`;
+          const complianceText = `**Enterprise Regulatory & Governance Compliance Sign-Off**\n\nThis document has been reviewed in accordance with Abhinav Giri Sovereign Security Standards.\n- Privacy Enforcement: Zero-Cloud Client-Side Isolation\n- Data Retention: Local Ephemeral In-Memory Storage Only\n- Status: Authorized for Executive Board Review and Formal Archival.`;
           this.importContentToPdf(complianceText);
           this.showToast('✅ Appended Compliance Review Note to Aegis PDF!', 'orange');
 
