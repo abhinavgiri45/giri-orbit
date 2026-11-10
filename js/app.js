@@ -1985,7 +1985,7 @@ class GiriOrbitPlatform {
                     </div>
                   </div>
                   <div style="font-size:12.5px; color:#334155; line-height:1.5;">
-                    Complete sovereign Microsoft Office alternative (Word/Drift, Excel/Axis, PowerPoint/Kinetic, PDF/Aegis, Forms, Quiz, Lists, Designer), 100+ Multilingual Satellite DLLs, International Fonts &amp; Sovereign Data Vault.
+                    Complete sovereign Giri Orbit suite (Drift, Axis, Kinetic, Aegis, Forms, Quiz, Lists, Designer), 100+ Multilingual Satellite DLLs, International Fonts &amp; Sovereign Data Vault.
                   </div>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:6px; min-width:200px;">
@@ -6205,7 +6205,7 @@ class GiriOrbitPlatform {
     const formatConfigs = {
       drift: [
         { ext: 'giri', name: 'Universal Office Container (.giri)', desc: 'Omni-compatible sovereign office container — opens seamlessly across all Giri tools, desktop & browser', color: '#e42528', label: 'GIRI' },
-        { ext: 'gdrift', name: 'Giri Drift Document (.gdrift)', desc: 'Universal document format — MS Office & OpenDocument native interoperability', color: '#2563eb', label: 'GDRIFT' },
+        { ext: 'gdrift', name: 'Giri Drift Document (.gdrift)', desc: 'Universal document format — Giri Orbit sovereign native interoperability', color: '#2563eb', label: 'GDRIFT' },
         { ext: 'docx', name: 'Executive Document (.docx)', desc: 'Office Open XML document format', color: '#2563eb', label: 'DOCX' },
         { ext: 'doc', name: 'Standard Document (.doc)', desc: 'Legacy Word binary format', color: '#1d4ed8', label: 'DOC' },
         { ext: 'odt', name: 'Open Document Text (.odt)', desc: 'OpenDocument Text (.odt) format', color: '#1a6b3c', label: 'ODT' },
@@ -6218,7 +6218,7 @@ class GiriOrbitPlatform {
       ],
       axis: [
         { ext: 'giri', name: 'Universal Office Container (.giri)', desc: 'Omni-compatible sovereign office container — holds full spreadsheet workbook & models', color: '#107c41', label: 'GIRI' },
-        { ext: 'gaxis', name: 'Giri Axis Workbook (.gaxis)', desc: 'Universal spreadsheet format — MS Office & OpenDocument native interoperability', color: '#e42528', label: 'GAXIS' },
+        { ext: 'gaxis', name: 'Giri Axis Workbook (.gaxis)', desc: 'Universal spreadsheet format — Giri Orbit sovereign native interoperability', color: '#e42528', label: 'GAXIS' },
         { ext: 'xlsx', name: 'Spreadsheet Workbook (.xlsx)', desc: 'Modern Open XML spreadsheet', color: '#107c41', label: 'XLSX' },
         { ext: 'xls', name: 'Spreadsheet 97-2003 (.xls)', desc: 'Legacy spreadsheet format', color: '#15803d', label: 'XLS' },
         { ext: 'ods', name: 'Open Spreadsheet (.ods)', desc: 'Open Spreadsheet (.ods) format', color: '#1a6b3c', label: 'ODS' },
@@ -6231,7 +6231,7 @@ class GiriOrbitPlatform {
       ],
       kinetic: [
         { ext: 'giri', name: 'Universal Office Container (.giri)', desc: 'Omni-compatible sovereign office container — holds cinematic presentation decks', color: '#ea580c', label: 'GIRI' },
-        { ext: 'gkinetic', name: 'Giri Kinetic Deck (.gkinetic)', desc: 'Universal presentation format — MS Office & OpenDocument native interoperability', color: '#e42528', label: 'GKINETIC' },
+        { ext: 'gkinetic', name: 'Giri Kinetic Deck (.gkinetic)', desc: 'Universal presentation format — Giri Orbit sovereign native interoperability', color: '#e42528', label: 'GKINETIC' },
         { ext: 'pptx', name: 'Presentation (.pptx)', desc: 'Office Open XML Presentation (.pptx)', color: '#ea580c', label: 'PPTX' },
         { ext: 'ppt', name: 'Presentation 97-2003 (.ppt)', desc: 'Legacy presentation format (.ppt)', color: '#c2410c', label: 'PPT' },
         { ext: 'odp', name: 'Open Presentation (.odp)', desc: 'Open Presentation (.odp) format', color: '#1a6b3c', label: 'ODP' },
@@ -6278,7 +6278,7 @@ class GiriOrbitPlatform {
    * Enterprise Multi-Format File Generation
    */
   generateAndDownloadFile(tool, ext, fullFileName, baseName) {
-    // Universal sovereign Giri formats — 100% interoperable across standard office suites, MS Office & Giri Orbit
+    // Universal sovereign Giri formats — 100% interoperable across Giri Orbit Sovereign Suite
     if (ext === 'gdrift') {
       const paper = document.getElementById('drift-paper-canvas');
       const titleEl = document.getElementById('drift-doc-title');

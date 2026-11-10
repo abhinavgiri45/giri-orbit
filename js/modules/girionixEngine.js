@@ -1473,7 +1473,7 @@ Calculate total revenue where Region is "West" and Sales exceed 5,000:
 * **Key Nodes:**
   - 1. 100% local-first memory execution with zero cloud telemetry.
   - 2. Built-in Girionix Pro offline artificial intelligence copilot.
-  - 3. Instant bidirectional round-trip export across all Microsoft Office formats.
+  - 3. Instant bidirectional round-trip export across all Giri Orbit formats.
 
 ---
 ### Slide 3: Market Size & Opportunity

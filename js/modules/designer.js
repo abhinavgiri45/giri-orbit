@@ -1,7 +1,7 @@
 /**
  * GIRI DESIGNER — VECTOR GRAPHICS & CREATIVE BANNER COMPOSER (designer.js)
  * Sovereign Visual Design Studio & Social Asset Generator
- * Competing directly with Microsoft Designer & Canva
+ * Giri Orbit Designer Creative Vector Studio
  * Part of the Giri Orbit Sovereign Office Suite
  * Made by Abhinav Giri (@abhinavgiri45)
  */

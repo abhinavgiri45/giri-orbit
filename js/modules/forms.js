@@ -1,7 +1,7 @@
 /**
  * GIRI FORMS — EXECUTIVE FORM & SURVEY STUDIO (forms.js)
  * Sovereign Interactive Form Builder & Analytics Engine
- * Competing directly with Microsoft Forms & Google Forms
+ * Giri Orbit Forms Survey & Data Collection Studio
  * Part of the Giri Orbit Sovereign Office Suite
  * Made by Abhinav Giri (@abhinavgiri45)
  */

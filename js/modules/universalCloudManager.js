@@ -5,7 +5,7 @@
  * ============================================================================
  * Seamlessly integrates and synchronizes with:
  * 1. Google Drive (Direct link opener, OAuth 2.0, auto-sync)
- * 2. Microsoft OneDrive & SharePoint (Direct link resolver, Graph API)
+ * 2. Giri Orbit Cloud (OneDrive & SharePoint) (Direct link resolver, Graph API)
  * 3. Dropbox (Direct download converter, Chooser / Saver)
  * 4. Nextcloud / ownCloud / Sovereign WebDAV (Private self-hosted clouds)
  * 5. Local Synced Directory (iCloud Drive / Synology / Local Cloud Sync via File System Access API)
@@ -22,7 +22,7 @@ export class UniversalCloudManager {
   constructor() {
     this.providers = {
       gdrive: { name: 'Google Drive', icon: '📁', status: 'ready', enabled: true },
-      onedrive: { name: 'Microsoft OneDrive', icon: '☁️', status: 'ready', enabled: true },
+      onedrive: { name: 'OneDrive (Giri Orbit Sync)', icon: '☁️', status: 'ready', enabled: true },
       dropbox: { name: 'Dropbox', icon: '📦', status: 'ready', enabled: true },
       webdav: { name: 'Nextcloud / WebDAV', icon: '🌐', status: 'not_configured', enabled: false },
       localsync: { name: 'Local Cloud Synced Folder', icon: '💻', status: 'ready', enabled: true }
@@ -132,7 +132,7 @@ export class UniversalCloudManager {
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 11px; color: #64748b;">
             <span>Supported:</span>
             <span style="background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Google Drive</span>
-            <span style="background: #f0fdf4; color: #15803d; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Microsoft OneDrive</span>
+            <span style="background: #f0fdf4; color: #15803d; padding: 2px 6px; border-radius: 4px; font-weight: 600;">OneDrive (Giri Orbit Cloud)</span>
             <span style="background: #eff6ff; color: #1d4ed8; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Dropbox</span>
             <span style="background: #faf5ff; color: #7e22ce; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Nextcloud / WebDAV</span>
           </div>
@@ -196,7 +196,7 @@ export class UniversalCloudManager {
               <div style="font-size: 11px; color: #64748b;">Direct sync to Abhinav Giri Drive or Personal Drive</div>
             </div>
             <div class="cloud-target-card" data-provider="onedrive" style="padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: #fff;">
-              <div style="font-weight: 600; font-size: 13px; color: #0f172a; margin-bottom: 4px;">☁️ Microsoft OneDrive</div>
+              <div style="font-weight: 600; font-size: 13px; color: #0f172a; margin-bottom: 4px;">☁️ OneDrive (Giri Orbit Cloud)</div>
               <div style="font-size: 11px; color: #64748b;">Sync to OneDrive or SharePoint document library</div>
             </div>
             <div class="cloud-target-card" data-provider="dropbox" style="padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: #fff;">

@@ -1,7 +1,7 @@
 /**
  * GIRI QUIZ — EXECUTIVE ASSESSMENT & EXAM ENGINE (quiz.js)
  * Sovereign Scored Assessment Studio with Live Timer & Automated Grading
- * Competing directly with Microsoft Forms Quiz & Google Forms Quiz
+ * Giri Orbit Quiz Assessment & Certification Engine
  * Part of the Giri Orbit Sovereign Office Suite
  * Made by Abhinav Giri (@abhinavgiri45)
  */

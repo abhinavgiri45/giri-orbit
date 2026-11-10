@@ -4,9 +4,9 @@
  * By Abhinav Giri (@abhinavgiri45)
  * 
  * Provides two-way, 100% interoperable serialization and deserialization for:
- * - .gdrift  -> Native Giri Drift / Microsoft Word / OpenDocument Writer / WPS Writer
- * - .gaxis   -> Native Giri Axis / Microsoft Excel / OpenDocument Calc / WPS Spreadsheets
- * - .gkinetic-> Native Giri Kinetic / Microsoft PowerPoint / OpenDocument Impress / WPS Presentation
+ * - .gdrift  -> Native Giri Drift Sovereign Document
+ * - .gaxis   -> Native Giri Axis Sovereign Spreadsheet
+ * - .gkinetic-> Native Giri Kinetic Sovereign Presentation
  * - .gaegis  -> Native Giri Aegis / Adobe PDF / Vector Draw Studio / Edge & Chrome PDF
  * - .giri    -> Native Sovereign Giri Orbit Universal Suite Container
  * ============================================================================
