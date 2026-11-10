@@ -25,20 +25,21 @@ The official production environment is actively deployed on Cloudflare Pages:
 
 ---
 
-## 🔒 Proprietary License & Terms of Use (STRICTLY RESTRICTED)
+## 🔒 Strict Proprietary License & Commercial Terms (LICENSABLE ONLY — NO MODIFICATIONS PERMITTED)
 
-> ### ⚠️ COPYRIGHT & USAGE NOTICE: ALL RIGHTS RESERVED
+> ### ⚠️ STRICT PROPRIETARY SOFTWARE NOTICE: ALL RIGHTS RESERVED
 > 
 > **Copyright © 2025–2026 Abhinav Giri (@abhinavgiri45). All Rights Reserved.**
 >
-> This repository and all associated software, source code, designs, user interfaces, documentation, graphic marks, algorithms, and intellectual assets are the **exclusive proprietary property of Abhinav Giri**.
+> This repository, along with all associated software, source code, designs, user interfaces, documentation, graphic marks, algorithms, and intellectual assets, is the **exclusive proprietary property of Abhinav Giri**.
 >
-> **Strict Terms & Restrictions:**
-> 1. **No External or Unauthorized Use**: You may NOT copy, reproduce, distribute, publicly display, sublicense, decompile, reverse-engineer, modify, or create derivative works from any part of this software or its source code.
-> 2. **No Commercial or Non-Commercial Exploitation**: External individuals, organizations, or third parties are strictly prohibited from using, hosting, redistributing, or incorporating any component of this platform into other products or services.
-> 3. **Private Sovereign Technology**: Access to this repository is provided solely for internal inspection and authorized development by Abhinav Giri. No license or permission, express or implied, is granted under any patent, copyright, trademark, or trade secret rights of Abhinav Giri.
+> **Strict Legal Terms & Prohibitions:**
+> 1. **No Modifications or Derivative Works**: NO user, organization, or third party is permitted to modify, edit, alter, patch, customize, decompile, reverse-engineer, or create derivative works from this software or its source code in any manner whatsoever.
+> 2. **No Unlicensed Use or Execution**: This software is **NOT open source** and is **NOT free software**. No one may execute, deploy, run, test, host, or use this software without an explicit, formal written commercial license executed directly by Abhinav Giri.
+> 3. **No Copying, Sublicensing, or Redistribution**: You may NOT copy, duplicate, distribute, sell, rent, lease, sublicense, mirror, or publish this software or any part thereof on any public or private server, mirror, or repository.
+> 4. **Fully Licensable Exclusively via the Author**: Commercial licenses, enterprise deployment permits, and institutional evaluation rights are granted exclusively through formal written agreements directly with Abhinav Giri.
 >
-> *For licensing inquiries or authorized institutional partnerships, contact me at `abhinavgiri370@gmail.com`.*
+> 📩 *For formal commercial licensing agreements or enterprise rights, contact:* **`abhinavgiri370@gmail.com`**
 
 ---
 
