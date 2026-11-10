@@ -6,7 +6,7 @@
  * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderListsApp(container, onUpdate = null, startInEditor = false) {
+export function renderListsApp(container, onUpdate = null, startInEditor = true) {
   let listData = loadListData();
   let currentView = 'grid'; // 'grid' (table) or 'board' (kanban)
   let searchQuery = '';

@@ -19,7 +19,7 @@ import { GiriOfficeFormats } from '../components/giriOfficeFormats.js';
  * - Professional PDF Export & Print Integration (.pdf, .png, print)
  */
 
-export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor = false) {
+export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor = true) {
   let customTemplates = [];
   try {
     const stored = localStorage.getItem('giri_orbit_pdf_custom_templates');

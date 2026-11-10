@@ -64,7 +64,7 @@ export function parseCellCoordinates(cellId) {
   return { col, row, colLetter };
 }
 
-export function renderAxisApp(container, onGridUpdate = null, startInEditor = false) {
+export function renderAxisApp(container, onGridUpdate = null, startInEditor = true) {
   let customTemplates = [];
   try {
     const stored = localStorage.getItem('giri_orbit_axis_custom_templates');

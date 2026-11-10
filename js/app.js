@@ -223,7 +223,8 @@ class GiriOrbitPlatform {
     if (!openedSpecialDoc) {
       // Parse target tool from URL hash (#axis), query param (?tool=axis), or pathname (/axis)
       const initialView = this.parseCurrentRoute();
-      this.navigateTo(initialView, null, false);
+      const isTool = initialView !== 'launcher' && initialView !== 'hub' && initialView !== 'home';
+      this.navigateTo(initialView, null, false, isTool);
 
       // Ensure URL hash reflects the active tool
       const canonicalHash = (initialView === 'launcher' || initialView === 'hub') ? '#hub' : `#${initialView}`;
@@ -241,7 +242,8 @@ class GiriOrbitPlatform {
       if (this.checkAndLoadSpecialDocLink()) return;
       const view = this.parseCurrentRoute();
       if (view !== this.currentView) {
-        this.navigateTo(view, null, false);
+        const isTool = view !== 'launcher' && view !== 'hub' && view !== 'home';
+        this.navigateTo(view, null, false, isTool);
       }
     });
 
@@ -249,7 +251,8 @@ class GiriOrbitPlatform {
     window.addEventListener('popstate', (e) => {
       const view = e.state?.view || this.parseCurrentRoute();
       if (view !== this.currentView) {
-        this.navigateTo(view, null, false);
+        const isTool = view !== 'launcher' && view !== 'hub' && view !== 'home';
+        this.navigateTo(view, null, false, isTool);
       }
     });
 
@@ -627,7 +630,29 @@ class GiriOrbitPlatform {
   /**
    * Main View Routing & State Transitions with URL Synchronization
    */
-  navigateTo(view, docTitle = null, updateHistory = true, forceEditor = false) {
+  switchView(view, docTitle = null, forceEditor = true) {
+    return this.navigateTo(view, docTitle, true, forceEditor);
+  }
+
+  createNew(type) {
+    const toolMap = {
+      drift: { tool: 'drift', title: 'Untitled Document', appName: 'Drift' },
+      kinetic: { tool: 'kinetic', title: 'Untitled Presentation', appName: 'Kinetic' },
+      axis: { tool: 'axis', title: 'Untitled Spreadsheet', appName: 'Axis' },
+      form: { tool: 'forms', title: 'Customer Feedback Survey', appName: 'Forms' },
+      forms: { tool: 'forms', title: 'Customer Feedback Survey', appName: 'Forms' },
+      quiz: { tool: 'quiz', title: 'Certification Assessment Quiz', appName: 'Quiz' },
+      list: { tool: 'lists', title: 'Enterprise Task Matrix', appName: 'Lists' },
+      lists: { tool: 'lists', title: 'Enterprise Task Matrix', appName: 'Lists' },
+      designer: { tool: 'designer', title: 'Keynote Social Banner', appName: 'Designer' },
+      pdf: { tool: 'pdf', title: 'Aegis Document', appName: 'Aegis' }
+    };
+    const item = toolMap[type] || { tool: type, title: 'New Document', appName: type };
+    this.recordRecentDocument(item.title, item.tool, item.appName);
+    this.navigateTo(item.tool, item.title, true, true);
+  }
+
+  navigateTo(view, docTitle = null, updateHistory = true, forceEditor = true) {
     if (view === 'storage') {
       this.storageOptimizer?.openModal();
       return;
@@ -676,14 +701,17 @@ class GiriOrbitPlatform {
       if (pillBar) { pillBar.style.display = 'flex'; pillBar.style.opacity = '1'; }
     }
 
-    const startEditor = forceEditor || !!docTitle;
+    const isHubView = (view === 'launcher' || view === 'hub' || view === 'home');
+    const startEditor = isHubView ? false : (forceEditor !== false);
+
     try {
-      if (view === 'launcher' || view === 'hub' || view === 'home') {
+      if (isHubView) {
         this.mountZohoLandingHub();
       } else {
         if (this.workspace) this.workspace.innerHTML = '';
         if (view === 'drift') {
-          renderDriftApp(this.workspace, null, docTitle, startEditor);
+          const doc = docTitle || 'Untitled Document - Giri Drift';
+          renderDriftApp(this.workspace, null, doc, startEditor);
           this.showToast('Giri Drift Workspace Ready', 'blue');
         } else if (view === 'axis') {
           renderAxisApp(this.workspace, null, startEditor);
@@ -712,8 +740,21 @@ class GiriOrbitPlatform {
         }
       }
     } catch (routeErr) {
-      console.error('[Giri Orbit] Routing error, recovering to hub:', routeErr);
-      this.mountZohoLandingHub();
+      console.error('[Giri Orbit] Routing error:', routeErr);
+      if (isHubView) {
+        this.mountZohoLandingHub();
+      } else {
+        if (this.workspace) {
+          this.workspace.innerHTML = `
+            <div style="padding:40px; text-align:center; color:#f1f5f9; background:#0f172a; min-height:100vh;">
+              <h2 style="color:#ef4444; margin-bottom:12px;">Tool Initialization Notice</h2>
+              <p style="color:#94a3b8; max-width:600px; margin:0 auto 20px auto;">${this.escapeHtml(routeErr.message || 'Error mounting tool workspace')}</p>
+              <button onclick="window.orbitPlatform.navigateTo('${view}', null, true, true)" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Retry Opening ${view}</button>
+              <button onclick="window.orbitPlatform.navigateTo('launcher')" style="padding:10px 20px; background:#334155; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600; margin-left:10px;">Return to Hub</button>
+            </div>
+          `;
+        }
+      }
     }
 
     this.updateAllAutoSaveBadges();
@@ -1001,7 +1042,7 @@ class GiriOrbitPlatform {
             <!-- 7 Authentic Document Preview Cards: Drift, Kinetic, Axis, Forms, Quiz, Lists, Designer -->
             <div class="m365-cards-row">
               <!-- 1. Document (Drift) -->
-              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Document (Giri Drift)">
+              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Document (Giri Drift)" onclick="window.orbitPlatform?.createNew('drift'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('drift'); event.preventDefault();}">
                 <div class="m365-card-preview preview-word">
                   <div class="sheet-word">
                     <div class="line-blue" style="width:45%; height:5px;"></div>
@@ -1018,7 +1059,7 @@ class GiriOrbitPlatform {
               </div>
 
               <!-- 2. Presentation (Kinetic) -->
-              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New Presentation (Giri Kinetic)">
+              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New Presentation (Giri Kinetic)" onclick="window.orbitPlatform?.createNew('kinetic'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('kinetic'); event.preventDefault();}">
                 <div class="m365-card-preview preview-ppt">
                   <div class="sheet-ppt">
                     <div class="ppt-top-bar"></div>
@@ -1036,7 +1077,7 @@ class GiriOrbitPlatform {
               </div>
 
               <!-- 3. Workbook (Axis) -->
-              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Spreadsheet (Giri Axis)">
+              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Spreadsheet (Giri Axis)" onclick="window.orbitPlatform?.createNew('axis'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('axis'); event.preventDefault();}">
                 <div class="m365-card-preview preview-excel">
                   <div class="sheet-excel">
                     <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
@@ -1051,8 +1092,8 @@ class GiriOrbitPlatform {
                 </div>
               </div>
 
-                            <!-- 4. Form (Forms) -->
-              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form">
+              <!-- 4. Form (Forms) -->
+              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form" onclick="window.orbitPlatform?.createNew('form'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('form'); event.preventDefault();}">
                 <div class="m365-card-preview preview-form">
                   <div class="sheet-form">
                     <div class="form-top-clip"></div>
@@ -1072,7 +1113,7 @@ class GiriOrbitPlatform {
               </div>
 
               <!-- 5. Quiz (Quiz) -->
-              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz">
+              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz" onclick="window.orbitPlatform?.createNew('quiz'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('quiz'); event.preventDefault();}">
                 <div class="m365-card-preview preview-quiz">
                   <div class="sheet-quiz">
                     <div class="quiz-medal-seal">&#9733;</div>
@@ -1093,7 +1134,7 @@ class GiriOrbitPlatform {
               </div>
 
               <!-- 6. List (Lists) -->
-              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix">
+              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix" onclick="window.orbitPlatform?.createNew('list'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('list'); event.preventDefault();}">
                 <div class="m365-card-preview preview-list">
                   <div class="sheet-list">
                     <div class="list-header-bar">
@@ -1125,7 +1166,7 @@ class GiriOrbitPlatform {
               </div>
 
               <!-- 7. Design (Designer) -->
-              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase">
+              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase" onclick="window.orbitPlatform?.createNew('designer'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('designer'); event.preventDefault();}">
                 <div class="m365-card-preview preview-designer">
                   <div class="sheet-designer">
                     <div class="designer-poly-cyan"></div>
@@ -1147,6 +1188,7 @@ class GiriOrbitPlatform {
                   <span class="m365-card-sub">Designer</span>
                 </div>
               </div>
+            </div>
 
             <div style="display:flex; justify-content:flex-end; margin-top:2px;">
               <a href="#" class="m365-see-more" id="m365-see-more-link" onclick="window.orbitPlatform?.openCreateTemplatesModal(); return false;">See more in Create &rarr;</a>
@@ -1321,30 +1363,10 @@ class GiriOrbitPlatform {
 
     // 2. Create New Cards
     container.querySelectorAll('.m365-create-card[data-create]').forEach(card => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
         const type = card.dataset.create;
-        if (type === 'drift') {
-          this.recordRecentDocument('Untitled Document', 'drift', 'Drift');
-          this.navigateTo('drift', 'Untitled Document', true, true);
-        } else if (type === 'kinetic') {
-          this.recordRecentDocument('Untitled Presentation', 'kinetic', 'Kinetic');
-          this.navigateTo('kinetic', null, true, true);
-        } else if (type === 'axis') {
-          this.recordRecentDocument('Untitled Spreadsheet', 'axis', 'Axis');
-          this.navigateTo('axis', null, true, true);
-        } else if (type === 'form') {
-          this.recordRecentDocument('Customer Feedback Survey', 'forms', 'Forms');
-          this.navigateTo('forms', 'Customer Feedback Survey', true, true);
-        } else if (type === 'quiz') {
-          this.recordRecentDocument('Certification Assessment Quiz', 'quiz', 'Quiz');
-          this.navigateTo('quiz', 'Certification Assessment Quiz', true, true);
-        } else if (type === 'list') {
-          this.recordRecentDocument('Enterprise Task Matrix', 'lists', 'Lists');
-          this.navigateTo('lists', 'Enterprise Task Matrix', true, true);
-        } else if (type === 'designer') {
-          this.recordRecentDocument('Keynote Social Banner', 'designer', 'Designer');
-          this.navigateTo('designer', 'Keynote Social Banner', true, true);
-        }
+        this.createNew(type);
       });
     });
 
@@ -3515,28 +3537,7 @@ class GiriOrbitPlatform {
       if (cardTarget) {
         e.preventDefault();
         const type = cardTarget.dataset.create;
-        if (type === 'drift') {
-          this.recordRecentDocument('Untitled Document', 'drift', 'Drift');
-          this.navigateTo('drift', 'Untitled Document', true, true);
-        } else if (type === 'kinetic') {
-          this.recordRecentDocument('Untitled Presentation', 'kinetic', 'Kinetic');
-          this.navigateTo('kinetic', null, true, true);
-        } else if (type === 'axis') {
-          this.recordRecentDocument('Untitled Spreadsheet', 'axis', 'Axis');
-          this.navigateTo('axis', null, true, true);
-        } else if (type === 'form') {
-          this.recordRecentDocument('Customer Feedback Survey', 'forms', 'Forms');
-          this.navigateTo('forms', 'Customer Feedback Survey', true, true);
-        } else if (type === 'quiz') {
-          this.recordRecentDocument('Certification Assessment Quiz', 'quiz', 'Quiz');
-          this.navigateTo('quiz', 'Certification Assessment Quiz', true, true);
-        } else if (type === 'list') {
-          this.recordRecentDocument('Enterprise Task Matrix', 'lists', 'Lists');
-          this.navigateTo('lists', 'Enterprise Task Matrix', true, true);
-        } else if (type === 'designer') {
-          this.recordRecentDocument('Keynote Social Banner', 'designer', 'Designer');
-          this.navigateTo('designer', 'Keynote Social Banner', true, true);
-        }
+        this.createNew(type);
         return;
       }
     });

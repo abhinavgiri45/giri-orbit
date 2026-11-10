@@ -6,7 +6,7 @@
  * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderQuizApp(container, onUpdate = null, startInEditor = false) {
+export function renderQuizApp(container, onUpdate = null, startInEditor = true) {
   let quizData = loadQuizData();
   let activeTab = 'questions'; // 'questions', 'gradebook'
   let isTakeQuizMode = false;

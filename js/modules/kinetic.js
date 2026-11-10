@@ -1602,7 +1602,7 @@ function wireDiagramInputListeners(container, slide, saveCallback) {
   });
 }
 
-export function renderKineticApp(container, onDeckUpdate = null, startInEditor = false) {
+export function renderKineticApp(container, onDeckUpdate = null, startInEditor = true) {
   let customTemplates = [];
   try {
     const stored = localStorage.getItem('giri_orbit_kinetic_custom_templates');

@@ -6,7 +6,7 @@
  * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderDesignerApp(container, onUpdate = null, startInEditor = false) {
+export function renderDesignerApp(container, onUpdate = null, startInEditor = true) {
   let designData = loadDesignData();
   let selectedElementId = null;
   let activeSidebarTab = 'templates'; // 'templates', 'shapes', 'text', 'background'

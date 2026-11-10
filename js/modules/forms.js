@@ -6,7 +6,7 @@
  * Made by Abhinav Giri (@abhinavgiri45)
  */
 
-export function renderFormsApp(container, onUpdate = null, startInEditor = false) {
+export function renderFormsApp(container, onUpdate = null, startInEditor = true) {
   let formData = loadFormData();
   let activeTab = 'questions'; // 'questions' or 'responses'
   let isPreviewMode = false;

@@ -623,7 +623,7 @@
             <!-- 7 Authentic Document Preview Cards: Drift, Kinetic, Axis, Forms, Quiz, Lists, Designer -->
             <div class="m365-cards-row">
               <!-- 1. Document (Drift) -->
-              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Document (Giri Drift)">
+              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Document (Giri Drift)" onclick="window.orbitPlatform?.createNew('drift'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('drift'); event.preventDefault();}">
                 <div class="m365-card-preview preview-word">
                   <div class="sheet-word">
                     <div class="line-blue" style="width:45%; height:5px;"></div>
@@ -640,7 +640,7 @@
               </div>
 
               <!-- 2. Presentation (Kinetic) -->
-              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New Presentation (Giri Kinetic)">
+              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New Presentation (Giri Kinetic)" onclick="window.orbitPlatform?.createNew('kinetic'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('kinetic'); event.preventDefault();}">
                 <div class="m365-card-preview preview-ppt">
                   <div class="sheet-ppt">
                     <div class="ppt-top-bar"></div>
@@ -658,7 +658,7 @@
               </div>
 
               <!-- 3. Workbook (Axis) -->
-              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Spreadsheet (Giri Axis)">
+              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Spreadsheet (Giri Axis)" onclick="window.orbitPlatform?.createNew('axis'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('axis'); event.preventDefault();}">
                 <div class="m365-card-preview preview-excel">
                   <div class="sheet-excel">
                     <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
@@ -673,8 +673,8 @@
                 </div>
               </div>
 
-                            <!-- 4. Form (Forms) -->
-              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form">
+              <!-- 4. Form (Forms) -->
+              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form" onclick="window.orbitPlatform?.createNew('form'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('form'); event.preventDefault();}">
                 <div class="m365-card-preview preview-form">
                   <div class="sheet-form">
                     <div class="form-top-clip"></div>
@@ -694,7 +694,7 @@
               </div>
 
               <!-- 5. Quiz (Quiz) -->
-              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz">
+              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz" onclick="window.orbitPlatform?.createNew('quiz'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('quiz'); event.preventDefault();}">
                 <div class="m365-card-preview preview-quiz">
                   <div class="sheet-quiz">
                     <div class="quiz-medal-seal">&#9733;</div>
@@ -715,7 +715,7 @@
               </div>
 
               <!-- 6. List (Lists) -->
-              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix">
+              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix" onclick="window.orbitPlatform?.createNew('list'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('list'); event.preventDefault();}">
                 <div class="m365-card-preview preview-list">
                   <div class="sheet-list">
                     <div class="list-header-bar">
@@ -747,7 +747,7 @@
               </div>
 
               <!-- 7. Design (Designer) -->
-              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase">
+              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase" onclick="window.orbitPlatform?.createNew('designer'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('designer'); event.preventDefault();}">
                 <div class="m365-card-preview preview-designer">
                   <div class="sheet-designer">
                     <div class="designer-poly-cyan"></div>
@@ -769,6 +769,7 @@
                   <span class="m365-card-sub">Designer</span>
                 </div>
               </div>
+            </div>
 
             <div style="display:flex; justify-content:flex-end; margin-top:2px;">
               <a href="#" class="m365-see-more" id="m365-see-more-link" onclick="window.orbitPlatform?.openCreateTemplatesModal(); return false;">See more in Create &rarr;</a>
