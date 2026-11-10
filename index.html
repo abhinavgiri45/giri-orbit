@@ -803,6 +803,17 @@
               </div>
 
               <div class="m365-action-tools">
+                <button class="m365-pill" id="btn-m365-open-url" onclick="window.universalDocumentUrlManager?.openDocumentByUrlModal(); return false;" title="Open and Edit Document from URL / Deep-Link" style="background:rgba(255,255,255,0.06); border:1px solid rgba(148,163,184,0.22); color:#cbd5e1; gap:6px; cursor:pointer;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                  <span>Open URL</span>
+                </button>
+                <button class="m365-pill" id="btn-m365-sig-verify" onclick="window.digitalSignatureEngine?.openSignatureInspectorModal('Workspace Documents'); return false;" title="Verify Sovereign Digital Signatures & Anti-Virus Threat Status" style="background:rgba(22,163,74,0.12); border:1px solid rgba(34,197,94,0.3); color:#4ade80; gap:5px; cursor:pointer;">
+                  <span>🛡️</span>
+                  <span style="font-weight:600;">Digitally Signed &amp; Safe</span>
+                </button>
                 <button class="m365-upload-btn" id="btn-m365-upload-file" title="Open or Upload Local Document (.docx, .xlsx, .pptx, .giri)">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
