@@ -1,22 +1,51 @@
 /* ============================================================================
- * GIRI ORBIT — GIRI ORBIT SOVEREIGN MODERN DASHBOARD THEME (m365-copilot.css)
- * Pixel-Accurate Giri Orbit Sovereign Light/Clean Workspace UI
+ * GIRI ORBIT — SOVEREIGN SUITE MODERN DASHBOARD THEME (m365-copilot.css)
+ * Usability Heuristics Design System: Unified Typography, Colors, Radii & Buttons
  * ============================================================================
  */
 
 :root {
+  /* Heuristic #1: Typography Tokens (Unified 3-family stack) */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', var(--font-sans);
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', monospace;
+
+  /* Heuristic #5: Consistent 7-Step Type Scale */
+  --text-xs: 11px;      /* fine badges, sub-labels */
+  --text-sm: 12px;      /* metadata, timestamps, tooltips */
+  --text-base: 14px;    /* body text, button labels, inputs */
+  --text-md: 16px;      /* section titles, card headers */
+  --text-lg: 18px;      /* modal titles, prominent labels */
+  --text-xl: 22px;      /* sub-hero headers */
+  --text-2xl: 28px;     /* page hero headline */
+
+  /* Heuristic #6: Standardized 6-Token Semantic Text Colors */
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #64748b;
+  --color-text-accent: #38bdf8;
+  --color-text-inverse: #090d16;
+
+  /* Heuristic #7: Consistent 4-Token Corner Radii */
+  --radius-sm: 6px;     /* badges, fine tags, inner sheets */
+  --radius-md: 10px;    /* buttons, inputs, dropdown items */
+  --radius-lg: 14px;    /* cards, modal dialogs, search bar */
+  --radius-full: 9999px;/* filter pills, circular icon wraps */
+
+  /* Theme Surfaces */
   --m365-bg: #090d16;
   --m365-canvas: transparent;
-  --m365-rail-bg: rgba(13, 19, 33, 0.88);
+  --m365-rail-bg: rgba(13, 19, 33, 0.94);
   --m365-rail-border: rgba(148, 163, 184, 0.12);
-  --m365-text-main: #f8fafc;
-  --m365-text-muted: #94a3b8;
-  --m365-text-light: #64748b;
+  --m365-text-main: var(--color-text-primary);
+  --m365-text-muted: var(--color-text-muted);
+  --m365-text-light: var(--color-text-subtle);
   --m365-border: rgba(148, 163, 184, 0.14);
   --m365-hover: rgba(255, 255, 255, 0.06);
   --m365-purple: #c084fc;
   --m365-blue: #38bdf8;
-  --m365-card-radius: 14px;
+  --m365-card-radius: var(--radius-lg);
 }
 
 /* Master Layout: Full Screen Flex Container */
@@ -32,7 +61,7 @@
               #090d16;
   background-attachment: fixed;
   color: var(--m365-text-main);
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  font-family: var(--font-sans);
   overflow: hidden;
   box-sizing: border-box;
   position: relative;
@@ -65,11 +94,45 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 0 16px 0;
+  padding: 12px 0 14px 0;
   z-index: 50;
   box-sizing: border-box;
   flex-shrink: 0;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+  overflow: hidden; /* Heuristic #4: Viewport bounds preserved */
+}
+
+/* Heuristic #3 & #4: Scrollable App Center with Pinned Global Actions */
+.m365-rail-scroll-group {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+.m365-rail-scroll-group::-webkit-scrollbar {
+  width: 4px;
+}
+.m365-rail-scroll-group::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+
+.m365-rail-group-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-subtle);
+  margin: 6px 0 2px 0;
+  user-select: none;
 }
 
 .m365-rail-top {
@@ -279,11 +342,14 @@
 
 .m365-search-bar input {
   flex: 1;
+  height: 100%;
+  min-height: 44px; /* Heuristic #9: Meets WCAG 44px hit-target */
+  padding: 10px 0;
   border: none;
   outline: none;
   background: transparent;
-  font-size: 13.5px;
-  color: var(--m365-text-main);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
   font-family: inherit;
 }
 
@@ -723,21 +789,27 @@
 .m365-upload-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 12.5px;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
   font-weight: 600;
-  border: 1px solid var(--m365-border);
-  background: #ffffff;
-  color: var(--m365-text-main);
+  border: 1px solid #3b82f6 !important;
+  background: #2563eb !important; /* Heuristic #11: High visual weight primary CTA */
+  color: #ffffff !important;
   cursor: pointer;
-  transition: all 0.15s ease;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .m365-upload-btn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #1d4ed8 !important;
+  border-color: #60a5fa !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.55);
+  transform: translateY(-1px);
+}
+.m365-upload-btn svg {
+  stroke: #ffffff !important;
 }
 
 .m365-view-toggle {
@@ -922,44 +994,40 @@ body:not(.in-tool) .orbit-workspace {
   flex-wrap: wrap;
   justify-content: center;
 }
+/* Heuristic #8: Clean Action Hierarchy (Primary Solid vs Secondary Outline) */
 .m365-empty-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 12.5px;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.m365-empty-btn:hover {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
+/* Primary Single Clear Starting Point */
+.m365-empty-btn.primary {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border: 1px solid #3b82f6 !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
-.m365-empty-btn.axis {
-  background: #f0fdf4;
-  color: #16a34a;
-  border-color: #bbf7d0;
+.m365-empty-btn.primary:hover {
+  background: #1d4ed8 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
 }
-.m365-empty-btn.axis:hover {
-  background: #16a34a;
-  color: #ffffff;
-  border-color: #16a34a;
+/* Secondary Subordinate Options */
+.m365-empty-btn.secondary {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--color-text-secondary) !important;
+  border: 1px solid rgba(148, 163, 184, 0.22) !important;
 }
-.m365-empty-btn.kinetic {
-  background: #fff7ed;
-  color: #ea580c;
-  border-color: #fed7aa;
-}
-.m365-empty-btn.kinetic:hover {
-  background: #ea580c;
-  color: #ffffff;
-  border-color: #ea580c;
+.m365-empty-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--color-text-primary) !important;
+  border-color: rgba(148, 163, 184, 0.45) !important;
 }
 
 /* ============================================================================
@@ -1633,65 +1701,49 @@ body:not(.in-tool) .orbit-workspace {
   background: #f3e8ff;
 }
 
-/* 7. Design Preview (Creative Vector Studio) - Pristine Light Canvas with Vibrant Geometry */
+/* Heuristic #12: Design Preview - Flat Monochromatic Badged Aesthetic */
 .preview-designer {
   background: #fdf2f8 !important;
 }
 .sheet-designer {
-  width: 68px !important;
+  width: 58px !important;
   height: 74px !important;
   background: #ffffff !important;
   border: 1px solid #fbcfe8 !important;
-  border-radius: 4px !important;
-  box-shadow: 0 3px 12px rgba(219, 39, 119, 0.14) !important;
-  padding: 0 !important;
-  position: relative !important;
-  overflow: hidden !important;
+  border-radius: 3px !important;
+  box-shadow: 0 2px 6px rgba(219, 39, 119, 0.08) !important;
+  padding: 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
 }
-.designer-poly-cyan {
-  position: absolute;
-  top: 8px;
-  left: 6px;
-  width: 26px;
-  height: 22px;
-  background: rgba(14, 165, 233, 0.75);
-  clip-path: polygon(10% 0%, 90% 15%, 80% 90%, 0% 80%);
+.designer-top-bar {
+  height: 5px;
+  background: #fbcfe8;
+  border-radius: 2px;
+  width: 60%;
 }
-.designer-poly-gold {
-  position: absolute;
-  top: 14px;
-  right: 6px;
-  width: 26px;
-  height: 24px;
-  background: rgba(245, 158, 11, 0.75);
-  clip-path: polygon(15% 10%, 100% 0%, 85% 100%, 0% 85%);
+.designer-canvas-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #fff5f8;
+  border-radius: 3px;
+  border: 1px dashed #f472b6;
+  padding: 4px;
 }
-.designer-cir-rose {
-  position: absolute;
-  top: 16px;
-  left: 18px;
-  width: 22px;
-  height: 22px;
+.designer-shape-circle {
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: rgba(236, 72, 153, 0.85);
-  box-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+  background: #ec4899;
 }
-.designer-bezier-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.designer-pen-nib {
-  position: absolute;
-  top: 24px;
-  left: 36px;
-  width: 10px;
-  height: 10px;
-  background: #db2777;
-  clip-path: polygon(0% 0%, 100% 30%, 30% 100%);
-  filter: drop-shadow(0 1px 2px rgba(219, 39, 119, 0.4));
+.designer-shape-rect {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: #f472b6;
 }
 
 

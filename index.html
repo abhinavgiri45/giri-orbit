@@ -365,7 +365,7 @@
       <nav class="m365-left-rail" aria-label="Main Navigation">
         <div class="m365-rail-top">
           <!-- 1. Home -->
-          <button class="m365-rail-btn active" id="rail-btn-home" data-rail="home" title="Home">
+          <button class="m365-rail-btn active" id="rail-btn-home" data-rail="home" aria-current="page" title="Home">
             <div class="m365-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
@@ -414,7 +414,10 @@
             </div>
             <span class="m365-rail-label">Apps</span>
           </button>
+        </div>
 
+        <!-- Scrollable Office Tools Section (Heuristics #3 & #4) -->
+        <div class="m365-rail-scroll-group" aria-label="Productivity Tools">
           <!-- 6. Universal Cloud -->
           <button class="m365-rail-btn" id="rail-btn-cloud" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Cloud Compatibility (Open from Drive, OneDrive, Dropbox, Nextcloud)">
             <div class="m365-rail-icon-wrap" style="background:#e0f2fe; color:#0284c7;">
@@ -549,10 +552,11 @@
             </div>
             <span class="m365-rail-label">More</span>
           </button>
+        </div>
 
-          <div class="m365-rail-divider"></div>
-
-          <!-- 6. Download Office Suite (.exe / .apk) -->
+        <!-- Pinned Bottom Global Actions: Always Visible (Heuristic #4) -->
+        <div class="m365-rail-bottom">
+          <!-- Download Suite (Pinned) -->
           <button class="m365-rail-btn" id="rail-btn-download" onclick="window.orbitPlatform?.openDownloadSuiteModal(); return false;" title="Download Giri Orbit Suite (.exe / .apk)">
             <div class="m365-rail-icon-wrap" style="background:#eff6ff; color:#2563eb;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -561,9 +565,6 @@
             </div>
             <span class="m365-rail-label" style="color:#2563eb; font-weight:700;">Download</span>
           </button>
-        </div>
-
-        <div class="m365-rail-bottom">
           <!-- Settings -->
           <button class="m365-rail-btn" id="rail-btn-settings" onclick="window.orbitPlatform?.openSettingsModal(); return false;" title="Settings & Personalization">
             <div class="m365-rail-icon-wrap">
@@ -750,18 +751,13 @@
               <!-- 7. Design (Designer) -->
               <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase" onclick="window.orbitPlatform?.createNew('designer'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('designer'); event.preventDefault();}">
                 <div class="m365-card-preview preview-designer">
+                  <!-- Heuristic #12: Flat monochromatic badged design artboard -->
                   <div class="sheet-designer">
-                    <div class="designer-poly-cyan"></div>
-                    <div class="designer-poly-gold"></div>
-                    <div class="designer-cir-rose"></div>
-                    <svg class="designer-bezier-svg" viewBox="0 0 68 74">
-                      <path d="M 10 55 C 20 20, 48 58, 58 24" fill="none" stroke="#db2777" stroke-width="2" />
-                      <line x1="22" y1="32" x2="36" y2="18" stroke="#38bdf8" stroke-width="1.5" />
-                      <circle cx="22" cy="32" r="2.5" fill="#38bdf8" />
-                      <circle cx="36" cy="18" r="2.5" fill="#38bdf8" />
-                      <rect x="27" y="23" width="4" height="4" fill="#ffffff" stroke="#0ea5e9" stroke-width="1" />
-                    </svg>
-                    <div class="designer-pen-nib"></div>
+                    <div class="designer-top-bar"></div>
+                    <div class="designer-canvas-box">
+                      <div class="designer-shape-circle"></div>
+                      <div class="designer-shape-rect"></div>
+                    </div>
                   </div>
                   <div class="badge-corner badge-designer">D</div>
                 </div>

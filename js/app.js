@@ -1168,18 +1168,13 @@ class GiriOrbitPlatform {
               <!-- 7. Design (Designer) -->
               <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase" onclick="window.orbitPlatform?.createNew('designer'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('designer'); event.preventDefault();}">
                 <div class="m365-card-preview preview-designer">
+                  <!-- Heuristic #12: Flat monochromatic badged design artboard -->
                   <div class="sheet-designer">
-                    <div class="designer-poly-cyan"></div>
-                    <div class="designer-poly-gold"></div>
-                    <div class="designer-cir-rose"></div>
-                    <svg class="designer-bezier-svg" viewBox="0 0 68 74">
-                      <path d="M 10 55 C 20 20, 48 58, 58 24" fill="none" stroke="#db2777" stroke-width="2" />
-                      <line x1="22" y1="32" x2="36" y2="18" stroke="#38bdf8" stroke-width="1.5" />
-                      <circle cx="22" cy="32" r="2.5" fill="#38bdf8" />
-                      <circle cx="36" cy="18" r="2.5" fill="#38bdf8" />
-                      <rect x="27" y="23" width="4" height="4" fill="#ffffff" stroke="#0ea5e9" stroke-width="1" />
-                    </svg>
-                    <div class="designer-pen-nib"></div>
+                    <div class="designer-top-bar"></div>
+                    <div class="designer-canvas-box">
+                      <div class="designer-shape-circle"></div>
+                      <div class="designer-shape-rect"></div>
+                    </div>
                   </div>
                   <div class="badge-corner badge-designer">D</div>
                 </div>
@@ -1524,18 +1519,19 @@ class GiriOrbitPlatform {
         <div class="m365-empty-icon">&#128193;</div>
         <h3>No documents yet</h3>
         <p>Create a new document above or upload an existing file to get started. All your files stay 100% private and sovereign.</p>
+        <!-- Heuristic #8: Clear Single Primary Starting Point & Subordinate Secondary Options -->
         <div class="m365-empty-actions">
-          <button class="m365-empty-btn" id="btn-empty-drift">
+          <button class="m365-empty-btn primary" id="btn-empty-drift">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
             + New Document (Drift)
           </button>
-          <button class="m365-empty-btn axis" id="btn-empty-axis">
+          <button class="m365-empty-btn secondary" id="btn-empty-axis">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            + New Spreadsheet (Axis)
+            Spreadsheet
           </button>
-          <button class="m365-empty-btn kinetic" id="btn-empty-kinetic">
+          <button class="m365-empty-btn secondary" id="btn-empty-kinetic">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            + New Presentation (Kinetic)
+            Presentation
           </button>
         </div>
       `;
