@@ -1,17 +1,18 @@
 {
   "name": "Giri Orbit Sovereign Suite",
   "short_name": "Giri Orbit",
-  "description": "Complete cloud-free office suite: Documents, Spreadsheets, Presentations & PDF Studio",
+  "description": "Complete sovereign cloud-free office suite by Abhinav Giri: Documents, Spreadsheets, Presentations, Forms, Designer, Lists, Quiz & PDF Studio",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "orientation": "any",
   "scope": "./",
   "categories": [
     "productivity",
     "utilities",
-    "business"
+    "business",
+    "finance"
   ],
   "lang": "en-US",
   "icons": [
@@ -28,50 +29,78 @@
       "purpose": "any maskable"
     }
   ],
+  "file_handlers": [
+    {
+      "action": "./index.html",
+      "name": "Giri Orbit Document Suite",
+      "icons": [
+        {
+          "src": "assets/giri-logo-symbol.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ],
+      "accept": {
+        "application/x-giri-suite": [".giri"],
+        "application/x-giri-drift": [".gdrift", ".gdoc", ".rtf", ".txt"],
+        "application/x-giri-axis": [".gaxis", ".gsheet", ".csv"],
+        "application/x-giri-kinetic": [".gkinetic", ".gpres"],
+        "application/x-giri-form": [".gform"],
+        "application/x-giri-designer": [".gdesign", ".gsvg"],
+        "application/x-giri-list": [".glist"],
+        "application/x-giri-quiz": [".gquiz"],
+        "application/pdf": [".pdf"]
+      }
+    }
+  ],
   "shortcuts": [
     {
-      "name": "Giri Drift (Docs)",
-      "url": "/#drift",
-      "description": "Open document editor",
-      "icons": [
-        {
-          "src": "assets/giri-logo-symbol.png",
-          "sizes": "96x96"
-        }
-      ]
+      "name": "Giri Drift (Word Processor)",
+      "url": "./index.html?tool=drift#drift",
+      "description": "Open document composer",
+      "icons": [{ "src": "assets/drift-symbol.png", "sizes": "96x96" }]
     },
     {
-      "name": "Giri Axis (Sheets)",
-      "url": "/#axis",
-      "description": "Open spreadsheet",
-      "icons": [
-        {
-          "src": "assets/giri-logo-symbol.png",
-          "sizes": "96x96"
-        }
-      ]
+      "name": "Giri Axis (Spreadsheet & Matrix)",
+      "url": "./index.html?tool=axis#axis",
+      "description": "Open high-velocity spreadsheet",
+      "icons": [{ "src": "assets/axis-logo.png", "sizes": "96x96" }]
     },
     {
-      "name": "Giri Kinetic (Slides)",
-      "url": "/#kinetic",
-      "description": "Open presentation",
-      "icons": [
-        {
-          "src": "assets/giri-logo-symbol.png",
-          "sizes": "96x96"
-        }
-      ]
+      "name": "Giri Kinetic (Presentation Studio)",
+      "url": "./index.html?tool=kinetic#kinetic",
+      "description": "Open cinematic presentation slides",
+      "icons": [{ "src": "assets/kinetic-logo.png", "sizes": "96x96" }]
     },
     {
-      "name": "Giri Aegis (PDF)",
-      "url": "/#pdf",
-      "description": "Open PDF studio",
-      "icons": [
-        {
-          "src": "assets/giri-logo-symbol.png",
-          "sizes": "96x96"
-        }
-      ]
+      "name": "Giri Forms (Survey & Data Matrix)",
+      "url": "./index.html?tool=forms#forms",
+      "description": "Open survey & form builder",
+      "icons": [{ "src": "assets/forms-logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Giri Designer (Graphic & Vector)",
+      "url": "./index.html?tool=designer#designer",
+      "description": "Open vector graphic studio",
+      "icons": [{ "src": "assets/designer-logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Giri Lists (Kanban & Sprint)",
+      "url": "./index.html?tool=lists#lists",
+      "description": "Open task & kanban tracker",
+      "icons": [{ "src": "assets/lists-logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Giri Quiz (Assessment & Exam)",
+      "url": "./index.html?tool=quiz#quiz",
+      "description": "Open certification exam engine",
+      "icons": [{ "src": "assets/quiz-logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Giri Aegis (PDF Studio)",
+      "url": "./index.html?tool=pdf#pdf",
+      "description": "Open PDF editor & signer",
+      "icons": [{ "src": "assets/aegis-logo.png", "sizes": "96x96" }]
     }
   ]
 }

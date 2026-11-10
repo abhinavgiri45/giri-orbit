@@ -47,6 +47,37 @@ export function renderQuizApp(container, onUpdate = null, startInEditor = false)
         { id: 'qz_4', type: 'single_choice', title: 'What is the penalty for violating enterprise data sovereignty?', points: 25, options: ['No penalty', 'Immediate regulatory compliance audit and security escalation', 'A bonus', 'Free coffee'], correctIndex: 1, explanation: 'Non-compliance exposes organizations to severe governance penalties.' }
       ]
     }
+,
+    {
+      id: 'iso-soc2',
+      name: 'ISO 27001 / SOC-2 Cybersecurity Certification',
+      category: 'compliance',
+      desc: 'Industry benchmark certification testing cryptographic ciphers, key management, and zero-leak access controls.',
+      themeColor: '#10b981',
+      passingScorePercent: 75,
+      timeLimitMinutes: 12,
+      questions: [
+        { id: 'qz_1', type: 'single_choice', title: 'Which authenticated symmetric encryption cipher is mandated for enterprise data at rest?', points: 25, options: ['DES 56-bit', 'RC4 stream cipher', 'AES-256-GCM (Galois/Counter Mode)', 'Plain Base64 encoding'], correctIndex: 2, explanation: 'AES-256-GCM provides both mathematical confidentiality and tamper-proof authentication.' },
+        { id: 'qz_2', type: 'single_choice', title: 'Why is PBKDF2 with 100,000+ iterations utilized during key derivation?', points: 25, options: ['It slows down brute-force and GPU dictionary attacks', 'It compresses the file size', 'It sends telemetry to the cloud', 'It converts text to ASCII'], correctIndex: 0, explanation: 'High-iteration PBKDF2 creates severe computational hardness against brute-force attacks.' },
+        { id: 'qz_3', type: 'single_choice', title: 'What is the required procedure for in-memory plaintext buffers upon document close?', points: 25, options: ['Leave in memory cache indefinitely', 'Zeroize and overwrite with cryptographically secure random values', 'Write to temp text file on desktop', 'Print to paper'], correctIndex: 1, explanation: 'RAM zeroization prevents cold-boot memory dumps and process memory snooping.' },
+        { id: 'qz_4', type: 'single_choice', title: 'In an air-gapped high-security facility, how does Giri Orbit function?', points: 25, options: ['Fails to start', '100% full functionality with zero degradation because all runtimes and fonts are local', 'Requires phone tethering', 'Prompts for online login'], correctIndex: 1, explanation: 'Giri Orbit is engineered from the ground up for total air-gapped sovereign execution.' }
+      ]
+    },
+    {
+      id: 'fullstack-arch',
+      name: 'Full-Stack Performance & Concurrency Exam',
+      category: 'engineering',
+      desc: 'Advanced technical assessment covering browser event loops, requestAnimationFrame batching, and Web Workers.',
+      themeColor: '#8b5cf6',
+      passingScorePercent: 80,
+      timeLimitMinutes: 15,
+      questions: [
+        { id: 'qz_1', type: 'single_choice', title: 'How does Giri Orbit guarantee 60 FPS under a 1-million click synthetic flood?', points: 25, options: ['Drops all user input', 'Batches and merges rapid events into microtasks scheduled via requestAnimationFrame', 'Locks the computer screen', 'Spawns 10,000 popups'], correctIndex: 1, explanation: 'Backpressure throttling merges high-frequency bursts without overflowing call stacks.' },
+        { id: 'qz_2', type: 'single_choice', title: 'Which API enables direct-to-disk file saving without repeated download prompts?', points: 25, options: ['Flash Player', 'File System Access API (showSaveFilePicker / FileSystemFileHandle)', 'XMLHttpRequest sync mode', 'ActiveX Object'], correctIndex: 1, explanation: 'File System Access API provides native read/write file handle streams on modern browsers.' },
+        { id: 'qz_3', type: 'single_choice', title: 'Why does Giri Orbit execute heavy trigonometric calculations in Web Workers?', points: 25, options: ['To waste CPU cycles', 'To keep the main UI thread 100% responsive and stutter-free', 'To bypass browser security', 'To play audio'], correctIndex: 1, explanation: 'Web Workers offload intensive computation from the main rendering thread.' },
+        { id: 'qz_4', type: 'single_choice', title: 'What is the role of a Service Worker in a sovereign offline office suite?', points: 25, options: ['Mine cryptocurrency', 'Intercept network requests and serve cached assets instantaneously via Stale-While-Revalidate', 'Display banner advertisements', 'Send daily user emails'], correctIndex: 1, explanation: 'Service Workers enable instant load times and offline execution from local CacheStorage.' }
+      ]
+    }
   ];
 
   if (startInEditor) {

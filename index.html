@@ -51,6 +51,7 @@
   <link rel="stylesheet" href="css/mobile.css?v=10.2">
   <link rel="stylesheet" href="css/hindiInputTools.css?v=1.0">
   <link rel="stylesheet" href="css/vaultAndStress.css?v=1.0">
+  <link rel="stylesheet" href="css/sessionAndDiff.css?v=1.0">
   <link rel="manifest" href="manifest.json">
   <meta name="google-signin-client_id" content="340226227470-np4m4o749r8t12nkpb2lgqru8rftju3r.apps.googleusercontent.com">
   <!-- Official Google Identity Services SDK & Google API Client (GAPI) -->
@@ -259,6 +260,13 @@
             <span class="pill-sub" style="color:#ef4444; background:rgba(239,68,68,0.1);">1T Load</span>
           </button>
 
+          <!-- 16. Smart Difference & Forensic Device Audit -->
+          <button type="button" class="suite-nav-pill" id="tab-nav-smart-diff" onclick="window.smartDifferenceEngine?.openAuditModal(); return false;" title="Smart Difference & Multi-Device Audit Trail: Track which PC modified what and why">
+            <span class="pill-icon" style="color:#10b981;">🔬</span>
+            <span class="pill-name">Audit</span>
+            <span class="pill-sub" style="color:#10b981; background:rgba(16,185,129,0.1);">Diff & Why</span>
+          </button>
+
           <!-- 15. Zero-Knowledge Cryptographic Vault -->
           <button type="button" class="suite-nav-pill" id="tab-nav-vault" onclick="window.cryptoVault?.openModal(); return false;" title="Zero-Knowledge Cryptographic Vault: Military-Grade AES-256-GCM Hardware Encryption">
             <span class="pill-icon" style="color:#10b981;">🔒</span>
@@ -278,6 +286,9 @@
         <!-- Stress Testing Studio Pill -->
         <button class="tier1-icon-pill stress-tester-pill" id="btn-header-stress-tester" onclick="window.stressTester?.openModal(); return false;" title="Hyperscale 1T Concurrency Studio & Stress Benchmark">
           <span>🔥 1T Stress</span>
+        </button>
+        <button class="tier1-icon-pill smart-diff-pill" id="btn-header-smart-diff" onclick="window.smartDifferenceEngine?.openAuditModal(); return false;" title="Smart Difference & Multi-Device Audit Trail (Track modifications & why)" style="background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+          <span>🔬 Smart Diff</span>
         </button>
         <button class="tier1-cloud-pill" id="btn-global-cloud-sync" onclick="window.universalCloudManager?.openCloudOpenerDialog(); return false;" title="Universal Cloud Compatibility (Open from Google Drive, OneDrive, Dropbox, Nextcloud)" style="background:rgba(2,132,199,0.18); border:1px solid rgba(2,132,199,0.4); color:#38bdf8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
           <span style="font-size:12px;">🌐</span>

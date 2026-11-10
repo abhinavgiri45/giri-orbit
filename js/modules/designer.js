@@ -45,6 +45,72 @@ export function renderDesignerApp(container, onUpdate = null, startInEditor = fa
         { id: 'el_3', type: 'text', x: 120, y: 300, text: 'Sovereign Digital Infrastructure', fontSize: 56, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '900' },
         { id: 'el_4', type: 'text', x: 120, y: 460, text: 'Keynote Speaker: Abhinav Giri (@abhinavgiri45)', fontSize: 26, fill: '#38bdf8', fontFamily: 'Segoe UI', fontWeight: '600' }
       ]
+    },
+    {
+      id: 'linkedin-hero',
+      name: 'LinkedIn Business Profile Hero',
+      category: 'social',
+      preset: 'landscape',
+      width: 1584,
+      height: 396,
+      background: 'linear-gradient(90deg, #0f172a 0%, #0369a1 100%)',
+      desc: 'Standard 1584x396 executive banner for LinkedIn profiles and enterprise company pages.',
+      elements: [
+        { id: 'el_1', type: 'shape_rect', x: 40, y: 30, width: 1504, height: 336, fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(56,189,248,0.3)', strokeWidth: 1.5, rx: 12 },
+        { id: 'el_2', type: 'text', x: 100, y: 150, text: 'ABHINAV GIRI // ENTERPRISE ARCHITECTURE', fontSize: 22, fill: '#38bdf8', fontFamily: 'Segoe UI', fontWeight: 'bold' },
+        { id: 'el_3', type: 'text', x: 100, y: 230, text: 'Building the Sovereign Desktop Workspace & High-Velocity Silicon Runtimes', fontSize: 34, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '800' }
+      ]
+    },
+    {
+      id: 'youtube-titlecard',
+      name: 'YouTube 4K Broadcast Titlecard',
+      category: 'social',
+      preset: 'landscape',
+      width: 1280,
+      height: 720,
+      background: 'linear-gradient(135deg, #18181b 0%, #27272a 50%, #09090b 100%)',
+      desc: 'Crisp 1280x720 video thumbnail with high-contrast typography and red accent pill.',
+      elements: [
+        { id: 'el_1', type: 'shape_rect', x: 60, y: 60, width: 1160, height: 600, fill: 'transparent', stroke: '#ef4444', strokeWidth: 4, rx: 24 },
+        { id: 'el_2', type: 'shape_rect', x: 100, y: 120, width: 220, height: 48, fill: '#ef4444', stroke: 'none', strokeWidth: 0, rx: 8 },
+        { id: 'el_3', type: 'text', x: 130, y: 152, text: 'OFFICIAL RELEASE', fontSize: 18, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: 'bold' },
+        { id: 'el_4', type: 'text', x: 100, y: 280, text: 'NEXT-GEN OFFICE SUITE', fontSize: 62, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '900' },
+        { id: 'el_5', type: 'text', x: 100, y: 380, text: 'Zero Cloud. Zero Lag. Total Sovereignty.', fontSize: 30, fill: '#38bdf8', fontFamily: 'Segoe UI', fontWeight: '700' }
+      ]
+    },
+    {
+      id: 'infographic-flow',
+      name: 'System Architecture Infographic',
+      category: 'poster',
+      preset: 'portrait',
+      width: 800,
+      height: 1200,
+      background: 'linear-gradient(180deg, #090d16 0%, #111827 100%)',
+      desc: 'Tall 800x1200 vertical infographic layout for diagrams, engineering pipelines, and workflows.',
+      elements: [
+        { id: 'el_1', type: 'text', x: 60, y: 100, text: 'SYSTEM ARCHITECTURE', fontSize: 18, fill: '#10b981', fontFamily: 'Segoe UI', fontWeight: 'bold' },
+        { id: 'el_2', type: 'text', x: 60, y: 160, text: 'Client-Silicon In-Memory Pipeline', fontSize: 36, fill: '#ffffff', fontFamily: 'Segoe UI', fontWeight: '800' },
+        { id: 'el_3', type: 'shape_rect', x: 60, y: 240, width: 680, height: 220, fill: 'rgba(16, 185, 129, 0.08)', stroke: '#10b981', strokeWidth: 2, rx: 16 },
+        { id: 'el_4', type: 'text', x: 100, y: 300, text: 'Tier 1: Web Crypto Hardware Acceleration', fontSize: 24, fill: '#34d399', fontFamily: 'Segoe UI', fontWeight: 'bold' },
+        { id: 'el_5', type: 'text', x: 100, y: 360, text: 'AES-256-GCM authenticated cipher with 100k PBKDF2 iterations.', fontSize: 16, fill: '#94a3b8', fontFamily: 'Segoe UI', fontWeight: 'normal' }
+      ]
+    },
+    {
+      id: 'sovereign-certificate',
+      name: 'Certificate of Sovereign Excellence',
+      category: 'poster',
+      preset: 'landscape',
+      width: 1920,
+      height: 1080,
+      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+      desc: 'Prestige 1920x1080 landscape certificate with ornate gold borders and formal seal.',
+      elements: [
+        { id: 'el_1', type: 'shape_rect', x: 100, y: 80, width: 1720, height: 920, fill: 'transparent', stroke: '#eab308', strokeWidth: 5, rx: 12 },
+        { id: 'el_2', type: 'text', x: 580, y: 260, text: 'CERTIFICATE OF EXCELLENCE', fontSize: 52, fill: '#facc15', fontFamily: 'Times New Roman', fontWeight: 'bold' },
+        { id: 'el_3', type: 'text', x: 680, y: 360, text: 'THIS FORMAL ACCREDITATION IS AWARDED TO', fontSize: 18, fill: '#94a3b8', fontFamily: 'Segoe UI', fontWeight: 'bold' },
+        { id: 'el_4', type: 'text', x: 740, y: 480, text: 'ABHINAV GIRI', fontSize: 64, fill: '#ffffff', fontFamily: 'Times New Roman', fontWeight: 'bold' },
+        { id: 'el_5', type: 'text', x: 620, y: 600, text: 'For Outstanding Contributions to Sovereign Software Architecture', fontSize: 22, fill: '#38bdf8', fontFamily: 'Segoe UI', fontWeight: 'normal' }
+      ]
     }
   ];
 

@@ -1,7 +1,11 @@
 /**
- * Giri Orbit — Local File Direct Sync Engine
- * Sovereign Direct-to-Disk Read/Write via File System Access API
+ * ============================================================================
+ * GIRI ORBIT — LOCAL FILE DIRECT SYNC ENGINE (localFileDirectSync.js)
+ * By Abhinav Giri (@abhinavgiri45)
+ * ============================================================================
+ * Sovereign Direct-to-Disk Read/Write via File System Access API & LaunchQueue.
  * Eliminates re-downloads, re-uploads, and server roundtrips.
+ * Supports all tools: Drift, Axis, Kinetic, Aegis (PDF), Forms, Designer, Lists, Quiz.
  */
 
 class LocalFileDirectSyncEngine {
@@ -10,17 +14,26 @@ class LocalFileDirectSyncEngine {
       drift: null,
       axis: null,
       kinetic: null,
-      pdf: null
+      pdf: null,
+      forms: null,
+      designer: null,
+      lists: null,
+      quiz: null
     };
 
     this.activeFileNames = {
       drift: null,
       axis: null,
       kinetic: null,
-      pdf: null
+      pdf: null,
+      forms: null,
+      designer: null,
+      lists: null,
+      quiz: null
     };
 
     this.listeners = new Set();
+    this.autoSaveDebounceTimers = {};
   }
 
   isSupported() {
@@ -33,6 +46,12 @@ class LocalFileDirectSyncEngine {
 
   getActiveFileName(tool) {
     return this.activeFileNames[tool] || null;
+  }
+
+  setExternalHandle(tool, handle, fileName) {
+    this.activeHandles[tool] = handle;
+    this.activeFileNames[tool] = fileName || handle?.name || 'document';
+    this._notifyChange(tool);
   }
 
   clearHandle(tool) {
@@ -57,6 +76,29 @@ class LocalFileDirectSyncEngine {
   }
 
   /**
+   * Automatic background write-through to disk file handle when handle is active
+   */
+  queueAutoSave(tool, content) {
+    const handle = this.activeHandles[tool];
+    if (!handle) return false;
+
+    clearTimeout(this.autoSaveDebounceTimers[tool]);
+    this.autoSaveDebounceTimers[tool] = setTimeout(async () => {
+      try {
+        const writable = await handle.createWritable();
+        await writable.write(content);
+        await writable.close();
+        if (window.orbitPlatform) {
+          window.orbitPlatform.showToast(`💾 Auto-saved directly to Explorer: ${this.activeFileNames[tool]}`);
+        }
+      } catch (e) {
+        console.warn('Auto-save direct to handle skipped or permissions expired:', e);
+      }
+    }, 1500);
+    return true;
+  }
+
+  /**
    * Save content directly to local disk.
    * If a file handle is already linked, writes directly without prompts.
    * If forcePicker is true or no handle exists, prompts native OS save picker.
@@ -75,7 +117,7 @@ class LocalFileDirectSyncEngine {
       if (!this.isSupported()) {
         this._fallbackDownload(content, `${suggestedName}.${extension}`, mimeType);
         if (window.orbitPlatform) {
-          window.orbitPlatform.triggerToast(`Downloaded "${suggestedName}.${extension}" (Direct sync requires Chromium browser)`);
+          window.orbitPlatform.showToast(`Downloaded "${suggestedName}.${extension}" (Direct sync requires Chromium browser)`);
         }
         return { success: true, mode: 'download', name: `${suggestedName}.${extension}` };
       }
@@ -117,7 +159,7 @@ class LocalFileDirectSyncEngine {
       this._notifyChange(tool);
 
       if (window.orbitPlatform) {
-        window.orbitPlatform.triggerToast(`✓ Saved directly to disk: ${fileName}`);
+        window.orbitPlatform.showToast(`✓ Saved directly to disk: ${fileName}`);
       }
 
       return { success: true, mode: 'direct', name: fileName, handle };
@@ -170,7 +212,7 @@ class LocalFileDirectSyncEngine {
             this.activeFileNames[tool] = file.name;
             this._notifyChange(tool);
             if (window.orbitPlatform) {
-              window.orbitPlatform.triggerToast(`✓ Opened "${file.name}"`);
+              window.orbitPlatform.showToast(`✓ Opened "${file.name}"`);
             }
             resolve({
               handle: null,
@@ -208,7 +250,7 @@ class LocalFileDirectSyncEngine {
       this._notifyChange(tool);
 
       if (window.orbitPlatform) {
-        window.orbitPlatform.triggerToast(`✓ Opened "${handle.name}" (Direct Disk Sync Active)`);
+        window.orbitPlatform.showToast(`✓ Opened "${handle.name}" (Direct Disk Sync Active)`);
       }
 
       return {
@@ -238,3 +280,6 @@ class LocalFileDirectSyncEngine {
 }
 
 export const localSync = new LocalFileDirectSyncEngine();
+if (typeof window !== 'undefined') {
+  window.localSync = localSync;
+}

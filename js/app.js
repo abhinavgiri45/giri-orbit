@@ -33,6 +33,8 @@ import { hindiInputTools } from './components/hindiInputTools.js?v=1.0';
 import { universalCloudManager } from './modules/universalCloudManager.js?v=1.0';
 import { cryptoVault } from './modules/cryptoVault.js?v=1.0';
 import { stressTester } from './modules/stressTester.js?v=1.0';
+import { sessionResumeManager } from './modules/sessionResumeManager.js?v=1.0';
+import { smartDifferenceEngine } from './modules/smartDifferenceEngine.js?v=1.0';
 
 class GiriOrbitPlatform {
   constructor() {
@@ -55,6 +57,10 @@ class GiriOrbitPlatform {
     window.cryptoVault = cryptoVault;
     this.stressTester = stressTester;
     window.stressTester = stressTester;
+    this.sessionResumeManager = sessionResumeManager;
+    window.sessionResumeManager = sessionResumeManager;
+    this.smartDifferenceEngine = smartDifferenceEngine;
+    window.smartDifferenceEngine = smartDifferenceEngine;
     this.printManager = new PrintStudioManager(this);
     this.agent = new GirionixAgentManager(this);
     window.orbitAgent = this.agent;
@@ -134,6 +140,64 @@ class GiriOrbitPlatform {
     this.initSovereignModal();
     this.initRouting();
     this.checkPendingDesktopFile();
+    this.initLaunchQueue();
+    this.checkCommandLineFile();
+    if (window.sessionResumeManager) {
+      setTimeout(() => window.sessionResumeManager.checkAndPromptResume(), 600);
+    }
+  }
+
+  /**
+   * PWA LaunchQueue File Handling API
+   * Intercepts files launched from Windows Explorer or Android File Manager
+   */
+  initLaunchQueue() {
+    if ('launchQueue' in window && 'setConsumer' in window.launchQueue) {
+      window.launchQueue.setConsumer(async (launchParams) => {
+        if (!launchParams.files || !launchParams.files.length) return;
+        for (const fileHandle of launchParams.files) {
+          try {
+            const file = await fileHandle.getFile();
+            const text = await file.text();
+            const name = file.name;
+            const ext = name.split('.').pop().toLowerCase();
+
+            let targetTool = 'drift';
+            if (['gaxis', 'gsheet', 'csv', 'xlsx'].includes(ext)) targetTool = 'axis';
+            else if (['gkinetic', 'gpres', 'pptx'].includes(ext)) targetTool = 'kinetic';
+            else if (['gform'].includes(ext)) targetTool = 'forms';
+            else if (['gdesign', 'svg'].includes(ext)) targetTool = 'designer';
+            else if (['glist'].includes(ext)) targetTool = 'lists';
+            else if (['gquiz'].includes(ext)) targetTool = 'quiz';
+            else if (['pdf'].includes(ext)) targetTool = 'pdf';
+
+            this.switchView(targetTool);
+            if (window.localSync) {
+              window.localSync.setExternalHandle(targetTool, fileHandle, name);
+            }
+            this.handleImportedOfficeFile(name, ext, text);
+            this.showToast(`📂 Opened "${name}" directly from File Explorer.`);
+          } catch (err) {
+            console.error('LaunchQueue file read error:', err);
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Check for files passed via Windows Native Launcher / Command-line
+   */
+  checkCommandLineFile() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const filePath = params.get('file');
+      if (filePath) {
+        const decodedPath = decodeURIComponent(filePath);
+        const fileName = decodedPath.split(/[\/\\]/).pop();
+        this.showToast(`📂 Native file linked: "${fileName}"`);
+      }
+    } catch (_) {}
   }
 
   checkPendingDesktopFile() {
@@ -207,7 +271,7 @@ class GiriOrbitPlatform {
     const rawParam = (params.get('tool') || '').trim().toLowerCase();
     const rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
 
-    const target = rawHash || rawParam || rawPath;
+    const target = rawParam || rawHash || rawPath;
     if (['hub', 'launcher', 'home', ''].includes(target)) return 'launcher';
     if (['drift', 'doc', 'docs', 'word', 'writer'].includes(target)) return 'drift';
     if (['axis', 'sheet', 'sheets', 'excel', 'matrix'].includes(target)) return 'axis';

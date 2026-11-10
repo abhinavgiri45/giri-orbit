@@ -40,6 +40,56 @@ export function renderListsApp(container, onUpdate = null, startInEditor = false
         { id: 'item_3', title: 'YubiKey 5C NFC Enterprise Cryptographic Keys', status: 'Completed', priority: 'Urgent', assignee: 'Security Team', dueDate: '2026-10-15', tag: 'Security', progress: 100 }
       ]
     }
+,
+    {
+      id: 'gtm-roadmap',
+      name: 'Global Product Launch & GTM Roadmap',
+      category: 'product',
+      desc: 'Cross-functional milestones spanning engineering freeze, security audits, press briefings, and worldwide deployment.',
+      themeColor: '#0d9488',
+      items: [
+        { id: 'item_1', title: 'Feature Freeze & Final Native Executable Code Signing', status: 'Completed', priority: 'Urgent', assignee: 'Abhinav Giri', dueDate: '2026-11-05', tag: 'Engineering', progress: 100 },
+        { id: 'item_2', title: 'Global CDN & Offline PWA Service Worker Cache Verification', status: 'Completed', priority: 'High', assignee: 'Cloud Architect', dueDate: '2026-11-07', tag: 'DevOps', progress: 100 },
+        { id: 'item_3', title: 'Executive Keynote Video & Technical Press Release', status: 'In Progress', priority: 'High', assignee: 'Marketing Lead', dueDate: '2026-11-15', tag: 'Marketing', progress: 75 },
+        { id: 'item_4', title: 'Enterprise Customer Pilot Onboarding (Fortune 500)', status: 'Not Started', priority: 'Normal', assignee: 'Enterprise Solutions', dueDate: '2026-11-20', tag: 'Sales', progress: 0 }
+      ]
+    },
+    {
+      id: 'sec-triage',
+      name: 'Bug & Security Vulnerability Triage Matrix',
+      category: 'security',
+      desc: 'CVE tracking, threat severity scoring, patch verification, and regression test suites.',
+      themeColor: '#dc2626',
+      items: [
+        { id: 'item_1', title: 'Verify Web Crypto PBKDF2 100k Iterations Resistance', status: 'Completed', priority: 'Urgent', assignee: 'Security Architect', dueDate: '2026-11-08', tag: 'Cryptography', progress: 100 },
+        { id: 'item_2', title: 'Zeroize Sensitive Plaintext Memory Buffers on Vault Lock', status: 'Completed', priority: 'Urgent', assignee: 'Abhinav Giri', dueDate: '2026-11-08', tag: 'Kernel', progress: 100 },
+        { id: 'item_3', title: 'Audit DOM Heap Allocations During 1M Event Click Flood', status: 'Completed', priority: 'High', assignee: 'QA Lead', dueDate: '2026-11-09', tag: 'Stress Test', progress: 100 }
+      ]
+    },
+    {
+      id: 'onboarding-plan',
+      name: 'Executive 30-60-90 Day Onboarding Plan',
+      category: 'hr',
+      desc: 'Structured ramp-up milestones for incoming technical leaders and engineering architects.',
+      themeColor: '#0284c7',
+      items: [
+        { id: 'item_1', title: 'First 30 Days: Architecture Review & Native Win32 Setup', status: 'Completed', priority: 'High', assignee: 'Engineering Lead', dueDate: '2026-11-30', tag: 'Phase 1', progress: 100 },
+        { id: 'item_2', title: 'Day 60: Deliver First Core Sovereign Suite Feature', status: 'In Progress', priority: 'High', assignee: 'Engineering Lead', dueDate: '2026-12-30', tag: 'Phase 2', progress: 40 },
+        { id: 'item_3', title: 'Day 90: Lead Multi-Device Synchronous Architecture Sprint', status: 'Not Started', priority: 'Normal', assignee: 'Engineering Lead', dueDate: '2027-01-30', tag: 'Phase 3', progress: 0 }
+      ]
+    },
+    {
+      id: 'editorial-cal',
+      name: 'Multi-Channel Content Editorial Calendar',
+      category: 'marketing',
+      desc: 'Schedule and manage long-form technical blogs, YouTube releases, and social updates.',
+      themeColor: '#ea580c',
+      items: [
+        { id: 'item_1', title: 'Publish: The Death of SaaS & Rise of Sovereign Silicon', status: 'Completed', priority: 'High', assignee: 'Abhinav Giri', dueDate: '2026-11-04', tag: 'Article', progress: 100 },
+        { id: 'item_2', title: 'YouTube Premiere: Giri Orbit 1-Trillion Event Resilience Walkthrough', status: 'In Progress', priority: 'Urgent', assignee: 'Media Team', dueDate: '2026-11-12', tag: 'Video', progress: 80 },
+        { id: 'item_3', title: 'Release Technical Whitepaper: In-Memory Vector Spreadsheets', status: 'Not Started', priority: 'Normal', assignee: 'Research Lead', dueDate: '2026-11-25', tag: 'Whitepaper', progress: 15 }
+      ]
+    }
   ];
 
   if (startInEditor) {

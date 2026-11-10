@@ -565,6 +565,7 @@ export class OrbitDesktopSuite {
       { label: 'Settings & Personalization...', icon: '⚙️', cmd: 'open-settings' },
       { label: 'Zero-Knowledge Cryptographic Vault (AES-256)...', icon: '🔒', cmd: 'open-crypto-vault' },
       { label: 'Hyperscale 1T Stress Benchmark...', icon: '🔥', cmd: 'open-stress-tester' },
+      { label: 'Smart Difference & Multi-Device Audit Trail...', icon: '🔬', cmd: 'open-smart-diff' },
       { label: 'User Profile & Sovereignty Hub...', icon: '👤', cmd: 'open-profile' },
       { label: 'Templates & Document Gallery...', icon: '📁', cmd: 'open-templates' }
     ];
@@ -1091,6 +1092,9 @@ export class OrbitDesktopSuite {
         break;
       case 'open-stress-tester':
         if (window.stressTester) window.stressTester.openModal();
+        break;
+      case 'open-smart-diff':
+        if (window.smartDifferenceEngine) window.smartDifferenceEngine.openAuditModal();
         break;
       case 'save':
       case 'save-as':

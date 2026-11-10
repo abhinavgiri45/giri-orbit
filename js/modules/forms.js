@@ -73,6 +73,66 @@ export function renderFormsApp(container, onUpdate = null, startInEditor = false
         { id: 'q_4', type: 'text_long', title: 'Detailed Use Case & Expected Workflow', required: true, placeholder: 'Describe the user scenario and expected outcome...' }
       ]
     }
+,
+    {
+      id: 'job-app',
+      name: 'Global Job Application & Talent Screening',
+      category: 'hr',
+      desc: 'Enterprise recruitment intake with portfolio submission, compensation expectations, and technical background.',
+      themeColor: '#059669',
+      previewBg: '#ecfdf5',
+      accent: '#059669',
+      questions: [
+        { id: 'q_1', type: 'text_short', title: 'Full Legal Name', required: true, placeholder: 'e.g. Abhinav Giri' },
+        { id: 'q_2', type: 'text_short', title: 'Email Address & LinkedIn/GitHub Profile', required: true, placeholder: 'name@example.com' },
+        { id: 'q_3', type: 'choice', title: 'Target Role or Engineering Discipline', required: true, options: ['Systems Engineer (C++ / Win32)', 'Full-Stack Web Architect', 'UI/UX Visual Designer', 'Product Operations Manager'] },
+        { id: 'q_4', type: 'choice', title: 'Primary Work Preference', required: true, options: ['100% Remote (Global)', 'Hybrid Executive Office', 'On-Site Engineering Hub'] },
+        { id: 'q_5', type: 'text_long', title: 'Key Engineering Accomplishment or Architectural Portfolio', required: true, placeholder: 'Describe a complex system or application you built from scratch...' }
+      ]
+    },
+    {
+      id: 'patient-intake',
+      name: 'Medical Patient Health Intake',
+      category: 'medical',
+      desc: 'Compliant clinical patient registration, medical history disclosures, and emergency contact details.',
+      themeColor: '#dc2626',
+      previewBg: '#fef2f2',
+      accent: '#dc2626',
+      questions: [
+        { id: 'q_1', type: 'text_short', title: 'Patient Full Name & Date of Birth', required: true, placeholder: 'e.g. Jane Doe, 1990-05-14' },
+        { id: 'q_2', type: 'text_short', title: 'Emergency Contact & Phone Number', required: true, placeholder: 'Name and Phone' },
+        { id: 'q_3', type: 'checkbox', title: 'Pre-Existing Medical Conditions (Select all that apply)', required: false, options: ['Cardiovascular / Hypertension', 'Asthma / Respiratory', 'Diabetes', 'Severe Allergies', 'None of the above'] },
+        { id: 'q_4', type: 'text_long', title: 'Current Prescriptions & Dosage Information', required: false, placeholder: 'List all ongoing medications...' }
+      ]
+    },
+    {
+      id: 'event-reg',
+      name: 'Global Hackathon & Tech Expo Pass',
+      category: 'events',
+      desc: 'Attendee badges, hardware track selection, team sizing, and dietary requirements for major tech conferences.',
+      themeColor: '#8b5cf6',
+      previewBg: '#f5f3ff',
+      accent: '#8b5cf6',
+      questions: [
+        { id: 'q_1', type: 'text_short', title: 'Hacker / Delegate Handle or Team Name', required: true, placeholder: 'e.g. Team Sovereign Orbit' },
+        { id: 'q_2', type: 'choice', title: 'Competition Track', required: true, options: ['Offline & Sovereign Computing', 'High-Frequency Financial Vector Math', 'Zero-Knowledge Cryptography', 'AI Agent Orchestration'] },
+        { id: 'q_3', type: 'choice', title: 'T-Shirt & Swag Size', required: true, options: ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large'] }
+      ]
+    },
+    {
+      id: 'it-support',
+      name: 'IT Incident & Hardware Service Desk',
+      category: 'it',
+      desc: 'Urgent workstation diagnostics, software licensing, and network troubleshooting tickets.',
+      themeColor: '#0284c7',
+      previewBg: '#f0f9ff',
+      accent: '#0284c7',
+      questions: [
+        { id: 'q_1', type: 'text_short', title: 'Asset Tag or Workstation ID', required: true, placeholder: 'e.g. WS-WIN11-ENG-42' },
+        { id: 'q_2', type: 'choice', title: 'Incident Severity Level', required: true, options: ['P1 - Critical Blocker (Complete Outage)', 'P2 - High (Degraded Performance)', 'P3 - Normal Service Request'] },
+        { id: 'q_3', type: 'text_long', title: 'Detailed Diagnostic Information & Error Logs', required: true, placeholder: 'Paste error code or describe issue...' }
+      ]
+    }
   ];
 
   // Routing: Start in Editor or Start in Hub

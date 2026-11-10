@@ -1,5 +1,5 @@
 {
-  "version": "14.8.0",
+  "version": "14.9.0",
   "author": "Abhinav Giri",
   "github": "https://github.com/abhinavgiri45/giri-orbit",
   "instagram": "https://instagram.com/abhinavgiri45",
@@ -113,6 +113,25 @@
       "throughputTarget": "1,000,000 ops/sec client-side backpressure merge",
       "formats": [
         ".json"
+      ]
+    },
+    "sessionResume": {
+      "name": "Giri Orbit Session & Cloud Handoff Manager",
+      "type": "Continuous State Capture & Cross-Device Pick-Up Engine",
+      "features": [
+        "Instant cursor, active cell and slide resume",
+        "Cross-device cloud handoff (Google Drive, OneDrive, Dropbox)",
+        "Persistent sovereign device identity with zero telemetry"
+      ]
+    },
+    "smartDifference": {
+      "name": "Giri Orbit Smart Difference & Forensic Audit Engine",
+      "type": "Multi-Device Modification Ledger & Semantic Intent Synthesis",
+      "features": [
+        "Machine identity tracking across revisions",
+        "Semantic 'Why' explanation synthesis",
+        "Visual inline red/green difference hunks",
+        "Certified Forensic Audit Report (JSON)"
       ]
     }
   }
