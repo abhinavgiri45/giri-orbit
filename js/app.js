@@ -174,6 +174,7 @@ class GiriOrbitPlatform {
 
   init() {
     this.purgeLegacyMockDocuments();
+    this.updateAccountPillUI();
     const isDesktopEnv = window.location.protocol === 'file:' || 
                          window.location.search.includes('desktop=1') ||
                          window.location.hash.includes('desktop=1');
@@ -908,6 +909,133 @@ class GiriOrbitPlatform {
 /**
    * Mount the Zoho-Style Office Suite Landing Hub
    */
+  /**
+   * Update Account & Cloud Status Pills (Top Header, Pinned Corner, Rail Avatar, Suite Profile)
+   * Enforces Sovereign Strict Auth:
+   * When not logged in: Displays "Sign In / Connect your cloud ▾" with cloud icon.
+   * When logged in: Displays user's verified Google / Cloud account profile & name.
+   */
+  updateAccountPillUI(root = document) {
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
+
+    // Purge any unauthenticated fake username so no pseudo-account displays
+    if (!isGoogleConnected) {
+      try {
+        localStorage.removeItem('giri_user_name');
+      } catch (_) {}
+    }
+
+    const isLoggedIn = isGoogleConnected;
+    const userName = isLoggedIn ? (googleUser.name || googleUser.email.split('@')[0]) : null;
+    const userEmail = isLoggedIn ? googleUser.email : null;
+    const initials = userName ? userName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'SU';
+    const userPicture = (isLoggedIn && googleUser.picture) ? googleUser.picture : null;
+
+    const updatePill = (btnSel, avatarSel, nameSel, badgeSel) => {
+      const btn = (root && root.querySelector ? root.querySelector(btnSel) : null) || document.querySelector(btnSel);
+      const avatar = (root && root.querySelector ? root.querySelector(avatarSel) : null) || document.querySelector(avatarSel);
+      const nameEl = (root && root.querySelector ? root.querySelector(nameSel) : null) || document.querySelector(nameSel);
+      const badgeEl = (root && root.querySelector ? root.querySelector(badgeSel) : null) || document.querySelector(badgeSel);
+
+      if (!btn) return;
+
+      if (isLoggedIn) {
+        btn.classList.remove('not-logged-in');
+        btn.classList.add('logged-in');
+        btn.title = `Signed in as ${userEmail} (${userName}) • Account & Cloud Settings`;
+
+        if (avatar) {
+          if (userPicture) {
+            avatar.innerHTML = `<img src="${this.escapeHtml(userPicture)}" alt="${this.escapeHtml(userName)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+          } else {
+            avatar.innerHTML = '';
+            avatar.textContent = initials;
+          }
+          avatar.style.background = '#16a34a';
+        }
+        if (nameEl) {
+          nameEl.textContent = userName;
+        }
+        if (badgeEl) {
+          badgeEl.textContent = 'Account & Cloud ▾';
+        }
+      } else {
+        btn.classList.add('not-logged-in');
+        btn.classList.remove('logged-in');
+        btn.title = 'Sign In to connect your Google Drive or cloud account';
+
+        if (avatar) {
+          avatar.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+              <path d="M12 14v4M10 16l2-2 2 2"/>
+            </svg>
+          `;
+          avatar.style.background = 'linear-gradient(135deg, rgba(37,99,235,0.3), rgba(124,58,237,0.35))';
+        }
+        if (nameEl) {
+          nameEl.textContent = 'Sign In';
+        }
+        if (badgeEl) {
+          badgeEl.textContent = 'Connect your cloud ▾';
+        }
+      }
+    };
+
+    updatePill('#hub-top-account-btn', '#hub-top-account-avatar', '#hub-top-account-name', '#hub-top-account-badge');
+    updatePill('#hub-corner-account-btn', '#hub-corner-account-avatar', '#hub-corner-account-name', '#hub-corner-account-badge');
+
+    // Rail avatar & suite profile pill
+    const railAvatar = (root && root.querySelector ? root.querySelector('#rail-avatar-btn') : null) || document.querySelector('#rail-avatar-btn');
+    if (railAvatar) {
+      if (isLoggedIn) {
+        railAvatar.title = `Signed in as ${userEmail}`;
+        if (userPicture) {
+          railAvatar.innerHTML = `<img src="${this.escapeHtml(userPicture)}" alt="${this.escapeHtml(userName)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        } else {
+          railAvatar.innerHTML = '';
+          railAvatar.textContent = initials;
+        }
+        railAvatar.style.background = '#16a34a';
+      } else {
+        railAvatar.title = 'Sign in to connect your cloud';
+        railAvatar.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+          </svg>
+        `;
+        railAvatar.style.background = 'linear-gradient(135deg, rgba(37,99,235,0.3), rgba(124,58,237,0.35))';
+      }
+    }
+
+    const suiteProfile = document.getElementById('btn-suite-profile');
+    const suiteProfileText = document.getElementById('btn-suite-profile-text');
+    if (suiteProfile) {
+      if (isLoggedIn) {
+        suiteProfile.title = `Signed in as ${userEmail}`;
+        if (suiteProfileText) {
+          if (userPicture) {
+            suiteProfileText.innerHTML = `<img src="${this.escapeHtml(userPicture)}" alt="${this.escapeHtml(userName)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+          } else {
+            suiteProfileText.textContent = initials;
+          }
+        }
+        suiteProfile.style.background = '#16a34a';
+      } else {
+        suiteProfile.title = 'Sign in to connect your cloud';
+        if (suiteProfileText) {
+          suiteProfileText.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+            </svg>
+          `;
+        }
+        suiteProfile.style.background = 'rgba(37,99,235,0.4)';
+      }
+    }
+  }
+
   mountZohoLandingHub() {
     try {
       const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
@@ -922,27 +1050,8 @@ class GiriOrbitPlatform {
 
       if (!landingContainer) return;
 
-      const userName = localStorage.getItem('giri_user_name') || (isGoogleConnected ? (googleUser.name || googleUser.email) : 'Sovereign User');
-      const initials = (userName || 'SU').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
-
-      // Update rail avatar
-      const avatarBtn = landingContainer.querySelector('#rail-avatar-btn');
-      if (avatarBtn) {
-        avatarBtn.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
-        avatarBtn.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SO');
-      }
-
-      // Update top header account pill (top right)
-      const topAvatar = landingContainer.querySelector('#hub-top-account-avatar');
-      if (topAvatar) {
-        topAvatar.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
-        topAvatar.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SU');
-      }
-
-      const topName = landingContainer.querySelector('#hub-top-account-name');
-      if (topName) {
-        topName.textContent = isGoogleConnected ? (googleUser.name || googleUser.email) : (localStorage.getItem('giri_user_name') || 'Sovereign User');
-      }
+      // Update account & cloud status pills (Strict Sovereign Auth)
+      this.updateAccountPillUI(landingContainer);
 
       const topCloudText = landingContainer.querySelector('#hub-top-cloud-text');
       const topCloudDot = landingContainer.querySelector('#hub-top-cloud-dot');
@@ -956,18 +1065,6 @@ class GiriOrbitPlatform {
         }
       }
 
-      // Sync Corner Account Hub (Top-Right Circled Area)
-      const cornerAvatar = landingContainer.querySelector('#hub-corner-account-avatar');
-      if (cornerAvatar) {
-        cornerAvatar.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
-        cornerAvatar.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SU');
-      }
-
-      const cornerName = landingContainer.querySelector('#hub-corner-account-name');
-      if (cornerName) {
-        cornerName.textContent = isGoogleConnected ? (googleUser.name || googleUser.email) : (localStorage.getItem('giri_user_name') || 'Sovereign User');
-      }
-
       const cornerCloudText = landingContainer.querySelector('#hub-corner-cloud-text');
       const cornerCloudDot = landingContainer.querySelector('#hub-corner-cloud-dot');
       if (cornerCloudText) {
@@ -978,12 +1075,6 @@ class GiriOrbitPlatform {
           cornerCloudText.textContent = 'Cloud: Sovereign (Local)';
           if (cornerCloudDot) { cornerCloudDot.className = 'm365-cloud-dot'; cornerCloudDot.style.background = '#10b981'; }
         }
-      }
-
-      // Sync suite top profile button
-      const suiteProfileText = document.getElementById('btn-suite-profile-text');
-      if (suiteProfileText) {
-        suiteProfileText.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SU');
       }
 
       // Bind all interactive events & universal search
@@ -1518,8 +1609,8 @@ class GiriOrbitPlatform {
 
     const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
     const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
-    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected ? (googleUser.name || googleUser.email) : 'Sovereign User');
-    const initials = (currentName || 'SU').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
+    const currentName = isGoogleConnected ? (googleUser.name || googleUser.email.split('@')[0]) : null;
+    const initials = currentName ? currentName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'SU';
     const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
     const activeCloudProvider = localStorage.getItem('giri_orbit_active_cloud_provider') || (isGoogleConnected ? 'gdrive' : 'local');
     const autoSync = localStorage.getItem('giri_gdrive_autosync') === 'true';
@@ -1550,26 +1641,56 @@ class GiriOrbitPlatform {
         <!-- Modal Body (Scrollable) -->
         <div class="giri-modal-body" style="padding:22px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:20px;">
           
-          <!-- 1. Active Account Profile Card -->
-          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px; display:flex; align-items:center; gap:18px;">
-            <div id="modal-user-avatar" style="width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #7c3aed); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; box-shadow:0 4px 16px rgba(37,99,235,0.4); flex-shrink:0;">
-              ${this.escapeHtml(initials)}
-            </div>
-            <div style="flex:1;">
-              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
-                <input type="text" id="account-name-input" value="${this.escapeHtml(currentName)}" style="font-size:15px; font-weight:700; color:#ffffff; background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:6px 12px; width:100%; max-width:240px;" placeholder="Your Name (e.g. Sovereign User)" />
-                <button class="giri-dl-btn" id="btn-save-account-name" style="margin-top:0; padding:6px 14px; font-size:12px; background:#2563eb; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Save</button>
+          <!-- 1. Account & Cloud Authentication Status Card -->
+          ${isGoogleConnected ? `
+            <div style="background:rgba(30,41,59,0.85); border:1.5px solid rgba(16,185,129,0.4); border-radius:14px; padding:18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div id="modal-user-avatar" style="width:54px; height:54px; border-radius:50%; background:#16a34a; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; box-shadow:0 4px 16px rgba(22,163,74,0.4); flex-shrink:0; overflow:hidden;">
+                  ${googleUser.picture ? `<img src="${this.escapeHtml(googleUser.picture)}" alt="${this.escapeHtml(googleUser.name || '')}" style="width:100%; height:100%; object-fit:cover;">` : this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase())}
+                </div>
+                <div>
+                  <div style="font-size:16px; font-weight:700; color:#ffffff; margin-bottom:2px;">
+                    ${this.escapeHtml(googleUser.name || googleUser.email.split('@')[0])}
+                  </div>
+                  <div style="font-size:12px; color:#94a3b8; margin-bottom:6px;">
+                    ${this.escapeHtml(googleUser.email)}
+                  </div>
+                  <span style="font-size:11px; padding:2px 8px; border-radius:12px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#34d399; font-weight:600;">
+                    ✓ Signed in with Google Account
+                  </span>
+                </div>
               </div>
-              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span style="font-size:11.5px; padding:3px 10px; border-radius:20px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#34d399; font-weight:600;">
-                  ${isGoogleConnected ? '✓ Google Account Connected' : '✓ Sovereign Private (Zero Telemetry)'}
-                </span>
-                <span style="font-size:11.5px; color:#94a3b8;">
-                  ${isGoogleConnected ? this.escapeHtml(googleUser.email) : 'Offline In-Memory Encryption Active'}
-                </span>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <button id="btn-modal-signout" style="padding:8px 16px; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3); border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                  🚪 Sign Out
+                </button>
               </div>
             </div>
-          </div>
+          ` : `
+            <div style="background:linear-gradient(135deg, rgba(37,99,235,0.22), rgba(124,58,237,0.22)); border:1.5px solid rgba(56,189,248,0.45); border-radius:14px; padding:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:52px; height:52px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #7c3aed); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(37,99,235,0.4); flex-shrink:0;">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                    <path d="M12 14v4M10 16l2-2 2 2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 style="font-size:16px; font-weight:700; color:#ffffff; margin:0 0 4px 0;">Sign In to Connect Your Cloud</h3>
+                  <p style="font-size:12px; color:#cbd5e1; margin:0; line-height:1.4;">Sign in with your Google account or link your cloud storage to sync and open files anywhere.</p>
+                </div>
+              </div>
+              <button id="btn-top-google-signin" style="padding:10px 18px; background:#2563eb; color:#ffffff; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 16px rgba(37,99,235,0.5);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                </svg>
+                Sign In with Google
+              </button>
+            </div>
+          `}
 
           <!-- Creator Verification & Social Links Bar -->
           <div style="background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(124,58,237,0.12)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
@@ -1772,23 +1893,21 @@ class GiriOrbitPlatform {
       if (e.target === overlay) closeModal();
     });
 
-    // Save Name
-    overlay.querySelector('#btn-save-account-name')?.addEventListener('click', () => {
-      const newName = overlay.querySelector('#account-name-input')?.value.trim();
-      if (newName) {
-        localStorage.setItem('giri_user_name', newName);
-        this.showToast(`Profile name saved: ${newName}`, 'blue');
-        // Update top bar & rail
-        const initialsNew = newName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        const topAv = document.querySelector('#hub-top-account-avatar');
-        if (topAv) topAv.textContent = initialsNew;
-        const topNm = document.querySelector('#hub-top-account-name');
-        if (topNm) topNm.textContent = newName;
-        const railAv = document.querySelector('#rail-avatar-btn');
-        if (railAv && !isGoogleConnected) railAv.textContent = initialsNew;
-        const modalAv = overlay.querySelector('#modal-user-avatar');
-        if (modalAv && !isGoogleConnected) modalAv.textContent = initialsNew;
+    // Top Google Sign In Button (when not logged in)
+    overlay.querySelector('#btn-top-google-signin')?.addEventListener('click', () => {
+      closeModal();
+      if (driveSyncManager) {
+        driveSyncManager.connectGoogleAccount();
       }
+    });
+
+    // Sign Out Button (when logged in)
+    overlay.querySelector('#btn-modal-signout')?.addEventListener('click', () => {
+      if (driveSyncManager) {
+        driveSyncManager.disconnectGoogleAccount();
+      }
+      closeModal();
+      this.updateAccountPillUI();
     });
 
     // Google Drive Connect
@@ -3174,149 +3293,10 @@ class GiriOrbitPlatform {
   }
 
   /**
-   * User Profile & Sovereignty Hub Modal
+   * User Profile & Sovereignty Hub Modal (Unified Account & Cloud Platform Login)
    */
   openUserProfileModal() {
-    const existing = document.getElementById('giri-user-profile-modal');
-    if (existing) existing.remove();
-
-    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
-    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
-    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Sovereign User');
-    const initials = (currentName || 'SU').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
-    const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
-
-    const overlay = document.createElement('div');
-    overlay.className = 'giri-modal-overlay';
-    overlay.id = 'giri-user-profile-modal';
-
-    overlay.innerHTML = `
-      <div class="giri-modal-dialog" style="max-width:560px;">
-        <div class="giri-modal-header">
-          <h2>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-            </svg>
-            User Profile &amp; Sovereignty Hub
-          </h2>
-          <button class="giri-modal-close-btn" id="btn-close-profile-modal" title="Close">&times;</button>
-        </div>
-        <div class="giri-modal-body">
-          <!-- Profile Header Card -->
-          <div style="display:flex; align-items:center; gap:16px; padding:18px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:18px;">
-            <div id="profile-modal-avatar" style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; box-shadow:0 4px 12px rgba(37,99,235,0.3); flex-shrink:0;">
-              ${this.escapeHtml(initials)}
-            </div>
-            <div style="flex:1;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <input type="text" id="profile-display-name-input" value="${this.escapeHtml(currentName)}" style="font-size:15px; font-weight:700; color:#0f172a; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; width:100%; max-width:260px;" placeholder="Your Name" />
-                <button class="giri-dl-btn" id="btn-save-profile-name" style="margin-top:0; padding:6px 14px; font-size:12px;">Save</button>
-              </div>
-              <div style="font-size:12px; color:#64748b; margin-top:6px;">
-                ${isGoogleConnected ? this.escapeHtml(googleUser.email) : 'Sovereign Offline User &bull; 100% Private (No Login Required)'}
-              </div>
-            </div>
-          </div>
-
-          <!-- Sovereignty & Cloud Status -->
-          <div class="giri-setting-group">
-            <label class="giri-setting-label">Cloud Sovereignty &amp; Storage</label>
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span style="font-size:13px; font-weight:600; color:#0f172a;">Storage Mode</span>
-                <span class="giri-badge-sovereign" style="${isGoogleConnected ? 'background:#dbeafe; color:#1e40af; border-color:#bfdbfe;' : ''}">
-                  ${isGoogleConnected ? '✓ Google Drive Cloud Sync Active' : '✓ Sovereign Local (No Login Needed)'}
-                </span>
-              </div>
-              <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
-                ${isGoogleConnected 
-                  ? 'Your documents sync directly with your private Google Drive (15 GB free cloud quota).' 
-                  : 'Zero corporate login required. Documents are stored in cryptographic local memory on your hardware.'}
-              </div>
-              <div style="display:flex; gap:8px;">
-                ${isGoogleConnected ? `
-                  <button class="giri-dl-btn secondary" id="btn-profile-sync-now" style="margin-top:0; font-size:12px; padding:7px 12px;">Sync Drive Now</button>
-                  <button class="giri-dl-btn secondary" id="btn-profile-disconnect-gdrive" style="margin-top:0; font-size:12px; padding:7px 12px; color:#dc2626;">Disconnect</button>
-                ` : `
-                  <button class="giri-dl-btn" id="btn-profile-connect-gdrive" style="margin-top:0; font-size:12px; padding:7px 14px;">🔗 Connect Google Drive</button>
-                `}
-              </div>
-            </div>
-          </div>
-
-          <!-- Real Local Storage Metrics -->
-          <div class="giri-setting-group">
-            <label class="giri-setting-label">System Metrics</label>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
-                <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:600;">Local Data Usage</div>
-                <div style="font-size:16px; font-weight:700; color:#0f172a; margin-top:2px;">${localUsage}</div>
-              </div>
-              <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
-                <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:600;">Telemetry Leaks</div>
-                <div style="font-size:16px; font-weight:700; color:#16a34a; margin-top:2px;">0 (Blocked)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Navigation -->
-          <div style="display:flex; gap:10px; margin-top:14px;">
-            <button class="giri-dl-btn secondary" id="btn-profile-open-settings" style="flex:1; margin-top:0; justify-content:center;">
-              ⚙ Open Suite Settings
-            </button>
-            <button class="giri-dl-btn secondary" id="btn-profile-open-downloads" style="flex:1; margin-top:0; justify-content:center;">
-              📥 Download Apps
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(overlay);
-
-    overlay.querySelector('#btn-close-profile-modal')?.addEventListener('click', () => overlay.remove());
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
-
-    overlay.querySelector('#btn-save-profile-name')?.addEventListener('click', () => {
-      const input = overlay.querySelector('#profile-display-name-input');
-      const val = input ? input.value.trim() : '';
-      if (val) {
-        localStorage.setItem('giri_user_name', val);
-        const newInitials = val.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
-        const modalAvatar = overlay.querySelector('#profile-modal-avatar');
-        if (modalAvatar) modalAvatar.textContent = newInitials;
-        const railAvatar = document.querySelector('#rail-avatar-btn span');
-        if (railAvatar && !isGoogleConnected) railAvatar.textContent = newInitials;
-        this.showToast('Profile name saved successfully!', 'green');
-      }
-    });
-
-    overlay.querySelector('#btn-profile-connect-gdrive')?.addEventListener('click', () => {
-      overlay.remove();
-      driveSyncManager.promptGoogleDirectLogin();
-    });
-
-    overlay.querySelector('#btn-profile-sync-now')?.addEventListener('click', async () => {
-      overlay.remove();
-      await driveSyncManager.fetchRealGoogleDriveFiles();
-    });
-
-    overlay.querySelector('#btn-profile-disconnect-gdrive')?.addEventListener('click', () => {
-      driveSyncManager.disconnectGoogleAccount();
-      overlay.remove();
-      this.showToast('Disconnected Google Drive.', 'blue');
-      this.mountZohoLandingHub();
-    });
-
-    overlay.querySelector('#btn-profile-open-settings')?.addEventListener('click', () => {
-      overlay.remove();
-      this.openSettingsModal();
-    });
-
-    overlay.querySelector('#btn-profile-open-downloads')?.addEventListener('click', () => {
-      overlay.remove();
-      this.openDownloadSuiteModal();
-    });
+    this.openAccountAndCloudModal();
   }
 
   /**
@@ -4169,8 +4149,9 @@ class GiriOrbitPlatform {
     });
 
     window.addEventListener('orbit:drive-change', () => {
+      this.updateAccountPillUI();
       if (this.currentView === 'launcher') {
-        const landing = this.workspace.querySelector('.zoho-suite-landing');
+        const landing = this.workspace?.querySelector('.zoho-suite-landing, .m365-hub-root');
         if (landing) {
           this.renderRecentDocsGrid(landing);
           this.renderHubDriveFilesGrid(landing);
@@ -4178,6 +4159,7 @@ class GiriOrbitPlatform {
       }
     });
 
+    this.updateAccountPillUI();
     driveSyncManager.updateUIStatus();
   }
 

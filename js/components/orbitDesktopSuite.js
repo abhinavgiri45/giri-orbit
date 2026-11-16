@@ -130,6 +130,10 @@ export class OrbitDesktopSuite {
     };
     const t = titles[tool] || titles.drift;
 
+    const isGoogleConnected = !!(window.driveSyncManager?.isConnectedToGoogle && window.driveSyncManager?.googleUser?.email);
+    const googleUser = isGoogleConnected ? window.driveSyncManager.googleUser : null;
+    const userInitials = isGoogleConnected ? (googleUser.name || googleUser.email).substring(0, 2).toUpperCase() : '';
+
     return `
       <div class="lo-window-header">
         <div class="lo-window-title-left">
@@ -163,8 +167,8 @@ export class OrbitDesktopSuite {
           <button class="lo-header-btn" id="lo-btn-suite-settings" title="Settings & Personalization">
             <span>⚙️ Settings</span>
           </button>
-          <button class="lo-header-btn" id="lo-btn-suite-profile" title="User Profile & Sovereignty Hub" style="background:#2563eb; color:#ffffff; font-weight:700; border-radius:50%; width:26px; height:26px; padding:0; display:inline-flex; align-items:center; justify-content:center;">
-            <span>AG</span>
+          <button class="lo-header-btn ${isGoogleConnected ? 'logged-in' : 'not-logged-in'}" id="lo-btn-suite-profile" title="${isGoogleConnected ? `Signed in as ${googleUser.email}` : 'Sign In to Connect Your Cloud'}" style="background:${isGoogleConnected ? '#16a34a' : 'rgba(37,99,235,0.35)'}; color:#ffffff; font-weight:700; border-radius:${isGoogleConnected ? '50%' : '14px'}; min-width:26px; height:26px; padding:${isGoogleConnected ? '0' : '0 8px'}; display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid rgba(56,189,248,0.4);">
+            ${isGoogleConnected ? (googleUser.picture ? `<img src="${googleUser.picture}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : `<span>${userInitials}</span>`) : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg><span style="font-size:11px;">Sign In</span>`}
           </button>
         </div>
       </div>

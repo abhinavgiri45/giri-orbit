@@ -1583,6 +1583,9 @@ export class GiriDriveSyncManager {
     this.isConnectedToGoogle = false;
     this.googleUser = null;
     this.saveSettings();
+    try {
+      localStorage.removeItem('giri_user_name');
+    } catch (_) {}
     this.updateUIStatus();
     this.renderDriveModal('browser');
 
@@ -1590,6 +1593,9 @@ export class GiriDriveSyncManager {
 
     const app = window.orbitPlatform;
     if (app) {
+      if (typeof app.updateAccountPillUI === 'function') {
+        app.updateAccountPillUI();
+      }
       app.showToast(`Disconnected from ${userEmail}.`, 'blue');
     }
   }

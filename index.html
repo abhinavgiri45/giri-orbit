@@ -471,12 +471,17 @@
           <span id="hub-corner-drive-text">Drive</span>
         </button>
 
-        <!-- 5. Sovereign User Account Profile Button (Sovereign User by Default) -->
-        <button class="m365-corner-pill m365-corner-account-btn" id="hub-corner-account-btn" title="User Profile, Google Drive & Cloud Account" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
-          <div class="m365-account-avatar" id="hub-corner-account-avatar">SU</div>
+        <!-- 5. Sign In to Connect Cloud Button (Not logged in by default) -->
+        <button class="m365-corner-pill m365-corner-account-btn not-logged-in" id="hub-corner-account-btn" title="Sign In to connect your Google Drive or cloud account" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
+          <div class="m365-account-avatar" id="hub-corner-account-avatar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+              <path d="M12 14v4M10 16l2-2 2 2"/>
+            </svg>
+          </div>
           <div class="m365-account-meta">
-            <span class="m365-account-name" id="hub-corner-account-name">Sovereign User</span>
-            <span class="m365-account-badge">Account &amp; Cloud ▾</span>
+            <span class="m365-account-name" id="hub-corner-account-name">Sign In</span>
+            <span class="m365-account-badge" id="hub-corner-account-badge">Connect your cloud ▾</span>
           </div>
         </button>
       </aside>
@@ -721,12 +726,17 @@
                 <span class="m365-cloud-text" id="hub-top-cloud-text">Cloud: Local Sovereign</span>
               </button>
 
-              <!-- Account & Multi-Cloud Login Button (Top-Right Circled Area) -->
-              <button class="m365-header-pill m365-account-pill" id="hub-top-account-btn" title="Account, Google Drive & Multi-Cloud Login" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
-                <div class="m365-account-avatar" id="hub-top-account-avatar">SU</div>
+              <!-- Account & Multi-Cloud Login Button (Sign In to Connect Cloud) -->
+              <button class="m365-header-pill m365-account-pill not-logged-in" id="hub-top-account-btn" title="Sign In to connect your Google Drive or cloud account" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
+                <div class="m365-account-avatar" id="hub-top-account-avatar">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                    <path d="M12 14v4M10 16l2-2 2 2"/>
+                  </svg>
+                </div>
                 <div class="m365-account-meta">
-                  <span class="m365-account-name" id="hub-top-account-name">Sovereign User</span>
-                  <span class="m365-account-badge">Account &amp; Cloud ▾</span>
+                  <span class="m365-account-name" id="hub-top-account-name">Sign In</span>
+                  <span class="m365-account-badge" id="hub-top-account-badge">Connect your cloud ▾</span>
                 </div>
               </button>
             </div>
