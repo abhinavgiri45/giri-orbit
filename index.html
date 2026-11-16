@@ -146,7 +146,15 @@
         </div>
 
         <!-- Suite Menu Dropdowns -->
-        <nav class="tier2-nav-menu">
+        <nav class="tier2-nav-menu" style="display:flex; align-items:center; gap:8px;">
+          <button class="suite-tool-switcher-btn" id="btn-suite-tool-switcher" title="Universal Tool Switcher • Satisfy any requirement (Alt+S)" onclick="window.orbitPlatform?.openToolRequirementSwitcherModal(); return false;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="4" cy="4" r="2.2"/><circle cx="12" cy="4" r="2.2"/><circle cx="20" cy="4" r="2.2"/>
+              <circle cx="4" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/>
+              <circle cx="4" cy="20" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="20" cy="20" r="2.2"/>
+            </svg>
+            <span>Switch Tool</span>
+          </button>
           <div class="tier2-menu-item">
             <span>Workspace ▾</span>
             <div class="tier2-dropdown">
@@ -508,6 +516,18 @@
               </svg>
             </div>
             <span class="m365-rail-label">Girionix AI</span>
+          </button>
+
+          <!-- 2.5. Universal Tool Switcher & Task Satisfier -->
+          <button class="m365-rail-btn" id="rail-btn-switcher" data-rail="switcher" onclick="window.orbitPlatform?.openToolRequirementSwitcherModal(); return false;" title="Universal Tool Switcher • Satisfy Any Task Requirement (Alt+S)">
+            <div class="m365-rail-icon-wrap" style="color:#38bdf8;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="4" cy="4" r="2.2"/><circle cx="12" cy="4" r="2.2"/><circle cx="20" cy="4" r="2.2"/>
+                <circle cx="4" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/>
+                <circle cx="4" cy="20" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="20" cy="20" r="2.2"/>
+              </svg>
+            </div>
+            <span class="m365-rail-label">Switch Tool</span>
           </button>
 
           <!-- 3. Create -->

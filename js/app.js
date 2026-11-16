@@ -340,7 +340,9 @@ class GiriOrbitPlatform {
       }
       if (this.checkAndLoadSpecialDocLink()) return;
       const view = this.parseCurrentRoute();
-      if (view !== this.currentView) {
+      if (this.currentView !== null && view !== this.currentView) {
+        window.location.reload();
+      } else if (this.currentView === null) {
         this.navigateTo(view, null, false, false);
       }
     });
@@ -356,7 +358,9 @@ class GiriOrbitPlatform {
         }
       }
       const view = e.state?.view || this.parseCurrentRoute();
-      if (view !== this.currentView) {
+      if (this.currentView !== null && view !== this.currentView) {
+        window.location.reload();
+      } else if (this.currentView === null) {
         this.navigateTo(view, null, false, false);
       }
     });
@@ -766,12 +770,39 @@ class GiriOrbitPlatform {
     this.navigateTo(item.tool, null, true, false);
   }
 
+  /**
+   * Switch to any tool with automatic page reload for 100% clean memory, zero residual state & fresh lifecycle
+   */
+  switchToTool(tool, docTitle = null, forceEditor = false) {
+    if (tool === 'hub' || tool === 'home') tool = 'launcher';
+    let targetHash = (tool === 'launcher') ? '#hub' : `#${tool}`;
+    if (docTitle && forceEditor) {
+      targetHash = `#edit?tool=${tool}&doc=${encodeURIComponent(docTitle)}`;
+    }
+
+    try {
+      if (window.sessionResumeManager?.saveCurrentSession) {
+        window.sessionResumeManager.saveCurrentSession();
+      }
+    } catch (_) {}
+
+    window.location.hash = targetHash;
+    window.location.reload();
+  }
+
   navigateTo(view, docTitle = null, updateHistory = true, forceEditor = false) {
     if (view === 'storage') {
       this.storageOptimizer?.openModal();
       return;
     }
     if (view === 'hub' || view === 'home') view = 'launcher';
+
+    // If an action is requested by user while the suite is already loaded, reload page into that tool!
+    if (this.currentView !== null) {
+      this.switchToTool(view, docTitle, forceEditor);
+      return;
+    }
+
     if (this.currentView === view && this.workspace.children.length > 0 && !docTitle && !forceEditor) {
       return;
     }
@@ -3430,6 +3461,353 @@ class GiriOrbitPlatform {
   }
 
   /**
+   * Universal Tool Requirement Switcher & Task Satisfier Modal
+   * Enables users to switch to any tool to satisfy specific work, productivity, or creative requirements.
+   * Includes live requirement search, task tags, category filter chips, and 1-click reload navigation.
+   */
+  openToolRequirementSwitcherModal() {
+    const existing = document.getElementById('giri-tool-switcher-modal');
+    if (existing) existing.remove();
+
+    const tools = [
+      {
+        id: 'drift',
+        name: 'Giri Drift',
+        tagline: 'Executive Word Processor & Document Composer',
+        icon: 'assets/drift-symbol.png',
+        color: '#2563eb',
+        category: 'docs',
+        categoryName: 'Documents & Writing',
+        description: 'Create and format rich-text documents, academic essays, formal letters, legal agreements, resumes, and research papers with advanced typography.',
+        requirements: [
+          'Word Processing', 'Formal Letters', 'Academic Papers', 'Research Reports',
+          'Legal Contracts & NDAs', 'Resume & CV', 'Book Manuscripts', 'Meeting Notes',
+          'Invoices & Proposals', 'Rich Text Formatting', 'Word Count & Statistics'
+        ]
+      },
+      {
+        id: 'axis',
+        name: 'Giri Axis',
+        tagline: 'Dynamic Spreadsheet & Calculation Matrix',
+        icon: 'assets/axis-symbol.png',
+        color: '#16a34a',
+        category: 'sheets',
+        categoryName: 'Spreadsheets & Math',
+        description: 'Build financial models, track budgets, analyze tabular datasets, and compute complex calculations with 400+ Excel formulas and live charting.',
+        requirements: [
+          'Spreadsheet Modeling', '400+ Excel Formulas', 'Budget Planning', 'Financial Analysis',
+          'Sales Ledgers & P&L', 'Pivot Tables', 'Interactive Charts & Graphs', 'Data Matrices',
+          'Payroll Calculation', 'Statistical Math', 'CSV & XLSX Import/Export'
+        ]
+      },
+      {
+        id: 'kinetic',
+        name: 'Giri Kinetic',
+        tagline: 'High-Impact Presentation & Slide Studio',
+        icon: 'assets/kinetic-symbol.png',
+        color: '#ea580c',
+        category: 'slides',
+        categoryName: 'Presentations & Slides',
+        description: 'Design investor pitch decks, conference keynotes, classroom lectures, and visual storyboards with modern layouts, shapes, and animations.',
+        requirements: [
+          'Slide Deck Design', 'Investor Pitch Decks', 'Conference Keynotes', 'Lecture Slides',
+          'Business Proposals', 'Visual Storytelling', 'Shape Vectors & Animations',
+          'Full-Screen Presenter Mode', 'PowerPoint PPTX Compatibility'
+        ]
+      },
+      {
+        id: 'pdf',
+        name: 'Giri Aegis PDF Studio',
+        tagline: 'Sovereign PDF Reader, Annotator & Form Editor',
+        icon: 'assets/aegis-logo.png',
+        color: '#dc2626',
+        category: 'pdf',
+        categoryName: 'PDF & Documents',
+        description: 'View, annotate, highlight, reorder pages, extract sheets, sign, watermark, and fill PDF forms with 100% cryptographic client-side privacy.',
+        requirements: [
+          'PDF Reading & Search', 'Highlight & Freehand Annotation', 'Sign Documents',
+          'Page Extraction & Reordering', 'Merge PDF Files', 'Fill PDF Forms',
+          'Watermark Application', 'Offline Sovereign Security'
+        ]
+      },
+      {
+        id: 'designer',
+        name: 'Giri Designer',
+        tagline: 'Vector Graphics, Canvas & Infographic Studio',
+        icon: 'assets/designer-symbol.png',
+        color: '#db2777',
+        category: 'design',
+        categoryName: 'Vector & Graphic Design',
+        description: 'Craft social media banners, marketing graphics, system diagrams, technical flowcharts, logos, and UI wireframes on a high-precision vector canvas.',
+        requirements: [
+          'Graphic Design', 'Vector Illustration', 'Technical Flowcharts', 'Marketing Posters',
+          'Social Media Banners', 'Logos & Badges', 'UI Wireframing', 'Diagrams & Schematics',
+          'SVG Vector Export', 'High-Res PNG Rendering'
+        ]
+      },
+      {
+        id: 'forms',
+        name: 'Giri Forms',
+        tagline: 'Interactive Survey & Data Collection Studio',
+        icon: 'assets/forms-symbol.png',
+        color: '#0d9488',
+        category: 'forms',
+        categoryName: 'Surveys & Forms',
+        description: 'Build interactive questionnaires, customer feedback surveys, registration sheets, and event RSVPs with response analysis and instant export.',
+        requirements: [
+          'Customer Feedback Surveys', 'Event Registration Forms', 'RSVP Collection',
+          'Employee Questionnaires', 'Order Request Forms', 'Rating Evaluations',
+          'Dynamic Form Logic', 'Automated Response Analytics'
+        ]
+      },
+      {
+        id: 'quiz',
+        name: 'Giri Quiz',
+        tagline: 'Adaptive Assessment & Certification Testing Engine',
+        icon: 'assets/quiz-symbol.png',
+        color: '#0284c7',
+        category: 'quiz',
+        categoryName: 'Quizzes & Testing',
+        description: 'Create multiple-choice tests, timed certification exams, training quizzes, and knowledge evaluations with instant score calculation and grading.',
+        requirements: [
+          'Multiple Choice Quizzes', 'Timed Certification Exams', 'Training Assessments',
+          'Classroom Tests', 'Instant Score & Grading', 'Trivia & Competitions',
+          'Performance Review', 'Question Banks & Randomization'
+        ]
+      },
+      {
+        id: 'lists',
+        name: 'Giri Lists',
+        tagline: 'Smart Task Management, Kanban & Matrix Boards',
+        icon: 'assets/lists-symbol.png',
+        color: '#7c3aed',
+        category: 'tasks',
+        categoryName: 'Tasks & Kanban',
+        description: 'Organize agile Kanban boards, sprint columns, milestone trackers, prioritized checklists, and structured task matrices to execute projects smoothly.',
+        requirements: [
+          'Kanban Board Columns', 'Agile Sprint Tracking', 'Personal To-Do Lists',
+          'Project Milestones', 'Priority Tagging', 'Bug & Issue Tracking',
+          'Matrix Checklists', 'Completion Progress Meters'
+        ]
+      },
+      {
+        id: 'girionix',
+        name: 'Girionix AI',
+        tagline: 'Autonomous AI Polymath Studio & Research Engine',
+        icon: '🧠',
+        color: '#6366f1',
+        category: 'ai',
+        categoryName: 'AI & Research',
+        description: 'Harness multi-disciplinary autonomous intelligence for deep research, code synthesis, complex problem solving, and document drafting across the suite.',
+        requirements: [
+          'Autonomous AI Assistant', 'Full-Stack Code Synthesis', 'Deep Academic Research',
+          'Complex Problem Solving', 'Document Summarization', 'Cross-Domain Analysis',
+          'Multimodal Reasoning', 'Brainstorming & Strategy'
+        ]
+      },
+      {
+        id: 'launcher',
+        name: 'Giri Orbit Hub',
+        tagline: 'Universal Central Workstation & Cloud Station',
+        icon: '🪐',
+        color: '#38bdf8',
+        category: 'hub',
+        categoryName: 'Central Hub',
+        description: 'Your central command station: access all recent files, connect Google Drive and cloud storage, verify SHA-256 integrity, and manage suite preferences.',
+        requirements: [
+          'Central Dashboard', 'Recent Work Across All Tools', 'Google Drive Cloud Connect',
+          'Multi-Cloud Synchronizer', 'P2P Live Collaboration', 'Language Switcher (16 Languages)',
+          'SHA-256 Security Verifier', '100% Virus-Free Assurance'
+        ]
+      }
+    ];
+
+    const overlay = document.createElement('div');
+    overlay.className = 'giri-modal-overlay';
+    overlay.id = 'giri-tool-switcher-modal';
+
+    const renderToolCards = (filteredTools) => {
+      if (filteredTools.length === 0) {
+        return `
+          <div style="grid-column:1/-1; padding:40px 20px; text-align:center; color:#94a3b8; background:rgba(30,41,59,0.5); border-radius:12px; border:1px dashed rgba(255,255,255,0.15);">
+            <div style="font-size:32px; margin-bottom:10px;">🔍</div>
+            <h4 style="font-size:16px; color:#ffffff; margin:0 0 6px 0;">No matching tool found for this requirement</h4>
+            <p style="font-size:13px; margin:0;">Try searching for generic terms like "budget", "slides", "essay", "pdf", "tasks", "survey", or click "All Requirements" above.</p>
+          </div>
+        `;
+      }
+
+      return filteredTools.map(t => `
+        <div class="tool-requirement-card" data-tool-id="${t.id}" style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; gap:14px; cursor:pointer; transition:all 0.2s cubic-bezier(0.16, 1, 0.3, 1); position:relative; overflow:hidden;">
+          <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:${t.color};"></div>
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:36px; height:36px; border-radius:10px; background:rgba(15,23,42,0.8); border:1px solid ${t.color}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  ${t.icon.startsWith('assets/') ? `<img src="${t.icon}" alt="${t.name}" style="width:22px; height:22px; object-fit:contain;">` : `<span style="font-size:20px;">${t.icon}</span>`}
+                </div>
+                <div>
+                  <h4 style="font-size:15px; font-weight:700; color:#ffffff; margin:0; line-height:1.2;">${t.name}</h4>
+                  <span style="font-size:11px; color:#94a3b8;">${t.tagline}</span>
+                </div>
+              </div>
+              <span style="font-size:10.5px; padding:2px 8px; border-radius:10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1; font-weight:600;">
+                ${t.categoryName}
+              </span>
+            </div>
+
+            <p style="font-size:12px; color:#cbd5e1; line-height:1.45; margin:0 0 12px 0;">
+              ${t.description}
+            </p>
+
+            <div style="margin-top:8px;">
+              <div style="font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">
+                Satisfies Requirements:
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:5px;">
+                ${t.requirements.map(r => `
+                  <span class="req-chip" style="font-size:10.5px; padding:2px 7px; border-radius:4px; background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); color:#94a3b8;">
+                    ${r}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-switch-launch-tool" data-tool-id="${t.id}" style="width:100%; padding:9px 14px; background:${t.color}; color:#ffffff; border:none; border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 14px rgba(0,0,0,0.3); transition:all 0.15s ease;">
+            <span>Switch to ${t.name}</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+      `).join('');
+    };
+
+    overlay.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:920px; width:95%; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; border-radius:18px; background:#0f172a; border:1px solid rgba(255,255,255,0.14); box-shadow:0 24px 60px rgba(0,0,0,0.8), 0 0 35px rgba(56,189,248,0.25); color:#f8fafc;">
+        
+        <!-- Header -->
+        <div style="background:#1e293b; padding:18px 24px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:11px; background:linear-gradient(135deg, #2563eb, #7c3aed); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(37,99,235,0.4);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="4" cy="4" r="2.2"/><circle cx="12" cy="4" r="2.2"/><circle cx="20" cy="4" r="2.2"/>
+                <circle cx="4" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/>
+                <circle cx="4" cy="20" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="20" cy="20" r="2.2"/>
+              </svg>
+            </div>
+            <div>
+              <h2 style="font-size:18px; font-weight:800; color:#ffffff; margin:0; line-height:1.2;">Universal Tool Switcher &amp; Task Satisfier</h2>
+              <span style="font-size:12px; color:#94a3b8;">Switch to any tool for satisfying your specific productivity or creative requirement (Page reloads fresh)</span>
+            </div>
+          </div>
+          <button id="btn-close-tool-switcher-modal" style="background:transparent; border:none; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1; padding:4px 8px; border-radius:6px;">&times;</button>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div style="padding:16px 24px; background:#111827; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:12px; flex-shrink:0;">
+          <div style="position:relative;">
+            <input type="text" id="tool-switcher-search-input" placeholder="🔍 Search requirement (e.g. formulas, pitch slides, sign PDF, survey, kanban, write essay, logo)..." style="width:100%; height:46px; background:#1e293b; border:1.5px solid rgba(56,189,248,0.4); border-radius:10px; padding:0 16px; font-size:14px; color:#ffffff; outline:none; transition:border-color 0.2s;" autofocus />
+          </div>
+          
+          <!-- Category Chips -->
+          <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+            <span style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-right:4px;">Quick Filters:</span>
+            <button class="switcher-cat-chip active" data-cat="all" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:#2563eb; color:#fff; border:none;">All (10)</button>
+            <button class="switcher-cat-chip" data-cat="docs" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">📄 Documents</button>
+            <button class="switcher-cat-chip" data-cat="sheets" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">📊 Spreadsheets</button>
+            <button class="switcher-cat-chip" data-cat="slides" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">📽️ Presentations</button>
+            <button class="switcher-cat-chip" data-cat="pdf" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">📕 PDF Studio</button>
+            <button class="switcher-cat-chip" data-cat="design" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">🎨 Design</button>
+            <button class="switcher-cat-chip" data-cat="forms" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">📋 Surveys</button>
+            <button class="switcher-cat-chip" data-cat="quiz" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">🎯 Quizzes</button>
+            <button class="switcher-cat-chip" data-cat="tasks" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">📝 Tasks</button>
+            <button class="switcher-cat-chip" data-cat="ai" style="padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(30,41,59,0.8); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">🧠 AI Polymath</button>
+          </div>
+        </div>
+
+        <!-- Grid of Tool Cards (Scrollable) -->
+        <div class="giri-modal-body" id="tool-switcher-grid" style="padding:22px 24px; overflow-y:auto; flex:1; display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+          ${renderToolCards(tools)}
+        </div>
+
+        <!-- Footer -->
+        <div style="background:#1e293b; padding:12px 24px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+          <span style="font-size:12px; color:#94a3b8;">💡 Tip: Press <kbd style="background:#0f172a; padding:2px 6px; border-radius:4px; border:1px solid #334155; color:#38bdf8;">Alt + S</kbd> anytime to open this switcher</span>
+          <button id="btn-close-tool-switcher-footer" style="padding:6px 16px; background:#334155; color:#fff; border:none; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">Close</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const closeModal = () => overlay.remove();
+    overlay.querySelector('#btn-close-tool-switcher-modal')?.addEventListener('click', closeModal);
+    overlay.querySelector('#btn-close-tool-switcher-footer')?.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    const gridEl = overlay.querySelector('#tool-switcher-grid');
+    const searchInput = overlay.querySelector('#tool-switcher-search-input');
+    const chips = overlay.querySelectorAll('.switcher-cat-chip');
+
+    let currentCat = 'all';
+
+    const filterTools = () => {
+      const q = (searchInput?.value || '').trim().toLowerCase();
+      const filtered = tools.filter(t => {
+        const matchesCat = (currentCat === 'all' || t.category === currentCat);
+        if (!matchesCat) return false;
+        if (!q) return true;
+        const inName = t.name.toLowerCase().includes(q);
+        const inTagline = t.tagline.toLowerCase().includes(q);
+        const inDesc = t.description.toLowerCase().includes(q);
+        const inReq = t.requirements.some(r => r.toLowerCase().includes(q));
+        return inName || inTagline || inDesc || inReq;
+      });
+
+      if (gridEl) {
+        gridEl.innerHTML = renderToolCards(filtered);
+        bindCardActions();
+      }
+    };
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('active');
+          c.style.background = 'rgba(30,41,59,0.8)';
+          c.style.color = '#cbd5e1';
+          c.style.border = '1px solid rgba(255,255,255,0.1)';
+        });
+        chip.classList.add('active');
+        chip.style.background = '#2563eb';
+        chip.style.color = '#fff';
+        chip.style.border = 'none';
+        currentCat = chip.dataset.cat || 'all';
+        filterTools();
+      });
+    });
+
+    searchInput?.addEventListener('input', filterTools);
+
+    const bindCardActions = () => {
+      overlay.querySelectorAll('.tool-requirement-card, .btn-switch-launch-tool').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const targetTool = el.dataset.toolId;
+          if (targetTool) {
+            closeModal();
+            this.switchToTool(targetTool);
+          }
+        });
+      });
+    };
+
+    bindCardActions();
+  }
+
+  /**
    * All Applications Grid Launcher Modal
    */
   openAllAppsModal() {
@@ -4282,8 +4660,23 @@ class GiriOrbitPlatform {
       this.openUserProfileModal();
     });
 
+    // Global Shortcut Alt+S or Ctrl+Shift+S for Universal Tool Switcher
+    window.addEventListener('keydown', (e) => {
+      if ((e.altKey && e.key.toLowerCase() === 's') || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's')) {
+        e.preventDefault();
+        this.openToolRequirementSwitcherModal();
+      }
+    });
+
     // Universal Delegated Handler for Core Suite Controls
     document.addEventListener('click', (e) => {
+      // 0. Tool Switcher & Requirement Satisfier triggers
+      const switcherTarget = e.target.closest('#btn-suite-tool-switcher, #rail-btn-switcher, #lo-btn-suite-switcher, [data-action="open-tool-switcher"]');
+      if (switcherTarget) {
+        e.preventDefault();
+        this.openToolRequirementSwitcherModal();
+        return;
+      }
       // 1. Settings triggers
       const settingsTarget = e.target.closest('#rail-btn-settings, #btn-suite-settings, #btn-drift-settings, #btn-axis-settings, #btn-kinetic-settings, [data-action="open-settings"]');
       if (settingsTarget) {
@@ -4407,6 +4800,7 @@ class GiriOrbitPlatform {
     const closeBtn = document.getElementById('cmd-close-btn');
 
     const commands = [
+      { name: '🔀 Switch Tool & Satisfy Requirement (Alt+S)', category: 'Navigation', action: () => this.openToolRequirementSwitcherModal() },
       { name: '🤖 Open Girionix Autonomous Agent (Alt+A)', category: 'Agent', action: () => this.agent?.openAgent() },
       { name: '🤖 Agent: Autonomous Document Draft (Drift)', category: 'Agent', action: () => this.agent?.openAgent('drift') },
       { name: '🤖 Agent: Autonomous Financial Model (Axis)', category: 'Agent', action: () => this.agent?.openAgent('axis') },

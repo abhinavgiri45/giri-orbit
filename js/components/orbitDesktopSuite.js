@@ -155,6 +155,14 @@ export class OrbitDesktopSuite {
           <button class="lo-ui-switcher-pill" id="lo-btn-toggle-ui" title="Toggle User Interface Layout (Standard Toolbar vs Notebookbar)">
             <span>🎨 Layout: ${this.uiMode === 'standard' ? 'Giri-Orbit Classic' : 'Giri-Orbit Ribbon'} ▾</span>
           </button>
+          <button class="lo-header-btn" id="lo-btn-suite-switcher" onclick="window.orbitPlatform?.openToolRequirementSwitcherModal(); return false;" title="Universal Tool Switcher • Satisfy Any Task Requirement (Alt+S)" style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; font-weight:700;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; margin-right:4px;">
+              <circle cx="4" cy="4" r="2.2"/><circle cx="12" cy="4" r="2.2"/><circle cx="20" cy="4" r="2.2"/>
+              <circle cx="4" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/>
+              <circle cx="4" cy="20" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="20" cy="20" r="2.2"/>
+            </svg>
+            <span>Switch Tool</span>
+          </button>
           <button class="lo-header-btn" id="lo-btn-return-hub" title="Return to Suite Hub">
             <span>🪐 Hub</span>
           </button>
