@@ -160,7 +160,7 @@
 /* ==========================================================================
    ABHINAV GIRI OFFICIAL PORTAL (https://github.com/abhinavgiri45/giri-orbit)
    ========================================================================== */
-.giri-corp-card {
+.giri-author-card {
   display: inline-flex;
   align-items: center;
   gap: 14px;
@@ -175,34 +175,34 @@
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.giri-corp-card:hover {
+.giri-author-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
   border-color: #38bdf8;
 }
 
-.giri-corp-card-dark {
+.giri-author-card-dark {
   background: #202024 !important;
   border: 1px solid #333338 !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
   color: #ffffff !important;
 }
 
-.giri-corp-card-dark:hover {
+.giri-author-card-dark:hover {
   background: #27272d !important;
   border-color: #38bdf8 !important;
   box-shadow: 0 8px 26px rgba(56, 189, 248, 0.25) !important;
 }
 
-.giri-corp-card-dark .corp-title {
+.giri-author-card-dark .corp-title {
   color: #ffffff !important;
 }
 
-.giri-corp-card-dark .corp-sub {
+.giri-author-card-dark .corp-sub {
   color: #38bdf8 !important;
 }
 
-.tier1-corp-pill {
+.tier1-author-pill {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -218,7 +218,7 @@
   transition: all 0.18s ease;
 }
 
-.tier1-corp-pill:hover {
+.tier1-author-pill:hover {
   background: #0f172a;
   border-color: #38bdf8;
   color: #38bdf8;

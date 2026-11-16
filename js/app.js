@@ -2740,7 +2740,7 @@ class GiriOrbitPlatform {
                     <div class="giri-dl-card-icon" style="background:#2563eb; color:#ffffff;">&#9733;</div>
                     <div>
                       <strong style="font-size:16px; color:#1e3a8a;">4.00 GB Full Enterprise Suite (Windows x64)</strong>
-                      <div style="font-size:12px; color:#2563eb; font-weight:600;">Hosted on Google Drive (giricorporation.pvt@gmail.com)</div>
+                      <div style="font-size:12px; color:#2563eb; font-weight:600;">Maintained by Founder Abhinav Giri (@abhinavgiri45)</div>
                     </div>
                   </div>
                   <div style="font-size:12.5px; color:#334155; line-height:1.5;">
@@ -8541,7 +8541,7 @@ if (document.readyState === 'loading') {
       const setDriveUrlPrompt = () => {
         const current = getDriveUrl();
         const input = prompt(
-          'Official Public Google Drive URL for Giri Orbit 4.00 GB Suite (giricorporation.pvt@gmail.com):\n\nPress OK to keep default or enter updated link/ID:',
+          'Official Public Google Drive URL for Giri Orbit 4.00 GB Suite (abhinavgiri45 (Official Drive)):\n\nPress OK to keep default or enter updated link/ID:',
           current
         );
         if (input && input.trim()) {

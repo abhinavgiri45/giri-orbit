@@ -121,8 +121,8 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
             <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label">OFFICIAL PORTAL</span>
-                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
-                  <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-author-card giri-author-card-dark" title="Visit Abhinav Giri Official Website">
+                  <div class="author-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                     <img src="assets/orbit-master-512.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
                   </div>
                   <div class="instagram-card-text">
@@ -232,7 +232,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
         badgeHtml = `<span style="font-size:7px; font-weight:800; color:#2563eb; border:1px solid #bfdbfe; background:#eff6ff; padding:1px 4px; border-radius:2px;">MUTUAL NDA</span>`;
         middleContent = `
           <div style="display:flex; gap:6px; margin:6px 0;">
-            <div style="flex:1; background:#f8fafc; border:1px solid #e2e8f0; border-radius:2px; padding:3px; font-size:7.5px; color:#475569;"><b>DISCLOSING:</b> Giri Corp</div>
+            <div style="flex:1; background:#f8fafc; border:1px solid #e2e8f0; border-radius:2px; padding:3px; font-size:7.5px; color:#475569;"><b>DISCLOSING:</b> Abhinav Giri</div>
             <div style="flex:1; background:#f8fafc; border:1px solid #e2e8f0; border-radius:2px; padding:3px; font-size:7.5px; color:#475569;"><b>RECIPIENT:</b> Enterprise</div>
           </div>
           <div style="height:3px; background:#e2e8f0; border-radius:2px; margin-bottom:4px; width:100%;"></div>
@@ -736,7 +736,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
           </div>
           <div class="pdf-approved-stamp" id="page-1-stamp" style="border:2px solid #e42528; color:#e42528; padding:4px 10px; border-radius:4px; font-weight:800; font-size:12px; text-transform:uppercase; transform:rotate(-8deg);">
             APPROVED
-            <span style="font-size:8px; display:block; font-weight:500;">GIRI CORP EXECUTIVE</span>
+            <span style="font-size:8px; display:block; font-weight:500;">ABHINAV GIRI // SOVEREIGN SEAL</span>
           </div>
         </div>
 
@@ -797,7 +797,7 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
         <div class="pdf-signature-block" id="page-1-signature" style="margin-top:32px; display:flex; justify-content:space-between; align-items:flex-end;">
           <div>
             <div style="font-family:'Brush Script MT', cursive, sans-serif; font-size:26px; color:#1e40af; border-bottom:1.5px solid #0f172a; display:inline-block; padding-bottom:2px;">
-              Giri Corporate Directorate
+              Abhinav Giri Sovereign Directorate
             </div>
             <span style="display:block; font-size:10px; font-family:var(--font-mono); color:#64748b; margin-top:4px;">
               Validated by Chief Technology Architect // SHA-256 Verified
@@ -3493,7 +3493,7 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
       typed.style.fontSize = '30px';
       typed.style.color = '#1e3a8a';
       typed.style.borderBottom = '1.5px solid #0f172a';
-      typed.textContent = typeInput.value || 'Giri Corporate Signer';
+      typed.textContent = typeInput.value || 'Abhinav Giri Verified Signer';
       sigStamp.appendChild(typed);
     }
 
@@ -3554,7 +3554,7 @@ function initPdfStudioWorkspace(container, pages, activePageIndex, watermarkText
       stamp.style.textTransform = 'uppercase';
       stamp.style.transform = 'rotate(-8deg)';
       stamp.style.display = 'inline-block';
-      stamp.innerHTML = 'APPROVED<span style="font-size:8px; display:block; font-weight:500;">GIRI CORP EXECUTIVE</span>';
+      stamp.innerHTML = 'APPROVED<span style="font-size:8px; display:block; font-weight:500;">ABHINAV GIRI // SOVEREIGN SEAL</span>';
       contentWrapper.prepend(stamp);
     }
     auditLog.push({ action: 'Toggled Approved Stamp', time: new Date().toLocaleTimeString() });

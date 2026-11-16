@@ -66,7 +66,7 @@ button, [role=button], a, select, input { -webkit-tap-highlight-color: transpare
   .suite-nav-pill .pill-short-label { display: inline !important; }
   .tier1-sync-pill { padding: 4px 8px; font-size: 11px; }
   .tier1-sync-pill span:last-child { display: none; }
-  .tier1-instagram-pill, .tier1-corp-pill { display: none !important; }
+  .tier1-instagram-pill, .tier1-author-pill { display: none !important; }
 
   /* Hubs & Landing grids */
   .orbit-hub-grid, .hub-app-cards-grid {

@@ -166,8 +166,8 @@ export function renderAxisApp(container, onGridUpdate = null, startInEditor = tr
             <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label">OFFICIAL PORTAL</span>
-                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
-                  <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-author-card giri-author-card-dark" title="Visit Abhinav Giri Official Website">
+                  <div class="author-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                     <img src="assets/orbit-master-512.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
                   </div>
                   <div class="instagram-card-text">
@@ -2738,7 +2738,7 @@ function initAxisWorkspace(container, onGridUpdate, customInitialData = null) {
 
   function getInitialSeedData() {
     return [
-      { cell: 'A1', val: 'GIRI CORP // CAPITAL & REVENUE MODEL', bold: true },
+      { cell: 'A1', val: 'GIRI ORBIT // CAPITAL & REVENUE MODEL', bold: true },
       { cell: 'A3', val: 'Revenue Stream', bold: true },
       { cell: 'B3', val: 'Q1 Actual ($)', bold: true },
       { cell: 'C3', val: 'Q2 Target ($)', bold: true },

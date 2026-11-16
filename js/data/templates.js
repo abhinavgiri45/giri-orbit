@@ -157,7 +157,7 @@ export const AXIS_BUILTIN_TEMPLATES = [
     desc: 'Monthly cash burn forecast modeling operating collections, disbursements, and runway months',
     previewAccent: '#15803d',
     data: {
-      'A1': 'GIRI CORP // 12-MONTH CASH RUNWAY PROJECTION',
+      'A1': 'GIRI ORBIT // 12-MONTH CASH RUNWAY PROJECTION',
       'A3': 'Cash Flow Stream', 'B3': 'Month 1', 'C3': 'Month 2', 'D3': 'Month 3', 'E3': 'Q1 Total',
       'A4': 'Opening Cash Balance', 'B4': '3500000', 'C4': '=B10', 'D4': '=C10', 'E4': '=B4',
       'A5': 'Customer Subscription Cash In', 'B5': '280000', 'C5': '310000', 'D5': '350000', 'E5': '=SUM(B5:D5)',
@@ -362,7 +362,7 @@ export const KINETIC_BUILTIN_TEMPLATES = [
         title: 'Four Core Resolutions for Vote',
         desc: 'Review and ratification of executive equity plan, R&D expansion, and subsidiary consolidation.',
         features: [
-          { num: 'Item 1', title: 'Consolidation', desc: 'Giri Orbit corporate entity alignment' },
+          { num: 'Item 1', title: 'Consolidation', desc: 'Giri Orbit Sovereign Suite Architecture' },
           { num: 'Item 2', title: 'Executive Comp', desc: 'Performance-based milestone vesting' },
           { num: 'Item 3', title: 'Treasury Policy', desc: 'Sovereign cash preservation protocol' }
         ],
@@ -1051,7 +1051,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
             </div>
             <div style="border:2px solid #e42528; color:#e42528; padding:4px 10px; border-radius:4px; font-weight:800; font-size:12px; text-transform:uppercase; transform:rotate(-6deg);">
               APPROVED
-              <span style="font-size:8px; display:block; font-weight:500;">GIRI CORP EXECUTIVE</span>
+              <span style="font-size:8px; display:block; font-weight:500;">ABHINAV GIRI // SOVEREIGN SEAL</span>
             </div>
           </div>
           <div style="height:1px; background:#e2e8f0; margin:16px 0;"></div>
@@ -1254,7 +1254,7 @@ export const AEGIS_BUILTIN_TEMPLATES = [
             <strong>RESOLVED:</strong> That the deployment of the Giri Orbit Zero-Gravity Suite is hereby formally ratified, authorized, and approved for enterprise-wide implementation.
           </p>
           <p style="font-size:11.5px; line-height:1.6; color:#475569; margin-bottom:14px;">
-            <strong>FURTHER RESOLVED:</strong> That executive officers of the Corporation are authorized to sign and execute all associated commercial licensing agreements and regulatory disclosures.
+            <strong>FURTHER RESOLVED:</strong> That Abhinav Giri, Founder and Architect of Giri Orbit, is authorized to sign and execute all associated commercial licensing agreements and regulatory disclosures.
           </p>
           <div style="margin-top:32px; display:flex; justify-content:space-between; align-items:flex-end;">
             <div>

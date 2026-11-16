@@ -635,8 +635,8 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
       <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
         <div style="display:flex; flex-direction:column; gap:6px;">
           <span class="follow-journey-label">OFFICIAL PORTAL</span>
-          <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-corp-card giri-corp-card-dark" title="Visit Abhinav Giri Official Website">
-            <div class="corp-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-author-card giri-author-card-dark" title="Visit Abhinav Giri Official Website">
+            <div class="author-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
               <img src="assets/orbit-master-512.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
             </div>
             <div class="instagram-card-text">
@@ -2739,7 +2739,7 @@ export function renderDriftApp(container, onDocUpdate = null, initialDocTitle = 
             </div>
             <div>
               <label style="display:block; font-size:11.5px; font-weight:600; color:#334155; margin-bottom:4px;">Issuer / Department Subtext:</label>
-              <input type="text" id="stamp-custom-sub-input" class="dialog-input-field" value="GIRI CORP EXECUTIVE" placeholder="e.g. OFFICE OF THE CEO, LEGAL AUDIT">
+              <input type="text" id="stamp-custom-sub-input" class="dialog-input-field" value="ABHINAV GIRI SOVEREIGN" placeholder="e.g. OFFICE OF THE CEO, LEGAL AUDIT">
             </div>
             <div style="display:flex; gap:14px; align-items:center;">
               <div style="flex:1;">

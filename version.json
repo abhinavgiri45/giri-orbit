@@ -1,7 +1,7 @@
 {
   "version": "15.0.0",
   "author": "Abhinav Giri",
-  "license": "Proprietary Freeware & Sovereign End-User License (Free for Anyone Worldwide to Use — Strictly No Modifications Permitted)",
+  "license": "Proprietary Freeware & Sovereign End-User License (Free for Anyone Worldwide to Use \u2014 Strictly No Modifications Permitted)",
   "github": "https://github.com/abhinavgiri45/giri-orbit",
   "instagram": "https://instagram.com/abhinavgiri45",
   "suite": "Giri Orbit Sovereign Suite",
@@ -138,5 +138,14 @@
   },
   "build": "15.1.0",
   "buildTimestamp": 1794815829113,
-  "bundleUrl": "https://raw.githubusercontent.com/abhinavgiri45/giri-orbit/main/downloads/orbit_update.zip"
+  "bundleUrl": "https://raw.githubusercontent.com/abhinavgiri45/giri-orbit/main/downloads/orbit_update.zip",
+  "founder": "Abhinav Giri",
+  "developer": "Abhinav Giri",
+  "creator": "Abhinav Giri",
+  "owner": "Abhinav Giri",
+  "socials": {
+    "instagram": "https://instagram.com/abhinavgiri45",
+    "x": "https://x.com/abhinavgiri45",
+    "github": "https://github.com/abhinavgiri45"
+  }
 }
