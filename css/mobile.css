@@ -813,3 +813,437 @@ html {
     display: none !important;
   }
 }
+
+
+/* ============================================================================
+ * GIRI ORBIT — ANDROID & MOBILE PHONE ULTRA-SMOOTH OPTIMIZATIONS
+ * Supports Android (Pixel, Samsung, OnePlus, Xiaomi) & iOS devices
+ * Touch-action manipulation, 0ms tap delay, native bottom navigation rail,
+ * responsive swipeable carousels, and safe-area insets
+ * ============================================================================ */
+
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow and enable smooth inertia scrolling */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Hardware accelerated smooth touch interactions */
+  button, [role="button"], a, input, select, .m365-create-card, .m365-pill, .m365-rail-btn {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Full-viewport mobile root */
+  .m365-hub-root {
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     1. LEFT RAIL TRANSFORMS INTO NATIVE MOBILE BOTTOM NAVIGATION BAR
+     -------------------------------------------------------------------------- */
+  .m365-left-rail {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 0 4px !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.18) !important;
+    background: rgba(13, 19, 33, 0.96) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    z-index: 9999 !important;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5) !important;
+    box-sizing: border-box !important;
+  }
+
+  .m365-left-rail .m365-rail-top {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    width: 100% !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide excessive desktop icons in mobile bottom bar */
+  .m365-left-rail .m365-rail-tools,
+  .m365-left-rail .m365-rail-divider,
+  #rail-btn-girionix,
+  #rail-btn-content,
+  #rail-btn-converter,
+  #rail-btn-storage,
+  #rail-btn-settings,
+  #rail-btn-download {
+    display: none !important;
+  }
+
+  .m365-left-rail .m365-rail-bottom {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Mobile bottom bar touch items (48px height) */
+  .m365-left-rail .m365-rail-btn {
+    width: auto !important;
+    min-width: 52px !important;
+    height: 48px !important;
+    margin: 0 !important;
+    padding: 4px 8px !important;
+    border-radius: 8px !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+
+  .m365-left-rail .m365-rail-icon-wrap {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .m365-left-rail .m365-rail-icon-wrap svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .m365-left-rail .m365-rail-label {
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #94a3b8 !important;
+    line-height: 1 !important;
+    margin-top: 1px !important;
+  }
+
+  .m365-left-rail .m365-rail-btn.active .m365-rail-label {
+    color: #38bdf8 !important;
+  }
+
+  .m365-left-rail .m365-rail-btn.active::before {
+    display: none !important;
+  }
+
+  .m365-left-rail .m365-rail-btn.active {
+    background: rgba(56, 189, 248, 0.12) !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     2. MAIN WORKSPACE CANVAS ON MOBILE
+     -------------------------------------------------------------------------- */
+  .m365-canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 12px 14px 76px 14px !important; /* 76px bottom clearance so bottom bar never obstructs */
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+
+  .m365-inner-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     3. TOP HEADER BAR ON MOBILE
+     -------------------------------------------------------------------------- */
+  .m365-top-header {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 0 !important;
+    padding: 0 2px !important;
+  }
+
+  .m365-suite-indicator {
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .m365-top-header-right {
+    gap: 6px !important;
+  }
+
+  .m365-cloud-status-pill {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .m365-account-pill {
+    padding: 3px 8px 3px 4px !important;
+  }
+
+  .m365-account-badge {
+    display: none !important;
+  }
+
+  .m365-account-name {
+    font-size: 11.5px !important;
+    max-width: 80px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     4. HERO SECTION ON MOBILE
+     -------------------------------------------------------------------------- */
+  .m365-hero {
+    gap: 10px !important;
+    padding: 4px 0 8px 0 !important;
+  }
+
+  .m365-hero-title {
+    font-size: 22px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+  }
+
+  .m365-hero-subtitle-bar {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    font-size: 11px !important;
+    text-align: center !important;
+  }
+
+  .m365-hero-subtitle-bar .m365-badge {
+    padding: 3px 8px !important;
+  }
+
+  .m365-hero-download-btn {
+    padding: 5px 12px !important;
+    font-size: 11.5px !important;
+  }
+
+  .giri-social-handles-bar {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .giri-social-pill {
+    padding: 3px 8px !important;
+    font-size: 10.5px !important;
+    min-height: 30px !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     5. UNIVERSAL SEARCH BAR ON MOBILE
+     -------------------------------------------------------------------------- */
+  .m365-search-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 44px !important;
+  }
+
+  .search-kbd-hint {
+    display: none !important;
+  }
+
+  #m365-search-box {
+    font-size: 13px !important;
+    padding: 0 34px 0 36px !important;
+  }
+
+  #m365-search-dropdown {
+    width: 100% !important;
+    max-height: 60vh !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     6. CREATE NEW SECTION: HORIZONTAL SWIPEABLE CAROUSEL ON MOBILE
+     -------------------------------------------------------------------------- */
+  .m365-cards-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding-bottom: 8px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .m365-cards-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .m365-create-card {
+    flex: 0 0 120px !important;
+    min-width: 120px !important;
+    scroll-snap-align: start !important;
+    padding: 10px 8px !important;
+  }
+
+  .m365-card-preview {
+    height: 76px !important;
+  }
+
+  .m365-card-title {
+    font-size: 12px !important;
+  }
+
+  .m365-card-sub {
+    font-size: 10px !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     7. QUICK ACCESS & RECENT DOCUMENTS ON MOBILE
+     -------------------------------------------------------------------------- */
+  .m365-quick-access-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .m365-pills-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 6px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .m365-pills-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .m365-pill {
+    padding: 6px 12px !important;
+    font-size: 11.5px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .m365-actions-group {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .m365-upload-btn, .m365-pill-outline {
+    flex: 1 !important;
+    justify-content: center !important;
+    font-size: 11.5px !important;
+    padding: 6px 10px !important;
+    min-height: 38px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Responsive Table Container */
+  .m365-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+  }
+
+  .m365-table {
+    min-width: 440px !important;
+  }
+
+  .m365-table th, .m365-table td {
+    padding: 10px 8px !important;
+    font-size: 12px !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     8. MODALS & DIALOGS ON MOBILE
+     -------------------------------------------------------------------------- */
+  .giri-modal-dialog {
+    width: 95% !important;
+    max-width: 100% !important;
+    max-height: 88vh !important;
+    margin: auto !important;
+    border-radius: 16px !important;
+  }
+
+  .giri-modal-body {
+    padding: 14px 14px !important;
+  }
+
+  .giri-modal-header {
+    padding: 12px 14px !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     9. TOOL HUBS & APP WORKSPACES ON MOBILE
+     -------------------------------------------------------------------------- */
+  .drift-hub-top-bar, .axis-hub-top-bar, .kinetic-hub-top-bar, .pdf-hub-top-bar {
+    padding: 0 10px !important;
+    height: 48px !important;
+  }
+
+  .tool-hub-suite-links {
+    display: none !important;
+  }
+
+  .drift-hub-nav-links {
+    gap: 10px !important;
+    font-size: 11.5px !important;
+  }
+
+  .drift-hub-hero, .axis-hub-hero, .kinetic-hub-hero {
+    padding: 16px 12px !important;
+  }
+
+  .drift-templates-carousel, .axis-templates-carousel, .kinetic-templates-carousel {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 10px !important;
+    scrollbar-width: none !important;
+  }
+}
+
+/* Extra small Android phone screens (<= 480px) */
+@media (max-width: 480px) {
+  .m365-table th:nth-child(3), .m365-table td:nth-child(3),
+  .m365-table th:nth-child(4), .m365-table td:nth-child(4) {
+    display: none !important;
+  }
+  .m365-table {
+    min-width: 100% !important;
+  }
+  .m365-hero-title {
+    font-size: 20px !important;
+  }
+  .m365-cards-row .m365-create-card {
+    flex: 0 0 110px !important;
+    min-width: 110px !important;
+  }
+}
