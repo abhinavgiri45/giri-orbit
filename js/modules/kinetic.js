@@ -2338,7 +2338,50 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
     refreshCards();
   }
 
-  function mountKineticEditor(container, templateSlides = null, onDeckUpdate = null) {
+  
+// ── Universal Slide Normalizer for Full Template & Import Compatibility ──
+function normalizeImportedSlide(s, idx) {
+  if (!s || typeof s !== 'object') {
+    return {
+      id: Date.now() + (idx || 0),
+      layout: 'title',
+      tag: `SLIDE ${(idx || 0) + 1}`,
+      title: String(s || `Slide ${(idx || 0) + 1}`),
+      desc: '',
+      subtitle: '',
+      features: [],
+      notes: ''
+    };
+  }
+  const sTitle = s.title ?? s.heading ?? s.name ?? s.header ?? `Slide ${(idx || 0) + 1}`;
+  const sDesc = s.desc ?? s.subtitle ?? s.subTitle ?? s.sub_title ?? s.description ?? s.content ?? s.body ?? '';
+  const sTag = s.tag ?? s.category ?? s.section ?? `SLIDE ${(idx || 0) + 1}`;
+  let sFeatures = s.features ?? s.bullets ?? s.elements ?? s.points ?? [];
+
+  if (Array.isArray(sFeatures)) {
+    sFeatures = sFeatures.map((f, fIdx) => {
+      if (typeof f === 'string') {
+        return { num: String(fIdx + 1).padStart(2, '0'), title: f, desc: '' };
+      }
+      return f;
+    });
+  }
+
+  return {
+    id: s.id || (Date.now() + (idx || 0)),
+    layout: s.layout || (sFeatures.length ? 'columns' : 'title'),
+    tag: sTag,
+    title: sTitle,
+    desc: sDesc,
+    subtitle: sDesc,
+    features: sFeatures,
+    bg: s.bg || 'radial-gradient(ellipse at top right, #1e293b 0%, #0f172a 100%)',
+    accent: s.accent || '#38bdf8',
+    notes: s.notes || ''
+  };
+}
+
+function mountKineticEditor(container, templateSlides = null, onDeckUpdate = null) {
 
   const defaultSlides = [
     {
@@ -2353,6 +2396,9 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
   ];
 
   let slidesData = defaultSlides;
+  if (templateSlides && Array.isArray(templateSlides)) {
+    templateSlides = templateSlides.map(normalizeImportedSlide);
+  }
   if (templateSlides === 'blank') {
     slidesData = [
       {
@@ -2377,7 +2423,10 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
     const savedDeck = localStorage.getItem('giri_orbit_kinetic_deck');
     if (savedDeck) {
       try {
-        slidesData = JSON.parse(savedDeck);
+        const parsedDeck = JSON.parse(savedDeck);
+        if (Array.isArray(parsedDeck) && parsedDeck.length > 0) {
+          slidesData = parsedDeck.map(normalizeImportedSlide);
+        }
       } catch {}
     }
   }
@@ -2664,6 +2713,8 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
                   </select>
                   <div class="fluent-group-row">
                     <button class="fluent-btn-small" id="btn-kinetic-dup" title="Duplicate Slide" style="width:auto; padding:0 6px;">Duplicate</button>
+                    <button class="fluent-btn-small" id="btn-kinetic-quick-add-title" title="Add / Focus Slide Title" style="width:auto; padding:0 6px; font-weight:700; color:#38bdf8;">+ Title</button>
+                    <button class="fluent-btn-small" id="btn-kinetic-quick-add-subtitle" title="Add / Focus Slide Subtitle" style="width:auto; padding:0 6px; font-weight:600; color:#cbd5e1;">+ Subtitle</button>
                     <button class="fluent-btn-small" id="btn-kinetic-del" title="Delete Slide" style="color:#ef4444; width:auto; padding:0 6px;">Delete</button>
                   </div>
                 </div>
@@ -2898,6 +2949,14 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             <!-- Text & Media Group -->
             <div class="fluent-ribbon-group">
               <div class="fluent-group-controls">
+                <button class="fluent-btn-large" id="btn-kinetic-insert-title" title="Add Slide Title">
+                  <span style="font-size:18px; font-weight:800; color:#38bdf8;">T</span>
+                  <span>Title</span>
+                </button>
+                <button class="fluent-btn-large" id="btn-kinetic-insert-subtitle" title="Add Slide Subtitle">
+                  <span style="font-size:16px; font-weight:700; color:#cbd5e1;">S</span>
+                  <span>Subtitle</span>
+                </button>
                 <button class="fluent-btn-large" id="btn-kinetic-textbox" title="Insert Text Box">
                   <span style="font-size:16px;">🔤</span>
                   <span>Text Box</span>
@@ -3490,6 +3549,8 @@ export function renderKineticApp(container, onDeckUpdate = null, startInEditor =
             <button id="btn-kinetic-mobile-prev" style="background:none;border:none;color:#38bdf8;font-size:14px;cursor:pointer;padding:2px 4px;">◀</button>
             <span id="kinetic-mobile-slide-num" style="font-weight:700; font-family:var(--font-mono); font-size:11px;">1 / 1</span>
             <button id="btn-kinetic-mobile-next" style="background:none;border:none;color:#38bdf8;font-size:14px;cursor:pointer;padding:2px 4px;">▶</button>
+            <button id="btn-kinetic-mobile-add-title" title="Add / Edit Title" style="background:#0284c7;color:#ffffff;border:none;border-radius:12px;padding:3px 7px;font-size:10px;font-weight:700;cursor:pointer;">+ Title</button>
+            <button id="btn-kinetic-mobile-add-sub" title="Add / Edit Subtitle" style="background:#475569;color:#ffffff;border:none;border-radius:12px;padding:3px 7px;font-size:10px;font-weight:700;cursor:pointer;">+ Sub</button>
             <button id="btn-kinetic-mobile-add" title="Add Slide" style="background:#334155;color:#ffffff;border:none;border-radius:12px;padding:3px 7px;font-size:10px;font-weight:700;cursor:pointer;">+ Slide</button>
             <button id="btn-kinetic-mobile-present" style="background:#2563eb;color:#ffffff;border:none;border-radius:12px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;">▶ Show</button>
           </div>
@@ -4171,10 +4232,14 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
     descEl.style.color = '#cbd5e1';
     slideFrame.style.color = '#ffffff';
 
-    // ── Set slide text content ─────────────────────────────────
-    tagEl.textContent = slide.tag || `SLIDE ${index + 1}`;
-    titleEl.textContent = slide.title || 'Executive Heading';
-    descEl.textContent = slide.desc || 'Slide subtitle and overview text...';
+    // ── Set slide text content with Full Template Compatibility ──
+    const slideTitle = slide.title ?? slide.heading ?? slide.name ?? slide.header ?? '';
+    const slideDesc = slide.desc ?? slide.subtitle ?? slide.subTitle ?? slide.sub_title ?? slide.description ?? slide.content ?? slide.body ?? '';
+    const slideTag = slide.tag ?? slide.category ?? `SLIDE ${index + 1}`;
+
+    tagEl.textContent = slideTag;
+    titleEl.textContent = slideTitle || (slide.layout === 'blank' && !slide.hasCustomTitle ? '' : 'Click to add title');
+    descEl.textContent = slideDesc || (slide.layout === 'blank' && !slide.hasCustomDesc ? '' : 'Click to add subtitle');
     if (notesInput) notesInput.value = slide.notes || '';
     if (slideNumIndicator) slideNumIndicator.textContent = `${index + 1}`;
     const loSlideStat = container.querySelector('#lo-stat-slide-count');
@@ -4208,16 +4273,20 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
   }
 
   function applyLayout(layout) {
-    if (layout === 'blank') {
+    const slide = slidesData[currentSlideIndex];
+    const hasVisibleTitle = Boolean(slide?.hasCustomTitle || (slide?.title && slide.title.trim()) || (slide?.heading && slide.heading.trim()));
+    const hasVisibleDesc = Boolean(slide?.hasCustomDesc || (slide?.desc && slide.desc.trim()) || (slide?.subtitle && slide.subtitle.trim()));
+
+    if (layout === 'blank' && !hasVisibleTitle && !hasVisibleDesc) {
       tagEl.style.display = 'none';
       titleEl.style.display = 'none';
       descEl.style.display = 'none';
       nodesGrid.style.display = 'none';
     } else {
       tagEl.style.display = '';
-      titleEl.style.display = '';
-      descEl.style.display = '';
-      nodesGrid.style.display = 'block';
+      titleEl.style.display = (layout === 'blank' && !hasVisibleTitle) ? 'none' : '';
+      descEl.style.display = (layout === 'blank' && !hasVisibleDesc) ? 'none' : '';
+      nodesGrid.style.display = (layout === 'blank') ? 'none' : 'block';
     }
   }
 
@@ -4227,7 +4296,12 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
       const slide = slidesData[currentSlideIndex];
       slide.tag = tagEl.innerText;
       slide.title = titleEl.innerText;
+      slide.heading = titleEl.innerText;
       slide.desc = descEl.innerText;
+      slide.subtitle = descEl.innerText;
+      slide.subTitle = descEl.innerText;
+      if (el === titleEl) slide.hasCustomTitle = true;
+      if (el === descEl) slide.hasCustomDesc = true;
       saveDeck();
       const activeThumb = navSidebar.querySelector(`.slide-thumb-card[data-index="${currentSlideIndex}"] .thumb-title-line`);
       if (activeThumb) activeThumb.textContent = slide.title;
@@ -5287,6 +5361,79 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
   }
 
   container.querySelector('#btn-kinetic-icons')?.addEventListener('click', openVectorIconsModal);
+
+  const handleAddTitle = () => {
+    const slide = slidesData[currentSlideIndex];
+    if (!slide) return;
+    slide.hasCustomTitle = true;
+    if (slide.layout === 'blank') slide.layout = 'title';
+    titleEl.style.display = 'block';
+    if (!titleEl.textContent || titleEl.textContent === 'Click to add title') {
+      titleEl.textContent = 'Add title here';
+      slide.title = 'Add title here';
+    }
+    titleEl.focus();
+    try {
+      const range = document.createRange();
+      range.selectNodeContents(titleEl);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (_) {}
+    saveDeck();
+  };
+
+  const handleAddSubtitle = () => {
+    const slide = slidesData[currentSlideIndex];
+    if (!slide) return;
+    slide.hasCustomDesc = true;
+    descEl.style.display = 'block';
+    if (!descEl.textContent || descEl.textContent === 'Click to add subtitle') {
+      descEl.textContent = 'Add subtitle and executive overview here';
+      slide.desc = 'Add subtitle and executive overview here';
+      slide.subtitle = slide.desc;
+    }
+    descEl.focus();
+    try {
+      const range = document.createRange();
+      range.selectNodeContents(descEl);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (_) {}
+    saveDeck();
+  };
+
+  container.querySelector('#btn-kinetic-quick-add-title')?.addEventListener('click', handleAddTitle);
+  container.querySelector('#btn-kinetic-insert-title')?.addEventListener('click', handleAddTitle);
+  container.querySelector('#btn-kinetic-mobile-add-title')?.addEventListener('click', handleAddTitle);
+  container.querySelector('#btn-kinetic-quick-add-subtitle')?.addEventListener('click', handleAddSubtitle);
+  container.querySelector('#btn-kinetic-insert-subtitle')?.addEventListener('click', handleAddSubtitle);
+  container.querySelector('#btn-kinetic-mobile-add-sub')?.addEventListener('click', handleAddSubtitle);
+
+  // Mobile Touch Swipe Gesture Support for Slide Frame (Left/Right to switch slides)
+  let touchStartX = 0;
+  let touchStartY = 0;
+  slideFrame?.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  slideFrame?.addEventListener('touchend', (e) => {
+    if (e.changedTouches.length === 1) {
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX < 0 && currentSlideIndex < slidesData.length - 1) {
+          switchSlide(currentSlideIndex + 1);
+        } else if (deltaX > 0 && currentSlideIndex > 0) {
+          switchSlide(currentSlideIndex - 1);
+        }
+      }
+    }
+  }, { passive: true });
 
   container.querySelector('#btn-kinetic-textbox')?.addEventListener('click', () => {
     const tb = document.createElement('div');
@@ -8249,7 +8396,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
             </div>
           `;
           card.querySelector('.btn-load-kinetic-deck').addEventListener('click', () => {
-            slidesData = JSON.parse(JSON.stringify(tpl.slides));
+            slidesData = JSON.parse(JSON.stringify(tpl.slides)).map(normalizeImportedSlide);
             currentSlideIndex = 0;
             saveDeck();
             renderThumbnails();
@@ -8260,7 +8407,7 @@ function initKineticWorkspace(container, slidesData, currentSlideIndex, currentT
             }
           });
           card.querySelector('.btn-append-kinetic-deck').addEventListener('click', () => {
-            const newSlides = JSON.parse(JSON.stringify(tpl.slides)).map((s, idx) => ({
+            const newSlides = JSON.parse(JSON.stringify(tpl.slides)).map(normalizeImportedSlide).map((s, idx) => ({
               ...s,
               id: Date.now() + idx
             }));

@@ -2746,3 +2746,118 @@ body:not(.in-tool) .orbit-workspace {
     min-width: 110px !important;
   }
 }
+
+
+/* ============================================================================
+ * PINNED TOP-RIGHT CORNER ACCOUNT & MULTI-CLOUD STATUS HUB
+ * (Visible at top-right corner of viewport in landing workspace)
+ * ============================================================================ */
+.m365-corner-account-hub {
+  position: absolute;
+  top: 18px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.m365-corner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  padding: 6px 14px;
+  color: #f1f5f9;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  user-select: none;
+}
+
+.m365-corner-pill:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+.m365-corner-drive-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.m365-corner-drive-btn:hover {
+  border-color: #3b82f6;
+  color: #38bdf8;
+}
+
+.m365-corner-account-btn {
+  padding: 4px 12px 4px 6px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+}
+
+.m365-corner-account-btn:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35), 0 0 16px rgba(56, 189, 248, 0.3);
+}
+
+/* Ensure Search Bar has 50px comfortable vertical height and no cramping */
+.m365-search-bar {
+  height: 50px !important;
+  min-height: 50px !important;
+  padding: 0 20px !important;
+  border-radius: 14px !important;
+}
+
+#m365-search-box {
+  font-size: 14.5px !important;
+  min-height: 46px !important;
+}
+
+/* Ensure Upload Button is High Contrast Primary Vibrant Blue and NEVER White-on-White */
+#btn-m365-upload-file,
+.m365-upload-btn {
+  background: #2563eb !important;
+  background-color: #2563eb !important;
+  border: 1.5px solid #3b82f6 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45) !important;
+}
+
+#btn-m365-upload-file svg,
+.m365-upload-btn svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+  fill: none !important;
+}
+
+#btn-m365-upload-file span,
+.m365-upload-btn span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+#btn-m365-upload-file:hover,
+.m365-upload-btn:hover {
+  background: #1d4ed8 !important;
+  background-color: #1d4ed8 !important;
+  border-color: #60a5fa !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.65) !important;
+  transform: translateY(-1px) !important;
+}
+
+.m365-view-toggle {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}

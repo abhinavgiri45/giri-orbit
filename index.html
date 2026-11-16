@@ -325,7 +325,7 @@
           ⚙️
         </button>
         <button class="tier1-icon-pill" id="btn-suite-profile" onclick="window.orbitPlatform?.openUserProfileModal(); return false;" style="background:#2563eb; border:1px solid rgba(255,255,255,0.2); color:#ffffff; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:11px; font-weight:700;" title="User Profile & Sovereignty Hub">
-          <span id="btn-suite-profile-text">AG</span>
+          <span id="btn-suite-profile-text">SU</span>
         </button>
         <button class="tier1-icon-pill" id="btn-suite-shortcuts" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#64748b; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px;" title="Keyboard Shortcuts (Ctrl+/)">
           ⌨
@@ -360,6 +360,36 @@
   <!-- PRIMARY WORKSPACE VIEWPORT -->
   <main class="orbit-workspace" id="orbit-workspace">
     <div class="m365-hub-root">
+
+      <!-- TOP-RIGHT CORNER ACCOUNT & MULTI-CLOUD STATUS HUB (Fixed / Pinned Top-Right Corner) -->
+      <aside class="m365-corner-account-hub" id="hub-corner-account-widget" aria-label="Account and Cloud Controls">
+        <!-- Cloud Sync Status Pill -->
+        <button class="m365-corner-pill m365-corner-cloud-btn" id="hub-corner-cloud-status-btn" title="Cloud Sync & Multi-Platform Storage Status" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
+          <span class="m365-cloud-dot" id="hub-corner-cloud-dot"></span>
+          <span class="m365-cloud-text" id="hub-corner-cloud-text">Cloud: Sovereign (Local)</span>
+        </button>
+
+        <!-- Google Drive Quick Connect Pill -->
+        <button class="m365-corner-pill m365-corner-drive-btn" id="hub-corner-drive-btn" title="Google Drive Cloud Workspace (Optional Sync)" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;">
+            <path d="M7.71 3.5L1.15 15l3.43 6 6.56-11.5L7.71 3.5z" fill="#0066DA"/>
+            <path d="M16.29 3.5h-8.58l6.56 11.5h8.58l-6.56-11.5z" fill="#00AC47"/>
+            <path d="M22.85 15H9.71l-3.43 6h13.14l3.43-6z" fill="#EA4335"/>
+            <path d="M14.27 15l-3.42 6-3.43-6h6.85z" fill="#FFBA00"/>
+          </svg>
+          <span id="hub-corner-drive-text">Drive</span>
+        </button>
+
+        <!-- Sovereign User Account Profile Button (Sovereign User by Default) -->
+        <button class="m365-corner-pill m365-corner-account-btn" id="hub-corner-account-btn" title="User Profile, Google Drive & Cloud Account" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
+          <div class="m365-account-avatar" id="hub-corner-account-avatar">SU</div>
+          <div class="m365-account-meta">
+            <span class="m365-account-name" id="hub-corner-account-name">Sovereign User</span>
+            <span class="m365-account-badge">Account &amp; Cloud ▾</span>
+          </div>
+        </button>
+      </aside>
+
 
       <!-- LEFT NAVIGATION RAIL -->
       <nav class="m365-left-rail" aria-label="Main Navigation">
@@ -602,9 +632,9 @@
 
               <!-- Account & Multi-Cloud Login Button (Top-Right Circled Area) -->
               <button class="m365-header-pill m365-account-pill" id="hub-top-account-btn" title="Account, Google Drive & Multi-Cloud Login" onclick="window.orbitPlatform?.openAccountAndCloudModal(); return false;">
-                <div class="m365-account-avatar" id="hub-top-account-avatar">AG</div>
+                <div class="m365-account-avatar" id="hub-top-account-avatar">SU</div>
                 <div class="m365-account-meta">
-                  <span class="m365-account-name" id="hub-top-account-name">Abhinav Giri</span>
+                  <span class="m365-account-name" id="hub-top-account-name">Sovereign User</span>
                   <span class="m365-account-badge">Account &amp; Cloud ▾</span>
                 </div>
               </button>

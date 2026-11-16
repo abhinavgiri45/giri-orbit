@@ -860,26 +860,26 @@ class GiriOrbitPlatform {
 
       if (!landingContainer) return;
 
-      const userName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Abhinav Giri');
-      const initials = (userName || 'AG').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+      const userName = localStorage.getItem('giri_user_name') || (isGoogleConnected ? (googleUser.name || googleUser.email) : 'Sovereign User');
+      const initials = (userName || 'SU').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
 
       // Update rail avatar
       const avatarBtn = landingContainer.querySelector('#rail-avatar-btn');
       if (avatarBtn) {
         avatarBtn.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
-        avatarBtn.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : initials;
+        avatarBtn.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SO');
       }
 
       // Update top header account pill (top right)
       const topAvatar = landingContainer.querySelector('#hub-top-account-avatar');
       if (topAvatar) {
         topAvatar.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
-        topAvatar.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : initials;
+        topAvatar.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SU');
       }
 
       const topName = landingContainer.querySelector('#hub-top-account-name');
       if (topName) {
-        topName.textContent = isGoogleConnected ? (googleUser.name || googleUser.email) : userName;
+        topName.textContent = isGoogleConnected ? (googleUser.name || googleUser.email) : (localStorage.getItem('giri_user_name') || 'Sovereign User');
       }
 
       const topCloudText = landingContainer.querySelector('#hub-top-cloud-text');
@@ -892,6 +892,36 @@ class GiriOrbitPlatform {
           topCloudText.textContent = 'Cloud: Local Sovereign (Private)';
           if (topCloudDot) { topCloudDot.className = 'm365-cloud-dot'; topCloudDot.style.background = '#10b981'; }
         }
+      }
+
+      // Sync Corner Account Hub (Top-Right Circled Area)
+      const cornerAvatar = landingContainer.querySelector('#hub-corner-account-avatar');
+      if (cornerAvatar) {
+        cornerAvatar.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
+        cornerAvatar.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SU');
+      }
+
+      const cornerName = landingContainer.querySelector('#hub-corner-account-name');
+      if (cornerName) {
+        cornerName.textContent = isGoogleConnected ? (googleUser.name || googleUser.email) : (localStorage.getItem('giri_user_name') || 'Sovereign User');
+      }
+
+      const cornerCloudText = landingContainer.querySelector('#hub-corner-cloud-text');
+      const cornerCloudDot = landingContainer.querySelector('#hub-corner-cloud-dot');
+      if (cornerCloudText) {
+        if (isGoogleConnected) {
+          cornerCloudText.textContent = `Drive Connected (${googleUser.email.split('@')[0]})`;
+          if (cornerCloudDot) { cornerCloudDot.className = 'm365-cloud-dot connected'; cornerCloudDot.style.background = '#3b82f6'; }
+        } else {
+          cornerCloudText.textContent = 'Cloud: Sovereign (Local)';
+          if (cornerCloudDot) { cornerCloudDot.className = 'm365-cloud-dot'; cornerCloudDot.style.background = '#10b981'; }
+        }
+      }
+
+      // Sync suite top profile button
+      const suiteProfileText = document.getElementById('btn-suite-profile-text');
+      if (suiteProfileText) {
+        suiteProfileText.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : (localStorage.getItem('giri_user_name') ? initials : 'SU');
       }
 
       // Bind all interactive events & universal search
@@ -916,6 +946,22 @@ class GiriOrbitPlatform {
     });
 
     container.querySelector('#hub-top-cloud-status-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
+    });
+
+    // Pinned Top-Right Corner Account & Cloud Hub Triggers
+    container.querySelector('#hub-corner-account-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
+    });
+
+    container.querySelector('#hub-corner-cloud-status-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
+    });
+
+    container.querySelector('#hub-corner-drive-btn')?.addEventListener('click', (e) => {
       e.preventDefault();
       this.openAccountAndCloudModal();
     });
@@ -1389,8 +1435,8 @@ class GiriOrbitPlatform {
 
     const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
     const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
-    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Abhinav Giri');
-    const initials = (currentName || 'AG').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected ? (googleUser.name || googleUser.email) : 'Sovereign User');
+    const initials = (currentName || 'SU').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
     const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
     const activeCloudProvider = localStorage.getItem('giri_orbit_active_cloud_provider') || (isGoogleConnected ? 'gdrive' : 'local');
     const autoSync = localStorage.getItem('giri_gdrive_autosync') === 'true';
@@ -1428,7 +1474,7 @@ class GiriOrbitPlatform {
             </div>
             <div style="flex:1;">
               <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
-                <input type="text" id="account-name-input" value="${this.escapeHtml(currentName)}" style="font-size:15px; font-weight:700; color:#ffffff; background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:6px 12px; width:100%; max-width:240px;" placeholder="Your Name (e.g. Abhinav Giri)" />
+                <input type="text" id="account-name-input" value="${this.escapeHtml(currentName)}" style="font-size:15px; font-weight:700; color:#ffffff; background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:6px 12px; width:100%; max-width:240px;" placeholder="Your Name (e.g. Sovereign User)" />
                 <button class="giri-dl-btn" id="btn-save-account-name" style="margin-top:0; padding:6px 14px; font-size:12px; background:#2563eb; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Save</button>
               </div>
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -2911,7 +2957,7 @@ class GiriOrbitPlatform {
       const val = input ? input.value.trim() : '';
       if (val) {
         localStorage.setItem('giri_user_name', val);
-        const newInitials = val.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+        const newInitials = val.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SU';
         const modalAvatar = overlay.querySelector('#profile-modal-avatar');
         if (modalAvatar) modalAvatar.textContent = newInitials;
         const railAvatar = document.querySelector('#rail-avatar-btn span');
