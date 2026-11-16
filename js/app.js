@@ -37,6 +37,9 @@ import { sessionResumeManager } from './modules/sessionResumeManager.js?v=1.0';
 import { smartDifferenceEngine } from './modules/smartDifferenceEngine.js?v=1.0';
 import { digitalSignatureEngine } from './components/digitalSignatureEngine.js';
 import { universalDocumentUrlManager } from './components/universalDocumentUrlManager.js';
+import { p2pCollaborationEngine } from './modules/p2pCollaborationEngine.js';
+import { i18nEngine } from './modules/i18nEngine.js';
+import { internetTemplatesLibrary } from './data/internetTemplates.js';
 
 class GiriOrbitPlatform {
   constructor() {
@@ -66,6 +69,51 @@ class GiriOrbitPlatform {
     window.digitalSignatureEngine = digitalSignatureEngine;
     this.universalDocumentUrlManager = universalDocumentUrlManager;
     window.universalDocumentUrlManager = universalDocumentUrlManager;
+    this.p2pCollaborationEngine = p2pCollaborationEngine;
+    window.p2pCollaborationEngine = p2pCollaborationEngine;
+    this.i18nEngine = i18nEngine;
+    window.i18nEngine = i18nEngine;
+    this.internetTemplatesLibrary = internetTemplatesLibrary;
+    window.internetTemplatesLibrary = internetTemplatesLibrary;
+
+    // Cloudless P2P Document Edit Broadcaster
+    window.addEventListener('orbit:document-edit', (e) => {
+      if (e.detail && this.p2pCollaborationEngine?.roomId) {
+        this.p2pCollaborationEngine.sendContentChange(e.detail.content, e.detail.title);
+      }
+    });
+
+    // Cloudless P2P Remote Mutation Listener
+    window.addEventListener('orbit:p2p-remote-edit', (e) => {
+      const { content, title, tool } = e.detail;
+      if (tool === 'drift') {
+        const editor = document.getElementById('drift-editor');
+        if (editor && editor.innerHTML !== content) {
+          editor.innerHTML = content;
+        }
+        if (title) {
+          const titleInput = document.getElementById('drift-doc-title');
+          if (titleInput && titleInput.value !== title) titleInput.value = title;
+        }
+      }
+    });
+
+    // Cloudless P2P Initial Document State Sync Listener
+    window.addEventListener('orbit:p2p-document-synced', (e) => {
+      const { doc, role } = e.detail;
+      if (doc && doc.tool) {
+        this.navigateTo(doc.tool, doc.title, false, true);
+        setTimeout(() => {
+          if (doc.tool === 'drift') {
+            const editor = document.getElementById('drift-editor');
+            if (editor && doc.content) editor.innerHTML = doc.content;
+            const titleInput = document.getElementById('drift-doc-title');
+            if (titleInput && doc.title) titleInput.value = doc.title;
+            if (role === 'viewer' && editor) editor.contentEditable = 'false';
+          }
+        }, 350);
+      }
+    });
     window.sessionResumeManager = sessionResumeManager;
     this.smartDifferenceEngine = smartDifferenceEngine;
     window.smartDifferenceEngine = smartDifferenceEngine;
@@ -226,6 +274,24 @@ class GiriOrbitPlatform {
    * Resolves direct document URLs (#edit?tool=... or #open?url=...) and prevents data loss on refresh (F5).
    */
   async initRouting() {
+    // 0. Check for Cloudless P2P Live Collaboration URL (#p2p=room_xxx&role=editor)
+    const hashStr = window.location.hash || '';
+    const searchStr = window.location.search || '';
+    if (hashStr.includes('p2p=') || searchStr.includes('p2p=')) {
+      const combined = (hashStr.startsWith('#') ? hashStr.slice(1) : hashStr) + '&' + (searchStr.startsWith('?') ? searchStr.slice(1) : searchStr);
+      const urlParams = new URLSearchParams(combined);
+      const p2pRoomId = urlParams.get('p2p');
+      const p2pRole = urlParams.get('role') || 'editor';
+      const p2pTool = urlParams.get('tool') || 'drift';
+
+      if (p2pRoomId) {
+        this.p2pCollaborationEngine.joinSession(p2pRoomId, p2pRole);
+        this.navigateTo(p2pTool, 'P2P Live Document', false, true);
+        this.showToast(`🌐 Connected to Cloudless P2P Session (${p2pRole.toUpperCase()}) • Zero Cloud Servers`, 'green');
+        this._bindRoutingListeners();
+        return;
+      }
+    }
     // 1. Check if user navigated to a Direct Document URL (#edit?tool=... or #open?url=...)
     const docRoute = universalDocumentUrlManager?.parseRouteParams();
     if (docRoute) {
@@ -925,6 +991,13 @@ class GiriOrbitPlatform {
       }
 
       // Bind all interactive events & universal search
+      // Update active language label in corner
+      const langLabel = landingContainer.querySelector('#hub-current-lang-name');
+      if (langLabel && this.i18nEngine) {
+        const langObj = SUPPORTED_LANGUAGES.find(l => l.code === this.i18nEngine.getLanguage());
+        langLabel.textContent = langObj ? langObj.native : 'Language';
+      }
+
       this.bindM365HubEvents(landingContainer);
       this.initUniversalSearch(landingContainer);
       this.renderM365RecentDocuments(landingContainer);
@@ -951,6 +1024,21 @@ class GiriOrbitPlatform {
     });
 
     // Pinned Top-Right Corner Account & Cloud Hub Triggers
+    container.querySelector('#hub-corner-p2p-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.p2pCollaborationEngine?.openP2PShareModal();
+    });
+
+    container.querySelector('#hub-corner-lang-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.i18nEngine?.openLanguageModal();
+    });
+
+    container.querySelector('#btn-m365-internet-templates')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.internetTemplatesLibrary?.openInternetTemplatesModal();
+    });
+
     container.querySelector('#hub-corner-account-btn')?.addEventListener('click', (e) => {
       e.preventDefault();
       this.openAccountAndCloudModal();
@@ -8041,6 +8129,101 @@ ${(s.features || []).map(f => `- **${f.num}** ${f.title}: ${f.desc}`).join('\n')
 
     this.showToast('Giri File Converter ready', 'violet');
   }
+
+  /**
+   * Open the World Typography Studio (250+ Global Fonts Across All Scripts)
+   */
+  openWorldTypographyStudio() {
+    const existing = document.getElementById('giri-typography-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'giri-modal-overlay';
+    modal.id = 'giri-typography-modal';
+
+    const categories = ['All', 'Standard Office Classics', 'Modern Sans-Serif', 'Editorial & Classic Serif', 'Monospace & Code', 'Script & Handwriting', 'Devanagari & Indic', 'Arabic & Middle Eastern', 'East Asian (CJK)'];
+    let activeCat = 'All';
+
+    modal.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:880px; width:95%; max-height:88vh; display:flex; flex-direction:column; background:#0f172a; border:1px solid rgba(56,189,248,0.3); border-radius:18px; box-shadow:0 24px 60px rgba(0,0,0,0.85); color:#f8fafc; overflow:hidden;">
+        <!-- Header -->
+        <div style="background:#1e293b; padding:18px 24px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, #ec4899, #8b5cf6); display:flex; align-items:center; justify-content:center; font-size:18px;">
+              🔤
+            </div>
+            <div>
+              <h2 style="font-size:16px; font-weight:700; margin:0; color:#ffffff;">World Typography Studio (250+ Global Fonts)</h2>
+              <span style="font-size:11.5px; color:#94a3b8;">Latin, Devanagari, Arabic, CJK, Cyrillic, Monospace &amp; Editorial Fonts</span>
+            </div>
+          </div>
+          <button id="btn-close-typo-modal" style="background:transparent; border:none; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1;">&times;</button>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div style="padding:14px 24px; background:#1e293b44; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; gap:12px; align-items:center; flex-wrap:wrap; flex-shrink:0;">
+          <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; max-width:100%;">
+            ${categories.map(c => `
+              <button class="typo-cat-btn ${activeCat === c ? 'active' : ''}" data-cat="${c}" style="padding:5px 12px; border-radius:16px; font-size:11.5px; font-weight:700; cursor:pointer; border:1px solid ${activeCat === c ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background:${activeCat === c ? 'rgba(56,189,248,0.2)' : 'rgba(255,255,255,0.03)'}; color:${activeCat === c ? '#38bdf8' : '#94a3b8'}; white-space:nowrap;">
+                ${c}
+              </button>
+            `).join('')}
+          </div>
+          <input type="text" id="typo-search-input" placeholder="Search world fonts (e.g. Aptos, Inter, Amiri, Noto)..." style="flex:1; min-width:200px; background:#020617; border:1px solid #334155; border-radius:8px; padding:6px 12px; color:#f1f5f9; font-size:12px; outline:none;" />
+        </div>
+
+        <!-- Font Showcase List -->
+        <div style="padding:20px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:12px;">
+          ${[
+            { name: 'Calibri', cat: 'Standard Office Classics', sample: 'Giri Orbit Sovereign Productivity Suite' },
+            { name: 'Aptos', cat: 'Standard Office Classics', sample: 'Modern executive correspondence and data matrices.' },
+            { name: 'Inter', cat: 'Modern Sans-Serif', sample: 'The next-generation sovereign interface standard.' },
+            { name: 'Plus Jakarta Sans', cat: 'Modern Sans-Serif', sample: 'Crafted for high-density enterprise legibility.' },
+            { name: 'Playfair Display', cat: 'Editorial & Classic Serif', sample: 'Institutional Sovereign Governance & Charters.' },
+            { name: 'JetBrains Mono', cat: 'Monospace & Code', sample: 'const sovereignEngine = new P2PCollaborationEngine();' },
+            { name: 'Noto Sans Devanagari', cat: 'Devanagari & Indic', sample: 'संपूर्ण संप्रभु डिजिटल स्वतंत्रता और गोपनीयता' },
+            { name: 'Amiri', cat: 'Arabic & Middle Eastern', sample: 'نظام إنتاجي سيادي كامل دون وسيط سحابي' },
+            { name: 'Noto Sans SC', cat: 'East Asian (CJK)', sample: '零云端服务器 • 纯本地主权办公套件' },
+            { name: 'Dancing Script', cat: 'Script & Handwriting', sample: 'Designed with artistic sovereign elegance' }
+          ].map(f => `
+            <div class="typo-row-card" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <strong style="font-size:14px; color:#38bdf8;">${f.name}</strong>
+                  <span style="font-size:10.5px; padding:1px 6px; border-radius:10px; background:rgba(255,255,255,0.06); color:#94a3b8;">${f.cat}</span>
+                </div>
+                <div style="font-size:15px; color:#f1f5f9; font-family:'${f.name}', system-ui, sans-serif;">${f.sample}</div>
+              </div>
+              <button class="btn-apply-global-font" data-font="${f.name}" style="background:#2563eb; color:#ffffff; border:none; border-radius:6px; padding:6px 14px; font-size:11.5px; font-weight:700; cursor:pointer;">Apply Font</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.querySelector('#btn-close-typo-modal')?.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.remove();
+    });
+
+    modal.querySelectorAll('.btn-apply-global-font').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fontName = btn.dataset.font;
+        const editor = document.getElementById('drift-editor');
+        if (editor) {
+          editor.style.fontFamily = `'${fontName}', sans-serif`;
+        }
+        document.execCommand('fontName', false, fontName);
+        if (window.orbitPlatform) {
+          window.orbitPlatform.triggerToast(`Applied Global Font: ${fontName}`);
+        }
+        modal.remove();
+      });
+    });
+  }
+
 }
 
 function bootGiriOrbit() {
