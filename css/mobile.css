@@ -1256,9 +1256,7 @@ html {
 @media (max-width: 768px) {
   /* 1. Corner Account Hub on Mobile */
   .m365-corner-account-hub {
-    top: 10px !important;
-    right: 12px !important;
-    gap: 6px !important;
+    display: none !important;
   }
   .m365-corner-pill {
     padding: 4px 10px !important;

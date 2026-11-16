@@ -21,4 +21,6 @@ Users, viewers, and external developers are **strictly prohibited** from:
 For commercial licensing, enterprise deployment rights, or institutional partnership requests, please contact:
 - **Author**: Abhinav Giri
 - **Email**: `abhinavgiri370@gmail.com`
+- **X (Twitter)**: [@AbhinavGIri45](https://x.com/AbhinavGIri45)
+- **Instagram**: [@abhinavgiri45](https://instagram.com/abhinavgiri45)
 - **GitHub**: [@abhinavgiri45](https://github.com/abhinavgiri45)

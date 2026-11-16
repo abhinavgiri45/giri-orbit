@@ -1142,6 +1142,7 @@ class GiriOrbitPlatform {
     });
 
     // Pinned Top-Right Corner Account & Cloud Hub Triggers
+    container.querySelector('#hub-corner-safe-btn')?.addEventListener('click', (e) => { e.preventDefault(); window.orbitPlatform?.openVirusAssuranceModal(); });
     container.querySelector('#hub-corner-p2p-btn')?.addEventListener('click', (e) => {
       e.preventDefault();
       this.p2pCollaborationEngine?.openP2PShareModal();
@@ -1729,7 +1730,7 @@ class GiriOrbitPlatform {
             </div>
             <div style="display:flex; gap:8px; align-items:center;">
               <a href="https://instagram.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">Instagram</a>
-              <a href="https://x.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:#000000; border:1px solid rgba(255,255,255,0.3); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">X (@abhinavgiri45)</a>
+              <a href="https://x.com/AbhinavGIri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:#000000; border:1px solid rgba(255,255,255,0.3); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">X (@AbhinavGIri45)</a>
               <a href="https://github.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:#24292e; border:1px solid rgba(255,255,255,0.2); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">GitHub</a>
             </div>
           </div>

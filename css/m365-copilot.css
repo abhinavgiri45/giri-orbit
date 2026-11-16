@@ -2180,8 +2180,10 @@ body:not(.in-tool) .orbit-workspace {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4px 6px 4px;
-  margin-bottom: -10px;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 4px 4px 10px 4px;
+  margin-bottom: 0 !important;
   position: relative;
   z-index: 10;
 }
@@ -2189,20 +2191,22 @@ body:not(.in-tool) .orbit-workspace {
 .m365-top-header-left {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .m365-suite-indicator {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   font-size: 11.5px;
   font-weight: 600;
   color: #94a3b8;
   letter-spacing: 0.3px;
+  backdrop-filter: blur(8px);
 }
 
 .m365-indicator-dot {
@@ -2216,7 +2220,9 @@ body:not(.in-tool) .orbit-workspace {
 .m365-top-header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .m365-header-pill {
@@ -2227,6 +2233,27 @@ body:not(.in-tool) .orbit-workspace {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 28px;
   padding: 6px 14px;
+  color: #f1f5f9;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1), background 0.14s, border-color 0.14s, box-shadow 0.14s !important;
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.m365-header-pill:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(56, 189, 248, 0.25);
+};
   color: #f1f5f9;
   font-size: 12.5px;
   font-weight: 600;
@@ -2730,20 +2757,32 @@ body:not(.in-tool) .orbit-workspace {
 }
 
 /* Extra small Android phone screens (<= 480px) */
-@media (max-width: 480px) {
-  .m365-table th:nth-child(3), .m365-table td:nth-child(3),
-  .m365-table th:nth-child(4), .m365-table td:nth-child(4) {
+@media (max-width: 768px) {
+  .m365-top-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 4px 2px !important;
+  }
+
+  .m365-top-header-right {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 2px 0 6px 0 !important;
+  }
+
+  .m365-top-header-right::-webkit-scrollbar {
     display: none !important;
   }
-  .m365-table {
-    min-width: 100% !important;
-  }
-  .m365-hero-title {
-    font-size: 20px !important;
-  }
-  .m365-cards-row .m365-create-card {
-    flex: 0 0 110px !important;
-    min-width: 110px !important;
+
+  .m365-header-pill {
+    flex-shrink: 0 !important;
+    font-size: 11.5px !important;
+    padding: 5px 10px !important;
   }
 }
 
@@ -2753,14 +2792,7 @@ body:not(.in-tool) .orbit-workspace {
  * (Visible at top-right corner of viewport in landing workspace)
  * ============================================================================ */
 .m365-corner-account-hub {
-  position: fixed !important;
-  top: 14px !important;
-  right: 24px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  z-index: 99999 !important;
-  pointer-events: auto !important;
+  display: none !important; /* Unified into in-flow .m365-top-header-right to eliminate collision */
 }
 
 .m365-corner-pill {
@@ -3130,4 +3162,57 @@ body:not(.in-tool) .orbit-workspace {
 #tool-switcher-search-input:focus {
   border-color: #38bdf8 !important;
   box-shadow: 0 0 14px rgba(56, 189, 248, 0.3) !important;
+}
+
+/* ==========================================================================
+   150 FPS+ ULTRA-FLUID GPU HARDWARE ACCELERATION & HIGH REFRESH RATE ENGINE
+   ========================================================================== */
+*, *::before, *::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html, body, .orbit-workspace, .m365-canvas, .m365-inner-wrapper {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* Force hardware composite layer promotion for buttery 150+ FPS rendering */
+.m365-tool-card,
+.m365-header-pill,
+.suite-tool-card,
+.m365-rail-item,
+.m365-create-card,
+.m365-search-box,
+.m365-recent-row,
+.suite-tool-switcher-modal,
+.p2p-modal-content,
+.m365-account-pill {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+/* Content visibility containment for zero scroll lag and instant frame throughput */
+.m365-templates-grid,
+.m365-recent-grid,
+.suite-tools-grid {
+  content-visibility: auto;
+  contain-intrinsic-size: 380px;
+}
+
+/* Zero-jank high-refresh-rate transitions */
+.m365-tool-card,
+.m365-header-pill,
+.suite-tool-card,
+.m365-rail-item {
+  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.14s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.14s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.14s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }

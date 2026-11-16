@@ -6,7 +6,10 @@
 
 <p align="center">
   <strong>Next-Generation Sovereign Office Suite Engineered for Absolute Privacy and Enterprise Velocity.</strong><br>
-  By <a href="https://github.com/abhinavgiri45/giri-orbit"><strong>Abhinav Giri</strong></a>
+  By <a href="https://github.com/abhinavgiri45/giri-orbit"><strong>Abhinav Giri</strong></a><br>
+  <a href="https://x.com/AbhinavGIri45"><img src="https://img.shields.io/badge/X-@AbhinavGIri45-000000?style=flat&logo=x&logoColor=white" alt="X / Twitter"></a>
+  <a href="https://instagram.com/abhinavgiri45"><img src="https://img.shields.io/badge/Instagram-@abhinavgiri45-E4405F?style=flat&logo=instagram&logoColor=white" alt="Instagram"></a>
+  <a href="https://github.com/abhinavgiri45"><img src="https://img.shields.io/badge/GitHub-@abhinavgiri45-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a>
 </p>
 
 <p align="center">
