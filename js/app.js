@@ -310,8 +310,7 @@ class GiriOrbitPlatform {
     if (!openedSpecialDoc) {
       // Parse target tool from URL hash (#axis), query param (?tool=axis), or pathname (/axis)
       const initialView = this.parseCurrentRoute();
-      const isTool = initialView !== 'launcher' && initialView !== 'hub' && initialView !== 'home';
-      this.navigateTo(initialView, null, false, isTool);
+      this.navigateTo(initialView, null, false, false);
 
       // Ensure URL hash reflects the active tool
       const canonicalHash = (initialView === 'launcher' || initialView === 'hub') ? '#hub' : `#${initialView}`;
@@ -341,8 +340,7 @@ class GiriOrbitPlatform {
       if (this.checkAndLoadSpecialDocLink()) return;
       const view = this.parseCurrentRoute();
       if (view !== this.currentView) {
-        const isTool = view !== 'launcher' && view !== 'hub' && view !== 'home';
-        this.navigateTo(view, null, false, isTool);
+        this.navigateTo(view, null, false, false);
       }
     });
 
@@ -358,8 +356,7 @@ class GiriOrbitPlatform {
       }
       const view = e.state?.view || this.parseCurrentRoute();
       if (view !== this.currentView) {
-        const isTool = view !== 'launcher' && view !== 'hub' && view !== 'home';
-        this.navigateTo(view, null, false, isTool);
+        this.navigateTo(view, null, false, false);
       }
     });
 
@@ -764,8 +761,7 @@ class GiriOrbitPlatform {
       pdf: { tool: 'pdf', title: 'Aegis Document', appName: 'Aegis' }
     };
     const item = toolMap[type] || { tool: type, title: 'New Document', appName: type };
-    this.recordRecentDocument(item.title, item.tool, item.appName);
-    // Open tool interface so user sees template gallery and options
+    // Always open the tool's intro / first screen so user sees templates, blank options, and recent files first!
     this.navigateTo(item.tool, null, true, false);
   }
 
@@ -824,7 +820,7 @@ class GiriOrbitPlatform {
     }
 
     const isHubView = (view === 'launcher' || view === 'hub' || view === 'home');
-    const startEditor = isHubView ? false : (forceEditor === true || !!docTitle);
+    const startEditor = isHubView ? false : (forceEditor === true && !!docTitle);
 
     try {
       if (isHubView) {
@@ -1244,8 +1240,7 @@ class GiriOrbitPlatform {
       pdf: { tool: 'pdf', title: 'Aegis Document', appName: 'Aegis' }
     };
     const item = toolMap[type] || { tool: type, title: 'New Document', appName: type };
-    this.recordRecentDocument(item.title, item.tool, item.appName);
-    // Bring up the tool's interface so the user sees templates, recent files, and options!
+    // Always open the tool's intro / first screen so user sees templates, blank options, and recent files first!
     this.navigateTo(item.tool, null, true, false);
   }
 
