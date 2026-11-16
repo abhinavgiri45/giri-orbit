@@ -41,6 +41,7 @@ import { universalDocumentUrlManager } from './components/universalDocumentUrlMa
 class GiriOrbitPlatform {
   constructor() {
     this.workspace = document.getElementById('orbit-workspace');
+    this.hubTemplateHtml = this.workspace ? this.workspace.innerHTML : '';
     this.suiteNavPills = document.querySelectorAll('.suite-nav-pill');
     this.toastContainer = document.getElementById('orbit-toast-wrap');
     this.fileInput = document.getElementById('universal-file-input');
@@ -698,10 +699,11 @@ class GiriOrbitPlatform {
     };
     const item = toolMap[type] || { tool: type, title: 'New Document', appName: type };
     this.recordRecentDocument(item.title, item.tool, item.appName);
-    this.navigateTo(item.tool, item.title, true, true);
+    // Open tool interface so user sees template gallery and options
+    this.navigateTo(item.tool, null, true, false);
   }
 
-  navigateTo(view, docTitle = null, updateHistory = true, forceEditor = true) {
+  navigateTo(view, docTitle = null, updateHistory = true, forceEditor = false) {
     if (view === 'storage') {
       this.storageOptimizer?.openModal();
       return;
@@ -756,7 +758,7 @@ class GiriOrbitPlatform {
     }
 
     const isHubView = (view === 'launcher' || view === 'hub' || view === 'home');
-    const startEditor = isHubView ? false : (forceEditor !== false);
+    const startEditor = isHubView ? false : (forceEditor === true || !!docTitle);
 
     try {
       if (isHubView) {
@@ -764,7 +766,7 @@ class GiriOrbitPlatform {
       } else {
         if (this.workspace) this.workspace.innerHTML = '';
         if (view === 'drift') {
-          const doc = docTitle || 'Untitled Document - Giri Drift';
+          const doc = (startEditor && docTitle) ? docTitle : null;
           renderDriftApp(this.workspace, null, doc, startEditor);
           this.showToast('Giri Drift Workspace Ready', 'blue');
         } else if (view === 'axis') {
@@ -841,7 +843,7 @@ class GiriOrbitPlatform {
     `;
   }
 
-  /**
+/**
    * Mount the Zoho-Style Office Suite Landing Hub
    */
   mountZohoLandingHub() {
@@ -850,489 +852,52 @@ class GiriOrbitPlatform {
       const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
       const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
 
-    let landingContainer = this.workspace.querySelector('.m365-hub-root');
-    if (!landingContainer) {
-      landingContainer = document.createElement('div');
-      landingContainer.className = 'm365-hub-root';
+      let landingContainer = this.workspace?.querySelector('.m365-hub-root');
+      if (!landingContainer && this.hubTemplateHtml) {
+        this.workspace.innerHTML = this.hubTemplateHtml;
+        landingContainer = this.workspace.querySelector('.m365-hub-root');
+      }
 
-    landingContainer.innerHTML = `
-      <!-- LEFT NAVIGATION RAIL -->
-      <nav class="m365-left-rail" aria-label="Main Navigation">
-        <div class="m365-rail-top">
-          <!-- 1. Home -->
-          <button class="m365-rail-btn active" id="rail-btn-home" data-rail="home" title="Home">
-            <div class="m365-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Home</span>
-          </button>
+      if (!landingContainer) return;
 
-          <!-- 2. Girionix AI -->
-          <button class="m365-rail-btn" id="rail-btn-girionix" data-rail="girionix" title="Girionix AI Sovereign Assistant">
-            <div class="m365-rail-icon-wrap" style="color:#7c3aed;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Girionix AI</span>
-          </button>
+      const userName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Abhinav Giri');
+      const initials = (userName || 'AG').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
 
-          <!-- 3. Create -->
-          <button class="m365-rail-btn" id="rail-btn-create" data-rail="create" title="Create New Document">
-            <div class="m365-rail-icon-wrap">
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Create</span>
-          </button>
-
-          <!-- 4. My Content -->
-          <button class="m365-rail-btn" id="rail-btn-content" data-rail="content" title="My Sovereign Google Drive Files">
-            <div class="m365-rail-icon-wrap">
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">My Content</span>
-          </button>
-
-          <!-- 5. Apps -->
-          <button class="m365-rail-btn" id="rail-btn-apps" data-rail="apps" title="All Applications">
-            <div class="m365-rail-icon-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
-                <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Apps</span>
-          </button>
-
-          <div class="m365-rail-divider"></div>
-
-          <!-- Direct Office Tool Icons: Giri Drift, Axis, Kinetic, Aegis -->
-          <!-- 1. Drift (Word Processor) -->
-          <button class="m365-rail-btn" id="rail-btn-drift" data-launch="drift" title="Giri Drift (Document Composer & Sovereign Word Processor)">
-            <div class="m365-rail-icon-wrap" style="background:#eff6ff;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#2563eb">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8" fill="#93c5fd"/><line x1="8" y1="13" x2="16" y2="13" stroke="#fff" stroke-width="2"/><line x1="8" y1="17" x2="14" y2="17" stroke="#fff" stroke-width="2"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Drift</span>
-          </button>
-
-          <!-- 2. Axis (Spreadsheet Engine) -->
-          <button class="m365-rail-btn" id="rail-btn-axis" data-launch="axis" title="Giri Axis (Financial Matrix & Spreadsheet Engine)">
-            <div class="m365-rail-icon-wrap" style="background:#f0fdf4;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#16a34a">
-                <rect x="3" y="3" width="18" height="18" rx="3" fill="#16a34a"/>
-                <line x1="8" y1="8" x2="16" y2="16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-                <line x1="16" y1="8" x2="8" y2="16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Axis</span>
-          </button>
-
-          <!-- 3. Kinetic (Keynotes & Presentations) -->
-          <button class="m365-rail-btn" id="rail-btn-kinetic" data-launch="kinetic" title="Giri Kinetic (16:9 Presentation Studio & Keynotes)">
-            <div class="m365-rail-icon-wrap" style="background:#fff7ed;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#ea580c">
-                <rect x="3" y="3" width="18" height="18" rx="3" fill="#ea580c"/>
-                <path d="M9 8h4a2.5 2.5 0 0 1 0 5H9z" fill="#fff"/>
-                <line x1="9" y1="8" x2="9" y2="16" stroke="#fff" stroke-width="2.2"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Kinetic</span>
-          </button>
-
-          <!-- 4. Aegis (PDF Studio & Digital Seal) -->
-          <button class="m365-rail-btn" id="rail-btn-pdf" data-launch="pdf" title="Giri Aegis (PDF Studio & Cryptographic Seal)">
-            <div class="m365-rail-icon-wrap" style="background:#fef2f2;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#dc2626">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><text x="6" y="16" font-size="7" font-weight="900" fill="#fff">PDF</text>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Aegis</span>
-          </button>
-
-          <!-- 5. Forms (Survey & Data Matrix) -->
-          <button class="m365-rail-btn" id="rail-btn-forms" data-launch="forms" title="Giri Forms (Executive Survey Studio)">
-            <div class="m365-rail-icon-wrap" style="background:#f0fdfa;">
-              <img src="assets/forms-logo.png" alt="Forms" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
-            </div>
-            <span class="m365-rail-label">Forms</span>
-          </button>
-
-          <!-- 6. Quiz (Assessment & Exam Studio) -->
-          <button class="m365-rail-btn" id="rail-btn-quiz" data-launch="quiz" title="Giri Quiz (Assessment & Certification Studio)">
-            <div class="m365-rail-icon-wrap" style="background:#f0f9ff;">
-              <img src="assets/quiz-logo.png" alt="Quiz" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
-            </div>
-            <span class="m365-rail-label">Quiz</span>
-          </button>
-
-          <!-- 7. Lists (Agile Matrix & Kanban Board) -->
-          <button class="m365-rail-btn" id="rail-btn-lists" data-launch="lists" title="Giri Lists (Agile Task Matrix & Kanban)">
-            <div class="m365-rail-icon-wrap" style="background:#f5f3ff;">
-              <img src="assets/lists-logo.png" alt="Lists" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
-            </div>
-            <span class="m365-rail-label">Lists</span>
-          </button>
-
-          <!-- 8. Designer (Creative Graphic & Vector Canvas) -->
-          <button class="m365-rail-btn" id="rail-btn-designer" data-launch="designer" title="Giri Designer (Creative Graphic & Vector Studio)">
-            <div class="m365-rail-icon-wrap" style="background:#fdf2f8;">
-              <img src="assets/designer-logo.png" alt="Designer" style="width:18px; height:18px; object-fit:contain; border-radius:3px;">
-            </div>
-            <span class="m365-rail-label">Designer</span>
-          </button>
-
-          <!-- 9. Universal File Converter -->
-          <button class="m365-rail-btn" id="rail-btn-converter" title="Universal File Converter (Word, Excel, PDF, CSV, JSON)">
-            <div class="m365-rail-icon-wrap" style="background:#f3e8ff;">
-              <span style="font-size:14px; line-height:1;">🔄</span>
-            </div>
-            <span class="m365-rail-label">Converter</span>
-          </button>
-
-          <!-- 10. Storage Optimizer -->
-          <button class="m365-rail-btn" id="rail-btn-storage" title="Storage Optimizer & Space Saver">
-            <div class="m365-rail-icon-wrap" style="background:#ecfdf5; color:#059669;">
-              <span style="font-size:14px; line-height:1;">⚡</span>
-            </div>
-            <span class="m365-rail-label">Storage</span>
-          </button>
-
-          <!-- 11. More Tools (...) -->
-          <button class="m365-rail-btn" id="rail-btn-more" title="All Applications & Suite Tools">
-            <div class="m365-rail-icon-wrap">
-              <span style="font-weight:900; font-size:16px; color:#94a3b8; line-height:1;">&bull;&bull;&bull;</span>
-            </div>
-            <span class="m365-rail-label">More</span>
-          </button>
-
-          <div class="m365-rail-divider"></div>
-
-          <!-- 6. Download Office Suite (.exe / .apk) -->
-          <button class="m365-rail-btn" id="rail-btn-download" title="Download Giri Orbit Suite (.exe / .apk)">
-            <div class="m365-rail-icon-wrap" style="background:#eff6ff; color:#2563eb;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label" style="color:#2563eb; font-weight:700;">Download</span>
-          </button>
-        </div>
-
-        <div class="m365-rail-bottom">
-          <!-- Settings -->
-          <button class="m365-rail-btn" id="rail-btn-settings" onclick="window.orbitPlatform?.openSettingsModal(); return false;" title="Settings & Personalization">
-            <div class="m365-rail-icon-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
-                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-              </svg>
-            </div>
-            <span class="m365-rail-label">Settings</span>
-          </button>
-
-          <!-- User Account / Sovereign Avatar -->
-          <div class="m365-rail-avatar" id="rail-avatar-btn" onclick="window.orbitPlatform?.openUserProfileModal(); return false;" style="${isGoogleConnected ? 'background:#16a34a;' : 'background:#475569;'}" title="${isGoogleConnected ? ('Google Drive Connected (' + this.escapeHtml(googleUser.email) + ')') : 'Sovereign Local Mode (No Account Required • Click to Connect Google Drive)'}">
-            <span>${isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : 'SO'}</span>
-          </div>
-        </div>
-      </nav>
-
-      <!-- MAIN WORKSPACE CANVAS -->
-      <main class="m365-canvas">
-        <div class="m365-inner-wrapper">
-          
-          <!-- Top Hero Welcome -->
-          <section class="m365-hero">
-            <h1 class="m365-hero-title">Welcome to Giri Orbit</h1>
-            <div class="m365-hero-meta">
-              <span class="m365-badge-free">100% Free</span>
-              ${isGoogleConnected ? `
-                <span class="m365-storage-stat" id="m365-gdrive-stat" style="cursor:pointer; background:#f0fdf4; border-color:#bbf7d0; color:#15803d;" title="Google Drive Connected: ${this.escapeHtml(googleUser.email)} (Click to Manage)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-                  </svg>
-                  Google Drive: ${this.escapeHtml(googleUser.email)} &bull; 15 GB Cloud Storage Active
-                </span>
-              ` : `
-                <span class="m365-storage-stat" id="m365-gdrive-stat" style="cursor:pointer;" title="Click to view Local Storage or Connect Google Drive">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-                  </svg>
-                  Sovereign Local Storage &bull; No Login Required &bull; Connect Google Drive (Optional)
-                </span>
-              `}
-              <button class="m365-hero-download-btn" id="hero-btn-download-suite" title="Download Windows Installer (.exe) and Android APK (.apk)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Download Suite (.exe / .apk)
-              </button>
-            </div>
-          </section>
-
-          <!-- Wide Centered Search Bar -->
-          <div class="m365-search-wrap">
-            <div class="m365-search-bar">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-              <input type="text" id="m365-search-box" placeholder="Search for apps, files, templates and more" spellcheck="false" autocomplete="off">
-            </div>
-          </div>
-
-          <!-- Create New Section -->
-          <section class="m365-create-section">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <h2 class="m365-section-title">Create New</h2>
-            </div>
-
-            <!-- 7 Authentic Document Preview Cards: Drift, Kinetic, Axis, Forms, Quiz, Lists, Designer -->
-            <div class="m365-cards-row">
-              <!-- 1. Document (Drift) -->
-              <div class="m365-create-card" data-create="drift" role="button" tabindex="0" title="New Document (Giri Drift)" onclick="window.orbitPlatform?.createNew('drift'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('drift'); event.preventDefault();}">
-                <div class="m365-card-preview preview-word">
-                  <div class="sheet-word">
-                    <div class="line-blue" style="width:45%; height:5px;"></div>
-                    <div class="line-blue" style="width:90%; opacity:0.5;"></div>
-                    <div class="line-blue" style="width:80%; opacity:0.5;"></div>
-                    <div class="line-blue" style="width:65%; opacity:0.5;"></div>
-                  </div>
-                  <div class="badge-corner badge-drift">D</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">Document</strong>
-                  <span class="m365-card-sub">Drift</span>
-                </div>
-              </div>
-
-              <!-- 2. Presentation (Kinetic) -->
-              <div class="m365-create-card" data-create="kinetic" role="button" tabindex="0" title="New Presentation (Giri Kinetic)" onclick="window.orbitPlatform?.createNew('kinetic'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('kinetic'); event.preventDefault();}">
-                <div class="m365-card-preview preview-ppt">
-                  <div class="sheet-ppt">
-                    <div class="ppt-top-bar"></div>
-                    <div class="ppt-body-cols">
-                      <div class="ppt-body-col"></div>
-                      <div class="ppt-body-col"></div>
-                    </div>
-                  </div>
-                  <div class="badge-corner badge-kinetic">K</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">Presentation</strong>
-                  <span class="m365-card-sub">Kinetic</span>
-                </div>
-              </div>
-
-              <!-- 3. Workbook (Axis) -->
-              <div class="m365-create-card" data-create="axis" role="button" tabindex="0" title="New Spreadsheet (Giri Axis)" onclick="window.orbitPlatform?.createNew('axis'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('axis'); event.preventDefault();}">
-                <div class="m365-card-preview preview-excel">
-                  <div class="sheet-excel">
-                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
-                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
-                    <div class="excel-cell"></div><div class="excel-cell"></div><div class="excel-cell"></div>
-                  </div>
-                  <div class="badge-corner badge-axis">A</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">Workbook</strong>
-                  <span class="m365-card-sub">Axis</span>
-                </div>
-              </div>
-
-              <!-- 4. Form (Forms) -->
-              <div class="m365-create-card" data-create="form" role="button" tabindex="0" title="New Survey Form" onclick="window.orbitPlatform?.createNew('form'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('form'); event.preventDefault();}">
-                <div class="m365-card-preview preview-form">
-                  <div class="sheet-form">
-                    <div class="form-top-clip"></div>
-                    <div class="form-header-bar"></div>
-                    <div class="form-body">
-                      <div class="form-row"><span class="form-chk-checked">&#10003;</span><span class="form-line"></span></div>
-                      <div class="form-row"><span class="form-chk-empty"></span><span class="form-line short"></span></div>
-                      <div class="form-stars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span></div>
-                    </div>
-                  </div>
-                  <div class="badge-corner badge-forms">F</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">Form</strong>
-                  <span class="m365-card-sub">Forms</span>
-                </div>
-              </div>
-
-              <!-- 5. Quiz (Quiz) -->
-              <div class="m365-create-card" data-create="quiz" role="button" tabindex="0" title="New Assessment Quiz" onclick="window.orbitPlatform?.createNew('quiz'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('quiz'); event.preventDefault();}">
-                <div class="m365-card-preview preview-quiz">
-                  <div class="sheet-quiz">
-                    <div class="quiz-medal-seal">&#9733;</div>
-                    <div class="quiz-header-bar"></div>
-                    <div class="quiz-body">
-                      <div class="quiz-stem"></div>
-                      <div class="quiz-row"><span class="quiz-radio-selected"></span><span class="form-line short"></span></div>
-                      <div class="quiz-row"><span class="quiz-radio-empty"></span><span class="form-line muted"></span></div>
-                      <div class="quiz-score-pill">A+ 100%</div>
-                    </div>
-                  </div>
-                  <div class="badge-corner badge-quiz">Q</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">Quiz</strong>
-                  <span class="m365-card-sub">Quiz</span>
-                </div>
-              </div>
-
-              <!-- 6. List (Lists) -->
-              <div class="m365-create-card" data-create="list" role="button" tabindex="0" title="New Task List Matrix" onclick="window.orbitPlatform?.createNew('list'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('list'); event.preventDefault();}">
-                <div class="m365-card-preview preview-list">
-                  <div class="sheet-list">
-                    <div class="list-header-bar">
-                      <div class="list-header-dot"></div>
-                      <div class="list-header-dot"></div>
-                      <div class="list-header-dot"></div>
-                    </div>
-                    <div class="list-body">
-                      <div class="list-task-item done">
-                        <div class="list-task-left"><span class="list-task-ck">&#10003;</span><span class="list-task-text"></span></div>
-                        <span class="list-tag-pill done">Done</span>
-                      </div>
-                      <div class="list-task-item">
-                        <div class="list-task-left"><span class="list-task-bullet"></span><span class="list-task-text" style="width:18px;"></span></div>
-                        <span class="list-tag-pill active">Active</span>
-                      </div>
-                      <div class="list-task-item">
-                        <div class="list-task-left"><span class="list-task-bullet purple"></span><span class="list-task-text" style="width:22px;"></span></div>
-                        <span class="list-tag-pill queue">Queue</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="badge-corner badge-lists">L</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">List</strong>
-                  <span class="m365-card-sub">Lists</span>
-                </div>
-              </div>
-
-              <!-- 7. Design (Designer) -->
-              <div class="m365-create-card" data-create="designer" role="button" tabindex="0" title="New Visual Design Showcase" onclick="window.orbitPlatform?.createNew('designer'); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){window.orbitPlatform?.createNew('designer'); event.preventDefault();}">
-                <div class="m365-card-preview preview-designer">
-                  <!-- Heuristic #12: Flat monochromatic badged design artboard -->
-                  <div class="sheet-designer">
-                    <div class="designer-top-bar"></div>
-                    <div class="designer-canvas-box">
-                      <div class="designer-shape-circle"></div>
-                      <div class="designer-shape-rect"></div>
-                    </div>
-                  </div>
-                  <div class="badge-corner badge-designer">D</div>
-                </div>
-                <div class="m365-card-meta">
-                  <strong class="m365-card-title">Design</strong>
-                  <span class="m365-card-sub">Designer</span>
-                </div>
-              </div>
-            </div>
-
-            <div style="display:flex; justify-content:flex-end; margin-top:2px;">
-              <a href="#" class="m365-see-more" id="m365-see-more-link" onclick="window.orbitPlatform?.openCreateTemplatesModal(); return false;">See more in Create &rarr;</a>
-            </div>
-          </section>
-
-          <!-- Quick Access Section -->
-          <section class="m365-quick-section">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <h2 class="m365-section-title">Quick access</h2>
-            </div>
-
-            <!-- Toolbar with Filter Pills & Upload Button -->
-            <div class="m365-quick-toolbar">
-              <div class="m365-pills-wrap">
-                <button class="m365-pill active" id="pill-filter-recent" data-filter="recent">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  <span>Recently opened</span>
-                </button>
-                <button class="m365-pill" id="pill-filter-shared" data-filter="shared">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                  <span>Shared</span>
-                </button>
-                <button class="m365-pill" id="pill-filter-favorites" data-filter="favorites">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                  </svg>
-                  <span>Favorites</span>
-                </button>
-              </div>
-
-              <div class="m365-action-tools">
-                <button class="m365-upload-btn" id="btn-m365-upload-file" title="Open or Upload Local Document (.docx, .xlsx, .pptx, .giri)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-                  </svg>
-                  <span>Upload</span>
-                </button>
-                <div class="m365-view-toggle">
-                  <button class="m365-view-btn active" id="btn-m365-view-list" title="List View">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
-                      <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
-                    </svg>
-                  </button>
-                  <button class="m365-view-btn" id="btn-m365-view-grid" title="Grid View">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-                      <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Documents Table Container -->
-            <div class="m365-table-wrap" id="m365-table-container">
-              <table class="m365-table" id="m365-recent-table">
-                <thead>
-                  <tr>
-                    <th style="width:42%;">Name</th>
-                    <th style="width:20%;">Date modified</th>
-                    <th style="width:20%;">Sharing</th>
-                    <th style="width:18%;">Activity</th>
-                  </tr>
-                </thead>
-                <tbody id="m365-table-body">
-                  <!-- Real user documents populated dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-        </div>
-      </main>
-    `;
-
-    this.workspace.innerHTML = '';
-      this.workspace.appendChild(landingContainer);
-    } else {
-      // Update dynamic user badges if connected
+      // Update rail avatar
       const avatarBtn = landingContainer.querySelector('#rail-avatar-btn');
       if (avatarBtn) {
-        avatarBtn.style.background = isGoogleConnected ? '#16a34a' : '#475569';
-        avatarBtn.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : 'SO';
+        avatarBtn.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
+        avatarBtn.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : initials;
       }
-    }
 
-    // Bind Event Listeners
-    this.bindM365HubEvents(landingContainer);
-    this.renderM365RecentDocuments(landingContainer);
+      // Update top header account pill (top right)
+      const topAvatar = landingContainer.querySelector('#hub-top-account-avatar');
+      if (topAvatar) {
+        topAvatar.style.background = isGoogleConnected ? '#16a34a' : 'linear-gradient(135deg, #2563eb, #7c3aed)';
+        topAvatar.textContent = isGoogleConnected ? this.escapeHtml((googleUser.name || googleUser.email).substring(0, 2).toUpperCase()) : initials;
+      }
+
+      const topName = landingContainer.querySelector('#hub-top-account-name');
+      if (topName) {
+        topName.textContent = isGoogleConnected ? (googleUser.name || googleUser.email) : userName;
+      }
+
+      const topCloudText = landingContainer.querySelector('#hub-top-cloud-text');
+      const topCloudDot = landingContainer.querySelector('#hub-top-cloud-dot');
+      if (topCloudText) {
+        if (isGoogleConnected) {
+          topCloudText.textContent = `Google Drive Active (${googleUser.email})`;
+          if (topCloudDot) { topCloudDot.className = 'm365-cloud-dot connected'; topCloudDot.style.background = '#3b82f6'; }
+        } else {
+          topCloudText.textContent = 'Cloud: Local Sovereign (Private)';
+          if (topCloudDot) { topCloudDot.className = 'm365-cloud-dot'; topCloudDot.style.background = '#10b981'; }
+        }
+      }
+
+      // Bind all interactive events & universal search
+      this.bindM365HubEvents(landingContainer);
+      this.initUniversalSearch(landingContainer);
+      this.renderM365RecentDocuments(landingContainer);
     } catch (hubErr) {
       console.error('[Giri Orbit] Error in mountZohoLandingHub:', hubErr);
     }
@@ -1342,8 +907,22 @@ class GiriOrbitPlatform {
    * Bind All Interactive Controls in Giri Orbit Hub
    */
   bindM365HubEvents(container) {
+    if (!container) return;
+
+    // 0. Top Right Account & Cloud Login Triggers (Top-Right Circled Area)
+    container.querySelector('#hub-top-account-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
+    });
+
+    container.querySelector('#hub-top-cloud-status-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
+    });
+
     // 1. Left Rail Navigation
-    container.querySelector('#rail-btn-home')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-home')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.navigateTo('launcher');
     });
 
@@ -1354,63 +933,107 @@ class GiriOrbitPlatform {
       });
     });
 
+    // Rail tool launches: open tool's interface (forceEditor = false)
     container.querySelectorAll('.m365-rail-btn[data-launch]').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const tool = btn.dataset.launch;
-        if (tool) this.navigateTo(tool);
+        if (tool) this.navigateTo(tool, null, true, false);
       });
     });
 
-    container.querySelector('#rail-btn-girionix, #rail-btn-copilot')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-girionix, #rail-btn-copilot')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.navigateTo('girionix');
     });
 
-    container.querySelector('#rail-btn-create')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-create')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openCreateTemplatesModal();
     });
 
-    container.querySelector('#rail-btn-content')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-content')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openMyContentModal();
     });
 
-    container.querySelector('#rail-btn-apps')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-apps')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openAllAppsModal();
     });
 
+    container.querySelector('#rail-btn-cloud')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
+    });
+
+    container.querySelector('#rail-btn-hindi')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.hindiInputTools?.toggleHindiIME();
+    });
+
+    container.querySelector('#rail-btn-crypto')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.cryptoVault?.openCryptoVaultModal();
+    });
+
+    container.querySelector('#rail-btn-difference')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.smartDifferenceEngine?.openDifferenceModal();
+    });
+
+    container.querySelector('#rail-btn-stress')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.stressTester?.openStressTestModal();
+    });
+
+    container.querySelector('#rail-btn-resume')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.sessionResumeManager?.checkAndPromptResume();
+    });
+
     // Settings Modal Trigger
-    container.querySelector('#rail-btn-settings')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-settings')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openSettingsModal();
     });
 
     // Profile & Google Drive Sovereign Account Triggers
-    container.querySelector('#rail-avatar-btn')?.addEventListener('click', () => {
-      this.openUserProfileModal();
+    container.querySelector('#rail-avatar-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
     });
-    container.querySelector('#m365-gdrive-stat')?.addEventListener('click', () => {
-      this.openGoogleDriveAccountModal();
+    container.querySelector('#m365-gdrive-stat')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openAccountAndCloudModal();
     });
 
     // Download Suite Triggers
-    container.querySelector('#rail-btn-download')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-download')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openDownloadSuiteModal();
     });
-    container.querySelector('#hero-btn-download-suite')?.addEventListener('click', () => {
+    container.querySelector('#hero-btn-download-suite')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openDownloadSuiteModal();
     });
 
-    container.querySelector('#rail-btn-more')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-more')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openAllAppsModal();
     });
 
-    container.querySelector('#rail-btn-converter')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-converter')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.openFileConverterTool();
     });
 
-    container.querySelector('#rail-btn-storage')?.addEventListener('click', () => {
+    container.querySelector('#rail-btn-storage')?.addEventListener('click', (e) => {
+      e.preventDefault();
       this.storageOptimizer?.openModal();
     });
 
-    // 2. Create New Cards
+    // 2. Create New Cards: Open tool's interface with template gallery & options!
     container.querySelectorAll('.m365-create-card[data-create]').forEach(card => {
       card.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1419,30 +1042,7 @@ class GiriOrbitPlatform {
       });
     });
 
-    container.querySelector('#m365-see-more-link')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.openCreateTemplatesModal();
-    });
-
-    // 3. High-Performance Debounced Search Filtering (Zero Reflow using textContent & RAF)
-    const searchInput = container.querySelector('#m365-search-box');
-    let searchDebounceTimer = null;
-    searchInput?.addEventListener('input', (e) => {
-      clearTimeout(searchDebounceTimer);
-      searchDebounceTimer = setTimeout(() => {
-        requestAnimationFrame(() => {
-          const q = e.target.value.toLowerCase().trim();
-          const rows = container.querySelectorAll('#m365-table-body tr');
-          for (let i = 0; i < rows.length; i++) {
-            const r = rows[i];
-            const text = r.textContent.toLowerCase();
-            r.style.display = (!q || text.includes(q)) ? '' : 'none';
-          }
-        });
-      }, 50);
-    });
-
-    // 4. Quick Access Filter Pills
+    // 3. Quick Access Filter Pills
     container.querySelectorAll('.m365-pill[data-filter]').forEach(pill => {
       pill.addEventListener('click', () => {
         container.querySelectorAll('.m365-pill').forEach(p => p.classList.remove('active'));
@@ -1451,13 +1051,14 @@ class GiriOrbitPlatform {
       });
     });
 
-    // 5. Upload File Button
-    container.querySelector('#btn-m365-upload-file')?.addEventListener('click', () => {
+    // 4. Upload File Button (High contrast, clearly visible)
+    container.querySelector('#btn-m365-upload-file')?.addEventListener('click', (e) => {
+      e.preventDefault();
       const inp = document.createElement('input');
       inp.type = 'file';
       inp.accept = '.docx,.doc,.xlsx,.xls,.pptx,.ppt,.pdf,.giri,.gdrift,.gaxis,.gkinetic,.txt,.csv';
-      inp.onchange = (e) => {
-        const file = e.target.files[0];
+      inp.onchange = (ev) => {
+        const file = ev.target.files[0];
         if (file) {
           this.handleUniversalFileSelection(file);
         }
@@ -1465,7 +1066,19 @@ class GiriOrbitPlatform {
       inp.click();
     });
 
-    // 6. View Toggle (List / Grid)
+    // 5. Open URL Button
+    container.querySelector('#btn-m365-open-url')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.universalDocumentUrlManager?.openDocumentByUrlModal();
+    });
+
+    // 6. Digital Signatures Button
+    container.querySelector('#btn-m365-sig-verify')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.digitalSignatureEngine?.openSignatureInspectorModal('Workspace Documents');
+    });
+
+    // 7. View Toggle (List / Grid)
     const btnList = container.querySelector('#btn-m365-view-list');
     const btnGrid = container.querySelector('#btn-m365-view-grid');
     btnList?.addEventListener('click', () => {
@@ -1481,6 +1094,709 @@ class GiriOrbitPlatform {
   }
 
   /**
+   * Create New Document: Navigates to tool's interface with full template gallery
+   */
+  createNew(type) {
+    const toolMap = {
+      drift: { tool: 'drift', title: 'Untitled Document', appName: 'Drift' },
+      kinetic: { tool: 'kinetic', title: 'Untitled Presentation', appName: 'Kinetic' },
+      axis: { tool: 'axis', title: 'Untitled Spreadsheet', appName: 'Axis' },
+      form: { tool: 'forms', title: 'Customer Feedback Survey', appName: 'Forms' },
+      forms: { tool: 'forms', title: 'Customer Feedback Survey', appName: 'Forms' },
+      quiz: { tool: 'quiz', title: 'Certification Assessment Quiz', appName: 'Quiz' },
+      list: { tool: 'lists', title: 'Enterprise Task Matrix', appName: 'Lists' },
+      lists: { tool: 'lists', title: 'Enterprise Task Matrix', appName: 'Lists' },
+      designer: { tool: 'designer', title: 'Keynote Social Banner', appName: 'Designer' },
+      pdf: { tool: 'pdf', title: 'Aegis Document', appName: 'Aegis' }
+    };
+    const item = toolMap[type] || { tool: type, title: 'New Document', appName: type };
+    this.recordRecentDocument(item.title, item.tool, item.appName);
+    // Bring up the tool's interface so the user sees templates, recent files, and options!
+    this.navigateTo(item.tool, null, true, false);
+  }
+
+  /**
+   * Universal Smart Search with Live Suggestions Dropdown & Keyboard Navigation (Ctrl + K)
+   */
+  initUniversalSearch(container) {
+    const searchInput = container.querySelector('#m365-search-box');
+    const dropdown = container.querySelector('#m365-search-dropdown');
+    const clearBtn = container.querySelector('#m365-search-clear-btn');
+    if (!searchInput || !dropdown) return;
+
+    const searchCatalog = [
+      // 1. Applications & Tools
+      { type: 'app', id: 'drift', name: 'Giri Drift', desc: 'Word Processor & Document Composer', icon: 'D', color: '#2563eb' },
+      { type: 'app', id: 'axis', name: 'Giri Axis', desc: 'Financial Spreadsheets & Matrix Calculator', icon: 'A', color: '#16a34a' },
+      { type: 'app', id: 'kinetic', name: 'Giri Kinetic', desc: '16:9 Presentation Studio & Keynotes', icon: 'K', color: '#ea580c' },
+      { type: 'app', id: 'pdf', name: 'Giri Aegis', desc: 'PDF Studio & Cryptographic Seal', icon: 'P', color: '#dc2626' },
+      { type: 'app', id: 'forms', name: 'Giri Forms', desc: 'Sovereign Surveys & Data Collector', icon: 'F', color: '#0d9488' },
+      { type: 'app', id: 'quiz', name: 'Giri Quiz', desc: 'Certification & Skill Assessments', icon: 'Q', color: '#0284c7' },
+      { type: 'app', id: 'lists', name: 'Giri Lists', desc: 'Enterprise Task Matrix & Kanban Board', icon: 'L', color: '#7c3aed' },
+      { type: 'app', id: 'designer', name: 'Giri Designer', desc: 'Vector Graphics & Marketing Artboard', icon: 'G', color: '#db2777' },
+      { type: 'app', id: 'girionix', name: 'Girionix AI', desc: 'Polymath Sovereign Intelligence Copilot', icon: '✦', color: '#8b5cf6' },
+
+      // 2. Quick Actions & Features
+      { type: 'action', action: 'account', name: 'Account & Cloud Platform Login (Google Drive, OneDrive, Dropbox)', desc: 'Connect cloud storage or manage sovereign profile', icon: '☁️', color: '#2563eb' },
+      { type: 'action', action: 'download', name: 'Download Offline Suite (.exe / .apk / Multi-OS)', desc: 'Windows, Android, Linux, macOS, iOS releases', icon: '📥', color: '#2563eb' },
+      { type: 'action', action: 'open-url', name: 'Open Document by URL / Deep-Link', desc: 'Edit any online or cloud document instantly', icon: '🔗', color: '#0284c7' },
+      { type: 'action', action: 'signatures', name: 'Digital Signatures & Virus Verifier', desc: 'Verify tamper-proof authenticity and safety', icon: '🛡️', color: '#16a34a' },
+      { type: 'action', action: 'cloud', name: 'Universal Cloud Compatibility', desc: 'Google Drive, OneDrive, Dropbox, Nextcloud', icon: '🌐', color: '#0284c7' },
+      { type: 'action', action: 'hindi', name: 'Google Input Tools Hindi Transliteration', desc: 'Type Hindi phonetically with smart IME', icon: 'अ', color: '#16a34a' },
+      { type: 'action', action: 'storage', name: 'Storage Space Optimizer', desc: 'Compress, purge cache, and minimize footprint', icon: '💾', color: '#ea580c' },
+      { type: 'action', action: 'crypto', name: 'AES-256-GCM Sovereign Crypto Vault', desc: 'Encrypted document vault with client key', icon: '🔐', color: '#7c3aed' },
+      { type: 'action', action: 'settings', name: 'Settings & Personalization', desc: 'Theme, keybindings, fonts, and preferences', icon: '⚙️', color: '#64748b' },
+
+      // 3. Featured Global Templates
+      { type: 'template', tool: 'drift', name: 'Modern Executive Resume', desc: 'Clean typography for leadership CVs', icon: '📄', color: '#2563eb' },
+      { type: 'template', tool: 'drift', name: 'Commercial Project Proposal', desc: 'Milestones, scope, and deliverables charter', icon: '📄', color: '#2563eb' },
+      { type: 'template', tool: 'drift', name: 'Fall Gala Invitation Flyer', desc: 'Warm autumn layout with organic styling', icon: '📄', color: '#2563eb' },
+      { type: 'template', tool: 'axis', name: 'Financial Operating Budget 2026', desc: 'Revenue projections, expenses, and burn rate', icon: '📊', color: '#16a34a' },
+      { type: 'template', tool: 'axis', name: 'Quarterly Sales Pipeline Tracker', desc: 'Deal stages, win rates, and rep metrics', icon: '📊', color: '#16a34a' },
+      { type: 'template', tool: 'kinetic', name: 'Venture Capital Investor Deck', desc: '10-slide pitch with market size & financials', icon: '📽️', color: '#ea580c' },
+      { type: 'template', tool: 'forms', name: 'Customer Satisfaction NPS Survey', desc: '5-question feedback form with ratings', icon: '📋', color: '#0d9488' }
+    ];
+
+    let activeIndex = -1;
+
+    const renderResults = (query) => {
+      const q = (query || '').toLowerCase().trim();
+      if (!q) {
+        dropdown.style.display = 'none';
+        if (clearBtn) clearBtn.style.display = 'none';
+        return;
+      }
+
+      if (clearBtn) clearBtn.style.display = 'block';
+
+      // Load user documents to include in search
+      const userDocs = this.universalDocumentUrlManager?.listDocuments() || [];
+      const userDocResults = userDocs
+        .filter(d => (d.title || '').toLowerCase().includes(q))
+        .map(d => ({
+          type: 'doc',
+          id: d.id,
+          tool: d.tool,
+          name: d.title,
+          desc: `Edited ${new Date(d.updatedAt || Date.now()).toLocaleDateString()} • ${d.size || '1 KB'}`,
+          icon: (d.tool || 'drift')[0].toUpperCase(),
+          color: '#2563eb'
+        }));
+
+      const matches = searchCatalog.filter(item => 
+        item.name.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q)
+      );
+
+      const allResults = [...userDocResults.slice(0, 4), ...matches.slice(0, 8)];
+
+      if (!allResults.length) {
+        dropdown.innerHTML = `
+          <div style="padding:16px; text-align:center; color:#94a3b8; font-size:12.5px;">
+            No results found for "<strong>${this.escapeHtml(q)}</strong>".<br>
+            <span style="font-size:11px; color:#64748b;">Press Enter to open ${this.escapeHtml(q)} in Drift.</span>
+          </div>
+        `;
+        dropdown.style.display = 'block';
+        return;
+      }
+
+      let html = '';
+      
+      // Group: Documents
+      if (userDocResults.length) {
+        html += `<div class="search-group-title">Your Documents</div>`;
+        userDocResults.slice(0, 4).forEach((item, idx) => {
+          html += `
+            <div class="search-result-item" data-idx="${idx}" data-type="doc" data-tool="${item.tool}" data-id="${item.id}" data-name="${this.escapeHtml(item.name)}">
+              <div class="search-result-left">
+                <div class="search-result-icon" style="background:#eff6ff; color:#2563eb;">${item.icon}</div>
+                <div class="search-result-info">
+                  <div class="search-result-title">${this.highlightMatch(item.name, q)}</div>
+                  <div class="search-result-desc">${item.desc}</div>
+                </div>
+              </div>
+              <span class="search-result-badge">Document</span>
+            </div>
+          `;
+        });
+      }
+
+      // Group: Applications & Features
+      const appMatches = matches.filter(m => m.type === 'app');
+      if (appMatches.length) {
+        html += `<div class="search-group-title">Applications</div>`;
+        appMatches.forEach((item) => {
+          html += `
+            <div class="search-result-item" data-type="app" data-id="${item.id}">
+              <div class="search-result-left">
+                <div class="search-result-icon" style="background:rgba(255,255,255,0.08); color:${item.color};">${item.icon}</div>
+                <div class="search-result-info">
+                  <div class="search-result-title">${this.highlightMatch(item.name, q)}</div>
+                  <div class="search-result-desc">${item.desc}</div>
+                </div>
+              </div>
+              <span class="search-result-badge">Launch</span>
+            </div>
+          `;
+        });
+      }
+
+      // Group: Quick Actions
+      const actionMatches = matches.filter(m => m.type === 'action');
+      if (actionMatches.length) {
+        html += `<div class="search-group-title">Quick Actions</div>`;
+        actionMatches.forEach((item) => {
+          html += `
+            <div class="search-result-item" data-type="action" data-action="${item.action}">
+              <div class="search-result-left">
+                <div class="search-result-icon" style="background:rgba(255,255,255,0.08);">${item.icon}</div>
+                <div class="search-result-info">
+                  <div class="search-result-title">${this.highlightMatch(item.name, q)}</div>
+                  <div class="search-result-desc">${item.desc}</div>
+                </div>
+              </div>
+              <span class="search-result-badge">Action</span>
+            </div>
+          `;
+        });
+      }
+
+      // Group: Templates
+      const templateMatches = matches.filter(m => m.type === 'template');
+      if (templateMatches.length) {
+        html += `<div class="search-group-title">Templates</div>`;
+        templateMatches.forEach((item) => {
+          html += `
+            <div class="search-result-item" data-type="template" data-tool="${item.tool}" data-name="${this.escapeHtml(item.name)}">
+              <div class="search-result-left">
+                <div class="search-result-icon" style="background:rgba(255,255,255,0.08);">${item.icon}</div>
+                <div class="search-result-info">
+                  <div class="search-result-title">${this.highlightMatch(item.name, q)}</div>
+                  <div class="search-result-desc">${item.desc}</div>
+                </div>
+              </div>
+              <span class="search-result-badge">Create</span>
+            </div>
+          `;
+        });
+      }
+
+      dropdown.innerHTML = html;
+      dropdown.style.display = 'block';
+
+      // Bind click handlers to items
+      dropdown.querySelectorAll('.search-result-item').forEach(el => {
+        el.addEventListener('click', () => {
+          this.executeSearchResult(el.dataset);
+          dropdown.style.display = 'none';
+        });
+      });
+    };
+
+    searchInput.addEventListener('input', (e) => {
+      renderResults(e.target.value);
+    });
+
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) renderResults(searchInput.value);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        dropdown.style.display = 'none';
+        clearBtn.style.display = 'none';
+        searchInput.focus();
+      });
+    }
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Keyboard navigation (ArrowDown, ArrowUp, Enter, Escape)
+    searchInput.addEventListener('keydown', (e) => {
+      const items = Array.from(dropdown.querySelectorAll('.search-result-item'));
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = (activeIndex + 1) % items.length;
+        items.forEach((it, idx) => it.classList.toggle('selected', idx === activeIndex));
+        items[activeIndex]?.scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = (activeIndex - 1 + items.length) % items.length;
+        items.forEach((it, idx) => it.classList.toggle('selected', idx === activeIndex));
+        items[activeIndex]?.scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeIndex >= 0 && items[activeIndex]) {
+          this.executeSearchResult(items[activeIndex].dataset);
+          dropdown.style.display = 'none';
+        } else if (searchInput.value.trim()) {
+          this.navigateTo('drift', searchInput.value.trim(), true, true);
+          dropdown.style.display = 'none';
+        }
+      } else if (e.key === 'Escape') {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Global Ctrl+K / Cmd+K listener
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+    });
+  }
+
+  highlightMatch(text, query) {
+    if (!query) return this.escapeHtml(text);
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return this.escapeHtml(text).replace(regex, '<span class="search-highlight">$1</span>');
+  }
+
+  executeSearchResult(data) {
+    if (data.type === 'app') {
+      this.navigateTo(data.id, null, true, false);
+    } else if (data.type === 'doc') {
+      this.navigateTo(data.tool, data.name, true, true);
+    } else if (data.type === 'template') {
+      this.navigateTo(data.tool, data.name, true, true);
+    } else if (data.type === 'action') {
+      if (data.action === 'account') this.openAccountAndCloudModal();
+      else if (data.action === 'download') this.openDownloadSuiteModal();
+      else if (data.action === 'open-url') this.universalDocumentUrlManager?.openDocumentByUrlModal();
+      else if (data.action === 'signatures') this.digitalSignatureEngine?.openSignatureInspectorModal('Workspace Documents');
+      else if (data.action === 'cloud') this.openAccountAndCloudModal();
+      else if (data.action === 'hindi') this.hindiInputTools?.toggleHindiIME();
+      else if (data.action === 'storage') this.storageOptimizer?.openModal();
+      else if (data.action === 'crypto') this.cryptoVault?.openCryptoVaultModal();
+      else if (data.action === 'settings') this.openSettingsModal();
+    }
+  }
+
+  /**
+   * Universal Account & Cloud Platform Login Center (Google Drive, OneDrive, Dropbox, Nextcloud, Sovereign Local)
+   */
+  openAccountAndCloudModal() {
+    const existing = document.getElementById('giri-account-cloud-modal');
+    if (existing) existing.remove();
+
+    const isGoogleConnected = !!(driveSyncManager && driveSyncManager.isConnectedToGoogle && driveSyncManager.googleUser && driveSyncManager.googleUser.email);
+    const googleUser = isGoogleConnected ? driveSyncManager.googleUser : null;
+    const currentName = localStorage.getItem('giri_user_name') || (isGoogleConnected && googleUser.name ? googleUser.name : 'Abhinav Giri');
+    const initials = (currentName || 'AG').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AG';
+    const localUsage = this.calculateLocalDataUsage ? this.calculateLocalDataUsage() : 'Sovereign In-Memory';
+    const activeCloudProvider = localStorage.getItem('giri_orbit_active_cloud_provider') || (isGoogleConnected ? 'gdrive' : 'local');
+    const autoSync = localStorage.getItem('giri_gdrive_autosync') === 'true';
+
+    const overlay = document.createElement('div');
+    overlay.className = 'giri-modal-overlay';
+    overlay.id = 'giri-account-cloud-modal';
+
+    overlay.innerHTML = `
+      <div class="giri-modal-dialog" style="max-width:680px; width:95%; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; border-radius:16px; background:#0f172a; border:1px solid rgba(255,255,255,0.12); box-shadow:0 24px 60px rgba(0,0,0,0.7), 0 0 30px rgba(37,99,235,0.25); color:#f8fafc;">
+        
+        <!-- Modal Header -->
+        <div class="giri-modal-header" style="background:#1e293b; padding:18px 24px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, #2563eb, #7c3aed); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(37,99,235,0.4);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 style="font-size:17px; font-weight:700; color:#ffffff; margin:0; line-height:1.2;">Account &amp; Cloud Platform Login</h2>
+              <span style="font-size:12px; color:#94a3b8;">Connect Google Drive, OneDrive, Dropbox, Nextcloud or use Sovereign Local Storage</span>
+            </div>
+          </div>
+          <button class="giri-modal-close-btn" id="btn-close-account-modal" title="Close" style="background:transparent; border:none; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1; padding:4px 8px; border-radius:6px;">&times;</button>
+        </div>
+
+        <!-- Modal Body (Scrollable) -->
+        <div class="giri-modal-body" style="padding:22px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:20px;">
+          
+          <!-- 1. Active Account Profile Card -->
+          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px; display:flex; align-items:center; gap:18px;">
+            <div id="modal-user-avatar" style="width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #7c3aed); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; box-shadow:0 4px 16px rgba(37,99,235,0.4); flex-shrink:0;">
+              ${this.escapeHtml(initials)}
+            </div>
+            <div style="flex:1;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <input type="text" id="account-name-input" value="${this.escapeHtml(currentName)}" style="font-size:15px; font-weight:700; color:#ffffff; background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:6px 12px; width:100%; max-width:240px;" placeholder="Your Name (e.g. Abhinav Giri)" />
+                <button class="giri-dl-btn" id="btn-save-account-name" style="margin-top:0; padding:6px 14px; font-size:12px; background:#2563eb; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Save</button>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span style="font-size:11.5px; padding:3px 10px; border-radius:20px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#34d399; font-weight:600;">
+                  ${isGoogleConnected ? '✓ Google Account Connected' : '✓ Sovereign Private (Zero Telemetry)'}
+                </span>
+                <span style="font-size:11.5px; color:#94a3b8;">
+                  ${isGoogleConnected ? this.escapeHtml(googleUser.email) : 'Offline In-Memory Encryption Active'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Creator Verification & Social Links Bar -->
+          <div style="background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(124,58,237,0.12)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">👑</span>
+              <div style="font-size:12px; color:#e2e8f0;">
+                Sovereign Suite Creator: <strong style="color:#ffffff;">Abhinav Giri</strong> (<span style="color:#38bdf8;">@abhinavgiri45</span>)
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <a href="https://instagram.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">Instagram</a>
+              <a href="https://x.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:#000000; border:1px solid rgba(255,255,255,0.3); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">X (@abhinavgiri45)</a>
+              <a href="https://github.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:5px; background:#24292e; border:1px solid rgba(255,255,255,0.2); color:#ffffff; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:16px; text-decoration:none;">GitHub</a>
+            </div>
+          </div>
+
+          <!-- 2. Multi-Cloud Platform Integrations Grid -->
+          <div>
+            <div style="font-size:13.5px; font-weight:700; color:#f1f5f9; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;">
+              <span>Cloud Storage Providers</span>
+              <span style="font-size:11.5px; color:#94a3b8;">Choose where your files sync</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr; gap:12px;">
+              
+              <!-- PLATFORM A: Google Drive -->
+              <div style="background:rgba(30,41,59,0.85); border:1px solid ${isGoogleConnected ? 'rgba(59,130,246,0.6)' : 'rgba(255,255,255,0.1)'}; border-radius:12px; padding:16px; transition:all 0.2s ease;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      <path d="M7.71 3.5L1.15 15l3.43 6 6.56-11.5L7.71 3.5z" fill="#0066DA"/>
+                      <path d="M16.29 3.5h-8.58l6.56 11.5h8.58l-6.56-11.5z" fill="#00AC47"/>
+                      <path d="M22.85 15H9.71l-3.43 6h13.14l3.43-6z" fill="#EA4335"/>
+                      <path d="M14.27 15l-3.42 6-3.43-6h6.85z" fill="#FFBA00"/>
+                    </svg>
+                    <div>
+                      <strong style="font-size:14px; color:#ffffff;">Google Drive</strong>
+                      <div style="font-size:11.5px; color:#94a3b8;">Sync directly with your private 15 GB Google Drive storage</div>
+                    </div>
+                  </div>
+                  ${isGoogleConnected ? `
+                    <span style="background:rgba(16,185,129,0.2); color:#34d399; font-size:11px; font-weight:700; padding:3px 10px; border-radius:12px; border:1px solid rgba(16,185,129,0.4);">
+                      Connected
+                    </span>
+                  ` : `
+                    <span style="background:rgba(148,163,184,0.15); color:#94a3b8; font-size:11px; font-weight:600; padding:3px 10px; border-radius:12px;">
+                      Not Connected
+                    </span>
+                  `}
+                </div>
+                
+                ${isGoogleConnected ? `
+                  <div style="font-size:12px; color:#cbd5e1; margin-bottom:12px; background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:8px;">
+                    Signed in as <strong style="color:#ffffff;">${this.escapeHtml(googleUser.email)}</strong> (${this.escapeHtml(googleUser.name || 'User')}). Files sync automatically to your "Giri Orbit Suite" folder.
+                  </div>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button id="btn-modal-gdrive-sync" style="padding:8px 14px; background:#2563eb; color:#fff; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">🔄 Sync All Documents Now</button>
+                    <button id="btn-modal-gdrive-open" style="padding:8px 14px; background:rgba(255,255,255,0.08); color:#f1f5f9; border:1px solid rgba(255,255,255,0.15); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">📂 Open File from Drive</button>
+                    <button id="btn-modal-gdrive-disconnect" style="padding:8px 14px; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">Disconnect</button>
+                  </div>
+                ` : `
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                    <span style="font-size:12px; color:#94a3b8;">Click below to authorize private Google Drive synchronization:</span>
+                    <button id="btn-modal-gdrive-connect" style="padding:8px 16px; background:#2563eb; color:#ffffff; border:none; border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(37,99,235,0.4);">
+                      🔗 Connect Google Drive
+                    </button>
+                  </div>
+                `}
+              </div>
+
+              <!-- PLATFORM B: Microsoft OneDrive & SharePoint -->
+              <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:24px; height:24px; border-radius:6px; background:#0078d4; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:800;">
+                      ☁
+                    </div>
+                    <div>
+                      <strong style="font-size:14px; color:#ffffff;">Microsoft OneDrive &amp; SharePoint</strong>
+                      <div style="font-size:11.5px; color:#94a3b8;">Direct link resolution, document streaming, and OneDrive backup</div>
+                    </div>
+                  </div>
+                  <span style="background:rgba(16,185,129,0.2); color:#34d399; font-size:11px; font-weight:700; padding:3px 10px; border-radius:12px; border:1px solid rgba(16,185,129,0.4);">
+                    Ready
+                  </span>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                  <button id="btn-modal-onedrive-open" style="padding:8px 14px; background:rgba(255,255,255,0.08); color:#f1f5f9; border:1px solid rgba(255,255,255,0.15); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">🔗 Open OneDrive / SharePoint Link</button>
+                  <button id="btn-modal-onedrive-save" style="padding:8px 14px; background:rgba(0,120,212,0.2); color:#60a5fa; border:1px solid rgba(0,120,212,0.4); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">💾 Save Current File to OneDrive</button>
+                </div>
+              </div>
+
+              <!-- PLATFORM C: Dropbox -->
+              <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:24px; height:24px; border-radius:6px; background:#0061ff; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:800;">
+                      📦
+                    </div>
+                    <div>
+                      <strong style="font-size:14px; color:#ffffff;">Dropbox</strong>
+                      <div style="font-size:11.5px; color:#94a3b8;">Direct download resolver and Dropbox cloud sync</div>
+                    </div>
+                  </div>
+                  <span style="background:rgba(16,185,129,0.2); color:#34d399; font-size:11px; font-weight:700; padding:3px 10px; border-radius:12px; border:1px solid rgba(16,185,129,0.4);">
+                    Ready
+                  </span>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                  <button id="btn-modal-dropbox-open" style="padding:8px 14px; background:rgba(255,255,255,0.08); color:#f1f5f9; border:1px solid rgba(255,255,255,0.15); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">🔗 Open Dropbox File Link</button>
+                  <button id="btn-modal-dropbox-save" style="padding:8px 14px; background:rgba(0,97,255,0.2); color:#93c5fd; border:1px solid rgba(0,97,255,0.4); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">💾 Save Current File to Dropbox</button>
+                </div>
+              </div>
+
+              <!-- PLATFORM D: Nextcloud / Sovereign WebDAV -->
+              <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:24px; height:24px; border-radius:6px; background:#0082c9; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:800;">
+                      🌐
+                    </div>
+                    <div>
+                      <strong style="font-size:14px; color:#ffffff;">Nextcloud / ownCloud / Sovereign WebDAV</strong>
+                      <div style="font-size:11.5px; color:#94a3b8;">Connect to your personal or company self-hosted private cloud</div>
+                    </div>
+                  </div>
+                  <button id="btn-toggle-webdav-form" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#cbd5e1; font-size:11.5px; padding:3px 10px; border-radius:8px; cursor:pointer;">Configure</button>
+                </div>
+                <div id="webdav-config-form" style="display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.08);">
+                  <div style="display:flex; flex-direction:column; gap:8px;">
+                    <input type="text" id="webdav-url-input" placeholder="Server URL (e.g. https://cloud.example.com/remote.php/dav/files/user/)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:6px 10px; font-size:12px; color:#fff;" />
+                    <div style="display:flex; gap:8px;">
+                      <input type="text" id="webdav-user-input" placeholder="Username" style="flex:1; background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:6px 10px; font-size:12px; color:#fff;" />
+                      <input type="password" id="webdav-pass-input" placeholder="App Password" style="flex:1; background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:6px 10px; font-size:12px; color:#fff;" />
+                    </div>
+                    <button id="btn-save-webdav" style="padding:7px 14px; background:#0284c7; color:#fff; border:none; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; align-self:flex-start;">Save &amp; Connect WebDAV</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PLATFORM E: Local Synced Cloud Folder (PC / Mac / Android) -->
+              <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:24px; height:24px; border-radius:6px; background:#10b981; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:800;">
+                      📁
+                    </div>
+                    <div>
+                      <strong style="font-size:14px; color:#ffffff;">Local Synced Cloud Folder</strong>
+                      <div style="font-size:11.5px; color:#94a3b8;">Link your local PC Google Drive, OneDrive, or iCloud sync directory</div>
+                    </div>
+                  </div>
+                  <button id="btn-modal-link-local-folder" style="padding:6px 12px; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">Link PC Folder</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 3. Direct Cloud URL Opener -->
+          <div style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <strong style="font-size:13px; color:#ffffff; display:block; margin-bottom:6px;">🔗 Universal Cloud Link Opener</strong>
+            <p style="font-size:11.5px; color:#94a3b8; margin:0 0 10px 0;">Paste any Google Drive, OneDrive, Dropbox, or public web document link to edit it in Giri Orbit:</p>
+            <div style="display:flex; gap:8px;">
+              <input type="url" id="universal-cloud-url-input" placeholder="https://drive.google.com/file/d/... or https://1drv.ms/..." style="flex:1; background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:8px 12px; font-size:12px; color:#fff;" />
+              <button id="btn-open-universal-cloud-url" style="padding:8px 16px; background:#2563eb; color:#fff; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;">Open Document</button>
+            </div>
+          </div>
+
+          <!-- 4. Sovereign In-Memory Metrics -->
+          <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:11px; color:#94a3b8; text-transform:uppercase; font-weight:600;">Sovereign Local Footprint</div>
+              <div style="font-size:15px; font-weight:700; color:#38bdf8;">${localUsage}</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="btn-export-all-zip-modal" style="padding:6px 12px; background:rgba(255,255,255,0.08); color:#f1f5f9; border:1px solid rgba(255,255,255,0.15); border-radius:6px; font-size:11.5px; font-weight:600; cursor:pointer;">📥 Backup All (.zip)</button>
+              <button id="btn-clear-cache-modal" style="padding:6px 12px; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3); border-radius:6px; font-size:11.5px; font-weight:600; cursor:pointer;">Reset Cache</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div style="background:#1e293b; padding:14px 24px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:#94a3b8;">100% Private &bull; AES-256 In-Memory Encryption Active</span>
+          <button id="btn-modal-done" style="padding:8px 22px; background:#2563eb; color:#ffffff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">Done</button>
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Event Bindings
+    const closeModal = () => overlay.remove();
+    overlay.querySelector('#btn-close-account-modal')?.addEventListener('click', closeModal);
+    overlay.querySelector('#btn-modal-done')?.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    // Save Name
+    overlay.querySelector('#btn-save-account-name')?.addEventListener('click', () => {
+      const newName = overlay.querySelector('#account-name-input')?.value.trim();
+      if (newName) {
+        localStorage.setItem('giri_user_name', newName);
+        this.showToast(`Profile name saved: ${newName}`, 'blue');
+        // Update top bar & rail
+        const initialsNew = newName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const topAv = document.querySelector('#hub-top-account-avatar');
+        if (topAv) topAv.textContent = initialsNew;
+        const topNm = document.querySelector('#hub-top-account-name');
+        if (topNm) topNm.textContent = newName;
+        const railAv = document.querySelector('#rail-avatar-btn');
+        if (railAv && !isGoogleConnected) railAv.textContent = initialsNew;
+        const modalAv = overlay.querySelector('#modal-user-avatar');
+        if (modalAv && !isGoogleConnected) modalAv.textContent = initialsNew;
+      }
+    });
+
+    // Google Drive Connect
+    overlay.querySelector('#btn-modal-gdrive-connect')?.addEventListener('click', () => {
+      if (driveSyncManager && typeof driveSyncManager.requestDriveToken === 'function') {
+        driveSyncManager.requestDriveToken();
+        closeModal();
+      } else {
+        this.showToast('Google Drive client initializing...', 'blue');
+      }
+    });
+
+    // Google Drive Disconnect
+    overlay.querySelector('#btn-modal-gdrive-disconnect')?.addEventListener('click', () => {
+      if (driveSyncManager && typeof driveSyncManager.disconnectGoogleDrive === 'function') {
+        driveSyncManager.disconnectGoogleDrive();
+        closeModal();
+        this.showToast('Google Drive disconnected. Operating in Sovereign Local Mode.', 'green');
+        if (this.currentView === 'launcher' || this.currentView === 'hub') {
+          this.mountZohoLandingHub();
+        }
+      }
+    });
+
+    // Google Drive Sync
+    overlay.querySelector('#btn-modal-gdrive-sync')?.addEventListener('click', () => {
+      if (driveSyncManager && typeof driveSyncManager.syncAllToDrive === 'function') {
+        driveSyncManager.syncAllToDrive();
+        this.showToast('Synchronizing workspace documents to Google Drive...', 'blue');
+      }
+    });
+
+    // Google Drive Open
+    overlay.querySelector('#btn-modal-gdrive-open')?.addEventListener('click', () => {
+      closeModal();
+      window.universalCloudManager?.openCloudOpenerDialog('gdrive');
+    });
+
+    // OneDrive
+    overlay.querySelector('#btn-modal-onedrive-open')?.addEventListener('click', () => {
+      closeModal();
+      window.universalCloudManager?.openCloudOpenerDialog('onedrive');
+    });
+    overlay.querySelector('#btn-modal-onedrive-save')?.addEventListener('click', () => {
+      closeModal();
+      window.universalCloudManager?.openCloudSaveDialog();
+    });
+
+    // Dropbox
+    overlay.querySelector('#btn-modal-dropbox-open')?.addEventListener('click', () => {
+      closeModal();
+      window.universalCloudManager?.openCloudOpenerDialog('dropbox');
+    });
+    overlay.querySelector('#btn-modal-dropbox-save')?.addEventListener('click', () => {
+      closeModal();
+      window.universalCloudManager?.openCloudSaveDialog();
+    });
+
+    // WebDAV Toggle
+    const webdavForm = overlay.querySelector('#webdav-config-form');
+    overlay.querySelector('#btn-toggle-webdav-form')?.addEventListener('click', () => {
+      if (webdavForm) {
+        webdavForm.style.display = webdavForm.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+
+    // WebDAV Save
+    overlay.querySelector('#btn-save-webdav')?.addEventListener('click', () => {
+      const url = overlay.querySelector('#webdav-url-input')?.value.trim();
+      const user = overlay.querySelector('#webdav-user-input')?.value.trim();
+      const pass = overlay.querySelector('#webdav-pass-input')?.value.trim();
+      if (url && window.universalCloudManager) {
+        window.universalCloudManager.webdavConfig.serverUrl = url;
+        window.universalCloudManager.webdavConfig.username = user;
+        window.universalCloudManager.webdavConfig.password = pass;
+        window.universalCloudManager.saveConfig();
+        this.showToast('WebDAV sovereign cloud configured!', 'green');
+      }
+    });
+
+    // Link PC Folder
+    overlay.querySelector('#btn-modal-link-local-folder')?.addEventListener('click', async () => {
+      if (window.showDirectoryPicker) {
+        try {
+          const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+          if (dirHandle) {
+            this.showToast(`Linked local directory: ${dirHandle.name}`, 'green');
+            closeModal();
+          }
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error(err);
+        }
+      } else {
+        alert('File System Access API is supported in Chromium-based desktop browsers.');
+      }
+    });
+
+    // Universal URL Open
+    overlay.querySelector('#btn-open-universal-cloud-url')?.addEventListener('click', () => {
+      const url = overlay.querySelector('#universal-cloud-url-input')?.value.trim();
+      if (url && window.universalCloudManager) {
+        closeModal();
+        window.universalCloudManager.openCloudLink(url);
+      }
+    });
+
+    // Backup ZIP
+    overlay.querySelector('#btn-export-all-zip-modal')?.addEventListener('click', () => {
+      closeModal();
+      this.backupAllDocumentsZip();
+    });
+
+    // Clear Cache
+    overlay.querySelector('#btn-clear-cache-modal')?.addEventListener('click', () => {
+      if (confirm('Clear local in-memory document cache? Saved sovereign files will be purged.')) {
+        localStorage.clear();
+        this.showToast('Local memory cache purged.', 'blue');
+        location.reload();
+      }
+    });
+  }
+
+  /**
+   * Alias for Profile Modal to open the unified Account & Cloud Platform Center
+   */
+  openUserProfileModal() {
+    this.openAccountAndCloudModal();
+  }
+
+  /**
+   * Alias for Google Drive Modal to open the unified Account & Cloud Platform Center
+   */
+  openGoogleDriveAccountModal() {
+    this.openAccountAndCloudModal();
+  }
+
+    /**
    * Record a document into real user recent documents history (Zero fake documents)
    */
   recordRecentDocument(title, type, appName) {
