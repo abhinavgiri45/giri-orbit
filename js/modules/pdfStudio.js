@@ -121,15 +121,15 @@ export function renderPdfStudioApp(container, onPdfUpdate = null, startInEditor 
             <div class="follow-journey-wrap" style="margin-bottom:18px; display:flex; flex-direction:row; flex-wrap:wrap; gap:14px; align-items:center;">
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label">OFFICIAL PORTAL</span>
-                <a href="https://github.com/abhinavgiri45/giri-orbit" target="_blank" rel="noopener" class="giri-author-card giri-author-card-dark" title="Visit Abhinav Giri Official Website">
-                  <div class="author-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                    <img src="assets/orbit-master-512.png" alt="Abhinav Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
-                  </div>
-                  <div class="instagram-card-text">
-                    <strong class="instagram-handle" style="color:#ffffff;">Abhinav Giri</strong>
-                    <span class="instagram-sub" style="color:#38bdf8;">github.com/abhinavgiri45/giri-orbit &rarr;</span>
-                  </div>
-                </a>
+                <a href="https://giri-orbit.pages.dev" target="_blank" rel="noopener" class="giri-author-card giri-author-card-dark" title="Visit Giri Official Portal (https://giri-orbit.pages.dev)">
+            <div class="author-logo-badge" style="width:42px; height:42px; border-radius:11px; background:#0f172a; border:1px solid #38bdf8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <img src="assets/orbit-master-512.png" alt="Giri" style="width:28px; height:28px; border-radius:50%; object-fit:cover; display:block;">
+            </div>
+            <div class="instagram-card-text">
+              <strong class="instagram-handle" style="color:#ffffff;">Giri</strong>
+              <span class="instagram-sub" style="color:#38bdf8;">giri-orbit.pages.dev &rarr;</span>
+            </div>
+          </a>
               </div>
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <span class="follow-journey-label">FOLLOW THE JOURNEY</span>
