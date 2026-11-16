@@ -1294,10 +1294,6 @@ class GiriOrbitPlatform {
     });
 
     // 6. Digital Signatures Button
-    container.querySelector('#btn-m365-sig-verify')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.digitalSignatureEngine?.openSignatureInspectorModal('Workspace Documents');
-    });
 
     // 7. View Toggle (List / Grid)
     const btnList = container.querySelector('#btn-m365-view-list');
@@ -2448,7 +2444,6 @@ class GiriOrbitPlatform {
               <div>
                 <div style="font-size:13.5px; font-weight:600; color:#0f172a; display:flex; align-items:center; gap:6px;">
                   <span>${this.escapeHtml(docTitle)}</span>
-                  <span style="font-size:11px; padding:1px 6px; background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; border-radius:4px; font-weight:600;" title="Cryptographically Signed &amp; 100% Virus-Free">🛡️ Signed</span>
                 </div>
                 <div class="m365-doc-subtext" style="font-size:11px; color:#64748b;">${badge.name} &bull; Sovereign In-Memory</div>
               </div>
