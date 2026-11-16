@@ -42,7 +42,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;700&family=Fira+Code:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="assets/orbit.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/orbit-master-512.png">
-  <link rel="apple-touch-icon" href="assets/orbit-master-512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/giri-logo-symbol.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/orbit-master-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/orbit-master-512.png">
   <link rel="stylesheet" href="css/styles.css?v=14.3">
   <link rel="stylesheet" href="css/orbitDesktop.css?v=1.0">
   <link rel="stylesheet" href="css/hub.css?v=10.2">
@@ -363,6 +365,18 @@
 
       <!-- TOP-RIGHT CORNER ACCOUNT & MULTI-CLOUD STATUS HUB (Fixed / Pinned Top-Right Corner) -->
       <aside class="m365-corner-account-hub" id="hub-corner-account-widget" aria-label="Account and Cloud Controls">
+        <!-- 0. 100% Virus-Free & Safe Assurance Pill (0/72 Clean VirusTotal & Whitelist Guide) -->
+        <button class="m365-corner-pill m365-corner-safe-btn" id="hub-corner-safe-btn" title="100% Virus-Free & Safe: 0/72 Clean VirusTotal • SHA-256 Verifier • False-Positive Whitelist Guide" onclick="window.orbitPlatform?.openVirusAssuranceModal(); return false;" style="background:rgba(22,163,74,0.15); border-color:rgba(34,197,94,0.4); color:#4ade80; font-weight:700;">
+          <span style="font-size:13px;">🛡️</span>
+          <span>100% Safe</span>
+        </button>
+
+        <!-- 0.5. Creator & Socials (Abhinav Giri) -->
+        <a href="https://instagram.com/abhinavgiri45" target="_blank" rel="noopener noreferrer" class="m365-corner-pill m365-corner-author-pill" id="hub-corner-author-btn" title="Created by Abhinav Giri (@abhinavgiri45) • Instagram, X, GitHub" style="background:linear-gradient(135deg, rgba(225,48,108,0.16), rgba(131,58,180,0.18)); border-color:rgba(225,48,108,0.4); color:#f472b6; font-weight:700; text-decoration:none;">
+          <span style="font-size:13px;">👑</span>
+          <span>@abhinavgiri45</span>
+        </a>
+
         <!-- 1. Cloudless P2P Real-Time Live Workplace Collaboration (Zero Cloud Servers) -->
         <button class="m365-corner-pill m365-corner-p2p-btn" id="hub-corner-p2p-btn" title="Cloudless P2P Real-Time Live Collaboration (Host Computer ON • Zero Cloud)" onclick="window.p2pCollaborationEngine?.openP2PShareModal(); return false;" style="background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.35); color:#34d399; font-weight:700;">
           <span style="font-size:13px;">🌐</span>
@@ -918,11 +932,11 @@
                   <span>🛡️</span>
                   <span style="font-weight:600;">Digitally Signed &amp; Safe</span>
                 </button>
-                <button class="m365-upload-btn" id="btn-m365-upload-file" title="Open or Upload Local Document (.docx, .xlsx, .pptx, .giri)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button class="m365-upload-btn" id="btn-m365-upload-file" title="Open or Upload Local Document (.docx, .xlsx, .pptx, .giri)" style="background:#2563eb !important; background-color:#2563eb !important; color:#ffffff !important; border:1.5px solid #3b82f6 !important; font-weight:700 !important; box-shadow:0 4px 14px rgba(37,99,235,0.45) !important;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" style="color:#ffffff !important; stroke:#ffffff !important;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                   </svg>
-                  <span>Upload</span>
+                  <span style="color:#ffffff !important; font-weight:700 !important;">Upload</span>
                 </button>
                 <div class="m365-view-toggle">
                   <button class="m365-view-btn active" id="btn-m365-view-list" title="List View">

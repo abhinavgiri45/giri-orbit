@@ -1277,6 +1277,11 @@ html {
     white-space: nowrap !important;
     font-size: 11px !important;
   }
+  #hub-corner-safe-btn span:last-child,
+  #hub-corner-author-btn span:last-child,
+  #hub-corner-p2p-btn span:last-child {
+    display: none !important;
+  }
 
   /* 2. Kinetic Slide Title & Subtitle Mobile Scaling */
   .slide-header-zone {

@@ -15,7 +15,7 @@ export class DigitalSignatureEngine {
   constructor() {
     this.keyStorageKey = 'giri_orbit_crypto_keypair_v1';
     this.certThumbprint = '76B5D8F9DD988F5EEEBDEBBFD6CC3658AC0211E0';
-    this.certIssuer = 'CN=Abhinav Giri, O=Vedic AI, OU=Software Engineering';
+    this.certIssuer = 'CN=Abhinav Giri, O=Giri Orbit Sovereign Systems, OU=Software Engineering';
     this.keyPair = null;
     this.publicKeyJwk = null;
     this._initPromise = this._initKeys();

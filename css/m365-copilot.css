@@ -2753,14 +2753,14 @@ body:not(.in-tool) .orbit-workspace {
  * (Visible at top-right corner of viewport in landing workspace)
  * ============================================================================ */
 .m365-corner-account-hub {
-  position: absolute;
-  top: 18px;
-  right: 28px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 100;
-  pointer-events: auto;
+  position: fixed !important;
+  top: 14px !important;
+  right: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
 }
 
 .m365-corner-pill {
